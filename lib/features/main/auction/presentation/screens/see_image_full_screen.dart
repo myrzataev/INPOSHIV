@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:inposhiv/core/utils/app_fonts.dart';
+
+class SeeImageFullScreen extends StatefulWidget {
+  final List<String> imagesList;
+  const SeeImageFullScreen({super.key, required this.imagesList});
+
+  @override
+  State<SeeImageFullScreen> createState() => _SeeImageFullScreenState();
+}
+
+class _SeeImageFullScreenState extends State<SeeImageFullScreen> {
+  int currentIndex = 0;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+         
+          Positioned.fill(
+            child: PageView.builder(
+                itemCount: widget.imagesList.length,
+                itemBuilder: (context, index) {
+                  return Image.asset(widget.imagesList[index]);
+                },
+                onPageChanged: (value) {
+                setState(() {
+                    currentIndex = value;
+                });
+                },
+                ),
+          ),
+           Positioned(
+            top: 0.h,
+            left: 20.w,
+            child:  IconButton(
+            icon: const Icon(  Icons.arrow_back_ios,),
+              color: Colors.white,
+              onPressed: () {
+               
+                GoRouter.of(context).pop();
+              },
+            ),
+          ),
+          Positioned(
+              bottom: 20.h,
+              child: Text(
+                "${currentIndex+1}-${widget.imagesList.length}",
+                style: AppFonts.w700s18.copyWith(color: Colors.white),
+              ))
+        ]),
+      ),
+    );
+  }
+}
