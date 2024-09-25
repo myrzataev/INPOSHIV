@@ -14,6 +14,7 @@ class CustomTextForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      
       controller: controller,
       keyboardType: (keyboardType == null) ? TextInputType.text : keyboardType,
       textAlign: TextAlign.center,

@@ -1,7 +1,7 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
@@ -26,11 +26,13 @@ class CustomDrawer extends StatelessWidget {
                   onTap: () {
                     Scaffold.of(context).closeDrawer();
                   },
-                  child: SvgPicture.asset(SVGImages.close)),
+                  child: SvgPicture.asset(SvgImages.close)),
               Padding(
                 padding: EdgeInsets.only(top: 60.h),
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      GoRouter.of(context).pushNamed("aboutAppScreen");
+                    },
                     child: Text(
                       "О приложении",
                       style: AppFonts.w400s16
@@ -38,14 +40,18 @@ class CustomDrawer extends StatelessWidget {
                     )),
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    GoRouter.of(context).pushNamed("settings");
+                  },
                   child: Text(
                     "Настройки",
                     style: AppFonts.w400s16
                         .copyWith(color: AppColors.accentTextColor),
                   )),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    GoRouter.of(context).pushNamed("faqScreen");
+                  },
                   child: Text(
                     "Помощь",
                     style: AppFonts.w400s16
@@ -55,7 +61,9 @@ class CustomDrawer extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(bottom: 20.h),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    GoRouter.of(context).pushNamed("walletScreen");
+                  },
                   child: Row(
                     children: [
                       CircleAvatar(
@@ -80,7 +88,9 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  GoRouter.of(context).pushNamed("profileScreen");
+                },
                 child: Row(
                   children: [
                     CircleAvatar(

@@ -5,8 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dart';
+import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choose_image_button.dart';
+import 'package:provider/provider.dart';
 
 class ChooseImageSourceScreen extends StatefulWidget {
   const ChooseImageSourceScreen({super.key});
@@ -17,7 +20,6 @@ class ChooseImageSourceScreen extends StatefulWidget {
 }
 
 class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
-  
   List<XFile>? _selectedImages = [];
   final int _maxImages = 3;
   final ImagePicker _picker = ImagePicker();
@@ -66,6 +68,7 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final int role = Provider.of<RoleProvider>(context, listen: true).role;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -90,14 +93,18 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
                 ),
               ),
               Text(
-                "Загрузите фотографии товара, который хотите заказать",
+                role == 0
+                    ? "Давайте создадим ваш профиль"
+                    : "Загрузите фотографии товара, который хотите заказать",
                 style: AppFonts.w700s36
                     .copyWith(height: 0.8, fontWeight: FontWeight.bold),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: Text(
-                  "Вы можете загрузить не более 3х фотографий. Вы можете внести изменения позже",
+                  role == 0
+                      ? "Загрузите фотографии ваших работ\nВы можете загрузить не более 5 фотографий"
+                      : "Вы можете загрузить не более 3х фотографий. Вы можете внести изменения позже",
                   style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                 ),
               ),
@@ -173,8 +180,16 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
                   : Padding(
                       padding: EdgeInsets.only(bottom: 20.h),
                       child: CustomButton(
-                          text: "Загрузить фотографию", onPressed: () {
-                            GoRouter.of(context).pushNamed("chooseCategory");
+                          text: "Загрузить фотографию",
+                          onPressed: () {
+                            role == 1
+                                ? GoRouter.of(context)
+                                    .pushNamed("chooseCategory")
+                                : GoRouter.of(context)
+                                    .pushNamed("aboutCompany");
+
+                            Provider.of<PhotoProvider>(context, listen: false)
+                                .addToList(photos: _selectedImages);
                           }),
                     )
             ],

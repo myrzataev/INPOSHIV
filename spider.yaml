@@ -34,5 +34,5 @@ groups:
     class_name: Images
     types: [ .png, .jpg, .jpeg, .webp, .webm, .bmp ]
   - path: assets/svgs/
-    class_name: SVGImages
+    class_name: SvgImages
     types: [ .svg, ]

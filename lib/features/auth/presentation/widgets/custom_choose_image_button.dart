@@ -22,7 +22,7 @@ class CustomChooseImageButton extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: Container(
+      child: Ink(
           height: 80.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.r),

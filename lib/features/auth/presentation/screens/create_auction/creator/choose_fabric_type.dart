@@ -5,40 +5,27 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
 import 'package:inposhiv/resources/resources.dart';
 
-class ChooseCategoryScreen extends StatefulWidget {
-  const ChooseCategoryScreen({super.key});
+class ChooseFabricTypeScreen extends StatefulWidget {
+  const ChooseFabricTypeScreen({super.key});
 
   @override
-  State<ChooseCategoryScreen> createState() => _ChooseCategoryScreenState();
+  State<ChooseFabricTypeScreen> createState() => _ChooseCategoryScreenState();
 }
 
-class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
+class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
   final List<String> _items = [
-    'Блузки',
-    'Кофты',
-    'Худи',
-    'Свитшоты'
+    'Хлопок',
+    'Шерсть',
+    'Лен',
+    'шелк'
   ]; // List of dropdown items
   String? _selectedValue; // Selected dropdown value
   GlobalKey _buttonKey = GlobalKey();
   OverlayEntry? _overlayEntry;
   bool _isDropdownOpen = false;
   String? category;
-  // @override
-  // void didChangeDependencies() {
-  //   // ignore: deprecated_member_use
-  //   ModalRoute.of(context)?.addScopedWillPopCallback(() async {
-  //     if (_isDropdownOpen) {
-  //       _closeDropdown();
-  //       return false; // Don't pop the route, close the dropdown first
-  //     }
-  //     return true; // Allow the pop to happen
-  //   });
-  //   super.didChangeDependencies();
-  // }
 
   @override
   void dispose() {
@@ -66,7 +53,7 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                   GoRouter.of(context).pop();
                 },
                 child: SvgPicture.asset(
-                  SVGImages.goback,
+                  SvgImages.goback,
                   height: 40.h,
                   width: 40.w,
                 ),
@@ -77,7 +64,7 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
               child: Row(
                 children: [
                   Text(
-                    "Шаг 2 ",
+                    "Шаг 3 ",
                     style: AppFonts.w400s16.copyWith(
                         fontFamily: "SF Pro", color: const Color(0xff324D19)),
                   ),
@@ -89,71 +76,14 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
               ),
             ),
             Text(
-              "Выберите  категорию товара",
+              "Выберите вид ткани",
               style: AppFonts.w700s36
                   .copyWith(height: 0.8, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.h),
               child: Text(
-                "К какой категории одежды подходит ваш товар",
-                style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-              child: Text(
-                "Тип одежды",
-                style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
-              ),
-            ),
-            Row(
-              children: [
-                Expanded(
-                  child: CustomChooseRoleWidget(
-                    isChoosed: category == "Мужская",
-                    onTap: () {
-                      setState(() {
-                        category = "Мужская";
-                      });
-                    },
-                    text: "Мужская",
-                  ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Expanded(
-                  child: CustomChooseRoleWidget(
-                    isChoosed: category == "Женская",
-                    onTap: () {
-                      setState(() {
-                        category = "Женская";
-                      });
-                    },
-                    text: "Женская",
-                  ),
-                ),
-                SizedBox(
-                  width: 10.w,
-                ),
-                Expanded(
-                  child: CustomChooseRoleWidget(
-                    isChoosed: category == "Детская",
-                    onTap: () {
-                      setState(() {
-                        category = "Детская";
-                      });
-                    },
-                    text: "Детская",
-                  ),
-                )
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-              child: Text(
-                "Категория",
+                "Это необязательное действие",
                 style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
               ),
             ),
@@ -170,14 +100,14 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      _selectedValue ?? "Выберите категорию",
+                      _selectedValue ?? "Выберите ткань",
                       style: TextStyle(fontSize: 16.sp),
                     ),
                     _isDropdownOpen
                         ? RotatedBox(
                             quarterTurns: 90,
-                            child: SvgPicture.asset(SVGImages.bottom))
-                        : SvgPicture.asset(SVGImages.bottom)
+                            child: SvgPicture.asset(SvgImages.bottom))
+                        : SvgPicture.asset(SvgImages.bottom)
                   ],
                 ),
               ),
@@ -188,10 +118,11 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
               child: CustomButton(
                   text: "Дальше",
                   onPressed: () {
-                    if(_isDropdownOpen){
+                    if (_isDropdownOpen) {
                       _closeDropdown();
                     }
-                    GoRouter.of(context).pushNamed("chooseFabricType");
+                                        GoRouter.of(context).pushNamed("setQuantityScreen");
+              
                   }),
             )
           ],
@@ -215,7 +146,7 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
     final size = renderBox.size;
 
     _overlayEntry = _createDropdownOverlay(position, size);
-    Overlay.of(context)?.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
     setState(() {
       _isDropdownOpen = true;
     });
@@ -223,14 +154,10 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
 
   void _closeDropdown() {
     _overlayEntry?.remove();
-    _overlayEntry = null; // Clear the overlay entry reference
-    if (mounted) {
-      setState(() {
-        _isDropdownOpen = false;
-      });
-    }
+    setState(() {
+      _isDropdownOpen = false;
+    });
   }
-
 
   OverlayEntry _createDropdownOverlay(Offset position, Size size) {
     return OverlayEntry(

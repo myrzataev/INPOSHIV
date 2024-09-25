@@ -20,18 +20,16 @@ class CustomAppBar extends StatelessWidget {
             onTap: () {
               GoRouter.of(context).pop();
             },
-            child: SvgPicture.asset(SVGImages.goback)),
+            child: SvgPicture.asset(SvgImages.goback)),
         const Spacer(),
-        Padding(
-            padding: EdgeInsets.only(left: 6.w),
-            child: const MoneyWidget(balance: 420000)),
+  
         Padding(
           padding: EdgeInsets.only(left: 6.w),
           child: CustomSearchWidget(
             onTap: () {
               GoRouter.of(context).pushNamed("searchScreen");
             },
-            child: SvgPicture.asset(SVGImages.search),
+            child: SvgPicture.asset(SvgImages.search),
           ),
         ),
       ],

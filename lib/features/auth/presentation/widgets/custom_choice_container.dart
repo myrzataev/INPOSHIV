@@ -18,7 +18,7 @@ class CustomChooseRoleWidget extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: Container(
+      child: Ink(
           height: 50.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.r),
@@ -29,9 +29,12 @@ class CustomChooseRoleWidget extends StatelessWidget {
                     : AppColors.borderColorGrey),
           ),
           child: Center(
-            child: Text(
-              text,
-              style: AppFonts.w400s16.copyWith(color: const Color(0xff101010)),
+            child: Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 5.w),
+              child: Text(
+                text,
+                style: AppFonts.w400s16.copyWith(color: const Color(0xff101010)),
+              ),
             ),
           )),
     );

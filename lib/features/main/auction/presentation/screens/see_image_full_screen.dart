@@ -5,44 +5,55 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 
 class SeeImageFullScreen extends StatefulWidget {
   final List<String> imagesList;
-  const SeeImageFullScreen({super.key, required this.imagesList});
+  final int index;
+  const SeeImageFullScreen(
+      {super.key, required this.imagesList, required this.index});
 
   @override
   State<SeeImageFullScreen> createState() => _SeeImageFullScreenState();
 }
 
 class _SeeImageFullScreenState extends State<SeeImageFullScreen> {
-  int currentIndex = 0;
+ late PageController _pageController;
+ 
+  int? currentIndex;
+  @override
+  void initState() {
+    currentIndex = widget.index;
+    _pageController = PageController(initialPage: currentIndex??0, );
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-         
+        child: Stack(alignment: Alignment.center, children: [
           Positioned.fill(
+
             child: PageView.builder(
-                itemCount: widget.imagesList.length,
-                itemBuilder: (context, index) {
-                  return Image.asset(widget.imagesList[index]);
-                },
-                onPageChanged: (value) {
+              controller: _pageController,
+              itemCount: widget.imagesList.length,
+              itemBuilder: (context, index) {
+                return Image.asset(widget.imagesList[index]);
+              },
+              onPageChanged: (value) {
                 setState(() {
-                    currentIndex = value;
+                  currentIndex = value ;
                 });
-                },
-                ),
+              },
+            ),
           ),
-           Positioned(
+          Positioned(
             top: 0.h,
             left: 20.w,
-            child:  IconButton(
-            icon: const Icon(  Icons.arrow_back_ios,),
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+              ),
               color: Colors.white,
               onPressed: () {
-               
                 GoRouter.of(context).pop();
               },
             ),
@@ -50,7 +61,7 @@ class _SeeImageFullScreenState extends State<SeeImageFullScreen> {
           Positioned(
               bottom: 20.h,
               child: Text(
-                "${currentIndex+1}-${widget.imagesList.length}",
+                "${currentIndex!+1}-${widget.imagesList.length }",
                 style: AppFonts.w700s18.copyWith(color: Colors.white),
               ))
         ]),

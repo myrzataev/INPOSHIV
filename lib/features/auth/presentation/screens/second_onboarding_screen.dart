@@ -27,7 +27,7 @@ class SecondOnboardingScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SvgPicture.asset(
-                  SVGImages.switchjusticon,
+                  SvgImages.switchjusticon,
                   height: 53.h,
                   width: 87.h,
                 ),
@@ -52,7 +52,7 @@ class SecondOnboardingScreen extends StatelessWidget {
             CustomButton(
               text: "Начать регистрацию",
               onPressed: () {
-                GoRouter.of(context).pushNamed("thirdOnBoarding");
+                GoRouter.of(context).pushNamed("chooseRole");
               },
             )
           ],

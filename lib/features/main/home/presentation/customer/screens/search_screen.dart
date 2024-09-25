@@ -29,7 +29,7 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
   final List<String> _materials = ['Хлопок', 'Шерсть', 'Лен', 'шелк'];
   String? _selectedValue; // Selected dropdown value
 
-  bool _isDropdownOpen = false;
+  // bool _isDropdownOpen = false;
   String? category;
   String? _selectedValueForSecond; // Selected dropdown value
 
@@ -68,7 +68,7 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
                         prefixIcon: Padding(
                           padding: EdgeInsets.only(left: 10.w),
                           child: SvgPicture.asset(
-                            SVGImages.search,
+                            SvgImages.search,
                             height: 24.h,
                             width: 24.w,
                           ),
@@ -216,9 +216,9 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
     if (image != null) {
       setState(() {
         if (_selectedImages!.length >= _maxImages) {
-          _selectedImages!.removeLast(); // Remove the last image
+          _selectedImages.removeLast(); // Remove the last image
         }
-        _selectedImages!.add(image); // Add the new image
+        _selectedImages.add(image); // Add the new image
       });
     }
   }
@@ -230,12 +230,12 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
         if (_selectedImages!.length + images.length > _maxImages) {
           // If the selected images exceed the max, remove the last few images
           int overflowCount =
-              (_selectedImages!.length + images.length) - _maxImages;
-          _selectedImages!.removeRange(
-              _selectedImages!.length - overflowCount, _selectedImages!.length);
+              (_selectedImages.length + images.length) - _maxImages;
+          _selectedImages.removeRange(
+              _selectedImages.length - overflowCount, _selectedImages.length);
         }
-        _selectedImages!.addAll(images
-            .take(_maxImages - _selectedImages!.length)); // Add new images
+        _selectedImages.addAll(images
+            .take(_maxImages - _selectedImages.length)); // Add new images
       });
     }
   }
@@ -245,11 +245,11 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
       int removeCount = newImages.length; // How many images to remove
       if (_selectedImages!.length >= removeCount) {
         // Remove the last few images
-        _selectedImages!.removeRange(
-            _selectedImages!.length - removeCount, _selectedImages!.length);
+        _selectedImages.removeRange(
+            _selectedImages.length - removeCount, _selectedImages.length);
       }
       // Add new images
-      _selectedImages!.addAll(newImages);
+      _selectedImages.addAll(newImages);
     });
   }
 }

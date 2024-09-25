@@ -42,7 +42,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           items: [
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              SVGImages.home,
+              SvgImages.home,
               color: currentIndex == 0
                   ? AppColors.accentTextColor
                   : AppColors.regularGreyColor, // Control the color
@@ -51,7 +51,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              SVGImages.auctiion,
+              SvgImages.auctiion,
               color: currentIndex == 1
                   ? AppColors.accentTextColor
                   : AppColors.regularGreyColor,
@@ -60,7 +60,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              SVGImages.chat,
+              SvgImages.chat,
               color: currentIndex == 2
                   ? AppColors.accentTextColor
                   : AppColors.regularGreyColor,
@@ -69,7 +69,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
           ),
           BottomNavigationBarItem(
             icon: SvgPicture.asset(
-              SVGImages.orders,
+              SvgImages.orders,
               color: currentIndex == 3
                   ? AppColors.accentTextColor
                   : AppColors.regularGreyColor,
@@ -83,7 +83,7 @@ class _AppBottomNavigationBarState extends State<AppBottomNavigationBar> {
   void changeTab(int index) {
     switch (index) {
       case 0:
-        context.go('/');
+        context.go('/main');
 
         break;
       case 1:

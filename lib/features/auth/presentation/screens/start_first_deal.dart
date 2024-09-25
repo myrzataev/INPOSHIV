@@ -51,7 +51,7 @@ class StartFirstDeal extends StatelessWidget {
               ],
             ),
             CustomButton(
-              text: "Начать регистрацию",
+              text: "Создать заявку на аукцион",
               onPressed: () {
                GoRouter.of(context).pushNamed("chooseImageSource");
               },

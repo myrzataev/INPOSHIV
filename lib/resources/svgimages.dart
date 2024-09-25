@@ -12,7 +12,10 @@ class SVGImages {
   static const String home = 'assets/svgs/home.svg';
   static const String info = 'assets/svgs/info.svg';
   static const String orders = 'assets/svgs/orders.svg';
+  static const String pen = 'assets/svgs/pen.svg';
+  static const String quit = 'assets/svgs/quit.svg';
   static const String search = 'assets/svgs/search.svg';
+  static const String send = 'assets/svgs/send.svg';
   static const String star = 'assets/svgs/star.svg';
   static const String switchjusticon = 'assets/svgs/switchjusticon.svg';
 }

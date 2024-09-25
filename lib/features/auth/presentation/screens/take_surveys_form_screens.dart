@@ -83,7 +83,7 @@ Widget build(BuildContext context) {
                         _previousPage();
                       },
                       child: SvgPicture.asset(
-                        SVGImages.goback,
+                        SvgImages.goback,
                         height: 40.h,
                         width: 40.w,
                       ),

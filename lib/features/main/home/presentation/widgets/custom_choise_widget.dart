@@ -22,7 +22,7 @@ class CustomChoiceWidget extends StatelessWidget {
       onTap: () {
         onTap();
       },
-      child: Container(
+      child: Ink(
           decoration: isSelelected
               ? BoxDecoration(
                   color: AppColors.buttonGreenColor,

@@ -6,15 +6,21 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
+import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
+import 'package:inposhiv/features/auth/presentation/screens/create_auction/creator/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/data/mocked_data.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:provider/provider.dart';
 
 class MainScreen extends StatefulWidget {
   final bool isFromSearch;
-  const MainScreen({super.key, required this.isFromSearch});
+  final bool? hasDialog;
+  const MainScreen(
+      {super.key, required this.isFromSearch, this.hasDialog = false});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -25,15 +31,74 @@ class _MainScreenState extends State<MainScreen> {
       CarouselSliderController();
   // int _currentIndex = 0;
   List<int> _currentIndexes = [];
+  List<bool> _isExpandedList = [];
   @override
   void initState() {
-    _currentIndexes = List.filled(MockedCardData.cardsList.length, 0);
     super.initState();
+    _currentIndexes = List.filled(MockedCardData.cardsList.length, 0);
+    _isExpandedList = List.filled(MockedCardData.cardsList.length, false);
+    // Show the dialog after the first frame
+    if (widget.hasDialog ?? false) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SvgPicture.asset(
+                        SvgImages.info,
+                        height: 24.h,
+                        width: 24.w,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          GoRouter.of(context).pop();
+                        },
+                        child: SvgPicture.asset(
+                          SvgImages.close,
+                          height: 24.h,
+                          width: 24.w,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Text(
+                      "Мы уведомим вас, когда появятся отклики от производителей",
+                      style: AppFonts.w700s20
+                          .copyWith(color: AppColors.accentTextColor),
+                    ),
+                  ),
+                  CustomButton(
+                    height: 40,
+                    text: "Понятно",
+                    onPressed: () {
+                      GoRouter.of(context).pop();
+                    },
+                    sizedTemporary: true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     List<CardsModel> data = MockedCardData.cardsList;
+    final int role = Provider.of<RoleProvider>(context).role;
+    List<SizeModel> sizesVm =
+        Provider.of<SizeProvider>(context, listen: true).sizes;
     return Scaffold(
       drawer: const CustomDrawer(),
       body: SafeArea(
@@ -63,7 +128,10 @@ class _MainScreenState extends State<MainScreen> {
                   child: ListView.builder(
                       itemCount: data.length,
                       itemBuilder: (context, index) {
+                        final bool currentIndexIsExpanded =
+                            _isExpandedList[index];
                         final item = data[index];
+
                         return Padding(
                           padding: EdgeInsets.only(bottom: 10.h),
                           child: InkWell(
@@ -94,7 +162,6 @@ class _MainScreenState extends State<MainScreen> {
                                                 indexCarousel;
                                           });
                                         },
-                                        // initialPage: 2,
                                       ),
                                       itemBuilder:
                                           (context, caruselIndex, realIndex) {
@@ -144,7 +211,7 @@ class _MainScreenState extends State<MainScreen> {
                                             radius: 20.r,
                                             // ignore: deprecated_member_use
                                             child: SvgPicture.asset(
-                                              SVGImages.chat,
+                                              SvgImages.chat,
                                               // ignore: deprecated_member_use
                                               color: AppColors.accentTextColor,
                                             ),
@@ -169,7 +236,9 @@ class _MainScreenState extends State<MainScreen> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          item.locaionName,
+                                          role == 0
+                                              ? "Хлопковая блузка"
+                                              : item.locaionName,
                                           style: AppFonts.w700s20.copyWith(
                                               color: AppColors.accentTextColor),
                                         ),
@@ -178,7 +247,7 @@ class _MainScreenState extends State<MainScreen> {
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 5.w),
                                           child: SvgPicture.asset(
-                                            SVGImages.star,
+                                            SvgImages.star,
                                             height: 16.h,
                                             width: 16.w,
                                           ),
@@ -191,17 +260,81 @@ class _MainScreenState extends State<MainScreen> {
                                     ),
                                   ),
                                   Text(
-                                    item.description,
+                                    role == 0
+                                        ? "600 руб за единицу, итого 348 000 руб"
+                                        : item.description,
                                     style: AppFonts.w400s16,
                                   ),
                                   Padding(
                                     padding:
                                         EdgeInsets.symmetric(vertical: 10.h),
-                                    child: Text(
-                                      "Выполнено в Inposhiv ${item.quantity} заказов.",
-                                      style: AppFonts.w400s16.copyWith(
-                                          color: AppColors.accentTextColor),
-                                    ),
+                                    child: role == 0
+                                        ? Column(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    _isExpandedList[index] =
+                                                        !_isExpandedList[index];
+                                                  });
+                                                },
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  
+                                                  children: [
+                                                    Text(
+                                                      "Размерный ряд",
+                                                      style: AppFonts.w400s16
+                                                          .copyWith(
+                                                              color: AppColors
+                                                                  .accentTextColor),
+                                                    ),
+                                                    Padding(
+                                                      padding: EdgeInsets.only(
+                                                          left: 6.w),
+                                                      child:  RotatedBox(
+                                                        quarterTurns: currentIndexIsExpanded?2: 0,
+                                                        child: SvgPicture.asset(
+                                                            SvgImages.bottom),
+                                                      ),
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                              AnimatedSize(
+                                                duration: const Duration(
+                                                    milliseconds: 300),
+                                                curve: Curves.fastOutSlowIn,
+                                                
+                                                child: currentIndexIsExpanded? GridView.builder(
+                                                    shrinkWrap: true,
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                            mainAxisSpacing: 0,
+                                                            mainAxisExtent:
+                                                                30.h,
+                                                            crossAxisCount: 2),
+                                                    itemCount: sizesVm.length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Text(
+                                                        "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
+                                                        style: AppFonts.w400s16
+                                                            .copyWith(
+                                                                color: AppColors
+                                                                    .accentTextColor),
+                                                      );
+                                                    }): const SizedBox.shrink(),
+                                              ),
+                                            ],
+                                          )
+                                        : Text(
+                                            "Выполнено в Inposhiv ${item.quantity} заказов.",
+                                            style: AppFonts.w400s16.copyWith(
+                                                color:
+                                                    AppColors.accentTextColor),
+                                          ),
                                   )
                                 ],
                               ),
@@ -215,8 +348,8 @@ class _MainScreenState extends State<MainScreen> {
           ),
           Positioned(
               bottom: 10.h,
-              left: 20.w,
-              right: 20.w,
+              left: 0.w,
+              right: 0.w,
               child: CustomButton(text: "Создать заказ", onPressed: () {}))
         ]),
       )),

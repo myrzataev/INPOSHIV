@@ -22,7 +22,7 @@ class MainAppBar extends StatelessWidget {
             onTap: () {
               
               Scaffold.of(context).openDrawer();
-            }, child: SvgPicture.asset(SVGImages.burgerMenu)),
+            }, child: SvgPicture.asset(SvgImages.burgerMenu)),
         // CircleAvatar(
         //   radius: 22.h,
         //   backgroundColor: AppColors.circleAvatarsColor,
@@ -41,59 +41,60 @@ class MainAppBar extends StatelessWidget {
             onTap: () {
               GoRouter.of(context).pushNamed("searchScreen");
             },
-            child: SvgPicture.asset(SVGImages.search),
+            child: SvgPicture.asset(SvgImages.search),
           ),
         ),
         CustomSearchWidget(
           onTap: () {
             showDialog(
-                context: context,
-                builder: (context) => Dialog(
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 10.h),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SvgPicture.asset(
-                                  SVGImages.info,
-                                  height: 24.h,
-                                  width: 24.w,
-                                ),
-                                InkWell(
-                                  onTap: () {
-                                    GoRouter.of(context).pop();
-                                  },
-                                  child: SvgPicture.asset(
-                                    SVGImages.close,
-                                    height: 24.h,
-                                    width: 24.w,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 10.h),
-                              child: Text(
-                                "Мы уведомим вас, когда появятся отклики от производителей",
-                                style: AppFonts.w700s20
-                                    .copyWith(color: AppColors.accentTextColor),
-                              ),
-                            ),
-                            CustomButton(
-                              text: "Понятно",
-                              onPressed: () {
-                                GoRouter.of(context).pop();
-                              },
-                              sizedTemporary: true,
-                            )
-                          ],
+          context: context,
+          builder: (context) => Dialog(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SvgPicture.asset(
+                        SvgImages.info,
+                        height: 24.h,
+                        width: 24.w,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          GoRouter.of(context).pop();
+                        },
+                        child: SvgPicture.asset(
+                          SvgImages.close,
+                          height: 24.h,
+                          width: 24.w,
                         ),
                       ),
-                    ));
+                    ],
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Text(
+                      "Мы уведомим вас, когда появятся отклики от производителей",
+                      style: AppFonts.w700s20
+                          .copyWith(color: AppColors.accentTextColor),
+                    ),
+                  ),
+                  CustomButton(
+                    height: 40,
+                    text: "Понятно",
+                    onPressed: () {
+                      GoRouter.of(context).pop();
+                    },
+                    sizedTemporary: true,
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
           },
           child: const Icon(
             Icons.notifications_outlined,

@@ -12,4 +12,8 @@ abstract class AppColors {
   static const Color red = Color(0xffFF513C);
   static const Color borderColor = Color(0xffE2E2E2);
   static const Color cardsColor = Color(0xffF9F9F9);
+  static const Color chatsGreen = Color(0xffEEFFDF);
+  static const Color positiveBalance = Color(0xffAFD98B);
+
+  static const Color grey = Color(0xffD5D5D5);
 }

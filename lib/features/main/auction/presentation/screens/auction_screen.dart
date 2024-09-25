@@ -4,7 +4,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/auction/data/mocked_aution_data.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dart';
@@ -150,7 +149,7 @@ class AuctionScreen extends StatelessWidget {
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 5.w),
                                     child: SvgPicture.asset(
-                                      SVGImages.star,
+                                      SvgImages.star,
                                       height: 16.h,
                                       width: 16.w,
                                     ),
@@ -203,11 +202,21 @@ class AuctionScreen extends StatelessWidget {
                             ),
                             Padding(
                               padding: EdgeInsets.symmetric(vertical: 10.h),
-                              child: CustomButton(
-                                text: "Связаться",
-                                onPressed: () {},
-                                sizedTemporary: true,
-                                height: 40,
+                              child: SizedBox(
+                                height: 40.h,
+                                width: double.infinity,
+                                child: MaterialButton(
+                                  onPressed: () {},
+                                  color: AppColors.buttonGreenColor,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(10.r)),
+                                  child: Text(
+                                    "Связаться",
+                                    style: AppFonts.w400s16.copyWith(
+                                        color: AppColors.accentTextColor),
+                                  ),
+                                ),
                               ),
                             )
                           ],
@@ -228,7 +237,7 @@ class AuctionScreen extends StatelessWidget {
     );
   }
 
-  Color statusColor({required int status}) {
+  static Color statusColor({required int status}) {
     switch (status) {
       case 2:
         return AppColors.accentTextColor;
@@ -241,7 +250,7 @@ class AuctionScreen extends StatelessWidget {
     }
   }
 
-  String trustStatus({required int status}) {
+  static String trustStatus({required int status}) {
     switch (status) {
       case 2:
         return "Очень надежный";

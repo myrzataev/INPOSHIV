@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
+import 'package:provider/provider.dart';
 
 class ChooseRoleScreen extends StatefulWidget {
   const ChooseRoleScreen({super.key});
@@ -13,7 +15,7 @@ class ChooseRoleScreen extends StatefulWidget {
 }
 
 class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
-  String? role;
+  int role = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,10 +48,10 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                   children: [
                     Expanded(
                       child: CustomChooseRoleWidget(
-                        isChoosed: role == "Производитель",
+                        isChoosed: role == 0,
                         onTap: () {
                           setState(() {
-                            role = "Производитель";
+                            role = 0;
                           });
                         },
                         text: "Производитель",
@@ -62,10 +64,10 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                       child: CustomChooseRoleWidget(
                         onTap: () {
                           setState(() {
-                            role = "Заказчик";
+                            role = 1;
                           });
                         },
-                        isChoosed: role == "Заказчик",
+                        isChoosed: role == 1,
                         text: "Заказчик",
                       ),
                     ),
@@ -76,7 +78,8 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
             CustomButton(
               text: "Создать заказ",
               onPressed: () {
-                GoRouter.of(context).pushNamed("takeSurvey");
+                Provider.of<RoleProvider>(context, listen: false).changeRole(role);
+                GoRouter.of(context).pushNamed("registration");
               },
             )
           ],

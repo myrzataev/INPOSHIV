@@ -28,4 +28,9 @@ abstract class AppFonts {
       fontSize: 16.sp,
       color: AppColors.accentTextColor,
       fontFamily: "Neue");
+  static TextStyle w500s18 = TextStyle(
+      fontWeight: FontWeight.w500,
+      fontSize: 18.sp,
+      color: AppColors.accentTextColor,
+      fontFamily: "Neue Medium");
 }

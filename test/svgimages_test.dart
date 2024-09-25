@@ -5,17 +5,20 @@ import 'package:inposhiv/resources/resources.dart';
 
 void main() {
   test('svgimages assets test', () {
-    expect(File(SVGImages.auctiion).existsSync(), isTrue);
-    expect(File(SVGImages.bottom).existsSync(), isTrue);
-    expect(File(SVGImages.burgerMenu).existsSync(), isTrue);
-    expect(File(SVGImages.chat).existsSync(), isTrue);
-    expect(File(SVGImages.close).existsSync(), isTrue);
-    expect(File(SVGImages.goback).existsSync(), isTrue);
-    expect(File(SVGImages.home).existsSync(), isTrue);
-    expect(File(SVGImages.info).existsSync(), isTrue);
-    expect(File(SVGImages.orders).existsSync(), isTrue);
-    expect(File(SVGImages.search).existsSync(), isTrue);
-    expect(File(SVGImages.star).existsSync(), isTrue);
-    expect(File(SVGImages.switchjusticon).existsSync(), isTrue);
+    expect(File(SvgImages.auctiion).existsSync(), isTrue);
+    expect(File(SvgImages.bottom).existsSync(), isTrue);
+    expect(File(SvgImages.burgerMenu).existsSync(), isTrue);
+    expect(File(SvgImages.chat).existsSync(), isTrue);
+    expect(File(SvgImages.close).existsSync(), isTrue);
+    expect(File(SvgImages.goback).existsSync(), isTrue);
+    expect(File(SvgImages.home).existsSync(), isTrue);
+    expect(File(SvgImages.info).existsSync(), isTrue);
+    expect(File(SvgImages.orders).existsSync(), isTrue);
+    expect(File(SvgImages.pen).existsSync(), isTrue);
+    expect(File(SvgImages.quit).existsSync(), isTrue);
+    expect(File(SvgImages.search).existsSync(), isTrue);
+    expect(File(SvgImages.send).existsSync(), isTrue);
+    expect(File(SvgImages.star).existsSync(), isTrue);
+    expect(File(SvgImages.switchjusticon).existsSync(), isTrue);
   });
 }
