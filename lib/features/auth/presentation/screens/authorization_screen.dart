@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/auth/presentation/blocs/login/login_bloc.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthorizationScreen extends StatefulWidget {
   const AuthorizationScreen({super.key});
@@ -27,9 +31,11 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     final int role = Provider.of<RoleProvider>(context, listen: true).role;
+    SharedPreferences preferences = locator<SharedPreferences>();
 
     return Scaffold(
       body: SafeArea(
@@ -52,10 +58,10 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 CustomProfileTextField(
                     textAlign: TextAlign.start,
                     controller: emailController,
-                    labelText: "Почта",
+                    labelText: "Номер телефона",
                     hasValidator: true,
-                    hintText: "example@gmail.com",
-                    textInputType: TextInputType.emailAddress,
+                    hintText: "Номер телефона",
+                    textInputType: TextInputType.phone,
                     obscureText: false,
                     suffixIcon: const SizedBox()),
                 Padding(
@@ -90,6 +96,27 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                     )
                   ],
                 ),
+                BlocListener<LoginBloc, LoginState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                        loading: () => const Dialog(
+                              child: Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              ),
+                            ),
+                        loaded: (entity) {
+                          preferences.setString(
+                              "refreshToken", entity.refreshToken ?? "");
+                          preferences.setString("token", entity.token ?? "");
+
+                          GoRouter.of(context).pushNamed("surveyStartScreen");
+                        },
+                        orElse: () {
+                          GoRouter.of(context).pushNamed("surveyStartScreen");
+                        });
+                  },
+                  child: const SizedBox.shrink(),
+                ),
                 Padding(
                   padding: EdgeInsets.only(top: 180.h),
                   child: Center(
@@ -107,8 +134,9 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 CustomButton(
                     text: "Войти",
                     onPressed: () {
-                      GoRouter.of(context).pushNamed(
-                          role == 0 ? "chooseImageSource" : "welcomScreen");
+                      BlocProvider.of<LoginBloc>(context).add(LoginEvent.login(
+                          phoneNumber: emailController.text,
+                          password: passwordController.text));
                     })
               ],
             ),

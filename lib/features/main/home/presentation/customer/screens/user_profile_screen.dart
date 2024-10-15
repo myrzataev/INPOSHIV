@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_choise_widget.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_profile_info_row.dart';
@@ -12,6 +14,8 @@ import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_pro
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/colors_helper.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfileScreen extends StatefulWidget {
   const UserProfileScreen({super.key});
@@ -24,16 +28,23 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   late PageController pageController;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-    TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  final preferences = locator<SharedPreferences>();
 
   int currentIndex = 0;
   @override
   void initState() {
+    initState();
     pageController = PageController(
       initialPage: currentIndex,
       keepPage: true,
     );
     super.initState();
+  }
+
+  void callBloc() {
+    BlocProvider.of<UserBloc>(context).add(
+        UserEvent.getUserInfo(userId: preferences.getString("userId") ?? ""));
   }
 
   @override
@@ -83,51 +94,67 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      radius: 22.r,
-                      backgroundImage: const AssetImage(Images.seller),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(left: 5.w),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            "Селлер 12",
-                            style: AppFonts.w700s20
-                                .copyWith(color: AppColors.accentTextColor),
+              BlocBuilder<UserBloc, UserState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                      loading: () => const Center(
+                            child: CircularProgressIndicator.adaptive(),
                           ),
-                          Text(
-                            "Заказчик",
-                            style: AppFonts.w400s16.copyWith(),
+                      userInfoLoaded: (model) {
+                        return Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 22.r,
+                                backgroundImage:
+                                    const AssetImage(Images.seller),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 5.w),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      model.username ?? "",
+                                      style: AppFonts.w700s20.copyWith(
+                                          color: AppColors.accentTextColor),
+                                    ),
+                                    Text(
+                                      model.role ?? "",
+                                      style: AppFonts.w400s16.copyWith(),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(60.r),
+                                    border: Border.all(
+                                        width: 1.w,
+                                        color: ColorsHelper.statusColor(
+                                            status: 1))),
+                                child: Padding(
+                                  padding: EdgeInsets.all(8.0.w),
+                                  child: Text(
+                                    ColorsHelper.trustStatus(status: 1),
+                                    style: AppFonts.w400s16.copyWith(
+                                        color:
+                                            ColorsHelper.statusColor(status: 1),
+                                        fontFamily: "SF Pro"),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(60.r),
-                          border: Border.all(
-                              width: 1.w,
-                              color: ColorsHelper.statusColor(status: 1))),
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0.w),
-                        child: Text(
-                          ColorsHelper.trustStatus(status: 1),
-                          style: AppFonts.w400s16.copyWith(
-                              color: ColorsHelper.statusColor(status: 1),
-                              fontFamily: "SF Pro"),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                        );
+                      },
+                      orElse: () {
+                        return const SizedBox.shrink();
+                      });
+                },
               ),
               // PageView for Profile Sections
               Expanded(

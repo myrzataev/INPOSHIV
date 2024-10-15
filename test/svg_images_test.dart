@@ -13,6 +13,7 @@ void main() {
     expect(File(SvgImages.close).existsSync(), isTrue);
     expect(File(SvgImages.dark).existsSync(), isTrue);
     expect(File(SvgImages.darkMode).existsSync(), isTrue);
+    expect(File(SvgImages.document).existsSync(), isTrue);
     expect(File(SvgImages.export).existsSync(), isTrue);
     expect(File(SvgImages.goback).existsSync(), isTrue);
     expect(File(SvgImages.home).existsSync(), isTrue);
@@ -28,5 +29,6 @@ void main() {
     expect(File(SvgImages.switchjusticon).existsSync(), isTrue);
     expect(File(SvgImages.system).existsSync(), isTrue);
     expect(File(SvgImages.techsupport).existsSync(), isTrue);
+    expect(File(SvgImages.tick).existsSync(), isTrue);
   });
 }

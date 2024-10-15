@@ -1,0 +1,14 @@
+[
+    {
+      "relation": [
+        "delegate_permission/common.handle_all_urls"
+      ],
+      "target": {
+      "namespace": "android_app",
+      "package_name": "com.example.inposhiv",
+      "sha256_cert_fingerprints": [
+          "E8:0A:CB:2D:EC:62:84:88:15:47:CE:BA:2D:08:C9:94:26:CF:74:A0:44:09:CB:CC:22:88:CB:25:89:74:35:95"    
+        ]
+      }
+    }
+  ]

@@ -11,6 +11,7 @@ class SvgImages {
   static const String close = 'assets/svgs/close.svg';
   static const String dark = 'assets/svgs/dark.svg';
   static const String darkMode = 'assets/svgs/darkMode.svg';
+  static const String document = 'assets/svgs/document.svg';
   static const String export = 'assets/svgs/export.svg';
   static const String goback = 'assets/svgs/goback.svg';
   static const String home = 'assets/svgs/home.svg';
@@ -26,4 +27,5 @@ class SvgImages {
   static const String switchjusticon = 'assets/svgs/switchjusticon.svg';
   static const String system = 'assets/svgs/system.svg';
   static const String techsupport = 'assets/svgs/techsupport.svg';
+  static const String tick = 'assets/svgs/tick.svg';
 }

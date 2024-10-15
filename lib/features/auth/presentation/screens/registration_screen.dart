@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/auth/data/models/user_model.dart';
+import 'package:inposhiv/features/auth/presentation/blocs/auth/auth_bloc.dart';
+import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationScreen extends StatefulWidget {
-  const RegistrationScreen({super.key});
+  final String? phoneNumber;
+  const RegistrationScreen({super.key, this.phoneNumber});
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -27,6 +35,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   bool ischecked = false;
   bool isErrorVisible = false;
   PhoneCountryData? _initialCountryData;
+
   @override
   void dispose() {
     nameController.dispose();
@@ -41,12 +50,35 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   void initState() {
-    _initialCountryData = PhoneCodes.getCountryDataByPhone("7");
+    proccessPhoneNumber();
+    // _initialCountryData = PhoneCodes.getCountryDataByPhone("996");
     super.initState();
+  }
+
+  void proccessPhoneNumber() {
+    if (widget.phoneNumber != null) {
+      String? phoneNumber = widget.phoneNumber;
+      List<String> countryCodes = ["996", "7"];
+
+      for (String countryCode in countryCodes) {
+        if (countryCode.startsWith(countryCode)) {
+          print(countryCode);
+          phoneNumber = phoneNumber?.substring(countryCode.length);
+          setState(() {
+            _initialCountryData = PhoneCodes.getCountryDataByPhone(countryCode);
+          });
+          break;
+        }
+      }
+      phoneController.text = phoneNumber ?? "";
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    SharedPreferences preferences = locator<SharedPreferences>();
+    final role = Provider.of<RoleProvider>(context).role;
+    bool isCustomer = role == 1;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -91,8 +123,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               child: CountryDropdown(
                                 dropdownColor: Colors.white,
                                 printCountryName: true,
+
                                 focusColor: AppColors.borderColor,
-                                
+
                                 style: AppFonts.w400s16,
                                 initialCountryData:
                                     _initialCountryData, // Russia by default
@@ -134,7 +167,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                           borderSide: BorderSide(
                                               width: 1,
                                               color: Color(0xffA0A0A0))),
-                                      hintText: _initialCountryData?.phoneMaskWithoutCountryCode,
+                                      hintText: _initialCountryData
+                                          ?.phoneMaskWithoutCountryCode,
                                       hintStyle: AppFonts.w700s20.copyWith(
                                           color: const Color(0xffA0A0A0)),
                                       border: const UnderlineInputBorder(
@@ -232,6 +266,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       )
                     ],
                   ),
+                  BlocListener<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        state.maybeWhen(
+                            loading: () => const Dialog(
+                                  child: Center(
+                                    child: CircularProgressIndicator.adaptive(),
+                                  ),
+                                ),
+                            loaded: (entity) {
+                              preferences.setString(
+                                  "userId", entity.userUuid ?? "");
+                              preferences.setString(
+                                  "userName", entity.username ?? "");
+                              preferences.setString("customerId",
+                                  entity.customerOrManufacturerUuid ?? "");
+                              GoRouter.of(context).pushNamed("authorization");
+                            },
+                            error: (error) => ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(error))),
+                            orElse: () {});
+                      },
+                      child: const SizedBox.shrink()),
                   isErrorVisible
                       ? Text(
                           "Пожалуйста, подтвердите согласие",
@@ -240,9 +296,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         )
                       : const SizedBox(),
                   Padding(
-                    padding: EdgeInsets.only(top: 30.h),
+                    padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
                     child: CustomButton(
-                        text: "Зарегистрироваться", onPressed: _submitForm),
+                        text: "Зарегистрироваться",
+                        onPressed: () {
+                          _submitForm(isCustomer);
+                        }),
                   )
                 ],
               ),
@@ -253,11 +312,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void _submitForm() {
+  void _submitForm(bool isCustomer) {
     if (_formKey.currentState!.validate() && ischecked) {
       setState(() {
         isErrorVisible = false;
-        GoRouter.of(context).pushNamed("authorization");
+        BlocProvider.of<AuthBloc>(context).add(AuthEvent.auth(
+            model: UserModel(
+                role: isCustomer ? "CUSTOMER" : "MANUFACTURER",
+                firstAndLastName: nameController.text,
+                phoneNumber: phoneController.text.replaceAll(" ", ""),
+                email: emailController.text,
+                city: cityController.text,
+                companyName: companiesNameController.text,
+                password: passwordControler.text)));
       });
     } else {
       setState(() {

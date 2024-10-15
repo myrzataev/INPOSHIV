@@ -22,66 +22,64 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
       backgroundColor: Colors.white,
       body: Padding(
         padding: EdgeInsets.only(
-            left: 20.w,
-            right: 20.w,
-            top: MediaQuery.of(context).size.height * 0.4,
-            bottom: 30.h),
+          left: 20.w,
+          right: 20.w,
+        ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(),
+            const Spacer(),
+            Text(
+              "Выберите роль",
+              style: AppFonts.w700s36.copyWith(height: 0.8),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
+              child: Text(
+                "Войти как:",
+                style: AppFonts.w400s16.copyWith(height: 0.8),
+              ),
+            ),
+            Row(
               children: [
-                Text(
-                  "Выберите роль",
-                  style: AppFonts.w700s36.copyWith(height: 0.8),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                  child: Text(
-                    "Войти как:",
-                    style: AppFonts.w400s16.copyWith(height: 0.8),
+                Expanded(
+                  child: CustomChooseRoleWidget(
+                    isChoosed: role == 0,
+                    onTap: () {
+                      setState(() {
+                        role = 0;
+                      });
+                    },
+                    text: "Производитель",
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomChooseRoleWidget(
-                        isChoosed: role == 0,
-                        onTap: () {
-                          setState(() {
-                            role = 0;
-                          });
-                        },
-                        text: "Производитель",
-                      ),
-                    ),
-                    SizedBox(
-                      width: 10.w,
-                    ), // Spacing between the containers
-                    Expanded(
-                      child: CustomChooseRoleWidget(
-                        onTap: () {
-                          setState(() {
-                            role = 1;
-                          });
-                        },
-                        isChoosed: role == 1,
-                        text: "Заказчик",
-                      ),
-                    ),
-                  ],
-                )
+                SizedBox(
+                  width: 10.w,
+                ), // Spacing between the containers
+                Expanded(
+                  child: CustomChooseRoleWidget(
+                    onTap: () {
+                      setState(() {
+                        role = 1;
+                      });
+                    },
+                    isChoosed: role == 1,
+                    text: "Заказчик",
+                  ),
+                ),
               ],
             ),
-            CustomButton(
-              text: "Создать заказ",
-              onPressed: () {
-                Provider.of<RoleProvider>(context, listen: false).changeRole(role);
-                GoRouter.of(context).pushNamed("registration");
-              },
-            )
+            Padding(
+                padding: EdgeInsets.only(bottom: 20.h, top: 113.h),
+                child: CustomButton(
+                  text: "Создать заказ",
+                  onPressed: () {
+                    Provider.of<RoleProvider>(context, listen: false)
+                        .changeRole(role);
+                    GoRouter.of(context).pushNamed("fifthOnboarding");
+                  },
+                )),
           ],
         ),
       ),

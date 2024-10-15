@@ -8,7 +8,8 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
-import 'package:inposhiv/features/auth/presentation/screens/create_auction/creator/set_quantity_screen.dart';
+import 'package:inposhiv/features/onboarding/customer/data/models/size_model.dart';
+import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/data/feedback_mocked_data.dart';
 import 'package:inposhiv/features/main/home/data/mocked_data.dart';
@@ -51,7 +52,7 @@ class _MainScreenState extends State<DetailedScreen> {
     final int role = Provider.of<RoleProvider>(context).role;
     bool isCreator = role == 0;
 
-    List<SizeModel> sizesVm =
+    List<SizeModelWithController> sizesVm =
         Provider.of<SizeProvider>(context, listen: true).sizes;
     return Scaffold(
       body: Stack(children: [

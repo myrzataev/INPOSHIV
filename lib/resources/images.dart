@@ -14,9 +14,11 @@ class Images {
   static const String logo1 = 'assets/pngs/logo1.png';
   static const String logo2 = 'assets/pngs/logo2.png';
   static const String logo3 = 'assets/pngs/logo3.png';
+  static const String map = 'assets/pngs/map.png';
   static const String mbank = 'assets/pngs/mbank.png';
   static const String mbanktwo = 'assets/pngs/mbanktwo.png';
   static const String money = 'assets/pngs/money.png';
+  static const String onboarding = 'assets/pngs/onboarding.png';
   static const String optima = 'assets/pngs/optima.png';
   static const String sber = 'assets/pngs/sber.png';
   static const String seller = 'assets/pngs/seller.png';

@@ -16,9 +16,11 @@ void main() {
     expect(File(Images.logo1).existsSync(), isTrue);
     expect(File(Images.logo2).existsSync(), isTrue);
     expect(File(Images.logo3).existsSync(), isTrue);
+    expect(File(Images.map).existsSync(), isTrue);
     expect(File(Images.mbank).existsSync(), isTrue);
     expect(File(Images.mbanktwo).existsSync(), isTrue);
     expect(File(Images.money).existsSync(), isTrue);
+    expect(File(Images.onboarding).existsSync(), isTrue);
     expect(File(Images.optima).existsSync(), isTrue);
     expect(File(Images.sber).existsSync(), isTrue);
     expect(File(Images.seller).existsSync(), isTrue);

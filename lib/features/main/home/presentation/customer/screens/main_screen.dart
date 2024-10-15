@@ -8,13 +8,15 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
-import 'package:inposhiv/features/auth/presentation/screens/create_auction/creator/set_quantity_screen.dart';
+import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/data/mocked_data.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
   final bool isFromSearch;
@@ -44,7 +46,7 @@ class _MainScreenState extends State<MainScreen> {
           context: context,
           builder: (context) => Dialog(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -97,7 +99,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     List<CardsModel> data = MockedCardData.cardsList;
     final int role = Provider.of<RoleProvider>(context).role;
-    List<SizeModel> sizesVm =
+    List<SizeModelWithController> sizesVm =
         Provider.of<SizeProvider>(context, listen: true).sizes;
     return Scaffold(
       drawer: const CustomDrawer(),
@@ -281,7 +283,6 @@ class _MainScreenState extends State<MainScreen> {
                                                 child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
-                                                  
                                                   children: [
                                                     Text(
                                                       "Размерный ряд",
@@ -293,8 +294,11 @@ class _MainScreenState extends State<MainScreen> {
                                                     Padding(
                                                       padding: EdgeInsets.only(
                                                           left: 6.w),
-                                                      child:  RotatedBox(
-                                                        quarterTurns: currentIndexIsExpanded?2: 0,
+                                                      child: RotatedBox(
+                                                        quarterTurns:
+                                                            currentIndexIsExpanded
+                                                                ? 2
+                                                                : 0,
                                                         child: SvgPicture.asset(
                                                             SvgImages.bottom),
                                                       ),
@@ -306,26 +310,31 @@ class _MainScreenState extends State<MainScreen> {
                                                 duration: const Duration(
                                                     milliseconds: 300),
                                                 curve: Curves.fastOutSlowIn,
-                                                
-                                                child: currentIndexIsExpanded? GridView.builder(
-                                                    shrinkWrap: true,
-                                                    gridDelegate:
-                                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                                            mainAxisSpacing: 0,
-                                                            mainAxisExtent:
-                                                                30.h,
-                                                            crossAxisCount: 2),
-                                                    itemCount: sizesVm.length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Text(
-                                                        "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
-                                                        style: AppFonts.w400s16
-                                                            .copyWith(
-                                                                color: AppColors
-                                                                    .accentTextColor),
-                                                      );
-                                                    }): const SizedBox.shrink(),
+                                                child: currentIndexIsExpanded
+                                                    ? GridView.builder(
+                                                        shrinkWrap: true,
+                                                        gridDelegate:
+                                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                                mainAxisSpacing:
+                                                                    0,
+                                                                mainAxisExtent:
+                                                                    30.h,
+                                                                crossAxisCount:
+                                                                    2),
+                                                        itemCount:
+                                                            sizesVm.length,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return Text(
+                                                            "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
+                                                            style: AppFonts
+                                                                .w400s16
+                                                                .copyWith(
+                                                                    color: AppColors
+                                                                        .accentTextColor),
+                                                          );
+                                                        })
+                                                    : const SizedBox.shrink(),
                                               ),
                                             ],
                                           )
@@ -350,7 +359,13 @@ class _MainScreenState extends State<MainScreen> {
               bottom: 10.h,
               left: 0.w,
               right: 0.w,
-              child: CustomButton(text: "Создать заказ", onPressed: () {}))
+              child: CustomButton(
+                  text: "Создать заказ",
+                  onPressed: () {
+                    role == 1
+                        ? GoRouter.of(context).pushNamed("chooseImageSource")
+                        : () {};
+                  }))
         ]),
       )),
     );

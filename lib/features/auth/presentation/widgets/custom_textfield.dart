@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 
 class CustomTextForm extends StatelessWidget {
   final TextEditingController controller;
   final String hintText;
   final TextInputType? keyboardType;
+  final TextAlign? textAlign;
   const CustomTextForm(
       {super.key,
       required this.hintText,
       required this.controller,
+      this.textAlign,
       this.keyboardType});
 
   @override
@@ -17,8 +20,8 @@ class CustomTextForm extends StatelessWidget {
       
       controller: controller,
       keyboardType: (keyboardType == null) ? TextInputType.text : keyboardType,
-      textAlign: TextAlign.center,
-      style: AppFonts.w700s20.copyWith(color: const Color(0xffA0A0A0)),
+      textAlign: textAlign != null? textAlign!: TextAlign.center,
+      style: AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
       decoration: InputDecoration(
           focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(width: 1, color: Color(0xffA0A0A0))),

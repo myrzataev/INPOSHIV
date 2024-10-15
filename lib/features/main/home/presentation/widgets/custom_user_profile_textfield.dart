@@ -57,7 +57,7 @@ class _CustomProfileTextFieldState extends State<CustomProfileTextField> {
           cursorColor: AppColors.borderColorGrey,
           obscureText: widget.obscureText ? isObscured : false,
           obscuringCharacter: "*",
-          style: AppFonts.w700s20.copyWith(color: const Color(0xffA0A0A0)),
+          style: AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
           inputFormatters: widget.textInputFormatter,
           decoration: InputDecoration(
               suffixIcon: InkWell(
