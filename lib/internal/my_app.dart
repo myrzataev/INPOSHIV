@@ -16,21 +16,40 @@ import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dar
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/create_auction_ds.dart';
+import 'package:inposhiv/features/main/auction/data/data_source/get_auction_members_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_auctions_list_ds.dart';
+import 'package:inposhiv/features/main/auction/data/data_source/get_customers_orders_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/make_bid_ds.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/auction_repo_impl.dart';
+import 'package:inposhiv/features/main/auction/data/repositories/get_auction_members_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_auctions_list_repoimmpl.dart';
+import 'package:inposhiv/features/main/auction/data/repositories/get_customer_orders_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/make_bid_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/create_auction_bloc/create_auction_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/get_auction_members_bloc/get_auction_members_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_bloc/get_auctions_bloc.dart';
+import 'package:inposhiv/features/main/chat/data/data_source/create_chatroom_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/get_chatroom_history_ds.dart';
+import 'package:inposhiv/features/main/chat/data/data_source/get_chats_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/send_message_ds.dart';
+import 'package:inposhiv/features/main/chat/data/repositories/create_chat_repoimpl.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/get_chat_rooms_history_repoimpl.dart';
+import 'package:inposhiv/features/main/chat/data/repositories/get_chats_repoimpl.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/send_message_repoimpl.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
+import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
+import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
+import 'package:inposhiv/features/main/home/data/data_source/get_manufacturers_ds.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_user_info_ds.dart';
+import 'package:inposhiv/features/main/home/data/repositories/get_manufacturers_repoimpl.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_user_info_repoimpl.dart';
+import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/data/data_source/send_invoice_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/send_order_details_ds.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/send_invoice_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_order_details_repo_impl.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/create_order_ds.dart';
@@ -58,6 +77,7 @@ import 'package:inposhiv/features/survey/presentation/blocs/get_job_priorities_b
 import 'package:inposhiv/features/survey/presentation/blocs/send_customer_survey_data_bloc/send_customer_survey_data_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/providers/categories_provider.dart';
 import 'package:inposhiv/services/keyboard_unfocuser.dart';
+import 'package:inposhiv/services/messaging_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:uni_links/uni_links.dart';
@@ -73,9 +93,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   StreamSubscription<Uri?>? _sub;
+  final messagingService = MessagingService();
 
   @override
   void initState() {
+    messagingService.init();
     super.initState();
     _handleIncomingLinks();
     // Handle initial link, if any
@@ -191,7 +213,6 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => CreateAuctionDs(
                 dio: RepositoryProvider.of<DioSettings>(context).dio)),
-
         RepositoryProvider(
             create: (context) => AuctionRepoImpl(
                 dataSource: RepositoryProvider.of<CreateAuctionDs>(context))),
@@ -239,8 +260,46 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => GetChatRoomsHistoryRepoimpl(
                 dataSource:
-                    RepositoryProvider.of<GetChatroomHistoryDs>(context)))
-        // RepositoryProvider(create: (context)=> )
+                    RepositoryProvider.of<GetChatroomHistoryDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetChatsDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetChatRoomsRepoimpl(
+                getChatsDs: RepositoryProvider.of<GetChatsDs>(context))),
+        RepositoryProvider(
+            create: (context) => CreateChatroomDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => CreateChatRepoimpl(
+                dataSource: RepositoryProvider.of<CreateChatroomDs>(context))),
+        RepositoryProvider(
+            create: (context) => SendInvoiceDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => SendInvoiceRepoimpl(
+                sendInvoiceDs: RepositoryProvider.of<SendInvoiceDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetCustomersOrdersDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetCustomerOrdersRepoimpl(
+                getCustomersOrdersDs:
+                    RepositoryProvider.of<GetCustomersOrdersDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetAuctionMembersDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetAuctionMembersRepoimpl(
+                getAuctionMembersDs:
+                    RepositoryProvider.of<GetAuctionMembersDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetManufacturersDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetManufacturersRepoimpl(
+                getManufacturersDs:
+                    RepositoryProvider.of<GetManufacturersDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -277,10 +336,26 @@ class _MyAppState extends State<MyApp> {
                     RepositoryProvider.of<CreateOrderRepoImpl>(context)),
           ),
           BlocProvider(
+              create: (context) => GetAuctionMembersBloc(
+                  getAuctionMembersRepoimpl:
+                      RepositoryProvider.of<GetAuctionMembersRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => CreateAuctionBloc(
+                  repoImpl: RepositoryProvider.of<AuctionRepoImpl>(context))),
+          BlocProvider(
+              create: (context) => CustomerAuctionsBloc(
+                  getCustomerOrdersRepoimpl:
+                      RepositoryProvider.of<GetCustomerOrdersRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => GetAuctionsBloc(
+                    getAuctionsListRepoimpl:
+                        RepositoryProvider.of<GetAuctionsListRepoimmpl>(
+                            context),
+                  )),
+          BlocProvider(
               create: (context) => AuctionBloc(
-                  repoImpl: RepositoryProvider.of<AuctionRepoImpl>(context),
-                  getAuctionsListRepoimpl:
-                      RepositoryProvider.of<GetAuctionsListRepoimmpl>(context),
                   makeBidRepoimpl:
                       RepositoryProvider.of<MakeBidRepoimpl>(context))),
           BlocProvider(
@@ -293,15 +368,32 @@ class _MyAppState extends State<MyApp> {
                       RepositoryProvider.of<CreateManufacturerProfileRepoimpl>(
                           context))),
           BlocProvider(
-              create: (context) => ChatBloc(
-                  repoimpl: RepositoryProvider.of<SendMessageRepoimpl>(context),
-                  getChatRoomHistoryRepo:
-                      RepositoryProvider.of<GetChatRoomsHistoryRepoimpl>(
-                          context))),
+              create: (context) => ChatsBloc(
+                    repoimpl:
+                        RepositoryProvider.of<SendMessageRepoimpl>(context),
+                    getChatRoomHistoryRepo:
+                        RepositoryProvider.of<GetChatRoomsHistoryRepoimpl>(
+                            context),
+                  )),
+          BlocProvider(
+              create: (context) => CreateChatRoomBloc(
+                  createChatRepoimpl:
+                      RepositoryProvider.of<CreateChatRepoimpl>(context))),
+          BlocProvider(
+              create: (context) => ChatRoomsBloc(
+                    getChatRoomsRepoimpl:
+                        RepositoryProvider.of<GetChatRoomsRepoimpl>(context),
+                  )),
           BlocProvider(
               create: (context) => OrdersBloc(
                   sendOrderDetailsRepoImpl:
-                      RepositoryProvider.of<SendOrderDetailsRepoImpl>(context)))
+                      RepositoryProvider.of<SendOrderDetailsRepoImpl>(context),
+                  sendInvoiceRepoimpl:
+                      RepositoryProvider.of<SendInvoiceRepoimpl>(context))),
+          BlocProvider(
+              create: (context) => GetManufacturersProfileBloc(
+                  getManufacturersRepoimpl:
+                      RepositoryProvider.of<GetManufacturersRepoimpl>(context)))
         ],
         child: MultiProvider(
           providers: [

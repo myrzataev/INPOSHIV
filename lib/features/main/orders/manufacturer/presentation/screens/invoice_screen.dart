@@ -7,10 +7,13 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_detail_row.dart';
+import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
+import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_row_withoutextfield.dart';
+import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_withouttextfield.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
-import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
+import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
+import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 
 class InvoiceScreen extends StatefulWidget {
@@ -25,170 +28,184 @@ class _InvoiceScreen extends State<InvoiceScreen> {
   List<PlatformFile>? filesForTech;
   List<PlatformFile>? filesForLecala;
   List<PlatformFile>? filesForDoc;
-  TextEditingController fabricTypeController = TextEditingController();
-  TextEditingController orderNameController = TextEditingController();
-
-  TextEditingController colorController = TextEditingController();
-  TextEditingController expirationController = TextEditingController();
-  TextEditingController discountController = TextEditingController();
+  TextEditingController amountController = TextEditingController();
+  TextEditingController retailPriceController = TextEditingController();
+  TextEditingController priceForLecalaController = TextEditingController();
+  TextEditingController exampleController = TextEditingController();
+  TextEditingController deliveryPriceController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-
+  double currentCurrency = 0;
+  double totalPriceWithoutAdditional = 0;
+  double totalPriceWithAdditional = 0;
+  double totalPriceWithoutAdditionalInRuble = 0;
+  double totalPriceWithAdditionalInRuble = 0;
+  double amount = 0;
+  double amountWithAdditional = 0;
   bool isShown = false;
   @override
   void dispose() {
-    fabricTypeController.dispose();
-    colorController.dispose();
-    expirationController.dispose();
-    discountController.dispose();
+    amountController.dispose();
+    priceForLecalaController.dispose();
+    exampleController.dispose();
+    deliveryPriceController.dispose();
     addressController.dispose();
-    orderNameController.dispose();
+    retailPriceController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    BlocProvider.of<CreateOrderBloc>(context)
+        .add(const CreateOrderEvent.getCurrentCurrencyEvent());
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomSearchWidget(
-                        onTap: () {},
-                        child: SvgPicture.asset(SvgImages.goback)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Text(
-                        "Данные заказа",
-                        style: AppFonts.w700s20
-                            .copyWith(color: AppColors.accentTextColor),
+          child: BlocListener<CreateOrderBloc, CreateOrderState>(
+        listener: (context, state) {
+          state.maybeWhen(
+              currencyLoaded: (model) {
+                setState(() {
+                  currentCurrency = model.rate ?? 0;
+                });
+              },
+              orElse: () {});
+        },
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomSearchWidget(
+                          onTap: () {
+                            GoRouter.of(context).pop();
+                          },
+                          child: SvgPicture.asset(SvgImages.goback)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Text(
+                          "Счет на оплату",
+                          style: AppFonts.w700s20
+                              .copyWith(color: AppColors.accentTextColor),
+                        ),
                       ),
-                    ),
-                    CustomOrderDetailRow(
-                      controller: orderNameController,
-                      title: "Наименование товара",
-                      value: "Женское платье",
-                    ),
-                    CustomOrderDetailRow(
-                      controller: fabricTypeController,
-                      title: "Материал",
-                      value: "Хлопок",
-                    ),
-                    CustomOrderDetailRow(
-                      controller: colorController,
-                      title: "Цвет ткани",
-                      value: "Черный",
-                    ),
-                    // CustomOrderDetailRow(
-                    //   controller: expirationController,
-                    //   title: "Сроки",
-                    //   value: "16.04.2024 – 20.05.2024",
-                    // ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.h),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                "Сроки",
-                                style: AppFonts.w400s16,
-                              ),
-                              SizedBox(
-                                width: 50.w,
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  readOnly: true,
-                                  onTap: () {
-                                    pickDate();
-                                  },
-                                  controller: expirationController,
-                                  // value,
-                                  style: AppFonts.w400s16.copyWith(
-                                      color: AppColors.accentTextColor),
-                                ),
-                              )
-                            ],
-                          ),
-                          const Divider(
-                            color: AppColors.borderColorGrey,
-                          ),
-                        ],
+                      CustomOrderRowWithTextfield(
+                        onChanged: (value) => setState(() {
+                          amount = double.tryParse(value) ?? 0;
+                          totalPriceWithoutAdditional = calculateAmount(
+                              amount: double.tryParse(value) ?? 0,
+                              price:
+                                  double.tryParse(retailPriceController.text) ??
+                                      0);
+                          calculateretailInRuble(
+                              currency: currentCurrency,
+                              totalSumInDollar: totalPriceWithoutAdditional);
+                        }),
+                        title:
+                            "Примерное количество товара\nТочное кол-во будет указано после раскроя ткани",
+                        value: "шт",
+                        textInputType: const TextInputType.numberWithOptions(),
+                        hintText: "500",
+                        controller: amountController,
                       ),
-                    ),
-                    CustomOrderDetailRow(
-                      controller: discountController,
-                      title: "Скидка",
-                      value: "10%",
-                    ),
-                    CustomOrderDetailRow(
-                      title: "Пункт доставки",
-                      controller: addressController,
-                      value: "Манаса 119",
-                    ),
-                    CustomAttachDocument(
-                      isShown: isShown,
-                      files: filesForTech,
-                      text: "Тех. задание",
-                      onTap: () {
-                        _pickFiles(0);
-                      },
-                      fileName: "file.pdf",
-                    ),
-                    CustomAttachDocument(
-                      text: "Лекала",
-                      files: filesForLecala,
-                      onTap: () {
-                        _pickFiles(1);
-                      },
-                    ),
-                    CustomAttachDocument(
-                      text: "Договор",
-                      files: filesForDoc,
-                      onTap: () {
-                        _pickFiles(2);
-                      },
-                    ),
-                  ],
+                      CustomOrderRowWithTextfield(
+                        onChanged: (value) => setState(() {
+                          totalPriceWithoutAdditional = calculateAmount(
+                              amount: amount,
+                              price: double.tryParse(value) ?? 0);
+                          totalPriceWithoutAdditionalInRuble =
+                              calculateretailInRuble(
+                                  currency: currentCurrency,
+                                  totalSumInDollar:
+                                      totalPriceWithoutAdditional);
+                        }),
+                        title:
+                            "Примерное количество товара\nТочное кол-во будет указано после раскроя ткани",
+                        value: "\$",
+                        textInputType: const TextInputType.numberWithOptions(),
+                        hintText: "5",
+                        controller: retailPriceController,
+                      ),
+                      CustomOrderRowWithoutTextfield(
+                        title: "Итоговая примерная сумма",
+                        value: "$totalPriceWithoutAdditional\$",
+                        additionalValue:
+                            "$totalPriceWithoutAdditionalInRuble руб",
+                      ),
+                      CustomOrderRowWithTextfield(
+                        onChanged: (value) => setState(() {
+                          totalPriceWithAdditional =
+                              calculateAmountWithAdditional(
+                                  totalAmount: totalPriceWithoutAdditional,
+                                  additional: double.tryParse(value) ?? 0);
+                          totalPriceWithAdditionalInRuble =
+                              calculateretailInRuble(
+                                  currency: currentCurrency,
+                                  totalSumInDollar: totalPriceWithAdditional);
+                        }),
+                        title: "Цена за разработку лекал",
+                        controller: priceForLecalaController,
+                        value: "\$",
+                        hintText: "100+",
+                        textInputType: TextInputType.number,
+                      ),
+                      CustomOrderRowWithTextfield(
+                        onChanged: (value) => setState(() {
+                          totalPriceWithAdditional =
+                              calculateAmountWithAdditional(
+                                  totalAmount: totalPriceWithoutAdditional,
+                                  additional: double.tryParse(value) ?? 0);
+                          totalPriceWithAdditionalInRuble =
+                              calculateretailInRuble(
+                                  currency: currentCurrency,
+                                  totalSumInDollar: totalPriceWithAdditional);
+                        }),
+                        title: "Образец",
+                        value: "\$",
+                        hintText: "50+",
+                        textInputType: TextInputType.number,
+                        controller: exampleController,
+                      ),
+                      CustomOrderRowWithTextfield(
+                        onChanged: (value) => setState(() {
+                          totalPriceWithAdditional =
+                              calculateAmountWithAdditional(
+                                  totalAmount: totalPriceWithoutAdditional,
+                                  additional: double.tryParse(value) ?? 0);
+                          totalPriceWithAdditionalInRuble =
+                              calculateretailInRuble(
+                                  currency: currentCurrency,
+                                  totalSumInDollar: totalPriceWithAdditional);
+                        }),
+                        controller: deliveryPriceController,
+                        textInputType: TextInputType.number,
+                        hintText: "50+",
+                        title: "Доставка",
+                        value: "\$",
+                      ),
+                      CustomOrderRowWithoutTextfield(
+                        title: "Итоговая примерная сумма + доп. расходы",
+                        value: "$totalPriceWithAdditional\$",
+                        additionalValue: "$totalPriceWithAdditionalInRuble руб",
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            CustomButton(
-                text: "Подтвердите правильность данных",
-                onPressed: () {
-                  BlocProvider.of<OrdersBloc>(context)
-                      .add(OrdersEvent.sendOrderDetails(
-                          orderDetails: OrderDetailsModel(
-                            orderId: int.tryParse(widget.orderId),
-                            productName: orderNameController.text,
-                            material: 0,
-                            color: colorController.text,
-                            quantity: 100,
-                            deliveryPoint: addressController.text,
-                            discount: int.tryParse(discountController.text),
-                            deadline:
-                                DateTime.tryParse(expirationController.text),
-                            technicalDocumentUrls: filesForDoc
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                            technicalDocuments: filesForDoc
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                            lekalaDocumentUrls: filesForLecala
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                          ).toJson(),
-                          orderId: widget.orderId));
-                })
-          ],
+              CustomButton(
+                  text: "Подтвердить и перейти к оплате",
+                  onPressed: () {
+                    _showAuctionDetail();
+                  })
+            ],
+          ),
         ),
       )),
     );
@@ -208,15 +225,12 @@ class _InvoiceScreen extends State<InvoiceScreen> {
           filesForDoc = result.files;
         }
       });
-      // for (var element in result.files) {
-      //   print(element.name);
-      // }
     }
   }
 
   Future<void> pickDate() async {
     final result = await showDatePicker(
-        locale: Locale("ru", "RU"),
+        locale: const Locale("ru", "RU"),
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime(2000),
@@ -224,102 +238,131 @@ class _InvoiceScreen extends State<InvoiceScreen> {
 
     if (result != null) {
       setState(() {
-        expirationController.text = result.toString().split(" ")[0];
+        // expirationController.text = result.toString().split(" ")[0];
       });
     }
   }
+
+  double calculateAmount({required double amount, required double price}) {
+    return amount * price;
+  }
+
+  double calculateAmountWithAdditional(
+      {required double totalAmount, required double additional}) {
+    return totalAmount + additional;
+  }
+
+  double calculateretailInRuble(
+      {required double totalSumInDollar, required double currency}) {
+    return totalSumInDollar * currency;
+  }
+
+  void _showAuctionDetail() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(10.r)),
+      ),
+      builder: (BuildContext context) {
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.3, // adjust the height as needed
+          minChildSize: 0.3,
+          maxChildSize: 0.5,
+          builder: (context, scrollController) {
+            return SingleChildScrollView(
+              controller: scrollController,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Выберите способ оплаты",
+                      style: AppFonts.w700s36,
+                    ),
+                    CustomChoosePaymentWidget(
+                        text: "Через платформу Наиболее безопасный способ",
+                        icon: SvgImages.lock,
+                        onTap: () {
+                          GoRouter.of(context).pushNamed("payScreen");
+                        }),
+                    CustomChoosePaymentWidget(
+                        text: "Оплата на расчетный счет",
+                        icon: SvgImages.lock,
+                        onTap: () {
+                          GoRouter.of(context).pushNamed("payScreen");
+                        }),
+                    CustomChoosePaymentWidget(
+                        text: "Оплата физ. лицу",
+                        icon: SvgImages.lock,
+                        onTap: () {
+                          GoRouter.of(context).pushNamed("payScreen");
+                        }),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 }
 
-class CustomAttachDocument extends StatelessWidget {
+class CustomChoosePaymentWidget extends StatelessWidget {
   final String text;
-  final List<PlatformFile>? files;
+  final bool? isChoosed;
   final Function onTap;
-  final String? fileName;
-  final bool? isShown;
-  const CustomAttachDocument({
-    super.key,
-    required this.text,
-    required this.onTap,
-    this.files,
-    this.fileName,
-    this.isShown = false,
-  });
+  final String icon;
+  const CustomChoosePaymentWidget(
+      {super.key,
+      required this.text,
+      required this.onTap,
+      this.isChoosed,
+      required this.icon});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              text,
-              style: AppFonts.w400s16,
-            ),
-            Column(
-              children: [
-                IconButton(
-                    onPressed: () {
-                      onTap();
-                    },
-                    icon: SvgPicture.asset(SvgImages.document)),
-                // AnimatedSwitcher(
-                //   duration: const Duration(milliseconds: 300),
-                //   switchInCurve: Curves.easeIn,
-                //   switchOutCurve: Curves.easeOut,
-                //   child: (isShown ?? false)
-                //       ? Column(
-                //           key: ValueKey<int>(1), // Key for switching animation
-                //           children: [
-                //             TextButton(
-                //               onPressed: () {},
-                //               child: Text("data"),
-                //             ),
-                //             TextButton(
-                //               onPressed: () {},
-                //               child: Text("data"),
-                //             ),
-                //           ],
-                //         )
-                //       : SizedBox.shrink(key: ValueKey<int>(2)),
-                // )
-              ],
-            )
-          ],
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      child: InkWell(
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.r),
         ),
-        files != null
-            ? SizedBox(
-                height: 60.h,
-                child: ListView.separated(
-                    itemCount: files?.length ?? 0,
-                    separatorBuilder: (context, index) => SizedBox(
-                          width: 20.w,
-                        ),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          GoRouter.of(context).pushNamed("seeDoc",
-                              queryParameters: {"path": files?[index].path});
-                        },
-                        child: Column(
-                          children: [
-                            const Icon(
-                              Icons.edit_document,
-                              color: AppColors.accentTextColor,
-                            ),
-                            Text(
-                              files?[index].name ?? "",
-                              style: AppFonts.w400s16
-                                  .copyWith(color: AppColors.accentTextColor),
-                            )
-                          ],
-                        ),
-                      );
-                    }))
-            : const SizedBox.shrink()
-      ],
+        onTap: () {
+          onTap();
+        },
+        child: Ink(
+            height: 80.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10.r),
+              border: Border.all(
+                  width: 1,
+                  color: (isChoosed ?? false)
+                      ? Colors.black
+                      : AppColors.borderColorGrey),
+            ),
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 5.w),
+                child: Row(
+                  children: [
+                    SvgPicture.asset(icon),
+                    SizedBox(
+                      width: 20.w,
+                    ),
+                    Text(
+                      text,
+                      style: AppFonts.w400s16
+                          .copyWith(color: const Color(0xff101010)),
+                    ),
+                  ],
+                ),
+              ),
+            )),
+      ),
     );
   }
 }

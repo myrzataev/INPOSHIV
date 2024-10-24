@@ -8,6 +8,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_detail_row.dart';
+import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
@@ -124,11 +125,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         ],
                       ),
                     ),
-                    CustomOrderDetailRow(
-                      controller: discountController,
-                      title: "Скидка",
-                      value: "10%",
-                    ),
+                    // CustomOrderDetailRow(
+                    //   controller: discountController,
+                    //   title: "Скидка",
+                    //   value: "10%",
+                    // ),
                     CustomOrderDetailRow(
                       title: "Пункт доставки",
                       controller: addressController,
@@ -164,29 +165,48 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
             CustomButton(
                 text: "Подтвердите правильность данных",
                 onPressed: () {
-                  BlocProvider.of<OrdersBloc>(context)
-                      .add(OrdersEvent.sendOrderDetails(
-                          orderDetails: OrderDetailsModel(
-                            orderId: int.tryParse(widget.orderId),
-                            productName: orderNameController.text,
-                            material: 0,
-                            color: colorController.text,
-                            quantity: 100,
-                            deliveryPoint: addressController.text,
-                            discount: int.tryParse(discountController.text),
-                            deadline:
-                                DateTime.tryParse(expirationController.text),
-                            technicalDocumentUrls: filesForDoc
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                            technicalDocuments: filesForDoc
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                            lekalaDocumentUrls: filesForLecala
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                          ).toJson(),
-                          orderId: widget.orderId));
+                  context.goNamed("auction");
+                  Future.delayed(const Duration(milliseconds: 200), () {
+                    showDialog(
+                      // ignore: use_build_context_synchronously
+                      context: context,
+                      builder: (context) => CustomDialog(
+                        title:
+                            "Мы отправили эти данные производителю для подтверждения",
+                        description: "Мы уведомим вас, когда он это сделает",
+                        button: CustomButton(
+                          text: "Понятно",
+                          onPressed: () {
+                          GoRouter.of(context).pushNamed("invoiceScreen");
+                           // Close the dialog
+                          },
+                        ),
+                      ),
+                    );
+                  });
+                  // BlocProvider.of<OrdersBloc>(context)
+                  //     .add(OrdersEvent.sendOrderDetails(
+                  //         orderDetails: OrderDetailsModel(
+                  //           orderId: int.tryParse(widget.orderId),
+                  //           productName: orderNameController.text,
+                  //           material: 0,
+                  //           color: colorController.text,
+                  //           quantity: 100,
+                  //           deliveryPoint: addressController.text,
+                  //           discount: int.tryParse(discountController.text),
+                  //           deadline:
+                  //               DateTime.tryParse(expirationController.text),
+                  //           technicalDocumentUrls: filesForDoc
+                  //               ?.map((element) => element.path ?? "")
+                  //               .toList(),
+                  //           technicalDocuments: filesForDoc
+                  //               ?.map((element) => element.path ?? "")
+                  //               .toList(),
+                  //           lekalaDocumentUrls: filesForLecala
+                  //               ?.map((element) => element.path ?? "")
+                  //               .toList(),
+                  //         ).toJson(),
+                  //         orderId: widget.orderId));
                 })
           ],
         ),

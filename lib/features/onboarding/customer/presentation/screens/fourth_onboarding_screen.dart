@@ -36,7 +36,7 @@ class FourthOnboardingScreen extends StatelessWidget {
               width: 87.w,
             ),
             Text(
-              "Все ваши сделки в нашем приложении безопасны",
+              "Безопасная сделка. С нами вы можете быть уверены, что все пройдет гладко",
               style: AppFonts.w700s36
                   .copyWith(height: 0.8, fontWeight: FontWeight.bold),
             ),
@@ -45,7 +45,7 @@ class FourthOnboardingScreen extends StatelessWidget {
               child: InkWell(
                   onTap: () {},
                   child: Text(
-                    "Подробная информация о функции",
+                    "Что такое безопасная сделка",
                     style: AppFonts.w400s16.copyWith(
                         color: AppColors.accentTextColor,
                         decoration: TextDecoration.underline),
@@ -56,7 +56,7 @@ class FourthOnboardingScreen extends StatelessWidget {
               child: CustomButton(
                 text: "Дальше",
                 onPressed: () {
-                  GoRouter.of(context).pushNamed("chooseRole");
+                  GoRouter.of(context).pushNamed("fifthOnboarding");
                 },
               ),
             ),

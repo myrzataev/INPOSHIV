@@ -15,9 +15,10 @@ _$AuctionModelImpl _$$AuctionModelImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['startTime'] as String),
       endTime: json['endTime'],
       auctionUuid: json['auctionUuid'] as String?,
-      auctionProcesses: (json['auctionProcesses'] as List<dynamic>?)
-          ?.map((e) => AuctionProcess.fromJson(e as Map<String, dynamic>))
+      productsList: (json['productsList'] as List<dynamic>?)
+          ?.map((e) => ProductsList.fromJson(e as Map<String, dynamic>))
           .toList(),
+      auctionProcesses: json['auctionProcesses'] as List<dynamic>?,
     );
 
 Map<String, dynamic> _$$AuctionModelImplToJson(_$AuctionModelImpl instance) =>
@@ -27,26 +28,34 @@ Map<String, dynamic> _$$AuctionModelImplToJson(_$AuctionModelImpl instance) =>
       'startTime': instance.startTime?.toIso8601String(),
       'endTime': instance.endTime,
       'auctionUuid': instance.auctionUuid,
+      'productsList': instance.productsList,
       'auctionProcesses': instance.auctionProcesses,
     };
 
-_$AuctionProcessImpl _$$AuctionProcessImplFromJson(Map<String, dynamic> json) =>
-    _$AuctionProcessImpl(
-      auctionId: (json['auctionId'] as num?)?.toInt(),
-      manufacturerUuid: json['manufacturerUuid'] as String?,
-      bidPrice: (json['bidPrice'] as num?)?.toInt(),
-      bidTime: (json['bidTime'] as List<dynamic>?)
-          ?.map((e) => (e as num).toInt())
+_$ProductsListImpl _$$ProductsListImplFromJson(Map<String, dynamic> json) =>
+    _$ProductsListImpl(
+      name: json['name'] as String?,
+      categoryId: json['categoryId'],
+      fabricId: (json['fabricId'] as num?)?.toInt(),
+      sizeId: (json['sizeId'] as num?)?.toInt(),
+      priceUsd: (json['priceUsd'] as num?)?.toInt(),
+      priceRub: (json['priceRub'] as num?)?.toDouble(),
+      quantity: json['quantity'],
+      description: json['description'],
+      photoUrls: (json['photoUrls'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
-      bidCount: (json['bidCount'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$$AuctionProcessImplToJson(
-        _$AuctionProcessImpl instance) =>
+Map<String, dynamic> _$$ProductsListImplToJson(_$ProductsListImpl instance) =>
     <String, dynamic>{
-      'auctionId': instance.auctionId,
-      'manufacturerUuid': instance.manufacturerUuid,
-      'bidPrice': instance.bidPrice,
-      'bidTime': instance.bidTime,
-      'bidCount': instance.bidCount,
+      'name': instance.name,
+      'categoryId': instance.categoryId,
+      'fabricId': instance.fabricId,
+      'sizeId': instance.sizeId,
+      'priceUsd': instance.priceUsd,
+      'priceRub': instance.priceRub,
+      'quantity': instance.quantity,
+      'description': instance.description,
+      'photoUrls': instance.photoUrls,
     };

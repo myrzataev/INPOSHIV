@@ -16,40 +16,47 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$OrdersEvent {
-  Map<String, dynamic> get orderDetails => throw _privateConstructorUsedError;
   String get orderId => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Map<String, dynamic> orderDetails, String orderId)
         sendOrderDetails,
+    required TResult Function(Map<String, dynamic> invoice, String orderId)
+        sendInvoice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Map<String, dynamic> orderDetails, String orderId)?
         sendOrderDetails,
+    TResult? Function(Map<String, dynamic> invoice, String orderId)?
+        sendInvoice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, dynamic> orderDetails, String orderId)?
         sendOrderDetails,
+    TResult Function(Map<String, dynamic> invoice, String orderId)? sendInvoice,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SendOrderDetails value) sendOrderDetails,
+    required TResult Function(SendInvoice value) sendInvoice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SendOrderDetails value)? sendOrderDetails,
+    TResult? Function(SendInvoice value)? sendInvoice,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SendOrderDetails value)? sendOrderDetails,
+    TResult Function(SendInvoice value)? sendInvoice,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -67,7 +74,7 @@ abstract class $OrdersEventCopyWith<$Res> {
           OrdersEvent value, $Res Function(OrdersEvent) then) =
       _$OrdersEventCopyWithImpl<$Res, OrdersEvent>;
   @useResult
-  $Res call({Map<String, dynamic> orderDetails, String orderId});
+  $Res call({String orderId});
 }
 
 /// @nodoc
@@ -85,14 +92,9 @@ class _$OrdersEventCopyWithImpl<$Res, $Val extends OrdersEvent>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? orderDetails = null,
     Object? orderId = null,
   }) {
     return _then(_value.copyWith(
-      orderDetails: null == orderDetails
-          ? _value.orderDetails
-          : orderDetails // ignore: cast_nullable_to_non_nullable
-              as Map<String, dynamic>,
       orderId: null == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
@@ -192,6 +194,8 @@ class _$SendOrderDetailsImpl implements SendOrderDetails {
   TResult when<TResult extends Object?>({
     required TResult Function(Map<String, dynamic> orderDetails, String orderId)
         sendOrderDetails,
+    required TResult Function(Map<String, dynamic> invoice, String orderId)
+        sendInvoice,
   }) {
     return sendOrderDetails(orderDetails, orderId);
   }
@@ -201,6 +205,8 @@ class _$SendOrderDetailsImpl implements SendOrderDetails {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function(Map<String, dynamic> orderDetails, String orderId)?
         sendOrderDetails,
+    TResult? Function(Map<String, dynamic> invoice, String orderId)?
+        sendInvoice,
   }) {
     return sendOrderDetails?.call(orderDetails, orderId);
   }
@@ -210,6 +216,7 @@ class _$SendOrderDetailsImpl implements SendOrderDetails {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Map<String, dynamic> orderDetails, String orderId)?
         sendOrderDetails,
+    TResult Function(Map<String, dynamic> invoice, String orderId)? sendInvoice,
     required TResult orElse(),
   }) {
     if (sendOrderDetails != null) {
@@ -222,6 +229,7 @@ class _$SendOrderDetailsImpl implements SendOrderDetails {
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(SendOrderDetails value) sendOrderDetails,
+    required TResult Function(SendInvoice value) sendInvoice,
   }) {
     return sendOrderDetails(this);
   }
@@ -230,6 +238,7 @@ class _$SendOrderDetailsImpl implements SendOrderDetails {
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(SendOrderDetails value)? sendOrderDetails,
+    TResult? Function(SendInvoice value)? sendInvoice,
   }) {
     return sendOrderDetails?.call(this);
   }
@@ -238,6 +247,7 @@ class _$SendOrderDetailsImpl implements SendOrderDetails {
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(SendOrderDetails value)? sendOrderDetails,
+    TResult Function(SendInvoice value)? sendInvoice,
     required TResult orElse(),
   }) {
     if (sendOrderDetails != null) {
@@ -252,7 +262,6 @@ abstract class SendOrderDetails implements OrdersEvent {
       {required final Map<String, dynamic> orderDetails,
       required final String orderId}) = _$SendOrderDetailsImpl;
 
-  @override
   Map<String, dynamic> get orderDetails;
   @override
   String get orderId;
@@ -266,6 +275,175 @@ abstract class SendOrderDetails implements OrdersEvent {
 }
 
 /// @nodoc
+abstract class _$$SendInvoiceImplCopyWith<$Res>
+    implements $OrdersEventCopyWith<$Res> {
+  factory _$$SendInvoiceImplCopyWith(
+          _$SendInvoiceImpl value, $Res Function(_$SendInvoiceImpl) then) =
+      __$$SendInvoiceImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({Map<String, dynamic> invoice, String orderId});
+}
+
+/// @nodoc
+class __$$SendInvoiceImplCopyWithImpl<$Res>
+    extends _$OrdersEventCopyWithImpl<$Res, _$SendInvoiceImpl>
+    implements _$$SendInvoiceImplCopyWith<$Res> {
+  __$$SendInvoiceImplCopyWithImpl(
+      _$SendInvoiceImpl _value, $Res Function(_$SendInvoiceImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? invoice = null,
+    Object? orderId = null,
+  }) {
+    return _then(_$SendInvoiceImpl(
+      invoice: null == invoice
+          ? _value._invoice
+          : invoice // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>,
+      orderId: null == orderId
+          ? _value.orderId
+          : orderId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$SendInvoiceImpl implements SendInvoice {
+  const _$SendInvoiceImpl(
+      {required final Map<String, dynamic> invoice, required this.orderId})
+      : _invoice = invoice;
+
+  final Map<String, dynamic> _invoice;
+  @override
+  Map<String, dynamic> get invoice {
+    if (_invoice is EqualUnmodifiableMapView) return _invoice;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_invoice);
+  }
+
+  @override
+  final String orderId;
+
+  @override
+  String toString() {
+    return 'OrdersEvent.sendInvoice(invoice: $invoice, orderId: $orderId)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$SendInvoiceImpl &&
+            const DeepCollectionEquality().equals(other._invoice, _invoice) &&
+            (identical(other.orderId, orderId) || other.orderId == orderId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, const DeepCollectionEquality().hash(_invoice), orderId);
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$SendInvoiceImplCopyWith<_$SendInvoiceImpl> get copyWith =>
+      __$$SendInvoiceImplCopyWithImpl<_$SendInvoiceImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(Map<String, dynamic> orderDetails, String orderId)
+        sendOrderDetails,
+    required TResult Function(Map<String, dynamic> invoice, String orderId)
+        sendInvoice,
+  }) {
+    return sendInvoice(invoice, orderId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(Map<String, dynamic> orderDetails, String orderId)?
+        sendOrderDetails,
+    TResult? Function(Map<String, dynamic> invoice, String orderId)?
+        sendInvoice,
+  }) {
+    return sendInvoice?.call(invoice, orderId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(Map<String, dynamic> orderDetails, String orderId)?
+        sendOrderDetails,
+    TResult Function(Map<String, dynamic> invoice, String orderId)? sendInvoice,
+    required TResult orElse(),
+  }) {
+    if (sendInvoice != null) {
+      return sendInvoice(invoice, orderId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(SendOrderDetails value) sendOrderDetails,
+    required TResult Function(SendInvoice value) sendInvoice,
+  }) {
+    return sendInvoice(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(SendOrderDetails value)? sendOrderDetails,
+    TResult? Function(SendInvoice value)? sendInvoice,
+  }) {
+    return sendInvoice?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(SendOrderDetails value)? sendOrderDetails,
+    TResult Function(SendInvoice value)? sendInvoice,
+    required TResult orElse(),
+  }) {
+    if (sendInvoice != null) {
+      return sendInvoice(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class SendInvoice implements OrdersEvent {
+  const factory SendInvoice(
+      {required final Map<String, dynamic> invoice,
+      required final String orderId}) = _$SendInvoiceImpl;
+
+  Map<String, dynamic> get invoice;
+  @override
+  String get orderId;
+
+  /// Create a copy of OrdersEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$SendInvoiceImplCopyWith<_$SendInvoiceImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
 mixin _$OrdersState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -273,6 +451,8 @@ mixin _$OrdersState {
     required TResult Function() loading,
     required TResult Function(OrderDetailsModel model) orderDetailsSended,
     required TResult Function(String errorText) orderDetailsError,
+    required TResult Function(InvoiceModel model) invoiceSended,
+    required TResult Function(String errorText) invoiceError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -281,6 +461,8 @@ mixin _$OrdersState {
     TResult? Function()? loading,
     TResult? Function(OrderDetailsModel model)? orderDetailsSended,
     TResult? Function(String errorText)? orderDetailsError,
+    TResult? Function(InvoiceModel model)? invoiceSended,
+    TResult? Function(String errorText)? invoiceError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -289,6 +471,8 @@ mixin _$OrdersState {
     TResult Function()? loading,
     TResult Function(OrderDetailsModel model)? orderDetailsSended,
     TResult Function(String errorText)? orderDetailsError,
+    TResult Function(InvoiceModel model)? invoiceSended,
+    TResult Function(String errorText)? invoiceError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -298,6 +482,8 @@ mixin _$OrdersState {
     required TResult Function(_Loading value) loading,
     required TResult Function(_OrderDetailsSended value) orderDetailsSended,
     required TResult Function(_OrderDetailsError value) orderDetailsError,
+    required TResult Function(_InvoiceSended value) invoiceSended,
+    required TResult Function(_InvoiceError value) invoiceError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -306,6 +492,8 @@ mixin _$OrdersState {
     TResult? Function(_Loading value)? loading,
     TResult? Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult? Function(_OrderDetailsError value)? orderDetailsError,
+    TResult? Function(_InvoiceSended value)? invoiceSended,
+    TResult? Function(_InvoiceError value)? invoiceError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -314,6 +502,8 @@ mixin _$OrdersState {
     TResult Function(_Loading value)? loading,
     TResult Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult Function(_OrderDetailsError value)? orderDetailsError,
+    TResult Function(_InvoiceSended value)? invoiceSended,
+    TResult Function(_InvoiceError value)? invoiceError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -385,6 +575,8 @@ class _$InitialImpl implements _Initial {
     required TResult Function() loading,
     required TResult Function(OrderDetailsModel model) orderDetailsSended,
     required TResult Function(String errorText) orderDetailsError,
+    required TResult Function(InvoiceModel model) invoiceSended,
+    required TResult Function(String errorText) invoiceError,
   }) {
     return initial();
   }
@@ -396,6 +588,8 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? loading,
     TResult? Function(OrderDetailsModel model)? orderDetailsSended,
     TResult? Function(String errorText)? orderDetailsError,
+    TResult? Function(InvoiceModel model)? invoiceSended,
+    TResult? Function(String errorText)? invoiceError,
   }) {
     return initial?.call();
   }
@@ -407,6 +601,8 @@ class _$InitialImpl implements _Initial {
     TResult Function()? loading,
     TResult Function(OrderDetailsModel model)? orderDetailsSended,
     TResult Function(String errorText)? orderDetailsError,
+    TResult Function(InvoiceModel model)? invoiceSended,
+    TResult Function(String errorText)? invoiceError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -422,6 +618,8 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_Loading value) loading,
     required TResult Function(_OrderDetailsSended value) orderDetailsSended,
     required TResult Function(_OrderDetailsError value) orderDetailsError,
+    required TResult Function(_InvoiceSended value) invoiceSended,
+    required TResult Function(_InvoiceError value) invoiceError,
   }) {
     return initial(this);
   }
@@ -433,6 +631,8 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_Loading value)? loading,
     TResult? Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult? Function(_OrderDetailsError value)? orderDetailsError,
+    TResult? Function(_InvoiceSended value)? invoiceSended,
+    TResult? Function(_InvoiceError value)? invoiceError,
   }) {
     return initial?.call(this);
   }
@@ -444,6 +644,8 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Loading value)? loading,
     TResult Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult Function(_OrderDetailsError value)? orderDetailsError,
+    TResult Function(_InvoiceSended value)? invoiceSended,
+    TResult Function(_InvoiceError value)? invoiceError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -502,6 +704,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() loading,
     required TResult Function(OrderDetailsModel model) orderDetailsSended,
     required TResult Function(String errorText) orderDetailsError,
+    required TResult Function(InvoiceModel model) invoiceSended,
+    required TResult Function(String errorText) invoiceError,
   }) {
     return loading();
   }
@@ -513,6 +717,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? loading,
     TResult? Function(OrderDetailsModel model)? orderDetailsSended,
     TResult? Function(String errorText)? orderDetailsError,
+    TResult? Function(InvoiceModel model)? invoiceSended,
+    TResult? Function(String errorText)? invoiceError,
   }) {
     return loading?.call();
   }
@@ -524,6 +730,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? loading,
     TResult Function(OrderDetailsModel model)? orderDetailsSended,
     TResult Function(String errorText)? orderDetailsError,
+    TResult Function(InvoiceModel model)? invoiceSended,
+    TResult Function(String errorText)? invoiceError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -539,6 +747,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_Loading value) loading,
     required TResult Function(_OrderDetailsSended value) orderDetailsSended,
     required TResult Function(_OrderDetailsError value) orderDetailsError,
+    required TResult Function(_InvoiceSended value) invoiceSended,
+    required TResult Function(_InvoiceError value) invoiceError,
   }) {
     return loading(this);
   }
@@ -550,6 +760,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_Loading value)? loading,
     TResult? Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult? Function(_OrderDetailsError value)? orderDetailsError,
+    TResult? Function(_InvoiceSended value)? invoiceSended,
+    TResult? Function(_InvoiceError value)? invoiceError,
   }) {
     return loading?.call(this);
   }
@@ -561,6 +773,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Loading value)? loading,
     TResult Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult Function(_OrderDetailsError value)? orderDetailsError,
+    TResult Function(_InvoiceSended value)? invoiceSended,
+    TResult Function(_InvoiceError value)? invoiceError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -659,6 +873,8 @@ class _$OrderDetailsSendedImpl implements _OrderDetailsSended {
     required TResult Function() loading,
     required TResult Function(OrderDetailsModel model) orderDetailsSended,
     required TResult Function(String errorText) orderDetailsError,
+    required TResult Function(InvoiceModel model) invoiceSended,
+    required TResult Function(String errorText) invoiceError,
   }) {
     return orderDetailsSended(model);
   }
@@ -670,6 +886,8 @@ class _$OrderDetailsSendedImpl implements _OrderDetailsSended {
     TResult? Function()? loading,
     TResult? Function(OrderDetailsModel model)? orderDetailsSended,
     TResult? Function(String errorText)? orderDetailsError,
+    TResult? Function(InvoiceModel model)? invoiceSended,
+    TResult? Function(String errorText)? invoiceError,
   }) {
     return orderDetailsSended?.call(model);
   }
@@ -681,6 +899,8 @@ class _$OrderDetailsSendedImpl implements _OrderDetailsSended {
     TResult Function()? loading,
     TResult Function(OrderDetailsModel model)? orderDetailsSended,
     TResult Function(String errorText)? orderDetailsError,
+    TResult Function(InvoiceModel model)? invoiceSended,
+    TResult Function(String errorText)? invoiceError,
     required TResult orElse(),
   }) {
     if (orderDetailsSended != null) {
@@ -696,6 +916,8 @@ class _$OrderDetailsSendedImpl implements _OrderDetailsSended {
     required TResult Function(_Loading value) loading,
     required TResult Function(_OrderDetailsSended value) orderDetailsSended,
     required TResult Function(_OrderDetailsError value) orderDetailsError,
+    required TResult Function(_InvoiceSended value) invoiceSended,
+    required TResult Function(_InvoiceError value) invoiceError,
   }) {
     return orderDetailsSended(this);
   }
@@ -707,6 +929,8 @@ class _$OrderDetailsSendedImpl implements _OrderDetailsSended {
     TResult? Function(_Loading value)? loading,
     TResult? Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult? Function(_OrderDetailsError value)? orderDetailsError,
+    TResult? Function(_InvoiceSended value)? invoiceSended,
+    TResult? Function(_InvoiceError value)? invoiceError,
   }) {
     return orderDetailsSended?.call(this);
   }
@@ -718,6 +942,8 @@ class _$OrderDetailsSendedImpl implements _OrderDetailsSended {
     TResult Function(_Loading value)? loading,
     TResult Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult Function(_OrderDetailsError value)? orderDetailsError,
+    TResult Function(_InvoiceSended value)? invoiceSended,
+    TResult Function(_InvoiceError value)? invoiceError,
     required TResult orElse(),
   }) {
     if (orderDetailsSended != null) {
@@ -814,6 +1040,8 @@ class _$OrderDetailsErrorImpl implements _OrderDetailsError {
     required TResult Function() loading,
     required TResult Function(OrderDetailsModel model) orderDetailsSended,
     required TResult Function(String errorText) orderDetailsError,
+    required TResult Function(InvoiceModel model) invoiceSended,
+    required TResult Function(String errorText) invoiceError,
   }) {
     return orderDetailsError(errorText);
   }
@@ -825,6 +1053,8 @@ class _$OrderDetailsErrorImpl implements _OrderDetailsError {
     TResult? Function()? loading,
     TResult? Function(OrderDetailsModel model)? orderDetailsSended,
     TResult? Function(String errorText)? orderDetailsError,
+    TResult? Function(InvoiceModel model)? invoiceSended,
+    TResult? Function(String errorText)? invoiceError,
   }) {
     return orderDetailsError?.call(errorText);
   }
@@ -836,6 +1066,8 @@ class _$OrderDetailsErrorImpl implements _OrderDetailsError {
     TResult Function()? loading,
     TResult Function(OrderDetailsModel model)? orderDetailsSended,
     TResult Function(String errorText)? orderDetailsError,
+    TResult Function(InvoiceModel model)? invoiceSended,
+    TResult Function(String errorText)? invoiceError,
     required TResult orElse(),
   }) {
     if (orderDetailsError != null) {
@@ -851,6 +1083,8 @@ class _$OrderDetailsErrorImpl implements _OrderDetailsError {
     required TResult Function(_Loading value) loading,
     required TResult Function(_OrderDetailsSended value) orderDetailsSended,
     required TResult Function(_OrderDetailsError value) orderDetailsError,
+    required TResult Function(_InvoiceSended value) invoiceSended,
+    required TResult Function(_InvoiceError value) invoiceError,
   }) {
     return orderDetailsError(this);
   }
@@ -862,6 +1096,8 @@ class _$OrderDetailsErrorImpl implements _OrderDetailsError {
     TResult? Function(_Loading value)? loading,
     TResult? Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult? Function(_OrderDetailsError value)? orderDetailsError,
+    TResult? Function(_InvoiceSended value)? invoiceSended,
+    TResult? Function(_InvoiceError value)? invoiceError,
   }) {
     return orderDetailsError?.call(this);
   }
@@ -873,6 +1109,8 @@ class _$OrderDetailsErrorImpl implements _OrderDetailsError {
     TResult Function(_Loading value)? loading,
     TResult Function(_OrderDetailsSended value)? orderDetailsSended,
     TResult Function(_OrderDetailsError value)? orderDetailsError,
+    TResult Function(_InvoiceSended value)? invoiceSended,
+    TResult Function(_InvoiceError value)? invoiceError,
     required TResult orElse(),
   }) {
     if (orderDetailsError != null) {
@@ -892,5 +1130,348 @@ abstract class _OrderDetailsError implements OrdersState {
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$OrderDetailsErrorImplCopyWith<_$OrderDetailsErrorImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$InvoiceSendedImplCopyWith<$Res> {
+  factory _$$InvoiceSendedImplCopyWith(
+          _$InvoiceSendedImpl value, $Res Function(_$InvoiceSendedImpl) then) =
+      __$$InvoiceSendedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({InvoiceModel model});
+
+  $InvoiceModelCopyWith<$Res> get model;
+}
+
+/// @nodoc
+class __$$InvoiceSendedImplCopyWithImpl<$Res>
+    extends _$OrdersStateCopyWithImpl<$Res, _$InvoiceSendedImpl>
+    implements _$$InvoiceSendedImplCopyWith<$Res> {
+  __$$InvoiceSendedImplCopyWithImpl(
+      _$InvoiceSendedImpl _value, $Res Function(_$InvoiceSendedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? model = null,
+  }) {
+    return _then(_$InvoiceSendedImpl(
+      model: null == model
+          ? _value.model
+          : model // ignore: cast_nullable_to_non_nullable
+              as InvoiceModel,
+    ));
+  }
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $InvoiceModelCopyWith<$Res> get model {
+    return $InvoiceModelCopyWith<$Res>(_value.model, (value) {
+      return _then(_value.copyWith(model: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$InvoiceSendedImpl implements _InvoiceSended {
+  const _$InvoiceSendedImpl({required this.model});
+
+  @override
+  final InvoiceModel model;
+
+  @override
+  String toString() {
+    return 'OrdersState.invoiceSended(model: $model)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InvoiceSendedImpl &&
+            (identical(other.model, model) || other.model == model));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, model);
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InvoiceSendedImplCopyWith<_$InvoiceSendedImpl> get copyWith =>
+      __$$InvoiceSendedImplCopyWithImpl<_$InvoiceSendedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(OrderDetailsModel model) orderDetailsSended,
+    required TResult Function(String errorText) orderDetailsError,
+    required TResult Function(InvoiceModel model) invoiceSended,
+    required TResult Function(String errorText) invoiceError,
+  }) {
+    return invoiceSended(model);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(OrderDetailsModel model)? orderDetailsSended,
+    TResult? Function(String errorText)? orderDetailsError,
+    TResult? Function(InvoiceModel model)? invoiceSended,
+    TResult? Function(String errorText)? invoiceError,
+  }) {
+    return invoiceSended?.call(model);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(OrderDetailsModel model)? orderDetailsSended,
+    TResult Function(String errorText)? orderDetailsError,
+    TResult Function(InvoiceModel model)? invoiceSended,
+    TResult Function(String errorText)? invoiceError,
+    required TResult orElse(),
+  }) {
+    if (invoiceSended != null) {
+      return invoiceSended(model);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_OrderDetailsSended value) orderDetailsSended,
+    required TResult Function(_OrderDetailsError value) orderDetailsError,
+    required TResult Function(_InvoiceSended value) invoiceSended,
+    required TResult Function(_InvoiceError value) invoiceError,
+  }) {
+    return invoiceSended(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_OrderDetailsSended value)? orderDetailsSended,
+    TResult? Function(_OrderDetailsError value)? orderDetailsError,
+    TResult? Function(_InvoiceSended value)? invoiceSended,
+    TResult? Function(_InvoiceError value)? invoiceError,
+  }) {
+    return invoiceSended?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_OrderDetailsSended value)? orderDetailsSended,
+    TResult Function(_OrderDetailsError value)? orderDetailsError,
+    TResult Function(_InvoiceSended value)? invoiceSended,
+    TResult Function(_InvoiceError value)? invoiceError,
+    required TResult orElse(),
+  }) {
+    if (invoiceSended != null) {
+      return invoiceSended(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InvoiceSended implements OrdersState {
+  const factory _InvoiceSended({required final InvoiceModel model}) =
+      _$InvoiceSendedImpl;
+
+  InvoiceModel get model;
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InvoiceSendedImplCopyWith<_$InvoiceSendedImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$InvoiceErrorImplCopyWith<$Res> {
+  factory _$$InvoiceErrorImplCopyWith(
+          _$InvoiceErrorImpl value, $Res Function(_$InvoiceErrorImpl) then) =
+      __$$InvoiceErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String errorText});
+}
+
+/// @nodoc
+class __$$InvoiceErrorImplCopyWithImpl<$Res>
+    extends _$OrdersStateCopyWithImpl<$Res, _$InvoiceErrorImpl>
+    implements _$$InvoiceErrorImplCopyWith<$Res> {
+  __$$InvoiceErrorImplCopyWithImpl(
+      _$InvoiceErrorImpl _value, $Res Function(_$InvoiceErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? errorText = null,
+  }) {
+    return _then(_$InvoiceErrorImpl(
+      errorText: null == errorText
+          ? _value.errorText
+          : errorText // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$InvoiceErrorImpl implements _InvoiceError {
+  const _$InvoiceErrorImpl({required this.errorText});
+
+  @override
+  final String errorText;
+
+  @override
+  String toString() {
+    return 'OrdersState.invoiceError(errorText: $errorText)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$InvoiceErrorImpl &&
+            (identical(other.errorText, errorText) ||
+                other.errorText == errorText));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, errorText);
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$InvoiceErrorImplCopyWith<_$InvoiceErrorImpl> get copyWith =>
+      __$$InvoiceErrorImplCopyWithImpl<_$InvoiceErrorImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(OrderDetailsModel model) orderDetailsSended,
+    required TResult Function(String errorText) orderDetailsError,
+    required TResult Function(InvoiceModel model) invoiceSended,
+    required TResult Function(String errorText) invoiceError,
+  }) {
+    return invoiceError(errorText);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(OrderDetailsModel model)? orderDetailsSended,
+    TResult? Function(String errorText)? orderDetailsError,
+    TResult? Function(InvoiceModel model)? invoiceSended,
+    TResult? Function(String errorText)? invoiceError,
+  }) {
+    return invoiceError?.call(errorText);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(OrderDetailsModel model)? orderDetailsSended,
+    TResult Function(String errorText)? orderDetailsError,
+    TResult Function(InvoiceModel model)? invoiceSended,
+    TResult Function(String errorText)? invoiceError,
+    required TResult orElse(),
+  }) {
+    if (invoiceError != null) {
+      return invoiceError(errorText);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_OrderDetailsSended value) orderDetailsSended,
+    required TResult Function(_OrderDetailsError value) orderDetailsError,
+    required TResult Function(_InvoiceSended value) invoiceSended,
+    required TResult Function(_InvoiceError value) invoiceError,
+  }) {
+    return invoiceError(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_OrderDetailsSended value)? orderDetailsSended,
+    TResult? Function(_OrderDetailsError value)? orderDetailsError,
+    TResult? Function(_InvoiceSended value)? invoiceSended,
+    TResult? Function(_InvoiceError value)? invoiceError,
+  }) {
+    return invoiceError?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_OrderDetailsSended value)? orderDetailsSended,
+    TResult Function(_OrderDetailsError value)? orderDetailsError,
+    TResult Function(_InvoiceSended value)? invoiceSended,
+    TResult Function(_InvoiceError value)? invoiceError,
+    required TResult orElse(),
+  }) {
+    if (invoiceError != null) {
+      return invoiceError(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _InvoiceError implements OrdersState {
+  const factory _InvoiceError({required final String errorText}) =
+      _$InvoiceErrorImpl;
+
+  String get errorText;
+
+  /// Create a copy of OrdersState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$InvoiceErrorImplCopyWith<_$InvoiceErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

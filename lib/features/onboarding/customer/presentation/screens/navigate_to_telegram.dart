@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
+import 'package:inposhiv/resources/resources.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,6 +27,12 @@ class NavigateToTelegramScreen extends StatelessWidget {
           children: [
             const SizedBox(),
             const Spacer(),
+            Image.asset(
+              Images.telegram,
+              width: 195.w,
+              height: 195.h,
+              fit: BoxFit.cover,
+            ),
             Text(
               isCustomer
                   ? "Для создания заказа пройдите быструю регистрацию через телеграмм"
@@ -38,12 +45,11 @@ class NavigateToTelegramScreen extends StatelessWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20.r),
                   onTap: () {
-
                     // print("object");
                     // var url = Uri.parse("https://t.me/InposhivBot");
                     // launchUrl(url);
-                    GoRouter.of(context).pushNamed("registration"); 
-                        // GoRouter.of(context).pushNamed("chooseImageSource");
+                    GoRouter.of(context).pushNamed("registration");
+                    // GoRouter.of(context).pushNamed("chooseImageSource");
                   },
                   child: Container(
                     width: double.infinity,

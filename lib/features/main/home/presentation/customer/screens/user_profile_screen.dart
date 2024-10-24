@@ -34,7 +34,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   int currentIndex = 0;
   @override
   void initState() {
-    initState();
+    super.initState();
     pageController = PageController(
       initialPage: currentIndex,
       keepPage: true,

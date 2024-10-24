@@ -202,13 +202,13 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        ElevatedButton(
-                            onPressed: () {
-                              print(Provider.of<OrderProvider>(context,
-                                      listen: false)
-                                  .categoryId);
-                            },
-                            child: Text("data")),
+                        // ElevatedButton(
+                        //     onPressed: () {
+                        //       print(Provider.of<OrderProvider>(context,
+                        //               listen: false)
+                        //           .categoryId);
+                        //     },
+                        //     child: Text("data")),
                         Padding(
                           padding: EdgeInsets.only(top: 5.h),
                           child: InkWell(

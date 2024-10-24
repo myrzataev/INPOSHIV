@@ -42,20 +42,22 @@ class OnboardingScreen extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    
                     children: [
                       Text(
-                        "С нами уже 6200 производств и более 1000 селлеров!",
+                        "INPOSHIV  с нами уже более 10 000 селлеров и производителей",
                         style: AppFonts.w700s36.copyWith(height: 0.8),
                       ),
                       const Spacer(), // Pushes the button and link to the bottom
                       Padding(
                         padding: EdgeInsets.only(bottom: 15.h),
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            GoRouter.of(context).pushNamed("registration");
+                          },
                           child: Text(
                             "Пропустить ознакомление",
                             style: AppFonts.w400s16.copyWith(
@@ -68,7 +70,7 @@ class OnboardingScreen extends StatelessWidget {
                       CustomButton(
                         text: "Начать",
                         onPressed: () {
-                          GoRouter.of(context).pushNamed("secondOnBoarding");
+                          GoRouter.of(context).pushNamed("chooseRole");
                         },
                       ),
                       SizedBox(

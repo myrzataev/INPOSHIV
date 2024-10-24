@@ -1,6 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -8,6 +10,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
+import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/data/mocked_data.dart';
@@ -34,12 +37,20 @@ class _MainScreenState extends State<MainScreen> {
   // int _currentIndex = 0;
   List<int> _currentIndexes = [];
   List<bool> _isExpandedList = [];
+  late bool? isCustomer;
+  final preferences = locator<SharedPreferences>();
+  void getManufacturers() {
+    BlocProvider.of<GetManufacturersProfileBloc>(context)
+        .add(const GetManufacturersProfileEvent.started());
+  }
+
   @override
   void initState() {
     super.initState();
     _currentIndexes = List.filled(MockedCardData.cardsList.length, 0);
     _isExpandedList = List.filled(MockedCardData.cardsList.length, false);
-    // Show the dialog after the first frame
+    isCustomer = preferences.getBool("isCustomer") ?? true;
+    (isCustomer ?? true) ? getManufacturers() : null;
     if (widget.hasDialog ?? false) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showDialog(
@@ -122,237 +133,297 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     )
                   : const SizedBox(),
-              Expanded(
-                  child: Padding(
-                padding: EdgeInsets.only(top: 10.h),
-                child: RefreshIndicator.adaptive(
-                  onRefresh: () async {},
-                  child: ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        final bool currentIndexIsExpanded =
-                            _isExpandedList[index];
-                        final item = data[index];
+              (isCustomer ?? true)
+                  ? BlocBuilder<GetManufacturersProfileBloc,
+                      GetManufacturersProfileState>(
+                      builder: (context, state) {
+                        return state.maybeWhen(
+                          orElse: () {
+                            return const Center(
+                              child: Text("default"),
+                            );
+                          },
+                          error: (errorText) => Center(
+                            child: Text(errorText),
+                          ),
+                          loaded: (model) {
+                            return Expanded(
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 10.h),
+                              child: RefreshIndicator.adaptive(
+                                onRefresh: () async {},
+                                child: ListView.builder(
+                                    itemCount: model.length,
+                                    itemBuilder: (context, index) {
+                                      final currentItem = model[index];
+                                      final bool currentIndexIsExpanded =
+                                          _isExpandedList[index];
+                                      final item = data[index];
 
-                        return Padding(
-                          padding: EdgeInsets.only(bottom: 10.h),
-                          child: InkWell(
-                            onTap: () {
-                              GoRouter.of(context)
-                                  .pushNamed("detailed", extra: item);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.r)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Stack(alignment: Alignment.center, children: [
-                                    CarouselSlider.builder(
-                                      carouselController:
-                                          _carouselSliderController,
-                                      itemCount: item.carouselImage.length,
-                                      options: CarouselOptions(
-                                        autoPlay: false,
-                                        enlargeCenterPage: true,
-                                        viewportFraction: 1,
-                                        aspectRatio: 16 / 7,
-                                        height: 300.h,
-                                        onPageChanged: (indexCarousel, reason) {
-                                          setState(() {
-                                            _currentIndexes[index] =
-                                                indexCarousel;
-                                          });
-                                        },
-                                      ),
-                                      itemBuilder:
-                                          (context, caruselIndex, realIndex) {
-                                        return Stack(children: [
-                                          ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.r),
-                                              child: Image.asset(
-                                                  fit: BoxFit.fill,
-                                                  // height: 350.h,
-                                                  width: double.infinity,
-                                                  item.carouselImage[
-                                                      caruselIndex])),
-                                        ]);
-                                      },
-                                    ),
-                                    Positioned(
-                                      top: 10.h,
-                                      left: 10.w,
-                                      right: 10.w,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            height: 36.h,
+                                      return Padding(
+                                        padding: EdgeInsets.only(bottom: 10.h),
+                                        child: InkWell(
+                                          onTap: () {
+                                            GoRouter.of(context).pushNamed(
+                                                "detailed",
+                                                extra: item);
+                                          },
+                                          child: Container(
                                             decoration: BoxDecoration(
-                                                color: Colors.white,
                                                 borderRadius:
                                                     BorderRadius.circular(
-                                                        60.r)),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 14.w),
-                                              child: Text(
-                                                "Очень надежный",
-                                                style: AppFonts.w400s16
-                                                    .copyWith(
-                                                        color: AppColors
-                                                            .accentTextColor),
-                                              ),
-                                            ),
-                                          ),
-                                          CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            radius: 20.r,
-                                            // ignore: deprecated_member_use
-                                            child: SvgPicture.asset(
-                                              SvgImages.chat,
-                                              // ignore: deprecated_member_use
-                                              color: AppColors.accentTextColor,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 10.h,
-                                      child: DotsIndicator(
-                                        dotsCount: item.carouselImage.length,
-                                        position: _currentIndexes[index],
-                                        decorator: DotsDecorator(
-                                            activeColor: Colors.white,
-                                            size: Size(10.w, 10.h)),
-                                      ),
-                                    )
-                                  ]),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 10.h),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          role == 0
-                                              ? "Хлопковая блузка"
-                                              : item.locaionName,
-                                          style: AppFonts.w700s20.copyWith(
-                                              color: AppColors.accentTextColor),
-                                        ),
-                                        const Spacer(),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5.w),
-                                          child: SvgPicture.asset(
-                                            SvgImages.star,
-                                            height: 16.h,
-                                            width: 16.w,
-                                          ),
-                                        ),
-                                        Text(
-                                          item.rating.toString(),
-                                          style: AppFonts.w700s16,
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Text(
-                                    role == 0
-                                        ? "600 руб за единицу, итого 348 000 руб"
-                                        : item.description,
-                                    style: AppFonts.w400s16,
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 10.h),
-                                    child: role == 0
-                                        ? Column(
-                                            children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  setState(() {
-                                                    _isExpandedList[index] =
-                                                        !_isExpandedList[index];
-                                                  });
-                                                },
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Размерный ряд",
-                                                      style: AppFonts.w400s16
-                                                          .copyWith(
-                                                              color: AppColors
-                                                                  .accentTextColor),
-                                                    ),
-                                                    Padding(
-                                                      padding: EdgeInsets.only(
-                                                          left: 6.w),
-                                                      child: RotatedBox(
-                                                        quarterTurns:
-                                                            currentIndexIsExpanded
-                                                                ? 2
-                                                                : 0,
-                                                        child: SvgPicture.asset(
-                                                            SvgImages.bottom),
+                                                        20.r)),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      CarouselSlider.builder(
+                                                        carouselController:
+                                                            _carouselSliderController,
+                                                        itemCount: item
+                                                            .carouselImage
+                                                            .length,
+                                                        options:
+                                                            CarouselOptions(
+                                                          autoPlay: false,
+                                                          enlargeCenterPage:
+                                                              true,
+                                                          viewportFraction: 1,
+                                                          aspectRatio: 16 / 7,
+                                                          height: 300.h,
+                                                          onPageChanged:
+                                                              (indexCarousel,
+                                                                  reason) {
+                                                            setState(() {
+                                                              _currentIndexes[
+                                                                      index] =
+                                                                  indexCarousel;
+                                                            });
+                                                          },
+                                                        ),
+                                                        itemBuilder: (context,
+                                                            caruselIndex,
+                                                            realIndex) {
+                                                          return Stack(
+                                                              children: [
+                                                                ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            15.r),
+                                                                    child: Image.asset(
+                                                                        fit: BoxFit.fill,
+                                                                        // height: 350.h,
+                                                                        width: double.infinity,
+                                                                        item.carouselImage[caruselIndex])),
+                                                              ]);
+                                                        },
                                                       ),
-                                                    )
-                                                  ],
+                                                      Positioned(
+                                                        top: 10.h,
+                                                        left: 10.w,
+                                                        right: 10.w,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              height: 36.h,
+                                                              decoration: BoxDecoration(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              60.r)),
+                                                              child: Padding(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            14.w),
+                                                                child: Text(
+                                                                  "Очень надежный",
+                                                                  style: AppFonts
+                                                                      .w400s16
+                                                                      .copyWith(
+                                                                          color:
+                                                                              AppColors.accentTextColor),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            CircleAvatar(
+                                                              backgroundColor:
+                                                                  Colors.white,
+                                                              radius: 20.r,
+                                                              // ignore: deprecated_member_use
+                                                              child: SvgPicture
+                                                                  .asset(
+                                                                SvgImages.chat,
+                                                                // ignore: deprecated_member_use
+                                                                color: AppColors
+                                                                    .accentTextColor,
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 10.h,
+                                                        child: DotsIndicator(
+                                                          dotsCount: item
+                                                              .carouselImage
+                                                              .length,
+                                                          position:
+                                                              _currentIndexes[
+                                                                  index],
+                                                          decorator:
+                                                              DotsDecorator(
+                                                                  activeColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  size: Size(
+                                                                      10.w,
+                                                                      10.h)),
+                                                        ),
+                                                      )
+                                                    ]),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.h),
+                                                  child: Row(
+                                                    children: [
+                                                      Text(
+                                                        role == 0
+                                                            ? "Хлопковая блузка"
+                                                            : item.locaionName,
+                                                        style: AppFonts.w700s20
+                                                            .copyWith(
+                                                                color: AppColors
+                                                                    .accentTextColor),
+                                                      ),
+                                                      const Spacer(),
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    5.w),
+                                                        child: SvgPicture.asset(
+                                                          SvgImages.star,
+                                                          height: 16.h,
+                                                          width: 16.w,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        item.rating.toString(),
+                                                        style: AppFonts.w700s16,
+                                                      )
+                                                    ],
+                                                  ),
                                                 ),
-                                              ),
-                                              AnimatedSize(
-                                                duration: const Duration(
-                                                    milliseconds: 300),
-                                                curve: Curves.fastOutSlowIn,
-                                                child: currentIndexIsExpanded
-                                                    ? GridView.builder(
-                                                        shrinkWrap: true,
-                                                        gridDelegate:
-                                                            SliverGridDelegateWithFixedCrossAxisCount(
-                                                                mainAxisSpacing:
-                                                                    0,
-                                                                mainAxisExtent:
-                                                                    30.h,
-                                                                crossAxisCount:
-                                                                    2),
-                                                        itemCount:
-                                                            sizesVm.length,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return Text(
-                                                            "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
-                                                            style: AppFonts
-                                                                .w400s16
-                                                                .copyWith(
-                                                                    color: AppColors
-                                                                        .accentTextColor),
-                                                          );
-                                                        })
-                                                    : const SizedBox.shrink(),
-                                              ),
-                                            ],
-                                          )
-                                        : Text(
-                                            "Выполнено в Inposhiv ${item.quantity} заказов.",
-                                            style: AppFonts.w400s16.copyWith(
-                                                color:
-                                                    AppColors.accentTextColor),
+                                                Text(
+                                                  role == 0
+                                                      ? "600 руб за единицу, итого 348 000 руб"
+                                                      : item.description,
+                                                  style: AppFonts.w400s16,
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.h),
+                                                  child: role == 0
+                                                      ? Column(
+                                                          children: [
+                                                            InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  _isExpandedList[
+                                                                          index] =
+                                                                      !_isExpandedList[
+                                                                          index];
+                                                                });
+                                                              },
+                                                              child: Row(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    "Размерный ряд",
+                                                                    style: AppFonts
+                                                                        .w400s16
+                                                                        .copyWith(
+                                                                            color:
+                                                                                AppColors.accentTextColor),
+                                                                  ),
+                                                                  Padding(
+                                                                    padding: EdgeInsets.only(
+                                                                        left: 6
+                                                                            .w),
+                                                                    child:
+                                                                        RotatedBox(
+                                                                      quarterTurns:
+                                                                          currentIndexIsExpanded
+                                                                              ? 2
+                                                                              : 0,
+                                                                      child: SvgPicture.asset(
+                                                                          SvgImages
+                                                                              .bottom),
+                                                                    ),
+                                                                  )
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            AnimatedSize(
+                                                              duration:
+                                                                  const Duration(
+                                                                      milliseconds:
+                                                                          300),
+                                                              curve: Curves
+                                                                  .fastOutSlowIn,
+                                                              child: currentIndexIsExpanded
+                                                                  ? GridView.builder(
+                                                                      shrinkWrap: true,
+                                                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 0, mainAxisExtent: 30.h, crossAxisCount: 2),
+                                                                      itemCount: sizesVm.length,
+                                                                      itemBuilder: (context, index) {
+                                                                        return Text(
+                                                                          "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
+                                                                          style: AppFonts
+                                                                              .w400s16
+                                                                              .copyWith(color: AppColors.accentTextColor),
+                                                                        );
+                                                                      })
+                                                                  : const SizedBox.shrink(),
+                                                            ),
+                                                          ],
+                                                        )
+                                                      : Text(
+                                                          "Выполнено в Inposhiv ${item.quantity} заказов.",
+                                                          style: AppFonts
+                                                              .w400s16
+                                                              .copyWith(
+                                                                  color: AppColors
+                                                                      .accentTextColor),
+                                                        ),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                  )
-                                ],
+                                        ),
+                                      );
+                                    }),
                               ),
-                            ),
-                          ),
+                            ));
+                          },
                         );
-                      }),
-                ),
-              ))
+                      },
+                    )
+                  : Text("manufacturer")
             ],
           ),
           Positioned(

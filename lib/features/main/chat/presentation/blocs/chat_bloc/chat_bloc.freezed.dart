@@ -15,7 +15,7 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 /// @nodoc
-mixin _$ChatEvent {
+mixin _$ChatsEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String chatUuid, String senderUuid,
@@ -66,22 +66,23 @@ mixin _$ChatEvent {
 }
 
 /// @nodoc
-abstract class $ChatEventCopyWith<$Res> {
-  factory $ChatEventCopyWith(ChatEvent value, $Res Function(ChatEvent) then) =
-      _$ChatEventCopyWithImpl<$Res, ChatEvent>;
+abstract class $ChatsEventCopyWith<$Res> {
+  factory $ChatsEventCopyWith(
+          ChatsEvent value, $Res Function(ChatsEvent) then) =
+      _$ChatsEventCopyWithImpl<$Res, ChatsEvent>;
 }
 
 /// @nodoc
-class _$ChatEventCopyWithImpl<$Res, $Val extends ChatEvent>
-    implements $ChatEventCopyWith<$Res> {
-  _$ChatEventCopyWithImpl(this._value, this._then);
+class _$ChatsEventCopyWithImpl<$Res, $Val extends ChatsEvent>
+    implements $ChatsEventCopyWith<$Res> {
+  _$ChatsEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -100,13 +101,13 @@ abstract class _$$SendMessageImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$SendMessageImplCopyWithImpl<$Res>
-    extends _$ChatEventCopyWithImpl<$Res, _$SendMessageImpl>
+    extends _$ChatsEventCopyWithImpl<$Res, _$SendMessageImpl>
     implements _$$SendMessageImplCopyWith<$Res> {
   __$$SendMessageImplCopyWithImpl(
       _$SendMessageImpl _value, $Res Function(_$SendMessageImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -139,7 +140,7 @@ class __$$SendMessageImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$SendMessageImpl implements SendMessage {
+class _$SendMessageImpl with DiagnosticableTreeMixin implements SendMessage {
   const _$SendMessageImpl(
       {required this.chatUuid,
       required this.senderUuid,
@@ -156,8 +157,19 @@ class _$SendMessageImpl implements SendMessage {
   final String content;
 
   @override
-  String toString() {
-    return 'ChatEvent.sendMessage(chatUuid: $chatUuid, senderUuid: $senderUuid, recipientUuid: $recipientUuid, content: $content)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsEvent.sendMessage(chatUuid: $chatUuid, senderUuid: $senderUuid, recipientUuid: $recipientUuid, content: $content)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ChatsEvent.sendMessage'))
+      ..add(DiagnosticsProperty('chatUuid', chatUuid))
+      ..add(DiagnosticsProperty('senderUuid', senderUuid))
+      ..add(DiagnosticsProperty('recipientUuid', recipientUuid))
+      ..add(DiagnosticsProperty('content', content));
   }
 
   @override
@@ -178,7 +190,7 @@ class _$SendMessageImpl implements SendMessage {
   int get hashCode =>
       Object.hash(runtimeType, chatUuid, senderUuid, recipientUuid, content);
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
@@ -258,7 +270,7 @@ class _$SendMessageImpl implements SendMessage {
   }
 }
 
-abstract class SendMessage implements ChatEvent {
+abstract class SendMessage implements ChatsEvent {
   const factory SendMessage(
       {required final String chatUuid,
       required final String senderUuid,
@@ -270,7 +282,7 @@ abstract class SendMessage implements ChatEvent {
   String get recipientUuid;
   String get content;
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SendMessageImplCopyWith<_$SendMessageImpl> get copyWith =>
@@ -290,13 +302,13 @@ abstract class _$$GetChatRoomHistoryImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GetChatRoomHistoryImplCopyWithImpl<$Res>
-    extends _$ChatEventCopyWithImpl<$Res, _$GetChatRoomHistoryImpl>
+    extends _$ChatsEventCopyWithImpl<$Res, _$GetChatRoomHistoryImpl>
     implements _$$GetChatRoomHistoryImplCopyWith<$Res> {
   __$$GetChatRoomHistoryImplCopyWithImpl(_$GetChatRoomHistoryImpl _value,
       $Res Function(_$GetChatRoomHistoryImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -316,7 +328,7 @@ class __$$GetChatRoomHistoryImplCopyWithImpl<$Res>
     ));
   }
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
@@ -329,7 +341,9 @@ class __$$GetChatRoomHistoryImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetChatRoomHistoryImpl implements _GetChatRoomHistory {
+class _$GetChatRoomHistoryImpl
+    with DiagnosticableTreeMixin
+    implements _GetChatRoomHistory {
   const _$GetChatRoomHistoryImpl(
       {required this.chatRoomUuid, required this.model});
 
@@ -339,8 +353,17 @@ class _$GetChatRoomHistoryImpl implements _GetChatRoomHistory {
   final PagebleModel model;
 
   @override
-  String toString() {
-    return 'ChatEvent.getChatRoomHistory(chatRoomUuid: $chatRoomUuid, model: $model)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsEvent.getChatRoomHistory(chatRoomUuid: $chatRoomUuid, model: $model)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ChatsEvent.getChatRoomHistory'))
+      ..add(DiagnosticsProperty('chatRoomUuid', chatRoomUuid))
+      ..add(DiagnosticsProperty('model', model));
   }
 
   @override
@@ -356,7 +379,7 @@ class _$GetChatRoomHistoryImpl implements _GetChatRoomHistory {
   @override
   int get hashCode => Object.hash(runtimeType, chatRoomUuid, model);
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
@@ -437,7 +460,7 @@ class _$GetChatRoomHistoryImpl implements _GetChatRoomHistory {
   }
 }
 
-abstract class _GetChatRoomHistory implements ChatEvent {
+abstract class _GetChatRoomHistory implements ChatsEvent {
   const factory _GetChatRoomHistory(
       {required final String chatRoomUuid,
       required final PagebleModel model}) = _$GetChatRoomHistoryImpl;
@@ -445,7 +468,7 @@ abstract class _GetChatRoomHistory implements ChatEvent {
   String get chatRoomUuid;
   PagebleModel get model;
 
-  /// Create a copy of ChatEvent
+  /// Create a copy of ChatsEvent
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetChatRoomHistoryImplCopyWith<_$GetChatRoomHistoryImpl> get copyWith =>
@@ -453,7 +476,7 @@ abstract class _GetChatRoomHistory implements ChatEvent {
 }
 
 /// @nodoc
-mixin _$ChatState {
+mixin _$ChatsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
@@ -463,6 +486,8 @@ mixin _$ChatState {
     required TResult Function(List<ChatRoomHistoryModel> model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -474,6 +499,8 @@ mixin _$ChatState {
     TResult? Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -485,6 +512,8 @@ mixin _$ChatState {
     TResult Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -498,6 +527,9 @@ mixin _$ChatState {
         getChatroomHistoryLoaded,
     required TResult Function(_GetChatroomHistoryError value)
         getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -509,6 +541,8 @@ mixin _$ChatState {
     TResult? Function(_GetChatroomHistoryLoaded value)?
         getChatroomHistoryLoaded,
     TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -519,28 +553,31 @@ mixin _$ChatState {
     TResult Function(_Error value)? sendError,
     TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
     TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ChatStateCopyWith<$Res> {
-  factory $ChatStateCopyWith(ChatState value, $Res Function(ChatState) then) =
-      _$ChatStateCopyWithImpl<$Res, ChatState>;
+abstract class $ChatsStateCopyWith<$Res> {
+  factory $ChatsStateCopyWith(
+          ChatsState value, $Res Function(ChatsState) then) =
+      _$ChatsStateCopyWithImpl<$Res, ChatsState>;
 }
 
 /// @nodoc
-class _$ChatStateCopyWithImpl<$Res, $Val extends ChatState>
-    implements $ChatStateCopyWith<$Res> {
-  _$ChatStateCopyWithImpl(this._value, this._then);
+class _$ChatsStateCopyWithImpl<$Res, $Val extends ChatsState>
+    implements $ChatsStateCopyWith<$Res> {
+  _$ChatsStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -553,24 +590,30 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$ChatStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$ChatsStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
       _$InitialImpl _value, $Res Function(_$InitialImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$InitialImpl implements _Initial {
+class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
   const _$InitialImpl();
 
   @override
-  String toString() {
-    return 'ChatState.initial()';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.initial()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'ChatsState.initial'));
   }
 
   @override
@@ -592,6 +635,8 @@ class _$InitialImpl implements _Initial {
     required TResult Function(List<ChatRoomHistoryModel> model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
   }) {
     return initial();
   }
@@ -606,6 +651,8 @@ class _$InitialImpl implements _Initial {
     TResult? Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
   }) {
     return initial?.call();
   }
@@ -620,6 +667,8 @@ class _$InitialImpl implements _Initial {
     TResult Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -639,6 +688,9 @@ class _$InitialImpl implements _Initial {
         getChatroomHistoryLoaded,
     required TResult Function(_GetChatroomHistoryError value)
         getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
   }) {
     return initial(this);
   }
@@ -653,6 +705,8 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_GetChatroomHistoryLoaded value)?
         getChatroomHistoryLoaded,
     TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
   }) {
     return initial?.call(this);
   }
@@ -666,6 +720,8 @@ class _$InitialImpl implements _Initial {
     TResult Function(_Error value)? sendError,
     TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
     TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -675,7 +731,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements ChatState {
+abstract class _Initial implements ChatsState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -688,24 +744,30 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$ChatStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$ChatsStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
       _$LoadingImpl _value, $Res Function(_$LoadingImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$LoadingImpl implements _Loading {
+class _$LoadingImpl with DiagnosticableTreeMixin implements _Loading {
   const _$LoadingImpl();
 
   @override
-  String toString() {
-    return 'ChatState.loading()';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.loading()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'ChatsState.loading'));
   }
 
   @override
@@ -727,6 +789,8 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(List<ChatRoomHistoryModel> model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
   }) {
     return loading();
   }
@@ -741,6 +805,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
   }) {
     return loading?.call();
   }
@@ -755,6 +821,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -774,6 +842,9 @@ class _$LoadingImpl implements _Loading {
         getChatroomHistoryLoaded,
     required TResult Function(_GetChatroomHistoryError value)
         getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
   }) {
     return loading(this);
   }
@@ -788,6 +859,8 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_GetChatroomHistoryLoaded value)?
         getChatroomHistoryLoaded,
     TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
   }) {
     return loading?.call(this);
   }
@@ -801,6 +874,8 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_Error value)? sendError,
     TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
     TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -810,7 +885,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements ChatState {
+abstract class _Loading implements ChatsState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -823,24 +898,30 @@ abstract class _$$SendedImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$SendedImplCopyWithImpl<$Res>
-    extends _$ChatStateCopyWithImpl<$Res, _$SendedImpl>
+    extends _$ChatsStateCopyWithImpl<$Res, _$SendedImpl>
     implements _$$SendedImplCopyWith<$Res> {
   __$$SendedImplCopyWithImpl(
       _$SendedImpl _value, $Res Function(_$SendedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 
-class _$SendedImpl implements _Sended {
+class _$SendedImpl with DiagnosticableTreeMixin implements _Sended {
   const _$SendedImpl();
 
   @override
-  String toString() {
-    return 'ChatState.sended()';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.sended()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties.add(DiagnosticsProperty('type', 'ChatsState.sended'));
   }
 
   @override
@@ -862,6 +943,8 @@ class _$SendedImpl implements _Sended {
     required TResult Function(List<ChatRoomHistoryModel> model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
   }) {
     return sended();
   }
@@ -876,6 +959,8 @@ class _$SendedImpl implements _Sended {
     TResult? Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
   }) {
     return sended?.call();
   }
@@ -890,6 +975,8 @@ class _$SendedImpl implements _Sended {
     TResult Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (sended != null) {
@@ -909,6 +996,9 @@ class _$SendedImpl implements _Sended {
         getChatroomHistoryLoaded,
     required TResult Function(_GetChatroomHistoryError value)
         getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
   }) {
     return sended(this);
   }
@@ -923,6 +1013,8 @@ class _$SendedImpl implements _Sended {
     TResult? Function(_GetChatroomHistoryLoaded value)?
         getChatroomHistoryLoaded,
     TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
   }) {
     return sended?.call(this);
   }
@@ -936,6 +1028,8 @@ class _$SendedImpl implements _Sended {
     TResult Function(_Error value)? sendError,
     TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
     TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (sended != null) {
@@ -945,7 +1039,7 @@ class _$SendedImpl implements _Sended {
   }
 }
 
-abstract class _Sended implements ChatState {
+abstract class _Sended implements ChatsState {
   const factory _Sended() = _$SendedImpl;
 }
 
@@ -960,13 +1054,13 @@ abstract class _$$ErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$ChatStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$ChatsStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
       _$ErrorImpl _value, $Res Function(_$ErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -984,15 +1078,23 @@ class __$$ErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ErrorImpl implements _Error {
+class _$ErrorImpl with DiagnosticableTreeMixin implements _Error {
   const _$ErrorImpl({required this.errorext});
 
   @override
   final String errorext;
 
   @override
-  String toString() {
-    return 'ChatState.sendError(errorext: $errorext)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.sendError(errorext: $errorext)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ChatsState.sendError'))
+      ..add(DiagnosticsProperty('errorext', errorext));
   }
 
   @override
@@ -1007,7 +1109,7 @@ class _$ErrorImpl implements _Error {
   @override
   int get hashCode => Object.hash(runtimeType, errorext);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
@@ -1025,6 +1127,8 @@ class _$ErrorImpl implements _Error {
     required TResult Function(List<ChatRoomHistoryModel> model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
   }) {
     return sendError(errorext);
   }
@@ -1039,6 +1143,8 @@ class _$ErrorImpl implements _Error {
     TResult? Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
   }) {
     return sendError?.call(errorext);
   }
@@ -1053,6 +1159,8 @@ class _$ErrorImpl implements _Error {
     TResult Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (sendError != null) {
@@ -1072,6 +1180,9 @@ class _$ErrorImpl implements _Error {
         getChatroomHistoryLoaded,
     required TResult Function(_GetChatroomHistoryError value)
         getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
   }) {
     return sendError(this);
   }
@@ -1086,6 +1197,8 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_GetChatroomHistoryLoaded value)?
         getChatroomHistoryLoaded,
     TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
   }) {
     return sendError?.call(this);
   }
@@ -1099,6 +1212,8 @@ class _$ErrorImpl implements _Error {
     TResult Function(_Error value)? sendError,
     TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
     TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (sendError != null) {
@@ -1108,12 +1223,12 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements ChatState {
+abstract class _Error implements ChatsState {
   const factory _Error({required final String errorext}) = _$ErrorImpl;
 
   String get errorext;
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
@@ -1132,14 +1247,14 @@ abstract class _$$GetChatroomHistoryLoadedImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GetChatroomHistoryLoadedImplCopyWithImpl<$Res>
-    extends _$ChatStateCopyWithImpl<$Res, _$GetChatroomHistoryLoadedImpl>
+    extends _$ChatsStateCopyWithImpl<$Res, _$GetChatroomHistoryLoadedImpl>
     implements _$$GetChatroomHistoryLoadedImplCopyWith<$Res> {
   __$$GetChatroomHistoryLoadedImplCopyWithImpl(
       _$GetChatroomHistoryLoadedImpl _value,
       $Res Function(_$GetChatroomHistoryLoadedImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1157,7 +1272,9 @@ class __$$GetChatroomHistoryLoadedImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
+class _$GetChatroomHistoryLoadedImpl
+    with DiagnosticableTreeMixin
+    implements _GetChatroomHistoryLoaded {
   const _$GetChatroomHistoryLoadedImpl(
       {required final List<ChatRoomHistoryModel> model})
       : _model = model;
@@ -1171,8 +1288,16 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
   }
 
   @override
-  String toString() {
-    return 'ChatState.getChatroomHistoryLoaded(model: $model)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.getChatroomHistoryLoaded(model: $model)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ChatsState.getChatroomHistoryLoaded'))
+      ..add(DiagnosticsProperty('model', model));
   }
 
   @override
@@ -1187,7 +1312,7 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
   int get hashCode =>
       Object.hash(runtimeType, const DeepCollectionEquality().hash(_model));
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
@@ -1206,6 +1331,8 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
     required TResult Function(List<ChatRoomHistoryModel> model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
   }) {
     return getChatroomHistoryLoaded(model);
   }
@@ -1220,6 +1347,8 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
     TResult? Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
   }) {
     return getChatroomHistoryLoaded?.call(model);
   }
@@ -1234,6 +1363,8 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
     TResult Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (getChatroomHistoryLoaded != null) {
@@ -1253,6 +1384,9 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
         getChatroomHistoryLoaded,
     required TResult Function(_GetChatroomHistoryError value)
         getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
   }) {
     return getChatroomHistoryLoaded(this);
   }
@@ -1267,6 +1401,8 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
     TResult? Function(_GetChatroomHistoryLoaded value)?
         getChatroomHistoryLoaded,
     TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
   }) {
     return getChatroomHistoryLoaded?.call(this);
   }
@@ -1280,6 +1416,8 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
     TResult Function(_Error value)? sendError,
     TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
     TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (getChatroomHistoryLoaded != null) {
@@ -1289,14 +1427,14 @@ class _$GetChatroomHistoryLoadedImpl implements _GetChatroomHistoryLoaded {
   }
 }
 
-abstract class _GetChatroomHistoryLoaded implements ChatState {
+abstract class _GetChatroomHistoryLoaded implements ChatsState {
   const factory _GetChatroomHistoryLoaded(
           {required final List<ChatRoomHistoryModel> model}) =
       _$GetChatroomHistoryLoadedImpl;
 
   List<ChatRoomHistoryModel> get model;
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetChatroomHistoryLoadedImplCopyWith<_$GetChatroomHistoryLoadedImpl>
@@ -1315,14 +1453,14 @@ abstract class _$$GetChatroomHistoryErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$GetChatroomHistoryErrorImplCopyWithImpl<$Res>
-    extends _$ChatStateCopyWithImpl<$Res, _$GetChatroomHistoryErrorImpl>
+    extends _$ChatsStateCopyWithImpl<$Res, _$GetChatroomHistoryErrorImpl>
     implements _$$GetChatroomHistoryErrorImplCopyWith<$Res> {
   __$$GetChatroomHistoryErrorImplCopyWithImpl(
       _$GetChatroomHistoryErrorImpl _value,
       $Res Function(_$GetChatroomHistoryErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -1340,15 +1478,25 @@ class __$$GetChatroomHistoryErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
+class _$GetChatroomHistoryErrorImpl
+    with DiagnosticableTreeMixin
+    implements _GetChatroomHistoryError {
   const _$GetChatroomHistoryErrorImpl({required this.errorext});
 
   @override
   final String errorext;
 
   @override
-  String toString() {
-    return 'ChatState.getChatroomHistoryError(errorext: $errorext)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.getChatroomHistoryError(errorext: $errorext)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ChatsState.getChatroomHistoryError'))
+      ..add(DiagnosticsProperty('errorext', errorext));
   }
 
   @override
@@ -1363,7 +1511,7 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
   @override
   int get hashCode => Object.hash(runtimeType, errorext);
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
@@ -1382,6 +1530,8 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
     required TResult Function(List<ChatRoomHistoryModel> model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
   }) {
     return getChatroomHistoryError(errorext);
   }
@@ -1396,6 +1546,8 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
     TResult? Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
   }) {
     return getChatroomHistoryError?.call(errorext);
   }
@@ -1410,6 +1562,8 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
     TResult Function(List<ChatRoomHistoryModel> model)?
         getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (getChatroomHistoryError != null) {
@@ -1429,6 +1583,9 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
         getChatroomHistoryLoaded,
     required TResult Function(_GetChatroomHistoryError value)
         getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
   }) {
     return getChatroomHistoryError(this);
   }
@@ -1443,6 +1600,8 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
     TResult? Function(_GetChatroomHistoryLoaded value)?
         getChatroomHistoryLoaded,
     TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
   }) {
     return getChatroomHistoryError?.call(this);
   }
@@ -1456,6 +1615,8 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
     TResult Function(_Error value)? sendError,
     TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
     TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
     required TResult orElse(),
   }) {
     if (getChatroomHistoryError != null) {
@@ -1465,15 +1626,419 @@ class _$GetChatroomHistoryErrorImpl implements _GetChatroomHistoryError {
   }
 }
 
-abstract class _GetChatroomHistoryError implements ChatState {
+abstract class _GetChatroomHistoryError implements ChatsState {
   const factory _GetChatroomHistoryError({required final String errorext}) =
       _$GetChatroomHistoryErrorImpl;
 
   String get errorext;
 
-  /// Create a copy of ChatState
+  /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetChatroomHistoryErrorImplCopyWith<_$GetChatroomHistoryErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CreateChatRoomSuccessImplCopyWith<$Res> {
+  factory _$$CreateChatRoomSuccessImplCopyWith(
+          _$CreateChatRoomSuccessImpl value,
+          $Res Function(_$CreateChatRoomSuccessImpl) then) =
+      __$$CreateChatRoomSuccessImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({CreateChatRoomModel model});
+
+  $CreateChatRoomModelCopyWith<$Res> get model;
+}
+
+/// @nodoc
+class __$$CreateChatRoomSuccessImplCopyWithImpl<$Res>
+    extends _$ChatsStateCopyWithImpl<$Res, _$CreateChatRoomSuccessImpl>
+    implements _$$CreateChatRoomSuccessImplCopyWith<$Res> {
+  __$$CreateChatRoomSuccessImplCopyWithImpl(_$CreateChatRoomSuccessImpl _value,
+      $Res Function(_$CreateChatRoomSuccessImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? model = null,
+  }) {
+    return _then(_$CreateChatRoomSuccessImpl(
+      model: null == model
+          ? _value.model
+          : model // ignore: cast_nullable_to_non_nullable
+              as CreateChatRoomModel,
+    ));
+  }
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $CreateChatRoomModelCopyWith<$Res> get model {
+    return $CreateChatRoomModelCopyWith<$Res>(_value.model, (value) {
+      return _then(_value.copyWith(model: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$CreateChatRoomSuccessImpl
+    with DiagnosticableTreeMixin
+    implements _CreateChatRoomSuccess {
+  const _$CreateChatRoomSuccessImpl({required this.model});
+
+  @override
+  final CreateChatRoomModel model;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.createChatRoomSuccess(model: $model)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ChatsState.createChatRoomSuccess'))
+      ..add(DiagnosticsProperty('model', model));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CreateChatRoomSuccessImpl &&
+            (identical(other.model, model) || other.model == model));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, model);
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CreateChatRoomSuccessImplCopyWith<_$CreateChatRoomSuccessImpl>
+      get copyWith => __$$CreateChatRoomSuccessImplCopyWithImpl<
+          _$CreateChatRoomSuccessImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() sended,
+    required TResult Function(String errorext) sendError,
+    required TResult Function(List<ChatRoomHistoryModel> model)
+        getChatroomHistoryLoaded,
+    required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
+  }) {
+    return createChatRoomSuccess(model);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? sended,
+    TResult? Function(String errorext)? sendError,
+    TResult? Function(List<ChatRoomHistoryModel> model)?
+        getChatroomHistoryLoaded,
+    TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
+  }) {
+    return createChatRoomSuccess?.call(model);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? sended,
+    TResult Function(String errorext)? sendError,
+    TResult Function(List<ChatRoomHistoryModel> model)?
+        getChatroomHistoryLoaded,
+    TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
+    required TResult orElse(),
+  }) {
+    if (createChatRoomSuccess != null) {
+      return createChatRoomSuccess(model);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Sended value) sended,
+    required TResult Function(_Error value) sendError,
+    required TResult Function(_GetChatroomHistoryLoaded value)
+        getChatroomHistoryLoaded,
+    required TResult Function(_GetChatroomHistoryError value)
+        getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
+  }) {
+    return createChatRoomSuccess(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Sended value)? sended,
+    TResult? Function(_Error value)? sendError,
+    TResult? Function(_GetChatroomHistoryLoaded value)?
+        getChatroomHistoryLoaded,
+    TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
+  }) {
+    return createChatRoomSuccess?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Sended value)? sended,
+    TResult Function(_Error value)? sendError,
+    TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
+    TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
+    required TResult orElse(),
+  }) {
+    if (createChatRoomSuccess != null) {
+      return createChatRoomSuccess(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CreateChatRoomSuccess implements ChatsState {
+  const factory _CreateChatRoomSuccess(
+      {required final CreateChatRoomModel model}) = _$CreateChatRoomSuccessImpl;
+
+  CreateChatRoomModel get model;
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CreateChatRoomSuccessImplCopyWith<_$CreateChatRoomSuccessImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$CreateChatRoomErrorImplCopyWith<$Res> {
+  factory _$$CreateChatRoomErrorImplCopyWith(_$CreateChatRoomErrorImpl value,
+          $Res Function(_$CreateChatRoomErrorImpl) then) =
+      __$$CreateChatRoomErrorImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({String errorText});
+}
+
+/// @nodoc
+class __$$CreateChatRoomErrorImplCopyWithImpl<$Res>
+    extends _$ChatsStateCopyWithImpl<$Res, _$CreateChatRoomErrorImpl>
+    implements _$$CreateChatRoomErrorImplCopyWith<$Res> {
+  __$$CreateChatRoomErrorImplCopyWithImpl(_$CreateChatRoomErrorImpl _value,
+      $Res Function(_$CreateChatRoomErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? errorText = null,
+  }) {
+    return _then(_$CreateChatRoomErrorImpl(
+      errorText: null == errorText
+          ? _value.errorText
+          : errorText // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$CreateChatRoomErrorImpl
+    with DiagnosticableTreeMixin
+    implements _CreateChatRoomError {
+  const _$CreateChatRoomErrorImpl({required this.errorText});
+
+  @override
+  final String errorText;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'ChatsState.createChatRoomError(errorText: $errorText)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'ChatsState.createChatRoomError'))
+      ..add(DiagnosticsProperty('errorText', errorText));
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CreateChatRoomErrorImpl &&
+            (identical(other.errorText, errorText) ||
+                other.errorText == errorText));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, errorText);
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CreateChatRoomErrorImplCopyWith<_$CreateChatRoomErrorImpl> get copyWith =>
+      __$$CreateChatRoomErrorImplCopyWithImpl<_$CreateChatRoomErrorImpl>(
+          this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function() sended,
+    required TResult Function(String errorext) sendError,
+    required TResult Function(List<ChatRoomHistoryModel> model)
+        getChatroomHistoryLoaded,
+    required TResult Function(String errorext) getChatroomHistoryError,
+    required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
+    required TResult Function(String errorText) createChatRoomError,
+  }) {
+    return createChatRoomError(errorText);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function()? sended,
+    TResult? Function(String errorext)? sendError,
+    TResult? Function(List<ChatRoomHistoryModel> model)?
+        getChatroomHistoryLoaded,
+    TResult? Function(String errorext)? getChatroomHistoryError,
+    TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult? Function(String errorText)? createChatRoomError,
+  }) {
+    return createChatRoomError?.call(errorText);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function()? sended,
+    TResult Function(String errorext)? sendError,
+    TResult Function(List<ChatRoomHistoryModel> model)?
+        getChatroomHistoryLoaded,
+    TResult Function(String errorext)? getChatroomHistoryError,
+    TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
+    TResult Function(String errorText)? createChatRoomError,
+    required TResult orElse(),
+  }) {
+    if (createChatRoomError != null) {
+      return createChatRoomError(errorText);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Sended value) sended,
+    required TResult Function(_Error value) sendError,
+    required TResult Function(_GetChatroomHistoryLoaded value)
+        getChatroomHistoryLoaded,
+    required TResult Function(_GetChatroomHistoryError value)
+        getChatroomHistoryError,
+    required TResult Function(_CreateChatRoomSuccess value)
+        createChatRoomSuccess,
+    required TResult Function(_CreateChatRoomError value) createChatRoomError,
+  }) {
+    return createChatRoomError(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Sended value)? sended,
+    TResult? Function(_Error value)? sendError,
+    TResult? Function(_GetChatroomHistoryLoaded value)?
+        getChatroomHistoryLoaded,
+    TResult? Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult? Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult? Function(_CreateChatRoomError value)? createChatRoomError,
+  }) {
+    return createChatRoomError?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Sended value)? sended,
+    TResult Function(_Error value)? sendError,
+    TResult Function(_GetChatroomHistoryLoaded value)? getChatroomHistoryLoaded,
+    TResult Function(_GetChatroomHistoryError value)? getChatroomHistoryError,
+    TResult Function(_CreateChatRoomSuccess value)? createChatRoomSuccess,
+    TResult Function(_CreateChatRoomError value)? createChatRoomError,
+    required TResult orElse(),
+  }) {
+    if (createChatRoomError != null) {
+      return createChatRoomError(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _CreateChatRoomError implements ChatsState {
+  const factory _CreateChatRoomError({required final String errorText}) =
+      _$CreateChatRoomErrorImpl;
+
+  String get errorText;
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$CreateChatRoomErrorImplCopyWith<_$CreateChatRoomErrorImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

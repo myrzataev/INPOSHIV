@@ -14,19 +14,14 @@ class FifthOnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final int role = Provider.of<RoleProvider>(context, listen: true).role;
     bool isCustomer = role == 0;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: EdgeInsets.only(
-            left: 20.w,
-            right: 20.w,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(),
-              const Spacer(),
+              const Spacer(), // Pushes content towards the bottom
               Image.asset(
                 Images.onboarding,
                 width: double.infinity,
@@ -36,8 +31,8 @@ class FifthOnboardingScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 68.h),
                 child: Text(
                   isCustomer
-                      ? "А теперь давайте найдем для вас лучший швейный цех  по самым выгодным ценам! "
-                      : "А теперь давайте создадим ваш профиль",
+                      ? "А теперь давайте найдем для вас лучший швейный цех по самым выгодным ценам! "
+                      : "А теперь давайте найдем для вас лучшее производство по самым выгодным ценам!",
                   style: AppFonts.w700s36
                       .copyWith(height: 0.8, fontWeight: FontWeight.bold),
                 ),
@@ -45,16 +40,18 @@ class FifthOnboardingScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: InkWell(
-                    onTap: () {},
-                    child: Text(
-                      isCustomer
-                          ? "Вы готовы сделать свой первый заказ?"
-                          : "Для того, чтобы вы могли найти лучшие заказы на аукционе по самым выгодным ценам! Вы готовы?",
-                      style: AppFonts.w400s16,
-                    )),
+                  onTap: () {},
+                  child: Text(
+                    isCustomer
+                        ? "Вы готовы сделать свой первый заказ?"
+                        : "Для того, чтобы вы могли найти лучшие заказы на аукционе по самым выгодным ценам! Вы готовы?",
+                    style: AppFonts.w400s16,
+                  ),
+                ),
               ),
+              const Spacer(), // Pushes CustomButton to the bottom
               Padding(
-                padding: EdgeInsets.only(bottom: 20.h, top: 113.h),
+                padding: EdgeInsets.only(bottom: 20.h),
                 child: CustomButton(
                   text: "Да!",
                   onPressed: () {

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,9 +39,9 @@ class CustomOrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
-                  backgroundImage: AssetImage(logo),
-                ),
+                // CircleAvatar(
+                //   backgroundImage: AssetImage(logo),
+                // ),
                 Padding(
                   padding: EdgeInsets.only(left: 5.w),
                   child: Container(
@@ -74,59 +73,64 @@ class CustomOrderCard extends StatelessWidget {
                         .copyWith(color: AppColors.accentTextColor),
                   ),
                   const Spacer(),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.w),
-                    child: SvgPicture.asset(
-                      SvgImages.star,
-                      height: 16.h,
-                      width: 16.w,
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  //   child: SvgPicture.asset(
+                  //     SvgImages.star,
+                  //     height: 16.h,
+                  //     width: 16.w,
+                  //   ),
+                  // ),
                   Text(
-                    "${4.96}",
-                    style: AppFonts.w700s16,
+                    "580 штук",
+                    style: AppFonts.w400s16
+                        .copyWith(color: AppColors.accentTextColor),
                   )
                 ],
               ),
             ),
             Text(
-              "Выполнено в Inposhiv $quantityInApp заказов.",
-              style:
-                  AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
+              "от 22.06.2024 – до 16.07.2024",
+              style: AppFonts.w400s16,
             ),
-            Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "${retailPrice}\$",
-                      style: AppFonts.w700s18,
-                    ),
-                    Text(
-                      "580 руб",
-                      style: AppFonts.w400s16,
-                    ),
-                  ],
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 40.w),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${3018}\$",
-                        style: AppFonts.w700s18,
-                      ),
-                      Text(
-                        "312 000 руб",
-                        style: AppFonts.w400s16,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+            // Text(
+            //   "Выполнено в Inposhiv $quantityInApp заказов.",
+            //   style:
+            //       AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
+            // ),
+            // Row(
+            //   children: [
+            //     Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text(
+            //           "${retailPrice}\$",
+            //           style: AppFonts.w700s18,
+            //         ),
+            //         Text(
+            //           "580 руб",
+            //           style: AppFonts.w400s16,
+            //         ),
+            //       ],
+            //     ),
+            //     Padding(
+            //       padding: EdgeInsets.only(left: 40.w),
+            //       child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           Text(
+            //             "${3018}\$",
+            //             style: AppFonts.w700s18,
+            //           ),
+            //           Text(
+            //             "312 000 руб",
+            //             style: AppFonts.w400s16,
+            //           ),
+            //         ],
+            //       ),
+            //     )
+            //   ],
+            // ),
             // Padding(
             //   padding: EdgeInsets.symmetric(vertical: 10.h),
             //   child: SizedBox(

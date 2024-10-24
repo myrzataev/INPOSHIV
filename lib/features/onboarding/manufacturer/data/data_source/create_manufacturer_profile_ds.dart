@@ -7,7 +7,7 @@ class CreateManufacturerProfileDs {
   CreateManufacturerProfileDs({required this.dio});
   Future<ManufacturerModel> createManufacturereProfile(
       {required FormData formData, required String userId}) async {
-    final Response response = await dio.post(UrlRoutes.manufacturer,
+    final Response response = await dio.post(UrlRoutes.createManufacturerProfile,
         queryParameters: {"userUuid": userId}, data: formData);
     return ManufacturerModel.fromJson(response.data);
   }

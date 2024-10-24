@@ -33,4 +33,14 @@ abstract class AppFonts {
       fontSize: 18.sp,
       color: AppColors.accentTextColor,
       fontFamily: "Neue Medium");
+  static TextStyle w400s14 = TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 14.sp,
+      color: AppColors.regularGreyColor,
+      fontFamily: "SF Pro");
+  static TextStyle w400s12 = TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 12.sp,
+      color: AppColors.regularGreyColor,
+      fontFamily: "SF Pro");
 }

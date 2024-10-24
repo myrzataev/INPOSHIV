@@ -8,25 +8,23 @@ import 'dart:convert';
 part 'chat_room_history_model.freezed.dart';
 part 'chat_room_history_model.g.dart';
 
-ChatRoomHistoryModel chatRoomHistoryModelFromJson(String str) => ChatRoomHistoryModel.fromJson(json.decode(str));
+List<ChatRoomHistoryModel> chatRoomHistoryModelFromJson(String str) => List<ChatRoomHistoryModel>.from(json.decode(str).map((x) => ChatRoomHistoryModel.fromJson(x)));
 
-String chatRoomHistoryModelToJson(ChatRoomHistoryModel data) => json.encode(data.toJson());
+String chatRoomHistoryModelToJson(List<ChatRoomHistoryModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @freezed
 class ChatRoomHistoryModel with _$ChatRoomHistoryModel {
     const factory ChatRoomHistoryModel({
-        int? orderId,
-        String? productName,
-        int? material,
-        String? color,
-        int? quantity,
-        List<String>? technicalDocuments,
-        List<String>? lekalaDocuments,
-        DateTime? deadline,
-        int? discount,
-        String? deliveryPoint,
-        List<String>? technicalDocumentUrls,
-        List<String>? lekalaDocumentUrls,
+        String? messageUuid,
+        String? chatUuid,
+        String? senderUuid,
+        String? senderName,
+        String? recipientName,
+        String? imageUrl,
+        String? recipientUuid,
+        String? content,
+        int? type,
+        String? messageStatus,
     }) = _ChatRoomHistoryModel;
 
     factory ChatRoomHistoryModel.fromJson(Map<String, dynamic> json) => _$ChatRoomHistoryModelFromJson(json);

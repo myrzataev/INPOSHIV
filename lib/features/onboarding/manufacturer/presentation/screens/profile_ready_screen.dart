@@ -161,7 +161,7 @@ class _OrderReadyScreenState extends State<ProfileReadyScreen> {
                         .add(ManufacturerEvent.createProfile(
                             formData: FormData.fromMap({
                               "username": preferences.getString("userName"),
-                              "companyName": "dfasf",
+                              "companyName": "Фортилайнс",
                               "description": widget.descriptionOfCompany,
                               "companySize": 45,
                               "photos":
@@ -170,7 +170,7 @@ class _OrderReadyScreenState extends State<ProfileReadyScreen> {
                                     filename: image.name);
                               }))
                             }),
-                            userId: preferences.getString("userId") ?? ""));
+                            userId: preferences.getString("customerId") ?? ""));
                   }),
             ],
           ),

@@ -281,6 +281,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   "userName", entity.username ?? "");
                               preferences.setString("customerId",
                                   entity.customerOrManufacturerUuid ?? "");
+                              preferences.setBool(
+                                  "isCustomer", entity.role == "CUSTOMER");
                               GoRouter.of(context).pushNamed("authorization");
                             },
                             error: (error) => ScaffoldMessenger.of(context)
@@ -300,6 +302,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     child: CustomButton(
                         text: "Зарегистрироваться",
                         onPressed: () {
+                          // GoRouter.of(context).pushNamed("authorization");
                           _submitForm(isCustomer);
                         }),
                   )

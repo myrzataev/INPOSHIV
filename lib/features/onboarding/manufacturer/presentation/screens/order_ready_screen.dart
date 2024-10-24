@@ -14,6 +14,7 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/create_auction_bloc/create_auction_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/providers/order_provider.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
@@ -60,8 +61,8 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
               listener: (context, state) {
                 state.maybeWhen(
                     createOrderLoaded: (model) {
-                      BlocProvider.of<AuctionBloc>(context).add(
-                          AuctionEvent.createAuction(
+                      BlocProvider.of<CreateAuctionBloc>(context).add(
+                          CreateAuctionEvent.createAuction(
                               orderId: model.orderId ?? 0));
                     },
                     createOrderError: (errorText) =>
@@ -69,7 +70,7 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                             .showSnackBar(SnackBar(content: Text(errorText))),
                     orElse: () {});
               },
-              child: BlocListener<AuctionBloc, AuctionState>(
+              child: BlocListener<CreateAuctionBloc, CreateAuctionState>(
                 listener: (context, state) {
                   state.maybeWhen(
                       auctionCreated: () =>

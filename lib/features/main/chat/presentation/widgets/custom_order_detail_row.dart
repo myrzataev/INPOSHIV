@@ -33,6 +33,12 @@ class CustomOrderDetailRow extends StatelessWidget {
               ),
               Expanded(
                 child: TextField(
+                  decoration: const InputDecoration(
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide:
+                              BorderSide(color: AppColors.borderColorGrey)),
+                      focusColor: AppColors.borderColorGrey,
+                      border: UnderlineInputBorder(borderSide: BorderSide())),
                   controller: controller,
                   // value,
                   style: AppFonts.w400s16

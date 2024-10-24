@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/about_app_screen.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/faq_screen.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/secured_deal_screen.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/settings_screen.dart';
 import 'package:inposhiv/features/auth/presentation/screens/authorization_screen.dart';
+import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
+import 'package:inposhiv/features/main/auction/presentation/screens/detailed_view_screen.dart';
+import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/screens/approve_invoice_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/order_detail_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/see_doc_screen.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/screens/invoice_screen.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/screens/pay_screen.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_without_size_screen.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/about_company_screen.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/profile_ready_screen.dart';
@@ -52,6 +58,8 @@ import 'package:inposhiv/features/main/home/presentation/customer/screens/search
 import 'package:inposhiv/features/main/home/presentation/customer/screens/top_up_balance_screen.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/user_profile_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
+import 'package:inposhiv/features/tracking/presentation/screens/first_tracking_screen.dart';
+import 'package:inposhiv/features/tracking/presentation/screens/second_tracking_screen.dart';
 import 'package:inposhiv/internal/bottom_navigation_bar.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -433,6 +441,7 @@ final GoRouter router = GoRouter(
             GoRoute(
                 path: "/auction",
                 name: "auction",
+
                 // parentNavigatorKey: _shellNavigatorKey,
                 pageBuilder: (context, state) {
                   return CustomTransitionPage<void>(
@@ -456,6 +465,16 @@ final GoRouter router = GoRouter(
                       return SeeImageFullScreen(
                         imagesList: imagesList,
                         index: (int.tryParse(index ?? "0") ?? 0),
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: "detailedViewScreen",
+                    name: "detailedViewScreen",
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return DetailedViewScreen(
+                        model: state.extra as CustomerOrdersModel,
                       );
                     },
                   ),
@@ -485,6 +504,9 @@ final GoRouter router = GoRouter(
                     builder: (context, state) {
                       return ChatScreen(
                         orderId: state.uri.queryParameters["orderId"] ?? "",
+                        receipentUuid:
+                            state.uri.queryParameters["receipentUuid"] ?? "",
+                        chatUuid: state.uri.queryParameters["chatUuid"] ?? "",
                       );
                     },
                   )
@@ -525,6 +547,40 @@ final GoRouter router = GoRouter(
                       return InvoiceScreen(
                         orderId: state.uri.queryParameters["orderId"] ?? "",
                       );
+                    },
+                  ),
+                  GoRoute(
+                    path: "approveInvoice",
+                    name: "approveInvoice",
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return ApproveInvoiceScreen(
+                        orderId: state.uri.queryParameters["orderId"] ?? "",
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: "trackingFirst",
+                    name: "trackingFirst",
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return const FirstTrackingScreen();
+                    },
+                  ),
+                  GoRoute(
+                    path: "secondTrackingScreen",
+                    name: "secondTrackingScreen",
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return const SecondTrackingScreen();
+                    },
+                  ),
+                  GoRoute(
+                    path: "payScreen",
+                    name: "payScreen",
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return const PayScreen();
                     },
                   ),
                   GoRoute(

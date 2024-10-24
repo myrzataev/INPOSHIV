@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/send_invoice_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_order_details_repo_impl.dart';
 
 part 'orders_event.dart';
@@ -9,18 +11,25 @@ part 'orders_bloc.freezed.dart';
 
 class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
   SendOrderDetailsRepoImpl sendOrderDetailsRepoImpl;
-  OrdersBloc({required this.sendOrderDetailsRepoImpl})
+  SendInvoiceRepoimpl sendInvoiceRepoimpl;
+  OrdersBloc(
+      {required this.sendOrderDetailsRepoImpl,
+      required this.sendInvoiceRepoimpl})
       : super(const _Initial()) {
     on<OrdersEvent>((event, emit) async {
       await event.map(
         sendOrderDetails: (value) async {
-          await sendOrderDetails(event: event, emit: emit);
+          await sendOrderDetails(event: value, emit: emit);
+        },
+        sendInvoice: (value) async {
+          await sendInvoice(event: value, emit: emit);
         },
       );
     });
   }
   Future<void> sendOrderDetails(
-      {required OrdersEvent event, required Emitter<OrdersState> emit}) async {
+      {required SendOrderDetails event,
+      required Emitter<OrdersState> emit}) async {
     try {
       emit(const OrdersState.loading());
       final result = await sendOrderDetailsRepoImpl.sendOrderDetails(
@@ -28,6 +37,18 @@ class OrdersBloc extends Bloc<OrdersEvent, OrdersState> {
       emit(OrdersState.orderDetailsSended(model: result));
     } catch (e) {
       emit(OrdersState.orderDetailsError(errorText: e.toString()));
+    }
+  }
+
+  Future<void> sendInvoice(
+      {required SendInvoice event, required Emitter<OrdersState> emit}) async {
+    try {
+      emit(const OrdersState.loading());
+      final result = await sendInvoiceRepoimpl.sendInvoice(
+          invoice: event.invoice, orderId: event.orderId);
+      emit(OrdersState.invoiceSended(model: result));
+    } catch (e) {
+      emit(OrdersState.invoiceError(errorText: e.toString()));
     }
   }
 }

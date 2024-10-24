@@ -5,6 +5,8 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
+import 'package:inposhiv/features/onboarding/customer/presentation/screens/second_onboarding_screen_for_customer.dart';
+import 'package:inposhiv/resources/resources.dart';
 import 'package:provider/provider.dart';
 
 class ChooseRoleScreen extends StatefulWidget {
@@ -30,6 +32,14 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
           children: [
             const SizedBox(),
             const Spacer(),
+            Padding(
+              padding: EdgeInsets.only(bottom: 35.h),
+              child: Image.asset(
+                Images.onboardingimages1,
+                height: 88.h,
+                width: 206.w,
+              ),
+            ),
             Text(
               "Выберите роль",
               style: AppFonts.w700s36.copyWith(height: 0.8),
@@ -77,7 +87,13 @@ class _ChooseRoleScreenState extends State<ChooseRoleScreen> {
                   onPressed: () {
                     Provider.of<RoleProvider>(context, listen: false)
                         .changeRole(role);
-                    GoRouter.of(context).pushNamed("fifthOnboarding");
+                    role == 1
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const SecondOnboardingScreenForCustomer()))
+                        : GoRouter.of(context).pushNamed("secondOnBoarding");
                   },
                 )),
           ],

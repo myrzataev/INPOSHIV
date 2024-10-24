@@ -20,21 +20,26 @@ class AuctionModel with _$AuctionModel {
         DateTime? startTime,
         dynamic endTime,
         String? auctionUuid,
-        List<AuctionProcess>? auctionProcesses,
+        List<ProductsList>? productsList,
+        List<dynamic>? auctionProcesses,
     }) = _AuctionModel;
 
     factory AuctionModel.fromJson(Map<String, dynamic> json) => _$AuctionModelFromJson(json);
 }
 
 @freezed
-class AuctionProcess with _$AuctionProcess {
-    const factory AuctionProcess({
-        int? auctionId,
-        String? manufacturerUuid,
-        int? bidPrice,
-        List<int>? bidTime,
-        int? bidCount,
-    }) = _AuctionProcess;
+class ProductsList with _$ProductsList {
+    const factory ProductsList({
+        String? name,
+        dynamic categoryId,
+        int? fabricId,
+        int? sizeId,
+        int? priceUsd,
+        double? priceRub,
+        dynamic quantity,
+        dynamic description,
+        List<String>? photoUrls,
+    }) = _ProductsList;
 
-    factory AuctionProcess.fromJson(Map<String, dynamic> json) => _$AuctionProcessFromJson(json);
+    factory ProductsList.fromJson(Map<String, dynamic> json) => _$ProductsListFromJson(json);
 }

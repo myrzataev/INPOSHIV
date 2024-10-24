@@ -20,18 +20,16 @@ ChatRoomHistoryModel _$ChatRoomHistoryModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatRoomHistoryModel {
-  int? get orderId => throw _privateConstructorUsedError;
-  String? get productName => throw _privateConstructorUsedError;
-  int? get material => throw _privateConstructorUsedError;
-  String? get color => throw _privateConstructorUsedError;
-  int? get quantity => throw _privateConstructorUsedError;
-  List<String>? get technicalDocuments => throw _privateConstructorUsedError;
-  List<String>? get lekalaDocuments => throw _privateConstructorUsedError;
-  DateTime? get deadline => throw _privateConstructorUsedError;
-  int? get discount => throw _privateConstructorUsedError;
-  String? get deliveryPoint => throw _privateConstructorUsedError;
-  List<String>? get technicalDocumentUrls => throw _privateConstructorUsedError;
-  List<String>? get lekalaDocumentUrls => throw _privateConstructorUsedError;
+  String? get messageUuid => throw _privateConstructorUsedError;
+  String? get chatUuid => throw _privateConstructorUsedError;
+  String? get senderUuid => throw _privateConstructorUsedError;
+  String? get senderName => throw _privateConstructorUsedError;
+  String? get recipientName => throw _privateConstructorUsedError;
+  String? get imageUrl => throw _privateConstructorUsedError;
+  String? get recipientUuid => throw _privateConstructorUsedError;
+  String? get content => throw _privateConstructorUsedError;
+  int? get type => throw _privateConstructorUsedError;
+  String? get messageStatus => throw _privateConstructorUsedError;
 
   /// Serializes this ChatRoomHistoryModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,18 +48,16 @@ abstract class $ChatRoomHistoryModelCopyWith<$Res> {
       _$ChatRoomHistoryModelCopyWithImpl<$Res, ChatRoomHistoryModel>;
   @useResult
   $Res call(
-      {int? orderId,
-      String? productName,
-      int? material,
-      String? color,
-      int? quantity,
-      List<String>? technicalDocuments,
-      List<String>? lekalaDocuments,
-      DateTime? deadline,
-      int? discount,
-      String? deliveryPoint,
-      List<String>? technicalDocumentUrls,
-      List<String>? lekalaDocumentUrls});
+      {String? messageUuid,
+      String? chatUuid,
+      String? senderUuid,
+      String? senderName,
+      String? recipientName,
+      String? imageUrl,
+      String? recipientUuid,
+      String? content,
+      int? type,
+      String? messageStatus});
 }
 
 /// @nodoc
@@ -80,68 +76,58 @@ class _$ChatRoomHistoryModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? orderId = freezed,
-    Object? productName = freezed,
-    Object? material = freezed,
-    Object? color = freezed,
-    Object? quantity = freezed,
-    Object? technicalDocuments = freezed,
-    Object? lekalaDocuments = freezed,
-    Object? deadline = freezed,
-    Object? discount = freezed,
-    Object? deliveryPoint = freezed,
-    Object? technicalDocumentUrls = freezed,
-    Object? lekalaDocumentUrls = freezed,
+    Object? messageUuid = freezed,
+    Object? chatUuid = freezed,
+    Object? senderUuid = freezed,
+    Object? senderName = freezed,
+    Object? recipientName = freezed,
+    Object? imageUrl = freezed,
+    Object? recipientUuid = freezed,
+    Object? content = freezed,
+    Object? type = freezed,
+    Object? messageStatus = freezed,
   }) {
     return _then(_value.copyWith(
-      orderId: freezed == orderId
-          ? _value.orderId
-          : orderId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      productName: freezed == productName
-          ? _value.productName
-          : productName // ignore: cast_nullable_to_non_nullable
+      messageUuid: freezed == messageUuid
+          ? _value.messageUuid
+          : messageUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      material: freezed == material
-          ? _value.material
-          : material // ignore: cast_nullable_to_non_nullable
-              as int?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
+      chatUuid: freezed == chatUuid
+          ? _value.chatUuid
+          : chatUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      quantity: freezed == quantity
-          ? _value.quantity
-          : quantity // ignore: cast_nullable_to_non_nullable
-              as int?,
-      technicalDocuments: freezed == technicalDocuments
-          ? _value.technicalDocuments
-          : technicalDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      lekalaDocuments: freezed == lekalaDocuments
-          ? _value.lekalaDocuments
-          : lekalaDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      deadline: freezed == deadline
-          ? _value.deadline
-          : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      discount: freezed == discount
-          ? _value.discount
-          : discount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      deliveryPoint: freezed == deliveryPoint
-          ? _value.deliveryPoint
-          : deliveryPoint // ignore: cast_nullable_to_non_nullable
+      senderUuid: freezed == senderUuid
+          ? _value.senderUuid
+          : senderUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      technicalDocumentUrls: freezed == technicalDocumentUrls
-          ? _value.technicalDocumentUrls
-          : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      lekalaDocumentUrls: freezed == lekalaDocumentUrls
-          ? _value.lekalaDocumentUrls
-          : lekalaDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      senderName: freezed == senderName
+          ? _value.senderName
+          : senderName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      recipientName: freezed == recipientName
+          ? _value.recipientName
+          : recipientName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      recipientUuid: freezed == recipientUuid
+          ? _value.recipientUuid
+          : recipientUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      content: freezed == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int?,
+      messageStatus: freezed == messageStatus
+          ? _value.messageStatus
+          : messageStatus // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -155,18 +141,16 @@ abstract class _$$ChatRoomHistoryModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? orderId,
-      String? productName,
-      int? material,
-      String? color,
-      int? quantity,
-      List<String>? technicalDocuments,
-      List<String>? lekalaDocuments,
-      DateTime? deadline,
-      int? discount,
-      String? deliveryPoint,
-      List<String>? technicalDocumentUrls,
-      List<String>? lekalaDocumentUrls});
+      {String? messageUuid,
+      String? chatUuid,
+      String? senderUuid,
+      String? senderName,
+      String? recipientName,
+      String? imageUrl,
+      String? recipientUuid,
+      String? content,
+      int? type,
+      String? messageStatus});
 }
 
 /// @nodoc
@@ -182,68 +166,58 @@ class __$$ChatRoomHistoryModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? orderId = freezed,
-    Object? productName = freezed,
-    Object? material = freezed,
-    Object? color = freezed,
-    Object? quantity = freezed,
-    Object? technicalDocuments = freezed,
-    Object? lekalaDocuments = freezed,
-    Object? deadline = freezed,
-    Object? discount = freezed,
-    Object? deliveryPoint = freezed,
-    Object? technicalDocumentUrls = freezed,
-    Object? lekalaDocumentUrls = freezed,
+    Object? messageUuid = freezed,
+    Object? chatUuid = freezed,
+    Object? senderUuid = freezed,
+    Object? senderName = freezed,
+    Object? recipientName = freezed,
+    Object? imageUrl = freezed,
+    Object? recipientUuid = freezed,
+    Object? content = freezed,
+    Object? type = freezed,
+    Object? messageStatus = freezed,
   }) {
     return _then(_$ChatRoomHistoryModelImpl(
-      orderId: freezed == orderId
-          ? _value.orderId
-          : orderId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      productName: freezed == productName
-          ? _value.productName
-          : productName // ignore: cast_nullable_to_non_nullable
+      messageUuid: freezed == messageUuid
+          ? _value.messageUuid
+          : messageUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      material: freezed == material
-          ? _value.material
-          : material // ignore: cast_nullable_to_non_nullable
-              as int?,
-      color: freezed == color
-          ? _value.color
-          : color // ignore: cast_nullable_to_non_nullable
+      chatUuid: freezed == chatUuid
+          ? _value.chatUuid
+          : chatUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      quantity: freezed == quantity
-          ? _value.quantity
-          : quantity // ignore: cast_nullable_to_non_nullable
-              as int?,
-      technicalDocuments: freezed == technicalDocuments
-          ? _value._technicalDocuments
-          : technicalDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      lekalaDocuments: freezed == lekalaDocuments
-          ? _value._lekalaDocuments
-          : lekalaDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      deadline: freezed == deadline
-          ? _value.deadline
-          : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      discount: freezed == discount
-          ? _value.discount
-          : discount // ignore: cast_nullable_to_non_nullable
-              as int?,
-      deliveryPoint: freezed == deliveryPoint
-          ? _value.deliveryPoint
-          : deliveryPoint // ignore: cast_nullable_to_non_nullable
+      senderUuid: freezed == senderUuid
+          ? _value.senderUuid
+          : senderUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      technicalDocumentUrls: freezed == technicalDocumentUrls
-          ? _value._technicalDocumentUrls
-          : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      lekalaDocumentUrls: freezed == lekalaDocumentUrls
-          ? _value._lekalaDocumentUrls
-          : lekalaDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      senderName: freezed == senderName
+          ? _value.senderName
+          : senderName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      recipientName: freezed == recipientName
+          ? _value.recipientName
+          : recipientName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      imageUrl: freezed == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      recipientUuid: freezed == recipientUuid
+          ? _value.recipientUuid
+          : recipientUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      content: freezed == content
+          ? _value.content
+          : content // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as int?,
+      messageStatus: freezed == messageStatus
+          ? _value.messageStatus
+          : messageStatus // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -252,88 +226,44 @@ class __$$ChatRoomHistoryModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ChatRoomHistoryModelImpl implements _ChatRoomHistoryModel {
   const _$ChatRoomHistoryModelImpl(
-      {this.orderId,
-      this.productName,
-      this.material,
-      this.color,
-      this.quantity,
-      final List<String>? technicalDocuments,
-      final List<String>? lekalaDocuments,
-      this.deadline,
-      this.discount,
-      this.deliveryPoint,
-      final List<String>? technicalDocumentUrls,
-      final List<String>? lekalaDocumentUrls})
-      : _technicalDocuments = technicalDocuments,
-        _lekalaDocuments = lekalaDocuments,
-        _technicalDocumentUrls = technicalDocumentUrls,
-        _lekalaDocumentUrls = lekalaDocumentUrls;
+      {this.messageUuid,
+      this.chatUuid,
+      this.senderUuid,
+      this.senderName,
+      this.recipientName,
+      this.imageUrl,
+      this.recipientUuid,
+      this.content,
+      this.type,
+      this.messageStatus});
 
   factory _$ChatRoomHistoryModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatRoomHistoryModelImplFromJson(json);
 
   @override
-  final int? orderId;
+  final String? messageUuid;
   @override
-  final String? productName;
+  final String? chatUuid;
   @override
-  final int? material;
+  final String? senderUuid;
   @override
-  final String? color;
+  final String? senderName;
   @override
-  final int? quantity;
-  final List<String>? _technicalDocuments;
+  final String? recipientName;
   @override
-  List<String>? get technicalDocuments {
-    final value = _technicalDocuments;
-    if (value == null) return null;
-    if (_technicalDocuments is EqualUnmodifiableListView)
-      return _technicalDocuments;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<String>? _lekalaDocuments;
+  final String? imageUrl;
   @override
-  List<String>? get lekalaDocuments {
-    final value = _lekalaDocuments;
-    if (value == null) return null;
-    if (_lekalaDocuments is EqualUnmodifiableListView) return _lekalaDocuments;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+  final String? recipientUuid;
   @override
-  final DateTime? deadline;
+  final String? content;
   @override
-  final int? discount;
+  final int? type;
   @override
-  final String? deliveryPoint;
-  final List<String>? _technicalDocumentUrls;
-  @override
-  List<String>? get technicalDocumentUrls {
-    final value = _technicalDocumentUrls;
-    if (value == null) return null;
-    if (_technicalDocumentUrls is EqualUnmodifiableListView)
-      return _technicalDocumentUrls;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<String>? _lekalaDocumentUrls;
-  @override
-  List<String>? get lekalaDocumentUrls {
-    final value = _lekalaDocumentUrls;
-    if (value == null) return null;
-    if (_lekalaDocumentUrls is EqualUnmodifiableListView)
-      return _lekalaDocumentUrls;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
+  final String? messageStatus;
 
   @override
   String toString() {
-    return 'ChatRoomHistoryModel(orderId: $orderId, productName: $productName, material: $material, color: $color, quantity: $quantity, technicalDocuments: $technicalDocuments, lekalaDocuments: $lekalaDocuments, deadline: $deadline, discount: $discount, deliveryPoint: $deliveryPoint, technicalDocumentUrls: $technicalDocumentUrls, lekalaDocumentUrls: $lekalaDocumentUrls)';
+    return 'ChatRoomHistoryModel(messageUuid: $messageUuid, chatUuid: $chatUuid, senderUuid: $senderUuid, senderName: $senderName, recipientName: $recipientName, imageUrl: $imageUrl, recipientUuid: $recipientUuid, content: $content, type: $type, messageStatus: $messageStatus)';
   }
 
   @override
@@ -341,46 +271,40 @@ class _$ChatRoomHistoryModelImpl implements _ChatRoomHistoryModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ChatRoomHistoryModelImpl &&
-            (identical(other.orderId, orderId) || other.orderId == orderId) &&
-            (identical(other.productName, productName) ||
-                other.productName == productName) &&
-            (identical(other.material, material) ||
-                other.material == material) &&
-            (identical(other.color, color) || other.color == color) &&
-            (identical(other.quantity, quantity) ||
-                other.quantity == quantity) &&
-            const DeepCollectionEquality()
-                .equals(other._technicalDocuments, _technicalDocuments) &&
-            const DeepCollectionEquality()
-                .equals(other._lekalaDocuments, _lekalaDocuments) &&
-            (identical(other.deadline, deadline) ||
-                other.deadline == deadline) &&
-            (identical(other.discount, discount) ||
-                other.discount == discount) &&
-            (identical(other.deliveryPoint, deliveryPoint) ||
-                other.deliveryPoint == deliveryPoint) &&
-            const DeepCollectionEquality()
-                .equals(other._technicalDocumentUrls, _technicalDocumentUrls) &&
-            const DeepCollectionEquality()
-                .equals(other._lekalaDocumentUrls, _lekalaDocumentUrls));
+            (identical(other.messageUuid, messageUuid) ||
+                other.messageUuid == messageUuid) &&
+            (identical(other.chatUuid, chatUuid) ||
+                other.chatUuid == chatUuid) &&
+            (identical(other.senderUuid, senderUuid) ||
+                other.senderUuid == senderUuid) &&
+            (identical(other.senderName, senderName) ||
+                other.senderName == senderName) &&
+            (identical(other.recipientName, recipientName) ||
+                other.recipientName == recipientName) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
+            (identical(other.recipientUuid, recipientUuid) ||
+                other.recipientUuid == recipientUuid) &&
+            (identical(other.content, content) || other.content == content) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.messageStatus, messageStatus) ||
+                other.messageStatus == messageStatus));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      orderId,
-      productName,
-      material,
-      color,
-      quantity,
-      const DeepCollectionEquality().hash(_technicalDocuments),
-      const DeepCollectionEquality().hash(_lekalaDocuments),
-      deadline,
-      discount,
-      deliveryPoint,
-      const DeepCollectionEquality().hash(_technicalDocumentUrls),
-      const DeepCollectionEquality().hash(_lekalaDocumentUrls));
+      messageUuid,
+      chatUuid,
+      senderUuid,
+      senderName,
+      recipientName,
+      imageUrl,
+      recipientUuid,
+      content,
+      type,
+      messageStatus);
 
   /// Create a copy of ChatRoomHistoryModel
   /// with the given fields replaced by the non-null parameter values.
@@ -402,46 +326,40 @@ class _$ChatRoomHistoryModelImpl implements _ChatRoomHistoryModel {
 
 abstract class _ChatRoomHistoryModel implements ChatRoomHistoryModel {
   const factory _ChatRoomHistoryModel(
-      {final int? orderId,
-      final String? productName,
-      final int? material,
-      final String? color,
-      final int? quantity,
-      final List<String>? technicalDocuments,
-      final List<String>? lekalaDocuments,
-      final DateTime? deadline,
-      final int? discount,
-      final String? deliveryPoint,
-      final List<String>? technicalDocumentUrls,
-      final List<String>? lekalaDocumentUrls}) = _$ChatRoomHistoryModelImpl;
+      {final String? messageUuid,
+      final String? chatUuid,
+      final String? senderUuid,
+      final String? senderName,
+      final String? recipientName,
+      final String? imageUrl,
+      final String? recipientUuid,
+      final String? content,
+      final int? type,
+      final String? messageStatus}) = _$ChatRoomHistoryModelImpl;
 
   factory _ChatRoomHistoryModel.fromJson(Map<String, dynamic> json) =
       _$ChatRoomHistoryModelImpl.fromJson;
 
   @override
-  int? get orderId;
+  String? get messageUuid;
   @override
-  String? get productName;
+  String? get chatUuid;
   @override
-  int? get material;
+  String? get senderUuid;
   @override
-  String? get color;
+  String? get senderName;
   @override
-  int? get quantity;
+  String? get recipientName;
   @override
-  List<String>? get technicalDocuments;
+  String? get imageUrl;
   @override
-  List<String>? get lekalaDocuments;
+  String? get recipientUuid;
   @override
-  DateTime? get deadline;
+  String? get content;
   @override
-  int? get discount;
+  int? get type;
   @override
-  String? get deliveryPoint;
-  @override
-  List<String>? get technicalDocumentUrls;
-  @override
-  List<String>? get lekalaDocumentUrls;
+  String? get messageStatus;
 
   /// Create a copy of ChatRoomHistoryModel
   /// with the given fields replaced by the non-null parameter values.

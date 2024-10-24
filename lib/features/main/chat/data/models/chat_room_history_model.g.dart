@@ -9,43 +9,29 @@ part of 'chat_room_history_model.dart';
 _$ChatRoomHistoryModelImpl _$$ChatRoomHistoryModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ChatRoomHistoryModelImpl(
-      orderId: (json['orderId'] as num?)?.toInt(),
-      productName: json['productName'] as String?,
-      material: (json['material'] as num?)?.toInt(),
-      color: json['color'] as String?,
-      quantity: (json['quantity'] as num?)?.toInt(),
-      technicalDocuments: (json['technicalDocuments'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      lekalaDocuments: (json['lekalaDocuments'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      deadline: json['deadline'] == null
-          ? null
-          : DateTime.parse(json['deadline'] as String),
-      discount: (json['discount'] as num?)?.toInt(),
-      deliveryPoint: json['deliveryPoint'] as String?,
-      technicalDocumentUrls: (json['technicalDocumentUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
-      lekalaDocumentUrls: (json['lekalaDocumentUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      messageUuid: json['messageUuid'] as String?,
+      chatUuid: json['chatUuid'] as String?,
+      senderUuid: json['senderUuid'] as String?,
+      senderName: json['senderName'] as String?,
+      recipientName: json['recipientName'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+      recipientUuid: json['recipientUuid'] as String?,
+      content: json['content'] as String?,
+      type: (json['type'] as num?)?.toInt(),
+      messageStatus: json['messageStatus'] as String?,
     );
 
 Map<String, dynamic> _$$ChatRoomHistoryModelImplToJson(
         _$ChatRoomHistoryModelImpl instance) =>
     <String, dynamic>{
-      'orderId': instance.orderId,
-      'productName': instance.productName,
-      'material': instance.material,
-      'color': instance.color,
-      'quantity': instance.quantity,
-      'technicalDocuments': instance.technicalDocuments,
-      'lekalaDocuments': instance.lekalaDocuments,
-      'deadline': instance.deadline?.toIso8601String(),
-      'discount': instance.discount,
-      'deliveryPoint': instance.deliveryPoint,
-      'technicalDocumentUrls': instance.technicalDocumentUrls,
-      'lekalaDocumentUrls': instance.lekalaDocumentUrls,
+      'messageUuid': instance.messageUuid,
+      'chatUuid': instance.chatUuid,
+      'senderUuid': instance.senderUuid,
+      'senderName': instance.senderName,
+      'recipientName': instance.recipientName,
+      'imageUrl': instance.imageUrl,
+      'recipientUuid': instance.recipientUuid,
+      'content': instance.content,
+      'type': instance.type,
+      'messageStatus': instance.messageStatus,
     };
