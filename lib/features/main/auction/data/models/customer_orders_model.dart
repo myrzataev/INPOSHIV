@@ -8,16 +8,13 @@ import 'dart:convert';
 part 'customer_orders_model.freezed.dart';
 part 'customer_orders_model.g.dart';
 
-List<CustomerOrdersModel> customerOrdersModelFromJson(String str) => List<CustomerOrdersModel>.from(json.decode(str).map((x) => CustomerOrdersModel.fromJson(x)));
+CustomerOrdersModel customerOrdersModelFromJson(String str) => CustomerOrdersModel.fromJson(json.decode(str));
 
-String customerOrdersModelToJson(List<CustomerOrdersModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String customerOrdersModelToJson(CustomerOrdersModel data) => json.encode(data.toJson());
 
 @freezed
 class CustomerOrdersModel with _$CustomerOrdersModel {
     const factory CustomerOrdersModel({
-        int? categoryId,
-        int? fabricId,
-        String? description,
         int? orderId,
         int? orderStatus,
         List<Product>? products,
@@ -33,13 +30,13 @@ class CustomerOrdersModel with _$CustomerOrdersModel {
 class Product with _$Product {
     const factory Product({
         String? name,
-        int? categoryId,
+        int? clothingCategoryId,
         int? fabricId,
-        int? sizeId,
-        int? priceUsd,
-        int? priceRub,
         int? quantity,
-        String? description,
+        Map<String, int>? sizeQuantities,
+        dynamic description,
+        int? priceUsd,
+        double? priceRub,
         List<String>? photos,
     }) = _Product;
 

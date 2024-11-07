@@ -13,7 +13,9 @@ class DioSettings {
 
   Dio dio = Dio(
     BaseOptions(
-      baseUrl: "http://192.168.31.208:8080/",
+      baseUrl: 
+      // "https://24redirect.ru/",
+      "http://192.168.31.208:8080/",
       contentType: "application/json",
       headers: {
         "Accept": "application/json",
@@ -25,7 +27,7 @@ class DioSettings {
 
   Future<void> setup() async {
     final Interceptors interceptors = dio.interceptors;
-    
+
     // Add the access token to all requests
     interceptors.add(
       InterceptorsWrapper(

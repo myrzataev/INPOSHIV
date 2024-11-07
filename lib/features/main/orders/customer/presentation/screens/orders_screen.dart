@@ -182,34 +182,51 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                   padding: EdgeInsets.only(
                                                       bottom: 10.h),
                                                   child: CustomOrderCard(
-                                                      images: fullPhotoUrls,
-                                                      onPageChanged: (carouselIndex,
-                                                          reason) {},
-                                                      reliableStatus: "",
-                                                      name: currentItem.products
-                                                              ?.first.name ??
-                                                          "",
-                                                      quantity: currentItem
-                                                              .products
-                                                              ?.first
-                                                              .quantity ??
-                                                          0,
-                                                      retailPriceInRuble: currentItem
-                                                              .products
-                                                              ?.first
-                                                              .priceRub ??
-                                                          0,
-                                                      totalPriceInRuble: calculateService
-                                                          .calculateTotalPriceInRuble(
-                                                              ruble: currentItem
-                                                                      .products
-                                                                      ?.first
-                                                                      .priceRub
-                                                                      ?.toDouble() ??
-                                                                  0,
-                                                              totalCount: currentItem.products?.first.quantity ?? 0)
-                                                          .toInt(),
-                                                      currentIndex: _currentIndex),
+                                                    images: fullPhotoUrls,
+                                                    onPageChanged:
+                                                        (carouselIndex,
+                                                            reason) {},
+                                                    reliableStatus: "",
+                                                    name: currentItem.products
+                                                            ?.first.name ??
+                                                        "",
+                                                    quantity: currentItem
+                                                            .products
+                                                            ?.first
+                                                            .quantity ??
+                                                        0,
+                                                    retailPriceInRuble:
+                                                        currentItem.products
+                                                                ?.first.priceRub
+                                                                ?.toInt() ??
+                                                            0,
+                                                    totalPriceInRuble: calculateService
+                                                        .calculateTotalPriceInRuble(
+                                                            ruble: currentItem
+                                                                    .products
+                                                                    ?.first
+                                                                    .priceRub
+                                                                    ?.toDouble() ??
+                                                                0,
+                                                            totalCount: currentItem
+                                                                    .products
+                                                                    ?.first
+                                                                    .quantity ??
+                                                                0)
+                                                        .toInt(),
+                                                    currentIndex: _currentIndex,
+                                                    sizeQuantities: currentItem
+                                                            .products
+                                                            ?.first
+                                                            .sizeQuantities ??
+                                                        {},
+                                                    gridwiewLength: currentItem
+                                                            .products
+                                                            ?.first
+                                                            .sizeQuantities
+                                                            ?.length ??
+                                                        0,
+                                                  ),
                                                 );
                                               }),
                                         );
@@ -253,34 +270,53 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                 padding: EdgeInsets.only(
                                                     bottom: 10.h),
                                                 child: CustomOrderCard(
-                                                    images: fullPhotoUrls,
-                                                    onPageChanged: (carouselIndex, reason) {},
-                                                    reliableStatus: "",
-                                                    name: currentIndex.productsList?.first.name ??
-                                                        "",
-                                                    quantity: currentIndex
-                                                            .productsList
-                                                            ?.first
-                                                            .quantity
-                                                            ?.toInt() ??
-                                                        0,
-                                                    retailPriceInRuble:
-                                                        currentIndex
-                                                                .productsList
-                                                                ?.first
-                                                                .priceRub
-                                                                ?.toInt() ??
-                                                            0,
-                                                    totalPriceInRuble: calculateService
-                                                        .calculateTotalPriceInRuble(
-                                                            ruble: currentIndex
-                                                                    .productsList
-                                                                    ?.first
-                                                                    .priceRub ??
-                                                                0,
-                                                            totalCount: currentIndex.productsList?.first.quantity?.toInt() ?? 0)
-                                                        .toInt(),
-                                                    currentIndex: _currentIndex),
+                                                  images: fullPhotoUrls,
+                                                  onPageChanged: (carouselIndex,
+                                                      reason) {},
+                                                  reliableStatus: "",
+                                                  name: currentIndex
+                                                          .productsList
+                                                          ?.first
+                                                          .name ??
+                                                      "",
+                                                  quantity: currentIndex
+                                                          .productsList
+                                                          ?.first
+                                                          .quantity
+                                                          ?.toInt() ??
+                                                      0,
+                                                  retailPriceInRuble:
+                                                      currentIndex.productsList
+                                                              ?.first.priceRub
+                                                              ?.toInt() ??
+                                                          0,
+                                                  totalPriceInRuble: calculateService
+                                                      .calculateTotalPriceInRuble(
+                                                          ruble: currentIndex
+                                                                  .productsList
+                                                                  ?.first
+                                                                  .priceRub ??
+                                                              0,
+                                                          totalCount: currentIndex
+                                                                  .productsList
+                                                                  ?.first
+                                                                  .quantity
+                                                                  ?.toInt() ??
+                                                              0)
+                                                      .toInt(),
+                                                  currentIndex: _currentIndex,
+                                                  gridwiewLength: currentIndex
+                                                          .productsList
+                                                          ?.first
+                                                          .sizeQuantities
+                                                          ?.length ??
+                                                      0,
+                                                  sizeQuantities: currentIndex
+                                                          .productsList
+                                                          ?.first
+                                                          .sizeQuantities ??
+                                                      {},
+                                                ),
                                               );
                                             },
                                           );

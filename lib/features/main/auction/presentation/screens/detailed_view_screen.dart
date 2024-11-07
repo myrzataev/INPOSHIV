@@ -13,6 +13,7 @@ import 'package:inposhiv/features/main/auction/presentation/screens/auction_scre
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,10 +29,11 @@ class DetailedViewScreen extends StatefulWidget {
 
 class _DetailedViewScreenState extends State<DetailedViewScreen> {
   SharedPreferences preferences = locator<SharedPreferences>();
-
+  double? currency;
   @override
   void initState() {
     callBloc();
+    getCurrency();
     super.initState();
   }
 
@@ -39,6 +41,11 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
     BlocProvider.of<GetAuctionMembersBloc>(context).add(
         GetAuctionMembersEvent.getAuctionMembersEvent(
             auctionId: widget.model.auctonsUuid?.first.toString() ?? ""));
+  }
+
+  getCurrency() {
+    BlocProvider.of<CreateOrderBloc>(context)
+        .add(const CreateOrderEvent.getCurrentCurrencyEvent());
   }
 
   @override
@@ -68,76 +75,87 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                       },
                       orElse: () {});
                 },
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: AppColors.cardsColor,
-                      borderRadius: BorderRadiusDirectional.circular(10.r),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 10.w, vertical: 10.h),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(bottom: 10.h),
-                            child: SizedBox(
-                              height: 60.h,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: widget.model.products?.first
-                                        .photos?.length ??
-                                    0,
-                                separatorBuilder: (context, indexForPhotos) {
-                                  return SizedBox(width: 10.w);
-                                },
-                                itemBuilder: (context, indexForPhotos) {
-                                  final List<String> fullPhotoUrls = widget
-                                          .model.products?.first.photos
-                                          ?.map((url) =>
-                                              "${UrlRoutes.baseUrl}$url")
-                                          .toList() ??
-                                      [];
+                child: BlocListener<CreateOrderBloc, CreateOrderState>(
+                  listener: (context, state) {
+                    state.maybeWhen(
+                        currencyLoaded: (model) => setState(() {
+                              currency = model.rate ?? 0;
+                            }),
+                        orElse: () {});
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.cardsColor,
+                        borderRadius: BorderRadiusDirectional.circular(10.r),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 10.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 10.h),
+                              child: SizedBox(
+                                height: 60.h,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: widget.model.products?.first.photos
+                                          ?.length ??
+                                      0,
+                                  separatorBuilder: (context, indexForPhotos) {
+                                    return SizedBox(width: 10.w);
+                                  },
+                                  itemBuilder: (context, indexForPhotos) {
+                                    final List<String> fullPhotoUrls = widget
+                                            .model.products?.first.photos
+                                            ?.map((url) =>
+                                                "${UrlRoutes.baseUrl}$url")
+                                            .toList() ??
+                                        [];
 
-                                  return InkWell(
-                                    onTap: () {
-                                      GoRouter.of(context).pushNamed("seeImage",
-                                          extra: fullPhotoUrls);
-                                    },
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(6.r),
-                                      child: CachedNetworkImage(
-                                        imageUrl:
-                                            "${UrlRoutes.baseUrl}${widget.model.products?.first.photos?[indexForPhotos]}",
+                                    return InkWell(
+                                      onTap: () {
+                                        GoRouter.of(context).pushNamed(
+                                            "seeImage",
+                                            extra: fullPhotoUrls);
+                                      },
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(6.r),
+                                        child: CachedNetworkImage(
+                                          imageUrl:
+                                              "${UrlRoutes.baseUrl}${widget.model.products?.first.photos?[indexForPhotos]}",
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                widget.model.products?.first.name ?? "",
-                                style: AppFonts.w700s16,
-                              ),
-                              Text(
-                                "${widget.model.products?.first.quantity ?? 0} штук",
-                                style: AppFonts.w400s16.copyWith(
-                                  color: AppColors.accentTextColor,
+                                    );
+                                  },
                                 ),
                               ),
-                            ],
-                          ),
-                          Text(
-                            "${widget.model.products?.first.priceRub?.toStringAsFixed(2) ?? ""} руб за единицу, итого 348 000 руб",
-                            style: AppFonts.w400s16,
-                          ),
-                        ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  widget.model.products?.first.name ?? "",
+                                  style: AppFonts.w700s16,
+                                ),
+                                Text(
+                                  "${widget.model.products?.first.quantity ?? 0} штук",
+                                  style: AppFonts.w400s16.copyWith(
+                                    color: AppColors.accentTextColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "${widget.model.products?.first.priceRub?.toStringAsFixed(2) ?? ""} руб за единицу, итого 348 000 руб",
+                              style: AppFonts.w400s16,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -157,169 +175,180 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                             child: Text("Пока никто не откликался"),
                           );
                         } else {
-                          return ListView.separated(
-                              itemBuilder: (context, index) {
-                                final currentItem = auctionMembersModel[index];
-                                return Container(
-                                  decoration: BoxDecoration(
-                                      color: AppColors.cardsColor,
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.r))),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(10.h),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            const CircleAvatar(
-                                              backgroundImage: AssetImage(
-                                                  Images.sewingMachine),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 5.w),
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            60.r),
-                                                    border: Border.all(
-                                                        width: 1.w,
-                                                        color: AuctionScreen
-                                                            .statusColor(
-                                                                status: 1))),
-                                                child: Padding(
-                                                  padding:
-                                                      EdgeInsets.all(8.0.w),
-                                                  child: Text(
-                                                    AuctionScreen.trustStatus(
-                                                        status: 1),
-                                                    style: AppFonts.w400s16
-                                                        .copyWith(
-                                                            color: AuctionScreen
-                                                                .statusColor(
-                                                                    status: 1),
-                                                            fontFamily:
-                                                                "SF Pro"),
+                          return RefreshIndicator.adaptive(
+                            onRefresh: () async => callBloc(),
+                            child: ListView.separated(
+                                itemBuilder: (context, index) {
+                                  final currentItem =
+                                      auctionMembersModel[index];
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                        color: AppColors.cardsColor,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.r))),
+                                    child: Padding(
+                                      padding: EdgeInsets.all(10.h),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const CircleAvatar(
+                                                backgroundImage: AssetImage(
+                                                    Images.sewingMachine),
+                                              ),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 5.w),
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              60.r),
+                                                      border: Border.all(
+                                                          width: 1.w,
+                                                          color: AuctionScreen
+                                                              .statusColor(
+                                                                  status: 1))),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.all(8.0.w),
+                                                    child: Text(
+                                                      AuctionScreen.trustStatus(
+                                                          status: 1),
+                                                      style: AppFonts.w400s16
+                                                          .copyWith(
+                                                              color: AuctionScreen
+                                                                  .statusColor(
+                                                                      status:
+                                                                          1),
+                                                              fontFamily:
+                                                                  "SF Pro"),
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.h),
-                                          child: Row(
-                                            children: [
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    horizontal: 5.w),
-                                                child: SvgPicture.asset(
-                                                  SvgImages.star,
-                                                  height: 16.h,
-                                                  width: 16.w,
-                                                ),
-                                              ),
-                                              Text(
-                                                "${4.96}",
-                                                style: AppFonts.w700s16,
-                                              )
                                             ],
                                           ),
-                                        ),
-                                        Text(
-                                          "Выполнено в Inposhiv ${40} заказов.",
-                                          style: AppFonts.w400s16.copyWith(
-                                              color: AppColors.accentTextColor),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            child: Row(
                                               children: [
-                                                Text(
-                                                  "${500}\$",
-                                                  style: AppFonts.w700s18,
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 5.w),
+                                                  child: SvgPicture.asset(
+                                                    SvgImages.star,
+                                                    height: 16.h,
+                                                    width: 16.w,
+                                                  ),
                                                 ),
                                                 Text(
-                                                  "580 руб",
-                                                  style: AppFonts.w400s16,
-                                                ),
+                                                  "${currentItem.rating ?? 0}",
+                                                  style: AppFonts.w700s16,
+                                                )
                                               ],
                                             ),
-                                            Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 40.w),
-                                              child: Column(
+                                          ),
+                                          Text(
+                                            "Выполнено в Inposhiv ${currentItem.ordersQuantity} заказов.",
+                                            style: AppFonts.w400s16.copyWith(
+                                                color:
+                                                    AppColors.accentTextColor),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Column(
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "${3018}\$",
+                                                    "${currentItem.orderPrice}\$",
                                                     style: AppFonts.w700s18,
                                                   ),
                                                   Text(
-                                                    "312 000 руб",
+                                                    "${((currency ?? 0) * (currentItem.orderPrice ?? 0)).toStringAsFixed(2)} руб",
                                                     style: AppFonts.w400s16,
                                                   ),
                                                 ],
                                               ),
-                                            )
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.h),
-                                          child: SizedBox(
-                                            height: 40.h,
-                                            width: double.infinity,
-                                            child: MaterialButton(
-                                              onPressed: () {
-                                               context.go("/chat/chatScreen");
-                                                BlocProvider.of<
-                                                            CreateChatRoomBloc>(
-                                                        context)
-                                                    .add(CreateChatRoomEvent
-                                                        .createChatRoom(
-                                                            chatData: {
-                                                      "userUid": preferences
-                                                          .getString("userId"),
-                                                      "senderUuid": preferences
-                                                          .getString("userId"),
-                                                      "recipientUuid": currentItem
-                                                          .manufacturerUserUuid
-                                                    }));
-                                              },
-                                              color: AppColors.buttonGreenColor,
-                                              shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.r)),
-                                              child: Text(
-                                                "Связаться",
-                                                style: AppFonts.w400s16
-                                                    .copyWith(
-                                                        color: AppColors
-                                                            .accentTextColor),
+                                              Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 40.w),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      "${currentItem.orderSumPrice}\$",
+                                                      style: AppFonts.w700s18,
+                                                    ),
+                                                    Text(
+                                                      "${((currency ?? 0) * (currentItem.orderSumPrice ?? 0)).toStringAsFixed(2)} руб",
+                                                      style: AppFonts.w400s16,
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 10.h),
+                                            child: SizedBox(
+                                              height: 40.h,
+                                              width: double.infinity,
+                                              child: MaterialButton(
+                                                onPressed: () {
+                                                  context
+                                                      .go("/chat/chatScreen");
+                                                  BlocProvider.of<
+                                                              CreateChatRoomBloc>(
+                                                          context)
+                                                      .add(CreateChatRoomEvent
+                                                          .createChatRoom(
+                                                              chatData: {
+                                                        "userUid": preferences
+                                                            .getString(
+                                                                "userId"),
+                                                        "senderUuid":
+                                                            preferences
+                                                                .getString(
+                                                                    "userId"),
+                                                        "recipientUuid": currentItem
+                                                            .manufacturerUserUuid
+                                                      }));
+                                                },
+                                                color:
+                                                    AppColors.buttonGreenColor,
+                                                shape: RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.r)),
+                                                child: Text(
+                                                  "Связаться",
+                                                  style: AppFonts.w400s16
+                                                      .copyWith(
+                                                          color: AppColors
+                                                              .accentTextColor),
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        )
-                                      ],
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
-                              separatorBuilder: (context, index) {
-                                return SizedBox(
-                                  height: 5.h,
-                                );
-                              },
-                              itemCount: auctionMembersModel.length);
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    height: 5.h,
+                                  );
+                                },
+                                itemCount: auctionMembersModel.length),
+                          );
                         }
                       },
                       orElse: () {

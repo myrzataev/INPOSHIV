@@ -17,6 +17,7 @@ import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/calculate_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -58,7 +59,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
   final preferences = locator<SharedPreferences>();
   final TextEditingController bidPriceController = TextEditingController();
   bool? isCustomer;
-
+  CalculateService calculateService = CalculateService();
   @override
   void initState() {
     BlocProvider.of<GetAuctionsBloc>(context)
@@ -592,7 +593,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                       ],
                                                     ),
                                                     Text(
-                                                      "${item.productsList?.first.priceRub?.toStringAsFixed(1)} руб за единицу, итого 348 000 руб",
+                                                      "${item.productsList?.first.priceRub?.toStringAsFixed(1)} руб за единицу, итого ${calculateService.calculateTotalPriceInRuble(ruble: item.productsList?.first.priceRub ?? 0, totalCount: item.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
                                                       style: AppFonts.w400s16,
                                                     ),
                                                     TextButton(

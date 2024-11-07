@@ -49,7 +49,6 @@ import 'package:inposhiv/features/main/auction/presentation/screens/auction_scre
 import 'package:inposhiv/features/main/auction/presentation/screens/see_image_full_screen.dart';
 import 'package:inposhiv/features/main/chat/presentation/screens/chat_screen.dart';
 import 'package:inposhiv/features/main/chat/presentation/screens/chat_tab.dart';
-import 'package:inposhiv/features/main/home/data/mocked_data.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/banks_list_screen.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/detailed_screen.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/link_credit_card_screen.dart';

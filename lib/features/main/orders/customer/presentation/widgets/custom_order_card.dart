@@ -1,10 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/features/main/home/presentation/customer/screens/main_screen.dart';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
@@ -20,15 +19,19 @@ class CustomOrderCard extends StatefulWidget {
     required this.quantity,
     required this.retailPriceInRuble,
     required this.totalPriceInRuble,
+    required this.gridwiewLength,
+    this.sizeQuantities,
   });
 
   final List<String> images;
-
+  final int gridwiewLength;
   final String reliableStatus;
   final String name;
   final int quantity;
   final int retailPriceInRuble;
   final int totalPriceInRuble;
+  final Map<String, int>? sizeQuantities;
+
   final Function(int carouselIndex, CarouselPageChangedReason reason)
       onPageChanged;
 
@@ -40,6 +43,14 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
   int _currentIndex = 0;
   final CarouselSliderController _carouselSliderController =
       CarouselSliderController();
+  List<SizesModel> sizes = [
+    SizesModel("XS", "42", 0),
+    SizesModel("S", "44", 0),
+    SizesModel("M", "46", 0),
+    SizesModel("L", "48", 0),
+    SizesModel("XL", "50", 0),
+    SizesModel("XXL", "52", 0)
+  ];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -152,11 +163,27 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
                 style:
                     AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 6.w),
-                child: SvgPicture.asset(SvgImages.bottom),
-              ),
             ],
+          ),
+          AnimatedSize(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.fastOutSlowIn,
+            child: true
+                ? GridView.builder(
+                    shrinkWrap: true,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        mainAxisSpacing: 0,
+                        mainAxisExtent: 30.h,
+                        crossAxisCount: 2),
+                    itemCount: widget.gridwiewLength,
+                    itemBuilder: (context, gridwiewIndex) {
+                      return Text(
+                        "${sizes[gridwiewIndex].usaSize} (${sizes[gridwiewIndex].ruSize}) – ${widget.sizeQuantities?["${gridwiewIndex + 1}"]}шт",
+                        style: AppFonts.w400s16
+                            .copyWith(color: AppColors.accentTextColor),
+                      );
+                    })
+                : const SizedBox.shrink(),
           ),
           // ElevatedButton(
           //     onPressed: () {},

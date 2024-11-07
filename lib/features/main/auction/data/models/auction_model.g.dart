@@ -35,13 +35,15 @@ Map<String, dynamic> _$$AuctionModelImplToJson(_$AuctionModelImpl instance) =>
 _$ProductsListImpl _$$ProductsListImplFromJson(Map<String, dynamic> json) =>
     _$ProductsListImpl(
       name: json['name'] as String?,
-      categoryId: json['categoryId'],
+      clothingCategoryId: (json['clothingCategoryId'] as num?)?.toInt(),
       fabricId: (json['fabricId'] as num?)?.toInt(),
-      sizeId: (json['sizeId'] as num?)?.toInt(),
+      quantity: (json['quantity'] as num?)?.toInt(),
+      sizeQuantities: (json['sizeQuantities'] as Map<String, dynamic>?)?.map(
+        (k, e) => MapEntry(k, (e as num).toInt()),
+      ),
+      description: json['description'],
       priceUsd: (json['priceUsd'] as num?)?.toInt(),
       priceRub: (json['priceRub'] as num?)?.toDouble(),
-      quantity: json['quantity'],
-      description: json['description'],
       photos:
           (json['photos'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
@@ -49,12 +51,12 @@ _$ProductsListImpl _$$ProductsListImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ProductsListImplToJson(_$ProductsListImpl instance) =>
     <String, dynamic>{
       'name': instance.name,
-      'categoryId': instance.categoryId,
+      'clothingCategoryId': instance.clothingCategoryId,
       'fabricId': instance.fabricId,
-      'sizeId': instance.sizeId,
+      'quantity': instance.quantity,
+      'sizeQuantities': instance.sizeQuantities,
+      'description': instance.description,
       'priceUsd': instance.priceUsd,
       'priceRub': instance.priceRub,
-      'quantity': instance.quantity,
-      'description': instance.description,
       'photos': instance.photos,
     };

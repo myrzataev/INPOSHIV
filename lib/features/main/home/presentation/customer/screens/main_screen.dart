@@ -38,12 +38,20 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   final CarouselSliderController _carouselSliderController =
       CarouselSliderController();
-  // int _currentIndex = 0;
   List<int> _currentIndexes = [];
   List<bool> _isExpandedList = [];
   late bool? isCustomer;
   final preferences = locator<SharedPreferences>();
   CalculateService calculateService = CalculateService();
+  List<SizesModel> sizes = [
+    SizesModel("XS", "42", 0),
+    SizesModel("S", "44", 0),
+    SizesModel("M", "46", 0),
+    SizesModel("L", "48", 0),
+    SizesModel("XL", "50", 0),
+    SizesModel("XXL", "52", 0)
+  ];
+
   void getManufacturers() {
     BlocProvider.of<GetManufacturersProfileBloc>(context)
         .add(const GetManufacturersProfileEvent.started());
@@ -126,7 +134,7 @@ class _MainScreenState extends State<MainScreen> {
                           loaded: (model) {
                             return Expanded(
                                 child: Padding(
-                              padding: EdgeInsets.only(top: 10.h),
+                              padding: EdgeInsets.only(top: 10.h, bottom: 50.h),
                               child: RefreshIndicator.adaptive(
                                 onRefresh: () async {
                                   getManufacturers();
@@ -363,9 +371,11 @@ class _MainScreenState extends State<MainScreen> {
                           if (model.isNotEmpty) {
                             return Expanded(
                                 child: Padding(
-                              padding: EdgeInsets.only(top: 10.h),
+                              padding: EdgeInsets.only(top: 10.h, bottom: 50.h),
                               child: RefreshIndicator.adaptive(
-                                onRefresh: () async {},
+                                onRefresh: () async {
+                                  getAuctionsList();
+                                },
                                 child: ListView.builder(
                                     itemCount: model.length,
                                     itemBuilder: (context, index) {
@@ -521,7 +531,7 @@ class _MainScreenState extends State<MainScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "${currentItem.productsList?.first.priceRub?.toStringAsFixed(2)} руб за единицу, итого ${calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity)} руб",
+                                                  "${currentItem.productsList?.first.priceRub?.toStringAsFixed(2)} руб за единицу, итого ${calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
                                                   style: AppFonts.w400s16,
                                                 ),
                                                 Padding(
@@ -582,10 +592,10 @@ class _MainScreenState extends State<MainScreen> {
                                                               ? GridView.builder(
                                                                   shrinkWrap: true,
                                                                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 0, mainAxisExtent: 30.h, crossAxisCount: 2),
-                                                                  itemCount: sizesVm.length,
-                                                                  itemBuilder: (context, index) {
+                                                                  itemCount: currentItem.productsList?.first.sizeQuantities?.length ?? 0,
+                                                                  itemBuilder: (context, gridwiewIndex) {
                                                                     return Text(
-                                                                      "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
+                                                                      "${sizes[gridwiewIndex].usaSize} (${sizes[gridwiewIndex].ruSize}) – ${currentItem.productsList?.first.sizeQuantities?["${gridwiewIndex + 1}"]}шт",
                                                                       style: AppFonts
                                                                           .w400s16
                                                                           .copyWith(
@@ -631,4 +641,12 @@ class _MainScreenState extends State<MainScreen> {
       )),
     );
   }
+}
+
+class SizesModel {
+  final String usaSize;
+  final String ruSize;
+  final int quantity;
+
+  SizesModel(this.usaSize, this.ruSize, this.quantity);
 }

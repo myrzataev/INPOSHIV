@@ -31,13 +31,13 @@ class AuctionModel with _$AuctionModel {
 class ProductsList with _$ProductsList {
     const factory ProductsList({
         String? name,
-        dynamic categoryId,
+        int? clothingCategoryId,
         int? fabricId,
-        int? sizeId,
+        int? quantity,
+        Map<String, int>? sizeQuantities,
+        dynamic description,
         int? priceUsd,
         double? priceRub,
-        dynamic quantity,
-        dynamic description,
         List<String>? photos,
     }) = _ProductsList;
 
