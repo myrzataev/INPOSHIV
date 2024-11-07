@@ -122,6 +122,8 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                 currencyLoaded: (model) {
                   setState(() {
                     currentCurrency = model.rate ?? 0;
+                    Provider.of<OrderProvider>(context, listen: false)
+                        .updateCurrency(newCurrency: currentCurrency);
                   });
                 },
                 orElse: () {});
@@ -245,9 +247,10 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                   child: CustomButton(
                     text: "Дальше",
                     onPressed: () {
-                      Provider.of<OrderProvider>(context, listen: false).updatePrice(
-                          priceInRuble: retailPriceInRuble.toInt(),
-                          priceInUsd: int.tryParse(controller.text));
+                      Provider.of<OrderProvider>(context, listen: false)
+                          .updatePrice(
+                              priceInRuble: retailPriceInRuble.toInt(),
+                              priceInUsd: int.tryParse(controller.text));
                       GoRouter.of(context)
                           .pushNamed("orderReady", queryParameters: {
                         "retaiPrice": retailPriceInRuble.toString(),

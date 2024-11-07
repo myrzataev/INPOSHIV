@@ -42,9 +42,8 @@ _$ProductsListImpl _$$ProductsListImplFromJson(Map<String, dynamic> json) =>
       priceRub: (json['priceRub'] as num?)?.toDouble(),
       quantity: json['quantity'],
       description: json['description'],
-      photoUrls: (json['photoUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      photos:
+          (json['photos'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$ProductsListImplToJson(_$ProductsListImpl instance) =>
@@ -57,5 +56,5 @@ Map<String, dynamic> _$$ProductsListImplToJson(_$ProductsListImpl instance) =>
       'priceRub': instance.priceRub,
       'quantity': instance.quantity,
       'description': instance.description,
-      'photoUrls': instance.photoUrls,
+      'photos': instance.photos,
     };

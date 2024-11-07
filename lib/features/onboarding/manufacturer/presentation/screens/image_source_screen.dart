@@ -9,7 +9,9 @@ import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dar
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choose_image_button.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ChooseImageSourceScreen extends StatefulWidget {
   const ChooseImageSourceScreen({super.key});
@@ -23,7 +25,7 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
   List<XFile>? _selectedImages = [];
   final int _maxImages = 5;
   final ImagePicker _picker = ImagePicker();
-
+  late bool? isCustomer;
   Future<void> _pickImageFromCamera() async {
     final XFile? image = await _picker.pickImage(source: ImageSource.camera);
     if (image != null) {
@@ -35,6 +37,8 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
       });
     }
   }
+
+  final preferences = locator<SharedPreferences>();
 
   Future<void> _pickImageFromGallery() async {
     final List<XFile>? images = await _picker.pickMultiImage();
@@ -67,10 +71,14 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
   }
 
   @override
+  void initState() {
+    isCustomer = preferences.getBool("isCustomer") ?? true;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final int role = Provider.of<RoleProvider>(context, listen: true).role;
-    bool isCustomer = role == 1;
-    isCustomer = false;
+   
 
     return Scaffold(
       body: SafeArea(
@@ -89,14 +97,14 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
                           fontFamily: "SF Pro", color: const Color(0xff324D19)),
                     ),
                     Text(
-                      "из ${isCustomer ? 5 : 2} ",
+                      "из ${(isCustomer??true) ? 5 : 2} ",
                       style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                     ),
                   ],
                 ),
               ),
               Text(
-                isCustomer
+                (isCustomer??true)
                     ? "Для аукциона загрузите фото товара"
                     : "Загрузите фото своих работ",
                 style: AppFonts.w700s36
@@ -105,7 +113,7 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: Text(
-                  isCustomer
+                  (isCustomer??true)
                       ? "Загрузите фотографии ваших работ\nВы можете загрузить не более 5 фотографий"
                       : "Вы можете загрузить не более 5 фотографий",
                   style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
@@ -191,7 +199,7 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
                             // role == 1
                             //     ?
                             GoRouter.of(context).pushNamed(
-                                isCustomer ? "chooseCategory" : "aboutCompany");
+                                (isCustomer??true) ? "chooseCategory" : "aboutCompany");
                             // : GoRouter.of(context)
                             //     .pushNamed("aboutCompany");
 

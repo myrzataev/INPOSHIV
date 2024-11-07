@@ -32,11 +32,9 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     final int role = Provider.of<RoleProvider>(context, listen: true).role;
-
 
     return Scaffold(
       body: SafeArea(
@@ -57,6 +55,14 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                   ),
                 ),
                 CustomProfileTextField(
+                    validator: (value) {
+                      (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Это поле является обязательным";
+                        }
+                        return null;
+                      };
+                    },
                     textAlign: TextAlign.start,
                     controller: emailController,
                     labelText: "Номер телефона",
@@ -68,6 +74,14 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 Padding(
                   padding: EdgeInsets.only(top: 20.h),
                   child: CustomProfileTextField(
+                      validator: (value) {
+                        (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Это поле является обязательным";
+                          }
+                          return null;
+                        };
+                      },
                       textAlign: TextAlign.start,
                       controller: passwordController,
                       labelText: "Пароль",

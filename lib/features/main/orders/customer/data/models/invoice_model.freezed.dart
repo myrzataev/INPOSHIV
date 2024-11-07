@@ -22,6 +22,7 @@ InvoiceModel _$InvoiceModelFromJson(Map<String, dynamic> json) {
 mixin _$InvoiceModel {
   int? get orderId => throw _privateConstructorUsedError;
   int? get preliminaryQuantity => throw _privateConstructorUsedError;
+  String? get invoiceUuid => throw _privateConstructorUsedError;
   int? get pricePerUnit => throw _privateConstructorUsedError;
   int? get preliminaryAmount => throw _privateConstructorUsedError;
   int? get lekalaCost => throw _privateConstructorUsedError;
@@ -49,6 +50,7 @@ abstract class $InvoiceModelCopyWith<$Res> {
   $Res call(
       {int? orderId,
       int? preliminaryQuantity,
+      String? invoiceUuid,
       int? pricePerUnit,
       int? preliminaryAmount,
       int? lekalaCost,
@@ -75,6 +77,7 @@ class _$InvoiceModelCopyWithImpl<$Res, $Val extends InvoiceModel>
   $Res call({
     Object? orderId = freezed,
     Object? preliminaryQuantity = freezed,
+    Object? invoiceUuid = freezed,
     Object? pricePerUnit = freezed,
     Object? preliminaryAmount = freezed,
     Object? lekalaCost = freezed,
@@ -92,6 +95,10 @@ class _$InvoiceModelCopyWithImpl<$Res, $Val extends InvoiceModel>
           ? _value.preliminaryQuantity
           : preliminaryQuantity // ignore: cast_nullable_to_non_nullable
               as int?,
+      invoiceUuid: freezed == invoiceUuid
+          ? _value.invoiceUuid
+          : invoiceUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       pricePerUnit: freezed == pricePerUnit
           ? _value.pricePerUnit
           : pricePerUnit // ignore: cast_nullable_to_non_nullable
@@ -135,6 +142,7 @@ abstract class _$$InvoiceModelImplCopyWith<$Res>
   $Res call(
       {int? orderId,
       int? preliminaryQuantity,
+      String? invoiceUuid,
       int? pricePerUnit,
       int? preliminaryAmount,
       int? lekalaCost,
@@ -159,6 +167,7 @@ class __$$InvoiceModelImplCopyWithImpl<$Res>
   $Res call({
     Object? orderId = freezed,
     Object? preliminaryQuantity = freezed,
+    Object? invoiceUuid = freezed,
     Object? pricePerUnit = freezed,
     Object? preliminaryAmount = freezed,
     Object? lekalaCost = freezed,
@@ -176,6 +185,10 @@ class __$$InvoiceModelImplCopyWithImpl<$Res>
           ? _value.preliminaryQuantity
           : preliminaryQuantity // ignore: cast_nullable_to_non_nullable
               as int?,
+      invoiceUuid: freezed == invoiceUuid
+          ? _value.invoiceUuid
+          : invoiceUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       pricePerUnit: freezed == pricePerUnit
           ? _value.pricePerUnit
           : pricePerUnit // ignore: cast_nullable_to_non_nullable
@@ -214,6 +227,7 @@ class _$InvoiceModelImpl implements _InvoiceModel {
   const _$InvoiceModelImpl(
       {this.orderId,
       this.preliminaryQuantity,
+      this.invoiceUuid,
       this.pricePerUnit,
       this.preliminaryAmount,
       this.lekalaCost,
@@ -229,6 +243,8 @@ class _$InvoiceModelImpl implements _InvoiceModel {
   final int? orderId;
   @override
   final int? preliminaryQuantity;
+  @override
+  final String? invoiceUuid;
   @override
   final int? pricePerUnit;
   @override
@@ -246,7 +262,7 @@ class _$InvoiceModelImpl implements _InvoiceModel {
 
   @override
   String toString() {
-    return 'InvoiceModel(orderId: $orderId, preliminaryQuantity: $preliminaryQuantity, pricePerUnit: $pricePerUnit, preliminaryAmount: $preliminaryAmount, lekalaCost: $lekalaCost, sampleCost: $sampleCost, deliveryCost: $deliveryCost, discount: $discount, totalAmount: $totalAmount)';
+    return 'InvoiceModel(orderId: $orderId, preliminaryQuantity: $preliminaryQuantity, invoiceUuid: $invoiceUuid, pricePerUnit: $pricePerUnit, preliminaryAmount: $preliminaryAmount, lekalaCost: $lekalaCost, sampleCost: $sampleCost, deliveryCost: $deliveryCost, discount: $discount, totalAmount: $totalAmount)';
   }
 
   @override
@@ -257,6 +273,8 @@ class _$InvoiceModelImpl implements _InvoiceModel {
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
             (identical(other.preliminaryQuantity, preliminaryQuantity) ||
                 other.preliminaryQuantity == preliminaryQuantity) &&
+            (identical(other.invoiceUuid, invoiceUuid) ||
+                other.invoiceUuid == invoiceUuid) &&
             (identical(other.pricePerUnit, pricePerUnit) ||
                 other.pricePerUnit == pricePerUnit) &&
             (identical(other.preliminaryAmount, preliminaryAmount) ||
@@ -279,6 +297,7 @@ class _$InvoiceModelImpl implements _InvoiceModel {
       runtimeType,
       orderId,
       preliminaryQuantity,
+      invoiceUuid,
       pricePerUnit,
       preliminaryAmount,
       lekalaCost,
@@ -307,6 +326,7 @@ abstract class _InvoiceModel implements InvoiceModel {
   const factory _InvoiceModel(
       {final int? orderId,
       final int? preliminaryQuantity,
+      final String? invoiceUuid,
       final int? pricePerUnit,
       final int? preliminaryAmount,
       final int? lekalaCost,
@@ -322,6 +342,8 @@ abstract class _InvoiceModel implements InvoiceModel {
   int? get orderId;
   @override
   int? get preliminaryQuantity;
+  @override
+  String? get invoiceUuid;
   @override
   int? get pricePerUnit;
   @override

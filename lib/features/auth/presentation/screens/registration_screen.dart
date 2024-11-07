@@ -98,6 +98,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     ),
                   ),
                   CustomProfileTextField(
+                      validator: (value) {
+                        (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Это поле является обязательным";
+                          }
+                          return null;
+                        };
+                      },
                       controller: nameController,
                       labelText: "ФИО",
                       hintText: "Эсенов Нурсултан",
@@ -188,6 +196,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20.h),
                     child: CustomProfileTextField(
+                        validator: (value) {
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Это поле является обязательным";
+                            }
+                            return null;
+                          };
+                        },
                         controller: emailController,
                         labelText: "Почта",
                         hintText: "example@gmail.com",
@@ -200,6 +216,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20.h),
                     child: CustomProfileTextField(
+                        validator: (value) {
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Это поле является обязательным";
+                            }
+                            return null;
+                          };
+                        },
                         controller: cityController,
                         labelText: "Город",
                         hintText: "Бишкек",
@@ -212,6 +236,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20.h),
                     child: CustomProfileTextField(
+                        validator: (value) {
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Это поле является обязательным";
+                            }
+                            return null;
+                          };
+                        },
                         controller: companiesNameController,
                         labelText: "Название компании",
                         hintText: "example",
@@ -224,6 +256,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20.h),
                     child: CustomProfileTextField(
+                        validator: (value) {
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Пароль обязателен";
+                            } else if (value.length < 8) {
+                              return "Пароль должен содержать не менее 8 символов";
+                            }
+                            return null;
+                          };
+                        },
                         controller: passwordControler,
                         labelText: "Пароль",
                         hintText: "*******",
@@ -236,6 +278,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   Padding(
                     padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
                     child: CustomProfileTextField(
+                        validator: (value) {
+                          (value) {
+                            if (value == null || value.isEmpty) {
+                              return "Повторите пароль";
+                            } else if (value != passwordControler.text) {
+                              return "Пароли не совпадают";
+                            } else if (value.length < 8) {
+                              return "Пароль должен содержать не менее 8 символов";
+                            }
+                            return null;
+                          };
+                        },
                         controller: passwordVerificationController,
                         labelText: "Повторите пароль",
                         hintText: "*******",
@@ -297,13 +351,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               AppFonts.w400s16.copyWith(color: AppColors.red),
                         )
                       : const SizedBox(),
+                  Center(
+                    child: TextButton(
+                        onPressed: () {
+                          GoRouter.of(context).pushNamed("authorization");
+                        },
+                        child: Text(
+                          "Войти",
+                          style: AppFonts.w400s16
+                              .copyWith(color: AppColors.accentTextColor),
+                        )),
+                  ),
                   Padding(
-                    padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
+                    padding: EdgeInsets.only(bottom: 10.h),
                     child: CustomButton(
                         text: "Зарегистрироваться",
                         onPressed: () {
                           // GoRouter.of(context).pushNamed("authorization");
-                          _submitForm(isCustomer);
+                   
+                           _submitForm(isCustomer);
+                         
                         }),
                   )
                 ],

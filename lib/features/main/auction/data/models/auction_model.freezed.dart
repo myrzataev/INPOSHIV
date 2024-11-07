@@ -331,7 +331,7 @@ mixin _$ProductsList {
   double? get priceRub => throw _privateConstructorUsedError;
   dynamic get quantity => throw _privateConstructorUsedError;
   dynamic get description => throw _privateConstructorUsedError;
-  List<String>? get photoUrls => throw _privateConstructorUsedError;
+  List<String>? get photos => throw _privateConstructorUsedError;
 
   /// Serializes this ProductsList to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -358,7 +358,7 @@ abstract class $ProductsListCopyWith<$Res> {
       double? priceRub,
       dynamic quantity,
       dynamic description,
-      List<String>? photoUrls});
+      List<String>? photos});
 }
 
 /// @nodoc
@@ -384,7 +384,7 @@ class _$ProductsListCopyWithImpl<$Res, $Val extends ProductsList>
     Object? priceRub = freezed,
     Object? quantity = freezed,
     Object? description = freezed,
-    Object? photoUrls = freezed,
+    Object? photos = freezed,
   }) {
     return _then(_value.copyWith(
       name: freezed == name
@@ -419,9 +419,9 @@ class _$ProductsListCopyWithImpl<$Res, $Val extends ProductsList>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      photoUrls: freezed == photoUrls
-          ? _value.photoUrls
-          : photoUrls // ignore: cast_nullable_to_non_nullable
+      photos: freezed == photos
+          ? _value.photos
+          : photos // ignore: cast_nullable_to_non_nullable
               as List<String>?,
     ) as $Val);
   }
@@ -444,7 +444,7 @@ abstract class _$$ProductsListImplCopyWith<$Res>
       double? priceRub,
       dynamic quantity,
       dynamic description,
-      List<String>? photoUrls});
+      List<String>? photos});
 }
 
 /// @nodoc
@@ -468,7 +468,7 @@ class __$$ProductsListImplCopyWithImpl<$Res>
     Object? priceRub = freezed,
     Object? quantity = freezed,
     Object? description = freezed,
-    Object? photoUrls = freezed,
+    Object? photos = freezed,
   }) {
     return _then(_$ProductsListImpl(
       name: freezed == name
@@ -503,9 +503,9 @@ class __$$ProductsListImplCopyWithImpl<$Res>
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      photoUrls: freezed == photoUrls
-          ? _value._photoUrls
-          : photoUrls // ignore: cast_nullable_to_non_nullable
+      photos: freezed == photos
+          ? _value._photos
+          : photos // ignore: cast_nullable_to_non_nullable
               as List<String>?,
     ));
   }
@@ -523,8 +523,8 @@ class _$ProductsListImpl implements _ProductsList {
       this.priceRub,
       this.quantity,
       this.description,
-      final List<String>? photoUrls})
-      : _photoUrls = photoUrls;
+      final List<String>? photos})
+      : _photos = photos;
 
   factory _$ProductsListImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductsListImplFromJson(json);
@@ -545,19 +545,19 @@ class _$ProductsListImpl implements _ProductsList {
   final dynamic quantity;
   @override
   final dynamic description;
-  final List<String>? _photoUrls;
+  final List<String>? _photos;
   @override
-  List<String>? get photoUrls {
-    final value = _photoUrls;
+  List<String>? get photos {
+    final value = _photos;
     if (value == null) return null;
-    if (_photoUrls is EqualUnmodifiableListView) return _photoUrls;
+    if (_photos is EqualUnmodifiableListView) return _photos;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'ProductsList(name: $name, categoryId: $categoryId, fabricId: $fabricId, sizeId: $sizeId, priceUsd: $priceUsd, priceRub: $priceRub, quantity: $quantity, description: $description, photoUrls: $photoUrls)';
+    return 'ProductsList(name: $name, categoryId: $categoryId, fabricId: $fabricId, sizeId: $sizeId, priceUsd: $priceUsd, priceRub: $priceRub, quantity: $quantity, description: $description, photos: $photos)';
   }
 
   @override
@@ -578,8 +578,7 @@ class _$ProductsListImpl implements _ProductsList {
             const DeepCollectionEquality().equals(other.quantity, quantity) &&
             const DeepCollectionEquality()
                 .equals(other.description, description) &&
-            const DeepCollectionEquality()
-                .equals(other._photoUrls, _photoUrls));
+            const DeepCollectionEquality().equals(other._photos, _photos));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -594,7 +593,7 @@ class _$ProductsListImpl implements _ProductsList {
       priceRub,
       const DeepCollectionEquality().hash(quantity),
       const DeepCollectionEquality().hash(description),
-      const DeepCollectionEquality().hash(_photoUrls));
+      const DeepCollectionEquality().hash(_photos));
 
   /// Create a copy of ProductsList
   /// with the given fields replaced by the non-null parameter values.
@@ -622,7 +621,7 @@ abstract class _ProductsList implements ProductsList {
       final double? priceRub,
       final dynamic quantity,
       final dynamic description,
-      final List<String>? photoUrls}) = _$ProductsListImpl;
+      final List<String>? photos}) = _$ProductsListImpl;
 
   factory _ProductsList.fromJson(Map<String, dynamic> json) =
       _$ProductsListImpl.fromJson;
@@ -644,7 +643,7 @@ abstract class _ProductsList implements ProductsList {
   @override
   dynamic get description;
   @override
-  List<String>? get photoUrls;
+  List<String>? get photos;
 
   /// Create a copy of ProductsList
   /// with the given fields replaced by the non-null parameter values.

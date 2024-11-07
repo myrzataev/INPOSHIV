@@ -88,14 +88,14 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                               child: ListView.separated(
                                 scrollDirection: Axis.horizontal,
                                 itemCount: widget.model.products?.first
-                                        .photoUrls?.length ??
+                                        .photos?.length ??
                                     0,
                                 separatorBuilder: (context, indexForPhotos) {
                                   return SizedBox(width: 10.w);
                                 },
                                 itemBuilder: (context, indexForPhotos) {
                                   final List<String> fullPhotoUrls = widget
-                                          .model.products?.first.photoUrls
+                                          .model.products?.first.photos
                                           ?.map((url) =>
                                               "${UrlRoutes.baseUrl}$url")
                                           .toList() ??
@@ -110,7 +110,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                       borderRadius: BorderRadius.circular(6.r),
                                       child: CachedNetworkImage(
                                         imageUrl:
-                                            "${UrlRoutes.baseUrl}${widget.model.products?.first.photoUrls?[indexForPhotos]}",
+                                            "${UrlRoutes.baseUrl}${widget.model.products?.first.photos?[indexForPhotos]}",
                                       ),
                                     ),
                                   );

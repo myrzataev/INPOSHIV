@@ -38,7 +38,7 @@ class ProductsList with _$ProductsList {
         double? priceRub,
         dynamic quantity,
         dynamic description,
-        List<String>? photoUrls,
+        List<String>? photos,
     }) = _ProductsList;
 
     factory ProductsList.fromJson(Map<String, dynamic> json) => _$ProductsListFromJson(json);

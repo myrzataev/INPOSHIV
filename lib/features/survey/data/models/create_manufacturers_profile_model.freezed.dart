@@ -21,21 +21,17 @@ CreateManufacturersProfileModel _$CreateManufacturersProfileModelFromJson(
 
 /// @nodoc
 mixin _$CreateManufacturersProfileModel {
-  dynamic get id => throw _privateConstructorUsedError;
-  dynamic get userId => throw _privateConstructorUsedError;
-  dynamic get userUuid => throw _privateConstructorUsedError;
-  String? get manufacturerUuid => throw _privateConstructorUsedError;
-  dynamic get username => throw _privateConstructorUsedError;
-  dynamic get legalStatus => throw _privateConstructorUsedError;
+  String? get legalStatus => throw _privateConstructorUsedError;
   String? get trustLevel => throw _privateConstructorUsedError;
   String? get companyName => throw _privateConstructorUsedError;
-  dynamic get city => throw _privateConstructorUsedError;
-  dynamic get monthProductsVolume => throw _privateConstructorUsedError;
-  dynamic get companyDescription => throw _privateConstructorUsedError;
-  int? get rating => throw _privateConstructorUsedError;
-  dynamic get clothingCategoriesList => throw _privateConstructorUsedError;
-  dynamic get manufacturerPrioritiesList => throw _privateConstructorUsedError;
-  List<dynamic>? get photosUrls => throw _privateConstructorUsedError;
+  String? get companyDescription => throw _privateConstructorUsedError;
+  String? get city => throw _privateConstructorUsedError;
+  List<ClothingCategoriesList>? get clothingCategoriesList =>
+      throw _privateConstructorUsedError;
+  int? get monthProductsVolume => throw _privateConstructorUsedError;
+  List<ClothingCategoriesList>? get manufacturerPrioritiesList =>
+      throw _privateConstructorUsedError;
+  List<String>? get photos => throw _privateConstructorUsedError;
 
   /// Serializes this CreateManufacturersProfileModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -56,21 +52,15 @@ abstract class $CreateManufacturersProfileModelCopyWith<$Res> {
           CreateManufacturersProfileModel>;
   @useResult
   $Res call(
-      {dynamic id,
-      dynamic userId,
-      dynamic userUuid,
-      String? manufacturerUuid,
-      dynamic username,
-      dynamic legalStatus,
+      {String? legalStatus,
       String? trustLevel,
       String? companyName,
-      dynamic city,
-      dynamic monthProductsVolume,
-      dynamic companyDescription,
-      int? rating,
-      dynamic clothingCategoriesList,
-      dynamic manufacturerPrioritiesList,
-      List<dynamic>? photosUrls});
+      String? companyDescription,
+      String? city,
+      List<ClothingCategoriesList>? clothingCategoriesList,
+      int? monthProductsVolume,
+      List<ClothingCategoriesList>? manufacturerPrioritiesList,
+      List<String>? photos});
 }
 
 /// @nodoc
@@ -89,47 +79,21 @@ class _$CreateManufacturersProfileModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? userId = freezed,
-    Object? userUuid = freezed,
-    Object? manufacturerUuid = freezed,
-    Object? username = freezed,
     Object? legalStatus = freezed,
     Object? trustLevel = freezed,
     Object? companyName = freezed,
-    Object? city = freezed,
-    Object? monthProductsVolume = freezed,
     Object? companyDescription = freezed,
-    Object? rating = freezed,
+    Object? city = freezed,
     Object? clothingCategoriesList = freezed,
+    Object? monthProductsVolume = freezed,
     Object? manufacturerPrioritiesList = freezed,
-    Object? photosUrls = freezed,
+    Object? photos = freezed,
   }) {
     return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      userUuid: freezed == userUuid
-          ? _value.userUuid
-          : userUuid // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      manufacturerUuid: freezed == manufacturerUuid
-          ? _value.manufacturerUuid
-          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      username: freezed == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       legalStatus: freezed == legalStatus
           ? _value.legalStatus
           : legalStatus // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       trustLevel: freezed == trustLevel
           ? _value.trustLevel
           : trustLevel // ignore: cast_nullable_to_non_nullable
@@ -138,34 +102,30 @@ class _$CreateManufacturersProfileModelCopyWithImpl<$Res,
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String?,
-      city: freezed == city
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      monthProductsVolume: freezed == monthProductsVolume
-          ? _value.monthProductsVolume
-          : monthProductsVolume // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       companyDescription: freezed == companyDescription
           ? _value.companyDescription
           : companyDescription // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      rating: freezed == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
+      city: freezed == city
+          ? _value.city
+          : city // ignore: cast_nullable_to_non_nullable
+              as String?,
       clothingCategoriesList: freezed == clothingCategoriesList
           ? _value.clothingCategoriesList
           : clothingCategoriesList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<ClothingCategoriesList>?,
+      monthProductsVolume: freezed == monthProductsVolume
+          ? _value.monthProductsVolume
+          : monthProductsVolume // ignore: cast_nullable_to_non_nullable
+              as int?,
       manufacturerPrioritiesList: freezed == manufacturerPrioritiesList
           ? _value.manufacturerPrioritiesList
           : manufacturerPrioritiesList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      photosUrls: freezed == photosUrls
-          ? _value.photosUrls
-          : photosUrls // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<ClothingCategoriesList>?,
+      photos: freezed == photos
+          ? _value.photos
+          : photos // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -180,21 +140,15 @@ abstract class _$$CreateManufacturersProfileModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {dynamic id,
-      dynamic userId,
-      dynamic userUuid,
-      String? manufacturerUuid,
-      dynamic username,
-      dynamic legalStatus,
+      {String? legalStatus,
       String? trustLevel,
       String? companyName,
-      dynamic city,
-      dynamic monthProductsVolume,
-      dynamic companyDescription,
-      int? rating,
-      dynamic clothingCategoriesList,
-      dynamic manufacturerPrioritiesList,
-      List<dynamic>? photosUrls});
+      String? companyDescription,
+      String? city,
+      List<ClothingCategoriesList>? clothingCategoriesList,
+      int? monthProductsVolume,
+      List<ClothingCategoriesList>? manufacturerPrioritiesList,
+      List<String>? photos});
 }
 
 /// @nodoc
@@ -212,47 +166,21 @@ class __$$CreateManufacturersProfileModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = freezed,
-    Object? userId = freezed,
-    Object? userUuid = freezed,
-    Object? manufacturerUuid = freezed,
-    Object? username = freezed,
     Object? legalStatus = freezed,
     Object? trustLevel = freezed,
     Object? companyName = freezed,
-    Object? city = freezed,
-    Object? monthProductsVolume = freezed,
     Object? companyDescription = freezed,
-    Object? rating = freezed,
+    Object? city = freezed,
     Object? clothingCategoriesList = freezed,
+    Object? monthProductsVolume = freezed,
     Object? manufacturerPrioritiesList = freezed,
-    Object? photosUrls = freezed,
+    Object? photos = freezed,
   }) {
     return _then(_$CreateManufacturersProfileModelImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      userId: freezed == userId
-          ? _value.userId
-          : userId // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      userUuid: freezed == userUuid
-          ? _value.userUuid
-          : userUuid // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      manufacturerUuid: freezed == manufacturerUuid
-          ? _value.manufacturerUuid
-          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      username: freezed == username
-          ? _value.username
-          : username // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       legalStatus: freezed == legalStatus
           ? _value.legalStatus
           : legalStatus // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       trustLevel: freezed == trustLevel
           ? _value.trustLevel
           : trustLevel // ignore: cast_nullable_to_non_nullable
@@ -261,34 +189,30 @@ class __$$CreateManufacturersProfileModelImplCopyWithImpl<$Res>
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String?,
-      city: freezed == city
-          ? _value.city
-          : city // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      monthProductsVolume: freezed == monthProductsVolume
-          ? _value.monthProductsVolume
-          : monthProductsVolume // ignore: cast_nullable_to_non_nullable
-              as dynamic,
       companyDescription: freezed == companyDescription
           ? _value.companyDescription
           : companyDescription // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      rating: freezed == rating
-          ? _value.rating
-          : rating // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
+      city: freezed == city
+          ? _value.city
+          : city // ignore: cast_nullable_to_non_nullable
+              as String?,
       clothingCategoriesList: freezed == clothingCategoriesList
-          ? _value.clothingCategoriesList
+          ? _value._clothingCategoriesList
           : clothingCategoriesList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as List<ClothingCategoriesList>?,
+      monthProductsVolume: freezed == monthProductsVolume
+          ? _value.monthProductsVolume
+          : monthProductsVolume // ignore: cast_nullable_to_non_nullable
+              as int?,
       manufacturerPrioritiesList: freezed == manufacturerPrioritiesList
-          ? _value.manufacturerPrioritiesList
+          ? _value._manufacturerPrioritiesList
           : manufacturerPrioritiesList // ignore: cast_nullable_to_non_nullable
-              as dynamic,
-      photosUrls: freezed == photosUrls
-          ? _value._photosUrls
-          : photosUrls // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<ClothingCategoriesList>?,
+      photos: freezed == photos
+          ? _value._photos
+          : photos // ignore: cast_nullable_to_non_nullable
+              as List<String>?,
     ));
   }
 }
@@ -298,68 +222,70 @@ class __$$CreateManufacturersProfileModelImplCopyWithImpl<$Res>
 class _$CreateManufacturersProfileModelImpl
     implements _CreateManufacturersProfileModel {
   const _$CreateManufacturersProfileModelImpl(
-      {this.id,
-      this.userId,
-      this.userUuid,
-      this.manufacturerUuid,
-      this.username,
-      this.legalStatus,
+      {this.legalStatus,
       this.trustLevel,
       this.companyName,
-      this.city,
-      this.monthProductsVolume,
       this.companyDescription,
-      this.rating,
-      this.clothingCategoriesList,
-      this.manufacturerPrioritiesList,
-      final List<dynamic>? photosUrls})
-      : _photosUrls = photosUrls;
+      this.city,
+      final List<ClothingCategoriesList>? clothingCategoriesList,
+      this.monthProductsVolume,
+      final List<ClothingCategoriesList>? manufacturerPrioritiesList,
+      final List<String>? photos})
+      : _clothingCategoriesList = clothingCategoriesList,
+        _manufacturerPrioritiesList = manufacturerPrioritiesList,
+        _photos = photos;
 
   factory _$CreateManufacturersProfileModelImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$CreateManufacturersProfileModelImplFromJson(json);
 
   @override
-  final dynamic id;
-  @override
-  final dynamic userId;
-  @override
-  final dynamic userUuid;
-  @override
-  final String? manufacturerUuid;
-  @override
-  final dynamic username;
-  @override
-  final dynamic legalStatus;
+  final String? legalStatus;
   @override
   final String? trustLevel;
   @override
   final String? companyName;
   @override
-  final dynamic city;
+  final String? companyDescription;
   @override
-  final dynamic monthProductsVolume;
+  final String? city;
+  final List<ClothingCategoriesList>? _clothingCategoriesList;
   @override
-  final dynamic companyDescription;
-  @override
-  final int? rating;
-  @override
-  final dynamic clothingCategoriesList;
-  @override
-  final dynamic manufacturerPrioritiesList;
-  final List<dynamic>? _photosUrls;
-  @override
-  List<dynamic>? get photosUrls {
-    final value = _photosUrls;
+  List<ClothingCategoriesList>? get clothingCategoriesList {
+    final value = _clothingCategoriesList;
     if (value == null) return null;
-    if (_photosUrls is EqualUnmodifiableListView) return _photosUrls;
+    if (_clothingCategoriesList is EqualUnmodifiableListView)
+      return _clothingCategoriesList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final int? monthProductsVolume;
+  final List<ClothingCategoriesList>? _manufacturerPrioritiesList;
+  @override
+  List<ClothingCategoriesList>? get manufacturerPrioritiesList {
+    final value = _manufacturerPrioritiesList;
+    if (value == null) return null;
+    if (_manufacturerPrioritiesList is EqualUnmodifiableListView)
+      return _manufacturerPrioritiesList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String>? _photos;
+  @override
+  List<String>? get photos {
+    final value = _photos;
+    if (value == null) return null;
+    if (_photos is EqualUnmodifiableListView) return _photos;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'CreateManufacturersProfileModel(id: $id, userId: $userId, userUuid: $userUuid, manufacturerUuid: $manufacturerUuid, username: $username, legalStatus: $legalStatus, trustLevel: $trustLevel, companyName: $companyName, city: $city, monthProductsVolume: $monthProductsVolume, companyDescription: $companyDescription, rating: $rating, clothingCategoriesList: $clothingCategoriesList, manufacturerPrioritiesList: $manufacturerPrioritiesList, photosUrls: $photosUrls)';
+    return 'CreateManufacturersProfileModel(legalStatus: $legalStatus, trustLevel: $trustLevel, companyName: $companyName, companyDescription: $companyDescription, city: $city, clothingCategoriesList: $clothingCategoriesList, monthProductsVolume: $monthProductsVolume, manufacturerPrioritiesList: $manufacturerPrioritiesList, photos: $photos)';
   }
 
   @override
@@ -367,51 +293,38 @@ class _$CreateManufacturersProfileModelImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CreateManufacturersProfileModelImpl &&
-            const DeepCollectionEquality().equals(other.id, id) &&
-            const DeepCollectionEquality().equals(other.userId, userId) &&
-            const DeepCollectionEquality().equals(other.userUuid, userUuid) &&
-            (identical(other.manufacturerUuid, manufacturerUuid) ||
-                other.manufacturerUuid == manufacturerUuid) &&
-            const DeepCollectionEquality().equals(other.username, username) &&
-            const DeepCollectionEquality()
-                .equals(other.legalStatus, legalStatus) &&
+            (identical(other.legalStatus, legalStatus) ||
+                other.legalStatus == legalStatus) &&
             (identical(other.trustLevel, trustLevel) ||
                 other.trustLevel == trustLevel) &&
             (identical(other.companyName, companyName) ||
                 other.companyName == companyName) &&
-            const DeepCollectionEquality().equals(other.city, city) &&
-            const DeepCollectionEquality()
-                .equals(other.monthProductsVolume, monthProductsVolume) &&
-            const DeepCollectionEquality()
-                .equals(other.companyDescription, companyDescription) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
-            const DeepCollectionEquality()
-                .equals(other.clothingCategoriesList, clothingCategoriesList) &&
+            (identical(other.companyDescription, companyDescription) ||
+                other.companyDescription == companyDescription) &&
+            (identical(other.city, city) || other.city == city) &&
             const DeepCollectionEquality().equals(
-                other.manufacturerPrioritiesList, manufacturerPrioritiesList) &&
-            const DeepCollectionEquality()
-                .equals(other._photosUrls, _photosUrls));
+                other._clothingCategoriesList, _clothingCategoriesList) &&
+            (identical(other.monthProductsVolume, monthProductsVolume) ||
+                other.monthProductsVolume == monthProductsVolume) &&
+            const DeepCollectionEquality().equals(
+                other._manufacturerPrioritiesList,
+                _manufacturerPrioritiesList) &&
+            const DeepCollectionEquality().equals(other._photos, _photos));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      const DeepCollectionEquality().hash(id),
-      const DeepCollectionEquality().hash(userId),
-      const DeepCollectionEquality().hash(userUuid),
-      manufacturerUuid,
-      const DeepCollectionEquality().hash(username),
-      const DeepCollectionEquality().hash(legalStatus),
+      legalStatus,
       trustLevel,
       companyName,
-      const DeepCollectionEquality().hash(city),
-      const DeepCollectionEquality().hash(monthProductsVolume),
-      const DeepCollectionEquality().hash(companyDescription),
-      rating,
-      const DeepCollectionEquality().hash(clothingCategoriesList),
-      const DeepCollectionEquality().hash(manufacturerPrioritiesList),
-      const DeepCollectionEquality().hash(_photosUrls));
+      companyDescription,
+      city,
+      const DeepCollectionEquality().hash(_clothingCategoriesList),
+      monthProductsVolume,
+      const DeepCollectionEquality().hash(_manufacturerPrioritiesList),
+      const DeepCollectionEquality().hash(_photos));
 
   /// Create a copy of CreateManufacturersProfileModel
   /// with the given fields replaced by the non-null parameter values.
@@ -434,55 +347,37 @@ class _$CreateManufacturersProfileModelImpl
 abstract class _CreateManufacturersProfileModel
     implements CreateManufacturersProfileModel {
   const factory _CreateManufacturersProfileModel(
-      {final dynamic id,
-      final dynamic userId,
-      final dynamic userUuid,
-      final String? manufacturerUuid,
-      final dynamic username,
-      final dynamic legalStatus,
+      {final String? legalStatus,
       final String? trustLevel,
       final String? companyName,
-      final dynamic city,
-      final dynamic monthProductsVolume,
-      final dynamic companyDescription,
-      final int? rating,
-      final dynamic clothingCategoriesList,
-      final dynamic manufacturerPrioritiesList,
-      final List<dynamic>? photosUrls}) = _$CreateManufacturersProfileModelImpl;
+      final String? companyDescription,
+      final String? city,
+      final List<ClothingCategoriesList>? clothingCategoriesList,
+      final int? monthProductsVolume,
+      final List<ClothingCategoriesList>? manufacturerPrioritiesList,
+      final List<String>? photos}) = _$CreateManufacturersProfileModelImpl;
 
   factory _CreateManufacturersProfileModel.fromJson(Map<String, dynamic> json) =
       _$CreateManufacturersProfileModelImpl.fromJson;
 
   @override
-  dynamic get id;
-  @override
-  dynamic get userId;
-  @override
-  dynamic get userUuid;
-  @override
-  String? get manufacturerUuid;
-  @override
-  dynamic get username;
-  @override
-  dynamic get legalStatus;
+  String? get legalStatus;
   @override
   String? get trustLevel;
   @override
   String? get companyName;
   @override
-  dynamic get city;
+  String? get companyDescription;
   @override
-  dynamic get monthProductsVolume;
+  String? get city;
   @override
-  dynamic get companyDescription;
+  List<ClothingCategoriesList>? get clothingCategoriesList;
   @override
-  int? get rating;
+  int? get monthProductsVolume;
   @override
-  dynamic get clothingCategoriesList;
+  List<ClothingCategoriesList>? get manufacturerPrioritiesList;
   @override
-  dynamic get manufacturerPrioritiesList;
-  @override
-  List<dynamic>? get photosUrls;
+  List<String>? get photos;
 
   /// Create a copy of CreateManufacturersProfileModel
   /// with the given fields replaced by the non-null parameter values.
@@ -490,5 +385,236 @@ abstract class _CreateManufacturersProfileModel
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CreateManufacturersProfileModelImplCopyWith<
           _$CreateManufacturersProfileModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+ClothingCategoriesList _$ClothingCategoriesListFromJson(
+    Map<String, dynamic> json) {
+  return _ClothingCategoriesList.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ClothingCategoriesList {
+  int? get id => throw _privateConstructorUsedError;
+  String? get slug => throw _privateConstructorUsedError;
+  String? get name => throw _privateConstructorUsedError;
+  List<ClothingCategoriesList>? get subcategories =>
+      throw _privateConstructorUsedError;
+
+  /// Serializes this ClothingCategoriesList to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of ClothingCategoriesList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ClothingCategoriesListCopyWith<ClothingCategoriesList> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ClothingCategoriesListCopyWith<$Res> {
+  factory $ClothingCategoriesListCopyWith(ClothingCategoriesList value,
+          $Res Function(ClothingCategoriesList) then) =
+      _$ClothingCategoriesListCopyWithImpl<$Res, ClothingCategoriesList>;
+  @useResult
+  $Res call(
+      {int? id,
+      String? slug,
+      String? name,
+      List<ClothingCategoriesList>? subcategories});
+}
+
+/// @nodoc
+class _$ClothingCategoriesListCopyWithImpl<$Res,
+        $Val extends ClothingCategoriesList>
+    implements $ClothingCategoriesListCopyWith<$Res> {
+  _$ClothingCategoriesListCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of ClothingCategoriesList
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? slug = freezed,
+    Object? name = freezed,
+    Object? subcategories = freezed,
+  }) {
+    return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      subcategories: freezed == subcategories
+          ? _value.subcategories
+          : subcategories // ignore: cast_nullable_to_non_nullable
+              as List<ClothingCategoriesList>?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ClothingCategoriesListImplCopyWith<$Res>
+    implements $ClothingCategoriesListCopyWith<$Res> {
+  factory _$$ClothingCategoriesListImplCopyWith(
+          _$ClothingCategoriesListImpl value,
+          $Res Function(_$ClothingCategoriesListImpl) then) =
+      __$$ClothingCategoriesListImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? id,
+      String? slug,
+      String? name,
+      List<ClothingCategoriesList>? subcategories});
+}
+
+/// @nodoc
+class __$$ClothingCategoriesListImplCopyWithImpl<$Res>
+    extends _$ClothingCategoriesListCopyWithImpl<$Res,
+        _$ClothingCategoriesListImpl>
+    implements _$$ClothingCategoriesListImplCopyWith<$Res> {
+  __$$ClothingCategoriesListImplCopyWithImpl(
+      _$ClothingCategoriesListImpl _value,
+      $Res Function(_$ClothingCategoriesListImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of ClothingCategoriesList
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = freezed,
+    Object? slug = freezed,
+    Object? name = freezed,
+    Object? subcategories = freezed,
+  }) {
+    return _then(_$ClothingCategoriesListImpl(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
+      slug: freezed == slug
+          ? _value.slug
+          : slug // ignore: cast_nullable_to_non_nullable
+              as String?,
+      name: freezed == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String?,
+      subcategories: freezed == subcategories
+          ? _value._subcategories
+          : subcategories // ignore: cast_nullable_to_non_nullable
+              as List<ClothingCategoriesList>?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ClothingCategoriesListImpl implements _ClothingCategoriesList {
+  const _$ClothingCategoriesListImpl(
+      {this.id,
+      this.slug,
+      this.name,
+      final List<ClothingCategoriesList>? subcategories})
+      : _subcategories = subcategories;
+
+  factory _$ClothingCategoriesListImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ClothingCategoriesListImplFromJson(json);
+
+  @override
+  final int? id;
+  @override
+  final String? slug;
+  @override
+  final String? name;
+  final List<ClothingCategoriesList>? _subcategories;
+  @override
+  List<ClothingCategoriesList>? get subcategories {
+    final value = _subcategories;
+    if (value == null) return null;
+    if (_subcategories is EqualUnmodifiableListView) return _subcategories;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  String toString() {
+    return 'ClothingCategoriesList(id: $id, slug: $slug, name: $name, subcategories: $subcategories)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ClothingCategoriesListImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.slug, slug) || other.slug == slug) &&
+            (identical(other.name, name) || other.name == name) &&
+            const DeepCollectionEquality()
+                .equals(other._subcategories, _subcategories));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, id, slug, name,
+      const DeepCollectionEquality().hash(_subcategories));
+
+  /// Create a copy of ClothingCategoriesList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ClothingCategoriesListImplCopyWith<_$ClothingCategoriesListImpl>
+      get copyWith => __$$ClothingCategoriesListImplCopyWithImpl<
+          _$ClothingCategoriesListImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ClothingCategoriesListImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ClothingCategoriesList implements ClothingCategoriesList {
+  const factory _ClothingCategoriesList(
+          {final int? id,
+          final String? slug,
+          final String? name,
+          final List<ClothingCategoriesList>? subcategories}) =
+      _$ClothingCategoriesListImpl;
+
+  factory _ClothingCategoriesList.fromJson(Map<String, dynamic> json) =
+      _$ClothingCategoriesListImpl.fromJson;
+
+  @override
+  int? get id;
+  @override
+  String? get slug;
+  @override
+  String? get name;
+  @override
+  List<ClothingCategoriesList>? get subcategories;
+
+  /// Create a copy of ClothingCategoriesList
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ClothingCategoriesListImplCopyWith<_$ClothingCategoriesListImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

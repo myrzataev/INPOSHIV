@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 
@@ -17,12 +18,11 @@ class MainAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-  
         CustomSearchWidget(
             onTap: () {
-              
               Scaffold.of(context).openDrawer();
-            }, child: SvgPicture.asset(SvgImages.burgerMenu)),
+            },
+            child: SvgPicture.asset(SvgImages.burgerMenu)),
         // CircleAvatar(
         //   radius: 22.h,
         //   backgroundColor: AppColors.circleAvatarsColor,
@@ -46,55 +46,7 @@ class MainAppBar extends StatelessWidget {
         ),
         CustomSearchWidget(
           onTap: () {
-            showDialog(
-          context: context,
-          builder: (context) => Dialog(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SvgPicture.asset(
-                        SvgImages.info,
-                        height: 24.h,
-                        width: 24.w,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          GoRouter.of(context).pop();
-                        },
-                        child: SvgPicture.asset(
-                          SvgImages.close,
-                          height: 24.h,
-                          width: 24.w,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: Text(
-                      "Мы уведомим вас, когда появятся отклики от производителей",
-                      style: AppFonts.w700s20
-                          .copyWith(color: AppColors.accentTextColor),
-                    ),
-                  ),
-                  CustomButton(
-                    height: 40,
-                    text: "Понятно",
-                    onPressed: () {
-                      GoRouter.of(context).pop();
-                    },
-                    sizedTemporary: true,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
+           GoRouter.of(context).pushNamed("notifications");
           },
           child: const Icon(
             Icons.notifications_outlined,

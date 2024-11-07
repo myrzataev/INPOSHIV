@@ -1,19 +1,27 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/auction/data/mocked_aution_data.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_auctions_bloc/manufacturer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_choise_widget.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/comment_column.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_card.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_widget.dart';
+import 'package:inposhiv/features/tracking/presentation/screens/tracking_screen.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/calculate_service.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -28,8 +36,16 @@ class _OrdersScreenState extends State<OrdersScreen>
   late AnimationController controller;
 
   List<String> images = [Images.good1, Images.good2, Images.good1];
+  List<String> tabs = [
+    "Все заказы",
+    "Завершенные",
+    "Пункты выдачи",
+    "Трекинг заказ"
+  ];
   int selectedIndex = 0;
   int _currentIndex = 0;
+  late bool? isCustomer;
+  final preferences = locator<SharedPreferences>();
   final PageController _pageController = PageController();
   final CarouselSliderController _carouselSliderController =
       CarouselSliderController();
@@ -37,6 +53,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   List<TrackingStatus> mockData = TrackingStatusData.data;
   List<AddressesModel> mockAdressesData = Addresses.adresses;
   bool openedDetailedView = false;
+  CalculateService calculateService = CalculateService();
   @override
   void initState() {
     controller = AnimationController(
@@ -46,7 +63,21 @@ class _OrdersScreenState extends State<OrdersScreen>
         setState(() {});
       });
     controller.repeat(reverse: false);
+    isCustomer = preferences.getBool("isCustomer") ?? true;
+    (isCustomer ?? true) ? callBlocForCustomer() : callBlocForManufacturer();
     super.initState();
+  }
+
+  void callBlocForManufacturer() {
+    BlocProvider.of<ManufacturerAuctionsBloc>(context).add(
+        ManufacturerAuctionsEvent.getManufacturerAuctions(
+            manufacturerId: preferences.getString("customerId") ?? ""));
+  }
+
+  void callBlocForCustomer() {
+    BlocProvider.of<CustomerAuctionsBloc>(context).add(
+        CustomerAuctionsEvent.getCustomerAuctions(
+            customerId: preferences.getString("customerId") ?? ""));
   }
 
   @override
@@ -80,67 +111,32 @@ class _OrdersScreenState extends State<OrdersScreen>
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomChoiceWidget(
-                            isSelelected: selectedIndex == 0,
-                            text: "Все заказы",
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = 0;
-                                _currentIndex = 0;
-                              });
-                              // Animate to the corresponding page in the PageView.
-                              _pageController.animateToPage(0,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut);
-                            },
-                          ),
-                          CustomChoiceWidget(
-                            isSelelected: selectedIndex == 1,
-                            text: "Завершенные",
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = 1;
-                                _currentIndex = 0;
-                              });
-                              _pageController.animateToPage(1,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut);
-                            },
-                          ),
-                          CustomChoiceWidget(
-                            isSelelected: selectedIndex == 2,
-                            text: "Пункты выдачи",
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = 2;
-                                _currentIndex = 0;
-                              });
-                              _pageController.animateToPage(2,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut);
-                            },
-                          ),
-                          CustomChoiceWidget(
-                            isSelelected: selectedIndex == 3,
-                            text: "Трекинг заказ",
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = 3;
-                                _currentIndex = 0;
-                              });
-                              _pageController.animateToPage(3,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut);
-                            },
-                          ),
-                        ],
-                      ),
+                    child: SizedBox(
+                      height: 55.h,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return CustomChoiceWidget(
+                              isSelelected: selectedIndex == index,
+                              text: tabs[index],
+                              onTap: () {
+                                setState(() {
+                                  selectedIndex = index;
+                                  _currentIndex = 0;
+                                });
+                                // Animate to the corresponding page in the PageView.
+                                _pageController.animateToPage(index,
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeInOut);
+                              },
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              width: 7.w,
+                            );
+                          },
+                          itemCount: tabs.length),
                     ),
                   ),
                   Expanded(
@@ -151,151 +147,157 @@ class _OrdersScreenState extends State<OrdersScreen>
                       onPageChanged: (value) {
                         setState(() {
                           selectedIndex = value;
-
                           _currentIndex = 0;
                         });
                       },
                       children: [
-                        SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Padding(
-                            padding: EdgeInsets.only(bottom: 10.h),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.r)),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Stack(alignment: Alignment.center, children: [
-                                    CarouselSlider.builder(
-                                      carouselController:
-                                          _carouselSliderController,
-                                      itemCount: images.length,
-                                      options: CarouselOptions(
-                                        autoPlay: false,
-                                        enlargeCenterPage: true,
-                                        viewportFraction: 1,
-                                        aspectRatio: 16 / 7,
-                                        height: 300.h,
-                                        onPageChanged: (indexCarousel, reason) {
-                                          setState(() {
-                                            _currentIndex = indexCarousel;
-                                          });
-                                        },
-                                      ),
-                                      itemBuilder:
-                                          (context, caruselIndex, realIndex) {
-                                        return Stack(children: [
-                                          ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(15.r),
-                                              child: Image.asset(
-                                                images[caruselIndex],
-                                                fit: BoxFit.fill,
-                                                width: double.infinity,
-                                              )),
-                                        ]);
+                        (isCustomer ?? true)
+                            ? BlocBuilder<CustomerAuctionsBloc,
+                                CustomerAuctionsState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(
+                                      customerOrdersLoaded:
+                                          (customerOrdersModel) {
+                                        return RefreshIndicator.adaptive(
+                                          onRefresh: () async =>
+                                              callBlocForCustomer(),
+                                          child: ListView.builder(
+                                              itemCount:
+                                                  customerOrdersModel.length,
+                                              scrollDirection: Axis.vertical,
+                                              itemBuilder: (context, index) {
+                                                final currentItem =
+                                                    customerOrdersModel[index];
+                                                final List<String>
+                                                    fullPhotoUrls =
+                                                    customerOrdersModel[index]
+                                                            .products
+                                                            ?.first
+                                                            .photos
+                                                            ?.map((url) =>
+                                                                "${UrlRoutes.baseUrl}$url")
+                                                            .toList() ??
+                                                        [];
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 10.h),
+                                                  child: CustomOrderCard(
+                                                      images: fullPhotoUrls,
+                                                      onPageChanged: (carouselIndex,
+                                                          reason) {},
+                                                      reliableStatus: "",
+                                                      name: currentItem.products
+                                                              ?.first.name ??
+                                                          "",
+                                                      quantity: currentItem
+                                                              .products
+                                                              ?.first
+                                                              .quantity ??
+                                                          0,
+                                                      retailPriceInRuble: currentItem
+                                                              .products
+                                                              ?.first
+                                                              .priceRub ??
+                                                          0,
+                                                      totalPriceInRuble: calculateService
+                                                          .calculateTotalPriceInRuble(
+                                                              ruble: currentItem
+                                                                      .products
+                                                                      ?.first
+                                                                      .priceRub
+                                                                      ?.toDouble() ??
+                                                                  0,
+                                                              totalCount: currentItem.products?.first.quantity ?? 0)
+                                                          .toInt(),
+                                                      currentIndex: _currentIndex),
+                                                );
+                                              }),
+                                        );
                                       },
-                                    ),
-                                    Positioned(
-                                      top: 10.h,
-                                      left: 10.w,
-                                      right: 10.w,
-                                      child: Row(
-                                        // mainAxisAlignment:
-                                        //     MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.center,
-                                            height: 36.h,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        60.r)),
-                                            child: Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 14.w),
-                                              child: Text(
-                                                "Очень надежный",
-                                                style: AppFonts.w400s16
-                                                    .copyWith(
-                                                        color: AppColors
-                                                            .accentTextColor),
-                                              ),
-                                            ),
+                                      loading: () => const Center(
+                                            child: CircularProgressIndicator
+                                                .adaptive(),
                                           ),
-                                          // CircleAvatar(
-                                          //   backgroundColor: Colors.white,
-                                          //   radius: 20.r,
-                                          //   child: SvgPicture.asset(
-                                          //     SVGImages.chat,
-                                          //     color: AppColors.accentTextColor,
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
-                                    Positioned(
-                                      bottom: 10.h,
-                                      child: DotsIndicator(
-                                        dotsCount: images.length,
-                                        position: _currentIndex,
-                                        // position: _currentIndex.toDouble(),
-                                        decorator: DotsDecorator(
-                                            activeColor: Colors.white,
-                                            size: Size(10.w, 10.h)),
-                                      ),
-                                    )
-                                  ]),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Хлопковая блузка",
-                                        style: AppFonts.w700s20.copyWith(
-                                            color: AppColors.accentTextColor),
-                                      ),
-                                      Text(
-                                        "825 штук",
-                                        style: AppFonts.w400s16.copyWith(
-                                            color: AppColors.accentTextColor),
-                                      ),
-                                    ],
-                                  ),
-                                  Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(vertical: 8.h),
-                                    child: Text(
-                                      "600 руб за единицу, итого 348 000 руб",
-                                      style: AppFonts.w400s16.copyWith(),
-                                    ),
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        "Размерный ряд",
-                                        style: AppFonts.w400s16.copyWith(
-                                            color: AppColors.accentTextColor),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.only(left: 6.w),
-                                        child:
-                                            SvgPicture.asset(SvgImages.bottom),
-                                      ),
-                                    ],
-                                  ),
-                                  // ElevatedButton(
-                                  //     onPressed: () {},
-                                  //     child: const Text("data"))
-                                ],
+                                      orElse: () => const SizedBox.shrink());
+                                },
+                              )
+                            : BlocBuilder<ManufacturerAuctionsBloc,
+                                ManufacturerAuctionsState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(
+                                      loading: () => const Center(
+                                            child: CircularProgressIndicator
+                                                .adaptive(),
+                                          ),
+                                      error: (errorText) => Center(
+                                            child: Text(errorText),
+                                          ),
+                                      loaded: (model) {
+                                        if (model.isNotEmpty) {
+                                          return ListView.builder(
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: model.length,
+                                            itemBuilder: (context, index) {
+                                              final currentIndex = model[index];
+                                              final List<
+                                                  String> fullPhotoUrls = model[
+                                                          index]
+                                                      .productsList
+                                                      ?.first
+                                                      .photos
+                                                      ?.map((url) =>
+                                                          "${UrlRoutes.baseUrl}$url")
+                                                      .toList() ??
+                                                  [];
+                                              return Padding(
+                                                padding: EdgeInsets.only(
+                                                    bottom: 10.h),
+                                                child: CustomOrderCard(
+                                                    images: fullPhotoUrls,
+                                                    onPageChanged: (carouselIndex, reason) {},
+                                                    reliableStatus: "",
+                                                    name: currentIndex.productsList?.first.name ??
+                                                        "",
+                                                    quantity: currentIndex
+                                                            .productsList
+                                                            ?.first
+                                                            .quantity
+                                                            ?.toInt() ??
+                                                        0,
+                                                    retailPriceInRuble:
+                                                        currentIndex
+                                                                .productsList
+                                                                ?.first
+                                                                .priceRub
+                                                                ?.toInt() ??
+                                                            0,
+                                                    totalPriceInRuble: calculateService
+                                                        .calculateTotalPriceInRuble(
+                                                            ruble: currentIndex
+                                                                    .productsList
+                                                                    ?.first
+                                                                    .priceRub ??
+                                                                0,
+                                                            totalCount: currentIndex.productsList?.first.quantity?.toInt() ?? 0)
+                                                        .toInt(),
+                                                    currentIndex: _currentIndex),
+                                              );
+                                            },
+                                          );
+                                        } else {
+                                          return Center(
+                                            child: Text(
+                                              "Список пуст",
+                                              style: AppFonts.w500s18,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      orElse: () {
+                                        return const SizedBox.shrink();
+                                      });
+                                },
                               ),
-                            ),
-                          ),
-                        ),
                         ListView.separated(
                             separatorBuilder: (context, index) {
                               return SizedBox(
@@ -305,8 +307,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                             itemCount: data.length,
                             itemBuilder: (context, index) {
                               final item = data[index];
-                              return CustomOrderCard(
-                                logo: item.logo,
+                              return CustomCompletedOrdersCard(
                                 location: item.location,
                                 trustRating: item.trustStatuses,
                                 rating: 4.96,
@@ -380,97 +381,107 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 20.h),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: AppColors.containersGrey,
-                                            borderRadius:
-                                                BorderRadius.circular(15.r)),
-                                        child: Padding(
-                                          padding: EdgeInsets.all(10.h),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "Этап 2",
-                                                style: AppFonts.w400s16,
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 4.h),
-                                                child: Text(
-                                                  "Пошив",
-                                                  style: AppFonts.w700s18,
+                                      child: InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const TrackingScreen()));
+                                        },
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: AppColors.containersGrey,
+                                              borderRadius:
+                                                  BorderRadius.circular(15.r)),
+                                          child: Padding(
+                                            padding: EdgeInsets.all(10.h),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Этап 2",
+                                                  style: AppFonts.w400s16,
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 8.h),
-                                                child: Container(
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15.r)),
-                                                  child: CustomProgressBar(
-                                                    progress: 0.5.toInt(),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 4.h),
+                                                  child: Text(
+                                                    "Пошив",
+                                                    style: AppFonts.w700s18,
                                                   ),
                                                 ),
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 10.h),
-                                                child: SizedBox(
-                                                  height: 65.h,
-                                                  child: ListView.separated(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        return ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.r),
-                                                          child: Image.asset(
-                                                              Images.good1),
-                                                        );
-                                                      },
-                                                      separatorBuilder:
-                                                          (context, index) {
-                                                        return SizedBox(
-                                                          width: 5.w,
-                                                        );
-                                                      },
-                                                      itemCount: 3),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 8.h),
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    15.r)),
+                                                    child: CustomProgressBar(
+                                                      progress: 0.5.toInt(),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
-                                              Text(
-                                                "Комментарии от производителя",
-                                                style:
-                                                    AppFonts.w400s14.copyWith(),
-                                              ),
-                                              const CommentColumn(
-                                                comment:
-                                                    "Все готово к началу производства",
-                                                data: "18.04.2024",
-                                              ),
-                                              const CommentColumn(
-                                                comment:
-                                                    "Все готово к началу производства",
-                                                data: "18.04.2024",
-                                              ),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 10.h),
-                                                child: CustomButton(
-                                                  text: "Подтвердить",
-                                                  onPressed: () {},
-                                                  sizedTemporary: true,
-                                                  height: 50,
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.h),
+                                                  child: SizedBox(
+                                                    height: 65.h,
+                                                    child: ListView.separated(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        itemBuilder:
+                                                            (context, index) {
+                                                          return ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10.r),
+                                                            child: Image.asset(
+                                                                Images.good1),
+                                                          );
+                                                        },
+                                                        separatorBuilder:
+                                                            (context, index) {
+                                                          return SizedBox(
+                                                            width: 5.w,
+                                                          );
+                                                        },
+                                                        itemCount: 3),
+                                                  ),
                                                 ),
-                                              )
-                                            ],
+                                                Text(
+                                                  "Комментарии от производителя",
+                                                  style: AppFonts.w400s14
+                                                      .copyWith(),
+                                                ),
+                                                const CommentColumn(
+                                                  comment:
+                                                      "Все готово к началу производства",
+                                                  data: "18.04.2024",
+                                                ),
+                                                const CommentColumn(
+                                                  comment:
+                                                      "Все готово к началу производства",
+                                                  data: "18.04.2024",
+                                                ),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.h),
+                                                  child: CustomButton(
+                                                    text: "Подтвердить",
+                                                    onPressed: () {},
+                                                    sizedTemporary: true,
+                                                    height: 50,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),

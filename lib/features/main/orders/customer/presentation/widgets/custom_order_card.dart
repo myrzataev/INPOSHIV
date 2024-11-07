@@ -1,156 +1,167 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/resources/resources.dart';
-import 'package:inposhiv/services/colors_helper.dart';
 
-class CustomOrderCard extends StatelessWidget {
-  final String logo;
-  final String location;
-  final int trustRating;
-  final double rating;
-  final int quantityInApp;
-  final double retailPrice;
-  final double retailPriceInRuble;
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
+class CustomOrderCard extends StatefulWidget {
   const CustomOrderCard({
     super.key,
-    required this.logo,
-    required this.location,
-    required this.trustRating,
-    required this.rating,
-    required this.quantityInApp,
-    required this.retailPrice,
+    required this.images,
+    required int currentIndex,
+    required this.onPageChanged,
+    required this.reliableStatus,
+    required this.name,
+    required this.quantity,
     required this.retailPriceInRuble,
+    required this.totalPriceInRuble,
   });
 
+  final List<String> images;
+
+  final String reliableStatus;
+  final String name;
+  final int quantity;
+  final int retailPriceInRuble;
+  final int totalPriceInRuble;
+  final Function(int carouselIndex, CarouselPageChangedReason reason)
+      onPageChanged;
+
+  @override
+  State<CustomOrderCard> createState() => _CustomOrderCardState();
+}
+
+class _CustomOrderCardState extends State<CustomOrderCard> {
+  int _currentIndex = 0;
+  final CarouselSliderController _carouselSliderController =
+      CarouselSliderController();
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-          color: AppColors.cardsColor,
-          borderRadius: BorderRadius.all(Radius.circular(10.r))),
-      child: Padding(
-        padding: EdgeInsets.all(10.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // CircleAvatar(
-                //   backgroundImage: AssetImage(logo),
-                // ),
-                Padding(
-                  padding: EdgeInsets.only(left: 5.w),
-                  child: Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.r)),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(alignment: Alignment.center, children: [
+            CarouselSlider.builder(
+              carouselController: _carouselSliderController,
+              itemCount: widget.images.length,
+              options: CarouselOptions(
+                initialPage: 0,
+                autoPlay: false,
+                enlargeCenterPage: true,
+                viewportFraction: 1,
+                aspectRatio: 16 / 7,
+                height: 300.h,
+                onPageChanged: (indexCarousel, reason) {
+                  // widget.onPageChanged(indexCarousel, reason);
+                  setState(() {
+                    _currentIndex = indexCarousel;
+                  });
+                },
+              ),
+              itemBuilder: (context, caruselIndex, realIndex) {
+                return Stack(children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(15.r),
+                      child: CachedNetworkImage(
+                        imageUrl: widget.images[caruselIndex],
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                      )),
+                ]);
+              },
+            ),
+            Positioned(
+              top: 10.h,
+              left: 10.w,
+              right: 10.w,
+              child: Row(
+                // mainAxisAlignment:
+                //     MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    height: 36.h,
                     decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(60.r),
-                        border: Border.all(
-                            width: 1.w,
-                            color: ColorsHelper.statusColor(status: 1))),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(60.r)),
                     child: Padding(
-                      padding: EdgeInsets.all(8.0.w),
+                      padding: EdgeInsets.symmetric(horizontal: 14.w),
                       child: Text(
-                        ColorsHelper.trustStatus(status: 1),
-                        style: AppFonts.w400s16.copyWith(
-                            color: ColorsHelper.statusColor(status: 1),
-                            fontFamily: "SF Pro"),
+                        widget.reliableStatus,
+                        style: AppFonts.w400s16
+                            .copyWith(color: AppColors.accentTextColor),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Row(
-                children: [
-                  Text(
-                    location,
-                    style: AppFonts.w700s20
-                        .copyWith(color: AppColors.accentTextColor),
-                  ),
-                  const Spacer(),
-                  // Padding(
-                  //   padding: EdgeInsets.symmetric(horizontal: 5.w),
+                  // CircleAvatar(
+                  //   backgroundColor: Colors.white,
+                  //   radius: 20.r,
                   //   child: SvgPicture.asset(
-                  //     SvgImages.star,
-                  //     height: 16.h,
-                  //     width: 16.w,
+                  //     SVGImages.chat,
+                  //     color: AppColors.accentTextColor,
                   //   ),
                   // ),
-                  Text(
-                    "580 штук",
-                    style: AppFonts.w400s16
-                        .copyWith(color: AppColors.accentTextColor),
-                  )
                 ],
               ),
             ),
-            Text(
-              "от 22.06.2024 – до 16.07.2024",
-              style: AppFonts.w400s16,
+            Positioned(
+              bottom: 10.h,
+              child: DotsIndicator(
+                dotsCount: widget.images.length ?? 1,
+                position: _currentIndex,
+                // position: _currentIndex.toDouble(),
+                decorator: DotsDecorator(
+                    activeColor: Colors.white, size: Size(10.w, 10.h)),
+              ),
+            )
+          ]),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                widget.name,
+                style:
+                    AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
+              ),
+              Text(
+                "${widget.quantity} штук",
+                style:
+                    AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 8.h),
+            child: Text(
+              "${widget.retailPriceInRuble} руб за единицу, итого ${widget.totalPriceInRuble} руб",
+              style: AppFonts.w400s16.copyWith(),
             ),
-            // Text(
-            //   "Выполнено в Inposhiv $quantityInApp заказов.",
-            //   style:
-            //       AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
-            // ),
-            // Row(
-            //   children: [
-            //     Column(
-            //       crossAxisAlignment: CrossAxisAlignment.start,
-            //       children: [
-            //         Text(
-            //           "${retailPrice}\$",
-            //           style: AppFonts.w700s18,
-            //         ),
-            //         Text(
-            //           "580 руб",
-            //           style: AppFonts.w400s16,
-            //         ),
-            //       ],
-            //     ),
-            //     Padding(
-            //       padding: EdgeInsets.only(left: 40.w),
-            //       child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Text(
-            //             "${3018}\$",
-            //             style: AppFonts.w700s18,
-            //           ),
-            //           Text(
-            //             "312 000 руб",
-            //             style: AppFonts.w400s16,
-            //           ),
-            //         ],
-            //       ),
-            //     )
-            //   ],
-            // ),
-            // Padding(
-            //   padding: EdgeInsets.symmetric(vertical: 10.h),
-            //   child: SizedBox(
-            //     height: 40.h,
-            //     width: double.infinity,
-            //     child: MaterialButton(
-            //       onPressed: () {},
-            //       color: AppColors.buttonGreenColor,
-            //       shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(10.r)),
-            //       child: Text(
-            //         "Связаться",
-            //         style: AppFonts.w400s16
-            //             .copyWith(color: AppColors.accentTextColor),
-            //       ),
-            //     ),
-            //   ),
-            // )
-          ],
-        ),
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "Размерный ряд",
+                style:
+                    AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 6.w),
+                child: SvgPicture.asset(SvgImages.bottom),
+              ),
+            ],
+          ),
+          // ElevatedButton(
+          //     onPressed: () {},
+          //     child: const Text("data"))
+        ],
       ),
     );
   }

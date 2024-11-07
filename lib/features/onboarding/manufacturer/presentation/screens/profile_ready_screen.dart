@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dio/dio.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,14 +16,15 @@ import 'package:inposhiv/features/onboarding/manufacturer/presentation/blocs/man
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/survey/data/models/create_manufacturers_profile_model.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfileReadyScreen extends StatefulWidget {
-  final String descriptionOfCompany;
-  const ProfileReadyScreen({super.key, required this.descriptionOfCompany});
+  final CreateManufacturersProfileModel model;
+  const ProfileReadyScreen({super.key, required this.model});
 
   @override
   State<ProfileReadyScreen> createState() => _OrderReadyScreenState();
@@ -79,7 +79,7 @@ class _OrderReadyScreenState extends State<ProfileReadyScreen> {
                     Stack(alignment: Alignment.center, children: [
                       CarouselSlider.builder(
                         carouselController: carouselController,
-                        itemCount: images?.length ?? 0,
+                        itemCount: widget.model.photos?.length ?? 0,
                         options: CarouselOptions(
                           autoPlay: false,
                           enlargeCenterPage: true,
@@ -140,7 +140,8 @@ class _OrderReadyScreenState extends State<ProfileReadyScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 8.h),
                       child: Text(
-                        widget.descriptionOfCompany,
+                        widget.model.companyDescription ?? "",
+                        // widget.descriptionOfCompany,
                         style: AppFonts.w400s16.copyWith(),
                       ),
                     ),
@@ -162,8 +163,7 @@ class _OrderReadyScreenState extends State<ProfileReadyScreen> {
                     //       filename: image.name,
                     //       contentType: DioMediaType("image", "jpg"));
                     // }));
-                    // context.goNamed("main", extra: false);
-                   
+                    context.goNamed("main", extra: false);
                   }),
             ],
           ),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/network/dio_settings.dart';
@@ -19,17 +20,20 @@ import 'package:inposhiv/features/main/auction/data/data_source/create_auction_d
 import 'package:inposhiv/features/main/auction/data/data_source/get_auction_members_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_auctions_list_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_customers_orders_ds.dart';
+import 'package:inposhiv/features/main/auction/data/data_source/get_manufacturer_auctions_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/make_bid_ds.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/auction_repo_impl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_auction_members_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_auctions_list_repoimmpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_customer_orders_repoimpl.dart';
+import 'package:inposhiv/features/main/auction/data/repositories/get_manufacturer_auctions_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/make_bid_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/create_auction_bloc/create_auction_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auction_members_bloc/get_auction_members_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_bloc/get_auctions_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_auctions_bloc/manufacturer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/create_chatroom_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/get_chatroom_history_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/get_chats_ds.dart';
@@ -47,11 +51,17 @@ import 'package:inposhiv/features/main/home/data/repositories/get_manufacturers_
 import 'package:inposhiv/features/main/home/data/repositories/get_user_info_repoimpl.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/data/data_source/search_order_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/send_invoice_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/send_order_details_ds.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/search_order_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_invoice_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_order_details_repo_impl.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/search_order_bloc/search_order_bloc.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_manufacturer_invoices_ds.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_manufacturer_invoices_repoimpl.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/create_order_ds.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/get_currency_ds.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/get_fabric_types_ds.dart';
@@ -310,7 +320,27 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => SendManufacturerSurveryRepoImpl(
                 sendManufacturerSurveyDs:
-                    RepositoryProvider.of<SendManufacturerSurveyDs>(context)))
+                    RepositoryProvider.of<SendManufacturerSurveyDs>(context))),
+        RepositoryProvider(
+            create: (context) => SearchOrderDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => SearchOrderRepoImpl(
+                searchOrderDs: RepositoryProvider.of<SearchOrderDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetManufacturerAuctionsDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetManufacturerAuctionsRepoimpl(
+                getManufacturerAuctionsDs:
+                    RepositoryProvider.of<GetManufacturerAuctionsDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetManufacturerInvoicesDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetManufacturerInvoicesRepoimpl(
+                getManufacturerInvoicesDs:
+                    RepositoryProvider.of<GetManufacturerInvoicesDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -410,6 +440,20 @@ class _MyAppState extends State<MyApp> {
               create: (context) => SendManufacturersSurveyBloc(
                   sendManufacturerSurveryRepoImpl:
                       RepositoryProvider.of<SendManufacturerSurveryRepoImpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => SearchOrderBloc(
+                  searchOrderRepoImpl:
+                      RepositoryProvider.of<SearchOrderRepoImpl>(context))),
+          BlocProvider(
+              create: (context) => ManufacturerAuctionsBloc(
+                  getManufacturerAuctionsRepoimpl:
+                      RepositoryProvider.of<GetManufacturerAuctionsRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => GetManufacturerInvoicesBloc(
+                  getManufacturerInvoicesRepoimpl:
+                      RepositoryProvider.of<GetManufacturerInvoicesRepoimpl>(
                           context)))
         ],
         child: MultiProvider(
@@ -422,7 +466,7 @@ class _MyAppState extends State<MyApp> {
                 create: (context) =>
                     PlatformProvider(platformIsAndroid: isAndroid)),
             ChangeNotifierProvider(create: (context) => CategoriesProvider()),
-            ChangeNotifierProvider(create: (context)=> PrioritiesProvider())
+            ChangeNotifierProvider(create: (context) => PrioritiesProvider())
           ],
           child: TextFieldUnfocus(
             child: ScreenUtilInit(
@@ -442,6 +486,7 @@ class _MyAppState extends State<MyApp> {
                   GlobalCupertinoLocalizations.delegate
                 ],
                 builder: (context, child) {
+                  EasyLoading.init();
                   return MediaQuery(
                       data: MediaQuery.of(context)
                           .copyWith(textScaler: TextScaler.noScaling),

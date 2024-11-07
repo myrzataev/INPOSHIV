@@ -15,6 +15,9 @@ String customerOrdersModelToJson(List<CustomerOrdersModel> data) => json.encode(
 @freezed
 class CustomerOrdersModel with _$CustomerOrdersModel {
     const factory CustomerOrdersModel({
+        int? categoryId,
+        int? fabricId,
+        String? description,
         int? orderId,
         int? orderStatus,
         List<Product>? products,
@@ -30,14 +33,14 @@ class CustomerOrdersModel with _$CustomerOrdersModel {
 class Product with _$Product {
     const factory Product({
         String? name,
-        dynamic categoryId,
+        int? categoryId,
         int? fabricId,
         int? sizeId,
         int? priceUsd,
-        double? priceRub,
-        dynamic quantity,
-        dynamic description,
-        List<String>? photoUrls,
+        int? priceRub,
+        int? quantity,
+        String? description,
+        List<String>? photos,
     }) = _Product;
 
     factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);

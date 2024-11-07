@@ -10,6 +10,7 @@ _$InvoiceModelImpl _$$InvoiceModelImplFromJson(Map<String, dynamic> json) =>
     _$InvoiceModelImpl(
       orderId: (json['orderId'] as num?)?.toInt(),
       preliminaryQuantity: (json['preliminaryQuantity'] as num?)?.toInt(),
+      invoiceUuid: json['invoiceUuid'] as String?,
       pricePerUnit: (json['pricePerUnit'] as num?)?.toInt(),
       preliminaryAmount: (json['preliminaryAmount'] as num?)?.toInt(),
       lekalaCost: (json['lekalaCost'] as num?)?.toInt(),
@@ -23,6 +24,7 @@ Map<String, dynamic> _$$InvoiceModelImplToJson(_$InvoiceModelImpl instance) =>
     <String, dynamic>{
       'orderId': instance.orderId,
       'preliminaryQuantity': instance.preliminaryQuantity,
+      'invoiceUuid': instance.invoiceUuid,
       'pricePerUnit': instance.pricePerUnit,
       'preliminaryAmount': instance.preliminaryAmount,
       'lekalaCost': instance.lekalaCost,

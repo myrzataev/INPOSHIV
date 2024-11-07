@@ -17,6 +17,7 @@ class InvoiceModel with _$InvoiceModel {
     const factory InvoiceModel({
         int? orderId,
         int? preliminaryQuantity,
+        String? invoiceUuid,
         int? pricePerUnit,
         int? preliminaryAmount,
         int? lekalaCost,

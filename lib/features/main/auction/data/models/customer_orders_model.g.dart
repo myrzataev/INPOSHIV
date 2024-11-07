@@ -9,6 +9,9 @@ part of 'customer_orders_model.dart';
 _$CustomerOrdersModelImpl _$$CustomerOrdersModelImplFromJson(
         Map<String, dynamic> json) =>
     _$CustomerOrdersModelImpl(
+      categoryId: (json['categoryId'] as num?)?.toInt(),
+      fabricId: (json['fabricId'] as num?)?.toInt(),
+      description: json['description'] as String?,
       orderId: (json['orderId'] as num?)?.toInt(),
       orderStatus: (json['orderStatus'] as num?)?.toInt(),
       products: (json['products'] as List<dynamic>?)
@@ -26,6 +29,9 @@ _$CustomerOrdersModelImpl _$$CustomerOrdersModelImplFromJson(
 Map<String, dynamic> _$$CustomerOrdersModelImplToJson(
         _$CustomerOrdersModelImpl instance) =>
     <String, dynamic>{
+      'categoryId': instance.categoryId,
+      'fabricId': instance.fabricId,
+      'description': instance.description,
       'orderId': instance.orderId,
       'orderStatus': instance.orderStatus,
       'products': instance.products,
@@ -37,16 +43,15 @@ Map<String, dynamic> _$$CustomerOrdersModelImplToJson(
 _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
     _$ProductImpl(
       name: json['name'] as String?,
-      categoryId: json['categoryId'],
+      categoryId: (json['categoryId'] as num?)?.toInt(),
       fabricId: (json['fabricId'] as num?)?.toInt(),
       sizeId: (json['sizeId'] as num?)?.toInt(),
       priceUsd: (json['priceUsd'] as num?)?.toInt(),
-      priceRub: (json['priceRub'] as num?)?.toDouble(),
-      quantity: json['quantity'],
-      description: json['description'],
-      photoUrls: (json['photoUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
-          .toList(),
+      priceRub: (json['priceRub'] as num?)?.toInt(),
+      quantity: (json['quantity'] as num?)?.toInt(),
+      description: json['description'] as String?,
+      photos:
+          (json['photos'] as List<dynamic>?)?.map((e) => e as String).toList(),
     );
 
 Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
@@ -59,5 +64,5 @@ Map<String, dynamic> _$$ProductImplToJson(_$ProductImpl instance) =>
       'priceRub': instance.priceRub,
       'quantity': instance.quantity,
       'description': instance.description,
-      'photoUrls': instance.photoUrls,
+      'photos': instance.photos,
     };

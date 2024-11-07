@@ -24,7 +24,7 @@ class ChooseCategoryScreen extends StatefulWidget {
 class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
   List<CategoriesEntity> _gender = [];
   List<Subcategory?> _category = [];
-  Set<Subcategory?> selectedCategories = {};
+  Subcategory? selectedSubCategory;
 
   String? _selectedGenderSlug;
   String? _selectedGenderName;
@@ -118,16 +118,18 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                         itemCount: _category.length,
                         itemBuilder: (context, index) {
                           final currentItem = _category[index];
-                          bool isCurrentItemInSelectedCategories =
-                              selectedCategories.contains(currentItem);
+                          // bool isCurrentItemInSelectedCategories =
+                          //     selectedCategories.contains(currentItem);
                           return InkWell(
                             onTap: () {
                               setState(() {
-                                if (selectedCategories.contains(currentItem)) {
-                                  selectedCategories.remove(currentItem);
-                                } else {
-                                  selectedCategories.add(currentItem);
-                                }
+                                selectedSubCategory = currentItem;
+                                // if (selectedCategories.contains(currentItem)) {
+                                //   selectedCategories.remove(currentItem);
+                                // }
+                                // else {
+                                // selectedCategories.add(currentItem);
+                                // }
                               });
                             },
                             customBorder: RoundedRectangleBorder(
@@ -137,7 +139,7 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                               height: 40.h,
                               alignment: Alignment.centerLeft,
                               decoration: BoxDecoration(
-                                  color: isCurrentItemInSelectedCategories
+                                  color: selectedSubCategory == currentItem
                                       ? AppColors.cardsColor
                                       : Colors.transparent,
                                   borderRadius: BorderRadius.circular(10.r)),
@@ -158,7 +160,7 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                                             color: AppColors.accentTextColor),
                                       ),
                                     ),
-                                    isCurrentItemInSelectedCategories
+                                    selectedSubCategory == currentItem
                                         ? SvgPicture.asset(SvgImages.tick)
                                         : const SizedBox()
                                   ],
@@ -255,35 +257,59 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                                 AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 10.h),
-                          child: Wrap(
-                            spacing: 5.w,
-                            runSpacing: 5.h,
-                            children: selectedCategories
-                                .map((element) => Chip(
-                                      backgroundColor: Colors.white,
-                                      label: Text(
-                                        element?.name ?? "",
-                                        style: AppFonts.w400s16.copyWith(
-                                            color: AppColors.accentTextColor),
-                                      ),
-                                      deleteIconColor:
-                                          AppColors.accentTextColor,
-                                      onDeleted: () {
-                                        setState(() {
-                                          selectedCategories.remove(element);
-                                        });
-                                      },
-                                      deleteIcon: Icon(
-                                        Icons.close,
-                                        size: 20.h,
-                                        color: AppColors.accentTextColor,
-                                      ),
-                                    ))
-                                .toList(),
-                          ),
-                        ),
+                        ((selectedSubCategory) != null)
+                            ? Padding(
+                                padding: EdgeInsets.symmetric(vertical: 20.h),
+                                child: Chip(
+                                  backgroundColor: Colors.white,
+                                  label: Text(
+                                    selectedSubCategory?.name ?? "",
+                                    style: AppFonts.w400s16.copyWith(
+                                        color: AppColors.accentTextColor),
+                                  ),
+                                  deleteIconColor: AppColors.accentTextColor,
+                                  onDeleted: () {
+                                    setState(() {
+                                      selectedSubCategory == null;
+                                    });
+                                  },
+                                  deleteIcon: Icon(
+                                    Icons.close,
+                                    size: 20.h,
+                                    color: AppColors.accentTextColor,
+                                  ),
+                                ),
+                              )
+                            : const SizedBox.shrink(),
+                        // Padding(
+                        //   padding: EdgeInsets.only(bottom: 10.h),
+                        //   child: Wrap(
+                        //     spacing: 5.w,
+                        //     runSpacing: 5.h,
+                        //     children: selectedCategories
+                        //         .map((element) => Chip(
+                        //               backgroundColor: Colors.white,
+                        //               label: Text(
+                        //                 element?.name ?? "",
+                        //                 style: AppFonts.w400s16.copyWith(
+                        //                     color: AppColors.accentTextColor),
+                        //               ),
+                        //               deleteIconColor:
+                        //                   AppColors.accentTextColor,
+                        //               onDeleted: () {
+                        //                 setState(() {
+                        //                   selectedCategories.remove(element);
+                        //                 });
+                        //               },
+                        //               deleteIcon: Icon(
+                        //                 Icons.close,
+                        //                 size: 20.h,
+                        //                 color: AppColors.accentTextColor,
+                        //               ),
+                        //             ))
+                        //         .toList(),
+                        //   ),
+                        // ),
                         SizedBox(
                           width: 177.w,
                           child: CustomChooseRoleWidget(
@@ -303,6 +329,10 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                   child: CustomButton(
                       text: "Дальше",
                       onPressed: () {
+                        Provider.of<OrderProvider>(context, listen: false)
+                            .updateProductName(
+                                name: selectedSubCategory?.name ?? "");
+
                         GoRouter.of(context).pushNamed("chooseFabricType");
                       }),
                 )

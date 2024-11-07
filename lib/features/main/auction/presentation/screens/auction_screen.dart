@@ -163,7 +163,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                       itemCount: currentItem
                                                               .products
                                                               ?.first
-                                                              .photoUrls
+                                                              .photos
                                                               ?.length ??
                                                           0,
                                                       separatorBuilder:
@@ -179,7 +179,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                             currentItem
                                                                     .products
                                                                     ?.first
-                                                                    .photoUrls
+                                                                    .photos
                                                                     ?.map((url) =>
                                                                         "${UrlRoutes.baseUrl}$url")
                                                                     .toList() ??
@@ -201,7 +201,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                             child:
                                                                 CachedNetworkImage(
                                                               imageUrl:
-                                                                  "${UrlRoutes.baseUrl}${currentItem.products?.first.photoUrls?[indexForPhotos]}",
+                                                                  "${UrlRoutes.baseUrl}${currentItem.products?.first.photos?[indexForPhotos]}",
                                                             ),
                                                           ),
                                                         );
@@ -221,7 +221,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                       style: AppFonts.w700s16,
                                                     ),
                                                     Text(
-                                                      "580 штук",
+                                                      "${currentItem.products?.first.quantity} штук",
                                                       style: AppFonts.w400s16
                                                           .copyWith(
                                                         color: AppColors
@@ -528,7 +528,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                 itemCount: item
                                                                         .productsList
                                                                         ?.first
-                                                                        .photoUrls
+                                                                        .photos
                                                                         ?.length ??
                                                                     0,
                                                                 separatorBuilder:
@@ -545,7 +545,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                       String> fullPhotoUrls = item
                                                                           .productsList
                                                                           ?.first
-                                                                          .photoUrls
+                                                                          .photos
                                                                           ?.map((url) =>
                                                                               "${UrlRoutes.baseUrl}$url")
                                                                           .toList() ??
@@ -562,7 +562,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                             BorderRadius.circular(6
                                                                                 .r),
                                                                         child: Image.network(
-                                                                            "${UrlRoutes.baseUrl}${item.productsList?.first.photoUrls?[indexForPhotos]}")),
+                                                                            "${UrlRoutes.baseUrl}${item.productsList?.first.photos?[indexForPhotos]}")),
                                                                   );
                                                                 }),
                                                       ),

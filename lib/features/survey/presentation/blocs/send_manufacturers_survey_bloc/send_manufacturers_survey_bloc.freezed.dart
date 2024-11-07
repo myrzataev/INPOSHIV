@@ -18,21 +18,25 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SendManufacturersSurveyEvent {
   Map<String, dynamic> get data => throw _privateConstructorUsedError;
   String get manufacturerId => throw _privateConstructorUsedError;
+  FormData get photo => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Map<String, dynamic> data, String manufacturerId)
+    required TResult Function(
+            Map<String, dynamic> data, String manufacturerId, FormData photo)
         sendData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Map<String, dynamic> data, String manufacturerId)?
+    TResult? Function(
+            Map<String, dynamic> data, String manufacturerId, FormData photo)?
         sendData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Map<String, dynamic> data, String manufacturerId)?
+    TResult Function(
+            Map<String, dynamic> data, String manufacturerId, FormData photo)?
         sendData,
     required TResult orElse(),
   }) =>
@@ -69,7 +73,7 @@ abstract class $SendManufacturersSurveyEventCopyWith<$Res> {
       _$SendManufacturersSurveyEventCopyWithImpl<$Res,
           SendManufacturersSurveyEvent>;
   @useResult
-  $Res call({Map<String, dynamic> data, String manufacturerId});
+  $Res call({Map<String, dynamic> data, String manufacturerId, FormData photo});
 }
 
 /// @nodoc
@@ -90,6 +94,7 @@ class _$SendManufacturersSurveyEventCopyWithImpl<$Res,
   $Res call({
     Object? data = null,
     Object? manufacturerId = null,
+    Object? photo = null,
   }) {
     return _then(_value.copyWith(
       data: null == data
@@ -100,6 +105,10 @@ class _$SendManufacturersSurveyEventCopyWithImpl<$Res,
           ? _value.manufacturerId
           : manufacturerId // ignore: cast_nullable_to_non_nullable
               as String,
+      photo: null == photo
+          ? _value.photo
+          : photo // ignore: cast_nullable_to_non_nullable
+              as FormData,
     ) as $Val);
   }
 }
@@ -112,7 +121,7 @@ abstract class _$$SendDataImplCopyWith<$Res>
       __$$SendDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({Map<String, dynamic> data, String manufacturerId});
+  $Res call({Map<String, dynamic> data, String manufacturerId, FormData photo});
 }
 
 /// @nodoc
@@ -130,6 +139,7 @@ class __$$SendDataImplCopyWithImpl<$Res>
   $Res call({
     Object? data = null,
     Object? manufacturerId = null,
+    Object? photo = null,
   }) {
     return _then(_$SendDataImpl(
       data: null == data
@@ -140,6 +150,10 @@ class __$$SendDataImplCopyWithImpl<$Res>
           ? _value.manufacturerId
           : manufacturerId // ignore: cast_nullable_to_non_nullable
               as String,
+      photo: null == photo
+          ? _value.photo
+          : photo // ignore: cast_nullable_to_non_nullable
+              as FormData,
     ));
   }
 }
@@ -148,7 +162,9 @@ class __$$SendDataImplCopyWithImpl<$Res>
 
 class _$SendDataImpl implements _SendData {
   const _$SendDataImpl(
-      {required final Map<String, dynamic> data, required this.manufacturerId})
+      {required final Map<String, dynamic> data,
+      required this.manufacturerId,
+      required this.photo})
       : _data = data;
 
   final Map<String, dynamic> _data;
@@ -161,10 +177,12 @@ class _$SendDataImpl implements _SendData {
 
   @override
   final String manufacturerId;
+  @override
+  final FormData photo;
 
   @override
   String toString() {
-    return 'SendManufacturersSurveyEvent.sendData(data: $data, manufacturerId: $manufacturerId)';
+    return 'SendManufacturersSurveyEvent.sendData(data: $data, manufacturerId: $manufacturerId, photo: $photo)';
   }
 
   @override
@@ -174,12 +192,13 @@ class _$SendDataImpl implements _SendData {
             other is _$SendDataImpl &&
             const DeepCollectionEquality().equals(other._data, _data) &&
             (identical(other.manufacturerId, manufacturerId) ||
-                other.manufacturerId == manufacturerId));
+                other.manufacturerId == manufacturerId) &&
+            (identical(other.photo, photo) || other.photo == photo));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(_data), manufacturerId);
+  int get hashCode => Object.hash(runtimeType,
+      const DeepCollectionEquality().hash(_data), manufacturerId, photo);
 
   /// Create a copy of SendManufacturersSurveyEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -192,30 +211,33 @@ class _$SendDataImpl implements _SendData {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(Map<String, dynamic> data, String manufacturerId)
+    required TResult Function(
+            Map<String, dynamic> data, String manufacturerId, FormData photo)
         sendData,
   }) {
-    return sendData(data, manufacturerId);
+    return sendData(data, manufacturerId, photo);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(Map<String, dynamic> data, String manufacturerId)?
+    TResult? Function(
+            Map<String, dynamic> data, String manufacturerId, FormData photo)?
         sendData,
   }) {
-    return sendData?.call(data, manufacturerId);
+    return sendData?.call(data, manufacturerId, photo);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(Map<String, dynamic> data, String manufacturerId)?
+    TResult Function(
+            Map<String, dynamic> data, String manufacturerId, FormData photo)?
         sendData,
     required TResult orElse(),
   }) {
     if (sendData != null) {
-      return sendData(data, manufacturerId);
+      return sendData(data, manufacturerId, photo);
     }
     return orElse();
   }
@@ -252,12 +274,15 @@ class _$SendDataImpl implements _SendData {
 abstract class _SendData implements SendManufacturersSurveyEvent {
   const factory _SendData(
       {required final Map<String, dynamic> data,
-      required final String manufacturerId}) = _$SendDataImpl;
+      required final String manufacturerId,
+      required final FormData photo}) = _$SendDataImpl;
 
   @override
   Map<String, dynamic> get data;
   @override
   String get manufacturerId;
+  @override
+  FormData get photo;
 
   /// Create a copy of SendManufacturersSurveyEvent
   /// with the given fields replaced by the non-null parameter values.

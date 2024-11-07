@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inposhiv/features/survey/data/models/create_manufacturers_profile_model.dart';
 import 'package:inposhiv/features/survey/data/repositories/send_manufacturer_survey_repoimpl.dart';
@@ -17,7 +18,9 @@ class SendManufacturersSurveyBloc
         emit(const SendManufacturersSurveyState.loading());
         final result =
             await sendManufacturerSurveryRepoImpl.createManufacturereProfile(
-                data: event.data, manufacturerUuid: event.manufacturerId);
+                data: event.data,
+                manufacturerUuid: event.manufacturerId,
+                photo: event.photo);
         emit(SendManufacturersSurveyState.loaded(model: result));
       } catch (e) {
         emit(SendManufacturersSurveyState.error(errorText: e.toString()));

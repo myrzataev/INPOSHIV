@@ -41,12 +41,12 @@ class _ChatScreenState extends State<ChatScreen> {
   final preferences = locator<SharedPreferences>();
   String? chatUuid; // Static UUID, modify this as needed
   List<types.Message> _messages = []; // List of chat messages
-  String? chatUuidMock =
-      "9e205782-e9ea-40e0-9465-19efbe7709ea_f9b4d387-871a-4123-9a73-70830c220e88"; // Static UUID, modify this as needed
-  String? senderIdMock =
-      "9e205782-e9ea-40e0-9465-19efbe7709ea"; // Static UUID, modify this as needed
-  String? receipentIdMock =
-      "f9b4d387-871a-4123-9a73-70830c220e88"; // Static UUID, modify this as needed
+  // String? chatUuidMock =
+  //     "9e205782-e9ea-40e0-9465-19efbe7709ea_f9b4d387-871a-4123-9a73-70830c220e88"; // Static UUID, modify this as needed
+  // String? senderIdMock =
+  //     "9e205782-e9ea-40e0-9465-19efbe7709ea"; // Static UUID, modify this as needed
+  // String? receipentIdMock =
+  //     "f9b4d387-871a-4123-9a73-70830c220e88"; // Static UUID, modify this as needed
 
   late final _currentUser;
   late final _secondUser;
@@ -75,7 +75,7 @@ class _ChatScreenState extends State<ChatScreen> {
   void connect() {
     stompClient = StompClient(
       config: StompConfig.sockJS(
-        url: 'http://192.168.31.141:8080/ws', // Replace with your WebSocket URL
+        url: 'http://192.168.31.208:8080/ws', // Replace with your WebSocket URL
         onConnect: (StompFrame frame) {
           debugPrint('Connected to WebSocket');
           debugPrint('Frame Headers: ${frame.headers}');
@@ -92,8 +92,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 var receivedMessage = jsonDecode(frame.body!);
                 print('Received frame message: ${receivedMessage}');
 
-                if (receivedMessage['senderUuid'] != senderIdMock
-                    // _currentUser.id
+                if (receivedMessage['senderUuid'] != 
+                // senderIdMock
+                    _currentUser.id
                     ) {
                   _handleIncomingMessage(
                       receivedMessage); // Handle incoming message
@@ -206,18 +207,18 @@ class _ChatScreenState extends State<ChatScreen> {
               child: CustomButton(
                   text: "Сформировать заказ",
                   onPressed: () {
-                    String? userIdFromPrefs = preferences.getString("userId");
+                    // String? userIdFromPrefs = preferences.getString("userId");
 
-                    if (userIdFromPrefs != null &&
-                        _secondUser.id == userIdFromPrefs) {
-                      print(
-                          "User ID from SharedPreferences matches _secondUser ID");
-                    } else {
-                      print("User ID does not match _secondUser ID");
-                    }
+                    // if (userIdFromPrefs != null &&
+                    //     _secondUser.id == userIdFromPrefs) {
+                    //   print(
+                    //       "User ID from SharedPreferences matches _secondUser ID");
+                    // } else {
+                    //   print("User ID does not match _secondUser ID");
+                    // }
 
-                    // GoRouter.of(context).pushNamed("orderDetails",
-                    //     queryParameters: {"orderId": "1"});
+                    GoRouter.of(context).pushNamed("orderDetails",
+                        queryParameters: {"orderId": "1"});
                   }),
             ),
           ),

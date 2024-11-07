@@ -53,7 +53,7 @@ class _ChatTabState extends State<ChatTab> {
     print("connect method is calling");
     stompClient = StompClient(
       config: StompConfig.sockJS(
-        url: 'http://192.168.31.141:8080/ws',
+        url: 'http://192.168.31.208:8080/ws',
         onConnect: (StompFrame frame) {
           stompClient!.subscribe(
             destination: "/getChatRooms/${preferences.getString("userId")}",
@@ -137,8 +137,8 @@ class _ChatTabState extends State<ChatTab> {
                         ),
                     chatRoomsLoaded: (model) {
                       if (model.isEmpty) {
-                        return const Center(
-                          child: Text("empty"),
+                        return  Center(
+                          child: Text("Начните переписываться", style: AppFonts.w700s16,),
                         );
                       } else {
                         return _buildChatRoomsList(model, () {

@@ -8,12 +8,18 @@ class OrderProvider extends ChangeNotifier {
   int? priceUsd;
   int? sizeId;
   int? quantity;
+  double? currency;
   void updateFabricId({int? id}) {
     fabricId = id;
     notifyListeners();
   }
 
-  void updateCategoryId({int? id}) {
+  void updateCurrency({required double newCurrency}) {
+    currency = newCurrency;
+    notifyListeners();
+  }
+
+  void updateCategoryId({required int? id}) {
     categoryId = id;
     notifyListeners();
   }
@@ -34,8 +40,8 @@ class OrderProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void updateProductName({int? id}) {
-    fabricId = id;
+  void updateProductName({required String? name}) {
+    productName = name;
     notifyListeners();
   }
 }

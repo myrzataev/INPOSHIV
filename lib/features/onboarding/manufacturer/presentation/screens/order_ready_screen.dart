@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
@@ -13,7 +14,6 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
-import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/create_auction_bloc/create_auction_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/providers/order_provider.dart';
@@ -26,10 +26,12 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderReadyScreen extends StatefulWidget {
-  final String retailPrice;
   final String totalPriceInRuble;
-  const OrderReadyScreen(
-      {super.key, required this.retailPrice, required this.totalPriceInRuble});
+
+  const OrderReadyScreen({
+    super.key,
+    required this.totalPriceInRuble,
+  });
 
   @override
   State<OrderReadyScreen> createState() => _OrderReadyScreenState();
@@ -119,11 +121,14 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                         return Stack(children: [
                           ClipRRect(
                               borderRadius: BorderRadius.circular(15.r),
-                              child: Image.file(
-                                File(images?[caruselIndex].path ?? ""),
-                                fit: BoxFit.contain,
-                                height: 300.h,
-                                width: double.infinity,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: Image.file(
+                                  File(images?[caruselIndex].path ?? ""),
+                                  fit: BoxFit.contain,
+                                  height: 300.h,
+                                  width: double.infinity,
+                                ),
                               )),
                         ]);
                       },
@@ -183,7 +188,7 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 8.h),
                     child: Text(
-                      "${double.parse(widget.retailPrice).toStringAsFixed(2)} руб за единицу, итого ${double.parse(widget.totalPriceInRuble).toStringAsFixed(2)} руб",
+                      "${(vm.priceRub ?? 0).toStringAsFixed(2)} руб за единицу, итого ${double.parse(widget.totalPriceInRuble).toStringAsFixed(2)} руб",
                       style: AppFonts.w400s16.copyWith(),
                     ),
                   ),
@@ -234,29 +239,25 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                   onPressed: () async {
                     final formDataMap = {
                       "categoryId": vm.categoryId,
-                      "products[0].fabricId": vm.fabricId,
-                      "products[0].sizeId": 1,
-                      "products[0].priceUsd": vm.priceUsd,
-                      "products[0].priceRub": vm.priceRub,
-                      "products[0].name": "Штаны",
-                      "products[0].photos":
-                          await Future.wait(images!.map((image) async {
+                      "fabricId": vm.fabricId,
+                      "priceUsd": vm.priceUsd,
+                      "priceRub": vm.priceRub,
+                      "productName": vm.productName,
+                      "quantity": totalCount,
+                      "sizeQuantitiesJson": jsonEncode({
+                        "1": sizesVm[0].quantity,
+                        "2": sizesVm[1].quantity,
+                        "3": sizesVm[2].quantity,
+                        "4": sizesVm[3].quantity,
+                        "5": sizesVm[4].quantity,
+                        "6": sizesVm[5].quantity,
+                      }),
+                      "photos": await Future.wait(images!.map((image) async {
                         return await MultipartFile.fromFile(image.path,
                             filename: image.name);
                       })),
                     };
 
-// Dynamically add "sizeQuantities[i]" keys to the map based on the sizesVm list
-                    for (int i = 0; i < sizesVm.length; i++) {
-                      final sizeItem = sizesVm[i];
-                      if (sizeItem != null) {
-                        formDataMap["sizeQuantities[$i]"] =
-                            sizeItem.quantity ?? totalCount;
-                        // Here, `totalCount` is used as a fallback if sizeItem.totalCount is null
-                      }
-                    }
-
-// Finally, create the FormData from the map
                     final formData = FormData.fromMap(formDataMap);
                     // print(formData);
                     formData.fields.forEach((field) {

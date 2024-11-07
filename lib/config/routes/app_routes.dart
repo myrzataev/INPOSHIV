@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/about_app_screen.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/faq_screen.dart';
@@ -8,6 +7,8 @@ import 'package:inposhiv/features/about_app/presentation/screens/settings_screen
 import 'package:inposhiv/features/auth/presentation/screens/authorization_screen.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/detailed_view_screen.dart';
+import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
+import 'package:inposhiv/features/main/home/presentation/customer/screens/notications_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/approve_invoice_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/order_detail_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/see_doc_screen.dart';
@@ -33,6 +34,7 @@ import 'package:inposhiv/features/onboarding/customer/presentation/screens/secon
 import 'package:inposhiv/features/auth/presentation/screens/sms_verification_screen.dart';
 import 'package:inposhiv/features/auth/presentation/screens/splash_screen.dart';
 import 'package:inposhiv/features/auth/presentation/screens/start_first_deal.dart';
+import 'package:inposhiv/features/survey/data/models/create_manufacturers_profile_model.dart';
 import 'package:inposhiv/features/survey/presentation/screens/choose_category.dart';
 import 'package:inposhiv/features/survey/presentation/screens/choose_specialization.dart';
 import 'package:inposhiv/features/survey/presentation/screens/end_of_survey_screen.dart';
@@ -57,8 +59,7 @@ import 'package:inposhiv/features/main/home/presentation/customer/screens/search
 import 'package:inposhiv/features/main/home/presentation/customer/screens/top_up_balance_screen.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/user_profile_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/features/tracking/presentation/screens/first_tracking_screen.dart';
-import 'package:inposhiv/features/tracking/presentation/screens/second_tracking_screen.dart';
+import 'package:inposhiv/features/tracking/presentation/screens/tracking_screen.dart';
 import 'package:inposhiv/internal/bottom_navigation_bar.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -68,10 +69,10 @@ final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation:
         // "/",
-        // "/main",
+        "/main",
     // "/registration",
     //  "/chooseImageSource",
-     "/surveyStartScreen",
+    //  "/surveyStartScreen",
     routes: [
       GoRoute(
         path: "/",
@@ -292,13 +293,12 @@ final GoRouter router = GoRouter(
         path: "/orderReady",
         name: "orderReady",
         builder: (context, state) {
-          final String retailPrice =
-              state.uri.queryParameters["retaiPrice"] ?? "0";
+          // final String retailPrice =
+          //     state.uri.queryParameters["retaiPrice"] ?? "0";
           final String totalSumRuble =
               state.uri.queryParameters["totalPrice"] ?? "0";
 
           return OrderReadyScreen(
-            retailPrice: retailPrice,
             totalPriceInRuble: totalSumRuble,
           );
         },
@@ -307,9 +307,9 @@ final GoRouter router = GoRouter(
         path: "/profileReady",
         name: "profileReady",
         builder: (context, state) {
-          final description = state.uri.queryParameters["description"];
+          final model = state.extra as CreateManufacturersProfileModel;
           return ProfileReadyScreen(
-            descriptionOfCompany: description ?? "",
+            model: model,
           );
         },
       ),
@@ -349,7 +349,8 @@ final GoRouter router = GoRouter(
                       name: "detailed",
                       parentNavigatorKey: _rootNavigatorKey,
                       builder: (context, state) {
-                        CardsModel model = state.extra as CardsModel;
+                        ManufacturersProfileModel model =
+                            state.extra as ManufacturersProfileModel;
                         return DetailedScreen(model: model);
                       },
                     ),
@@ -431,6 +432,14 @@ final GoRouter router = GoRouter(
                       parentNavigatorKey: _rootNavigatorKey,
                       builder: (context, state) {
                         return const SettingsScreen();
+                      },
+                    ),
+                    GoRoute(
+                      path: "notifications",
+                      name: "notifications",
+                      parentNavigatorKey: _rootNavigatorKey,
+                      builder: (context, state) {
+                        return const NoticationsScreen();
                       },
                     ),
                   ])
@@ -563,15 +572,7 @@ final GoRouter router = GoRouter(
                     name: "trackingFirst",
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
-                      return const FirstTrackingScreen();
-                    },
-                  ),
-                  GoRoute(
-                    path: "secondTrackingScreen",
-                    name: "secondTrackingScreen",
-                    parentNavigatorKey: _rootNavigatorKey,
-                    builder: (context, state) {
-                      return const SecondTrackingScreen();
+                      return const TrackingScreen();
                     },
                   ),
                   GoRoute(

@@ -172,6 +172,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         children: [
                           // User Contact Fields
                           CustomProfileTextField(
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Это поле является обязательным";
+                              }
+                              return null;
+                            },
                             controller: emailController,
                             textAlign: TextAlign.start,
                             labelText: "E-mail",
@@ -187,6 +193,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 10.h),
                             child: CustomProfileTextField(
+                                 validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Это поле является обязательным";
+                              }
+                              return null;
+                            },
                               textAlign: TextAlign.start,
                               controller: phoneNumberController,
                               labelText: "Номер телефона",
@@ -203,6 +215,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                           Padding(
                             padding: EdgeInsets.only(bottom: 30.h),
                             child: CustomProfileTextField(
+                                 validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Это поле является обязательным";
+                              }
+                              return null;
+                            },
                               controller: passwordController,
                               labelText: "Пароль",
                               hintText: "Пароль",

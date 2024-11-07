@@ -1,27 +1,29 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
-import 'package:inposhiv/features/onboarding/customer/data/models/size_model.dart';
+import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/data/feedback_mocked_data.dart';
-import 'package:inposhiv/features/main/home/data/mocked_data.dart';
 import 'package:inposhiv/features/main/home/data/mocked_history_data.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_appbar.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_choise_widget.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/history_card.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailedScreen extends StatefulWidget {
-  final CardsModel model;
+  final ManufacturersProfileModel model;
   const DetailedScreen({super.key, required this.model});
 
   @override
@@ -33,11 +35,17 @@ class _MainScreenState extends State<DetailedScreen> {
       CarouselSliderController();
   int _currentIndex = 0;
   int selectedIndex = 0;
+  int _carouselIndex = 0;
   bool isExpanded = false;
   // Add a PageController for handling page transitions.
   late PageController _pageController;
+  bool? isCustomer;
+  final preferences = locator<SharedPreferences>();
+
   @override
   void initState() {
+    isCustomer = preferences.getBool("isCustomer");
+
     _pageController =
         PageController(initialPage: _currentIndex, keepPage: true);
     super.initState();
@@ -48,10 +56,10 @@ class _MainScreenState extends State<DetailedScreen> {
     bool isAndroid = Platform.isAndroid;
     List<MockedHistoryModel> historyList = MockedHistoryData.data;
     List<FeedbackMockedModel> mockedFeedbackData = FeedbackMockedData.data;
-
-    final int role = Provider.of<RoleProvider>(context).role;
-    bool isCreator = role == 0;
-
+    final List<String> fullPhotoUrls = widget.model.photosUrls
+            ?.map((url) => "${UrlRoutes.baseUrl}$url")
+            .toList() ??
+        [];
     List<SizeModelWithController> sizesVm =
         Provider.of<SizeProvider>(context, listen: true).sizes;
     return Scaffold(
@@ -67,7 +75,7 @@ class _MainScreenState extends State<DetailedScreen> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               const CustomAppBar(),
-              role == 1
+              (isCustomer ?? true)
                   ? Padding(
                       padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
                       child: Row(
@@ -122,7 +130,7 @@ class _MainScreenState extends State<DetailedScreen> {
                   : const SizedBox.shrink(),
 
               // Use PageView for smooth horizontal scrolling between tabs.
-              role == 1
+              (isCustomer ?? true)
                   ? Expanded(
                       child: PageView(
                         controller: _pageController,
@@ -150,8 +158,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                           CarouselSlider.builder(
                                             carouselController:
                                                 _carouselSliderController,
-                                            itemCount: widget
-                                                .model.carouselImage.length,
+                                            itemCount: fullPhotoUrls.length,
                                             options: CarouselOptions(
                                               autoPlay: false,
                                               enlargeCenterPage: true,
@@ -161,7 +168,8 @@ class _MainScreenState extends State<DetailedScreen> {
                                               onPageChanged:
                                                   (indexCarousel, reason) {
                                                 setState(() {
-                                                  _currentIndex = indexCarousel;
+                                                  _carouselIndex =
+                                                      indexCarousel;
                                                 });
                                               },
                                             ),
@@ -172,12 +180,25 @@ class _MainScreenState extends State<DetailedScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15.r),
-                                                    child: Image.asset(
-                                                        fit: BoxFit.fill,
-                                                        width: double.infinity,
-                                                        widget.model
-                                                                .carouselImage[
-                                                            caruselIndex])),
+                                                    child: fullPhotoUrls
+                                                            .isNotEmpty
+                                                        ? CachedNetworkImage(
+                                                            progressIndicatorBuilder:
+                                                                (context, url,
+                                                                        progress) =>
+                                                                    const Center(
+                                                                      child: CircularProgressIndicator
+                                                                          .adaptive(),
+                                                                    ),
+                                                            fit: BoxFit.fill,
+                                                            // height: 350.h,
+                                                            width:
+                                                                double.infinity,
+                                                            imageUrl:
+                                                                fullPhotoUrls[
+                                                                    caruselIndex])
+                                                        : Image.asset(
+                                                            Images.good1)),
                                               ]);
                                             },
                                           ),
@@ -203,7 +224,8 @@ class _MainScreenState extends State<DetailedScreen> {
                                                         EdgeInsets.symmetric(
                                                             horizontal: 14.w),
                                                     child: Text(
-                                                      "Очень надежный",
+                                                      widget.model.trustLevel ??
+                                                          "",
                                                       style: AppFonts.w400s16
                                                           .copyWith(
                                                               color: AppColors
@@ -214,8 +236,10 @@ class _MainScreenState extends State<DetailedScreen> {
                                                 CircleAvatar(
                                                   backgroundColor: Colors.white,
                                                   radius: 20.r,
+                                                  // ignore: deprecated_member_use
                                                   child: SvgPicture.asset(
                                                     SvgImages.chat,
+                                                    // ignore: deprecated_member_use
                                                     color: AppColors
                                                         .accentTextColor,
                                                   ),
@@ -226,10 +250,11 @@ class _MainScreenState extends State<DetailedScreen> {
                                           Positioned(
                                             bottom: 10.h,
                                             child: DotsIndicator(
-                                              dotsCount: widget
-                                                  .model.carouselImage.length,
-                                              position: _currentIndex,
-                                              // position: _currentIndex.toDouble(),
+                                              dotsCount:
+                                                  fullPhotoUrls.isNotEmpty
+                                                      ? fullPhotoUrls.length
+                                                      : 1,
+                                              position: _carouselIndex,
                                               decorator: DotsDecorator(
                                                   activeColor: Colors.white,
                                                   size: Size(10.w, 10.h)),
@@ -242,7 +267,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                       child: Row(
                                         children: [
                                           Text(
-                                            widget.model.locaionName,
+                                            widget.model.companyName ?? "",
                                             style: AppFonts.w700s20.copyWith(
                                                 color:
                                                     AppColors.accentTextColor),
@@ -258,21 +283,21 @@ class _MainScreenState extends State<DetailedScreen> {
                                             ),
                                           ),
                                           Text(
-                                            "${widget.model.rating}",
+                                            widget.model.rating.toString(),
                                             style: AppFonts.w700s16,
                                           )
                                         ],
                                       ),
                                     ),
                                     Text(
-                                      widget.model.description,
+                                      widget.model.companyDescription ?? "",
                                       style: AppFonts.w400s16,
                                     ),
                                     Padding(
                                       padding:
                                           EdgeInsets.symmetric(vertical: 10.h),
                                       child: Text(
-                                        "Выполнено в Inposhiv ${widget.model.quantity} заказов.",
+                                        "Выполнено в Inposhiv ${40} заказов.",
                                         style: AppFonts.w400s16.copyWith(
                                             color: AppColors.accentTextColor),
                                       ),
@@ -287,14 +312,14 @@ class _MainScreenState extends State<DetailedScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Выполнено в Inposhiv ${widget.model.quantity} заказов.",
+                                "Выполнено в Inposhiv ${40} заказов.",
                                 style: AppFonts.w400s16.copyWith(
                                     color: AppColors.accentTextColor,
                                     fontFamily: "SF Pro"),
                               ),
                               Expanded(
                                 child: ListView.separated(
-                                    itemCount: historyList.length,
+                                    itemCount: historyList.length ?? 1,
                                     separatorBuilder: (context, index) {
                                       return const Divider();
                                     },
@@ -329,8 +354,8 @@ class _MainScreenState extends State<DetailedScreen> {
                                           CarouselSlider.builder(
                                             carouselController:
                                                 _carouselSliderController,
-                                            itemCount: widget
-                                                .model.carouselImage.length,
+                                            itemCount:
+                                                fullPhotoUrls?.length ?? 1,
                                             options: CarouselOptions(
                                               autoPlay: false,
                                               enlargeCenterPage: true,
@@ -352,11 +377,10 @@ class _MainScreenState extends State<DetailedScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15.r),
-                                                    child: Image.asset(
+                                                    child: CachedNetworkImage(
                                                       fit: BoxFit.fill,
                                                       width: double.infinity,
-                                                      widget.model
-                                                              .carouselImage[
+                                                      imageUrl: fullPhotoUrls[
                                                           caruselIndex],
                                                     ),
                                                   ),
@@ -367,8 +391,8 @@ class _MainScreenState extends State<DetailedScreen> {
                                           Positioned(
                                             bottom: 10.h,
                                             child: DotsIndicator(
-                                              dotsCount: widget
-                                                  .model.carouselImage.length,
+                                              dotsCount:
+                                                  fullPhotoUrls?.length ?? 1,
                                               position: _currentIndex,
                                               decorator: DotsDecorator(
                                                 activeColor: Colors.white,
@@ -386,7 +410,8 @@ class _MainScreenState extends State<DetailedScreen> {
                                             true, // Allows ListView to wrap its content
                                         physics:
                                             const NeverScrollableScrollPhysics(), // Disable its own scroll
-                                        itemCount: mockedFeedbackData.length,
+                                        itemCount:
+                                            mockedFeedbackData.length ?? 1,
                                         itemBuilder: (context, index) {
                                           final FeedbackMockedModel
                                               currentItem =
@@ -469,8 +494,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                   CarouselSlider.builder(
                                     carouselController:
                                         _carouselSliderController,
-                                    itemCount:
-                                        widget.model.carouselImage.length,
+                                    itemCount: fullPhotoUrls?.length ?? 1,
                                     options: CarouselOptions(
                                       autoPlay: false,
                                       enlargeCenterPage: true,
@@ -492,7 +516,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                             child: Image.asset(
                                                 fit: BoxFit.fill,
                                                 width: double.infinity,
-                                                widget.model.carouselImage[
+                                                widget.model.photosUrls?[
                                                     caruselIndex])),
                                       ]);
                                     },
@@ -537,8 +561,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                   Positioned(
                                     bottom: 10.h,
                                     child: DotsIndicator(
-                                      dotsCount:
-                                          widget.model.carouselImage.length,
+                                      dotsCount: fullPhotoUrls?.length ?? 1,
                                       position: _currentIndex,
                                       // position: _currentIndex.toDouble(),
                                       decorator: DotsDecorator(
@@ -552,12 +575,12 @@ class _MainScreenState extends State<DetailedScreen> {
                                   child: Row(
                                     children: [
                                       Text(
-                                        widget.model.locaionName,
+                                        widget.model.companyName ?? "",
                                         style: AppFonts.w700s20.copyWith(
                                             color: AppColors.accentTextColor),
                                       ),
                                       const Spacer(),
-                                      isCreator
+                                      (isCustomer ?? true)
                                           ? Text(
                                               "825 штук",
                                               style: AppFonts.w400s16.copyWith(
@@ -573,7 +596,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                                 width: 16.w,
                                               ),
                                             ),
-                                      isCreator
+                                      (isCustomer ?? true)
                                           ? const SizedBox.shrink()
                                           : Text(
                                               "${widget.model.rating}",
@@ -583,12 +606,12 @@ class _MainScreenState extends State<DetailedScreen> {
                                   ),
                                 ),
                                 Text(
-                                  isCreator
+                                  (isCustomer ?? true)
                                       ? "600 руб за единицу, итого 348 000 руб"
-                                      : widget.model.description,
+                                      : widget.model.companyDescription,
                                   style: AppFonts.w400s16,
                                 ),
-                                isCreator
+                                (isCustomer ?? true)
                                     ? Column(
                                         children: [
                                           InkWell(
@@ -600,8 +623,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                             child: Row(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
-                                                  mainAxisSize: MainAxisSize.max,
-                                                  
+                                              mainAxisSize: MainAxisSize.max,
                                               children: [
                                                 Text(
                                                   "Размерный ряд",
@@ -636,7 +658,8 @@ class _MainScreenState extends State<DetailedScreen> {
                                                             mainAxisExtent:
                                                                 30.h,
                                                             crossAxisCount: 2),
-                                                    itemCount: sizesVm.length,
+                                                    itemCount:
+                                                        sizesVm.length ?? 1,
                                                     itemBuilder:
                                                         (context, index) {
                                                       return Text(
@@ -655,7 +678,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                         padding: EdgeInsets.symmetric(
                                             vertical: 10.h),
                                         child: Text(
-                                          "Выполнено в Inposhiv ${widget.model.quantity} заказов.",
+                                          "Выполнено в Inposhiv ${50} заказов.",
                                           style: AppFonts.w400s16.copyWith(
                                               color: AppColors.accentTextColor),
                                         ),
@@ -674,7 +697,9 @@ class _MainScreenState extends State<DetailedScreen> {
             left: 20.w,
             right: 20.w,
             child: CustomButton(
-                text: role == 0 ? "Участвовать" : "Связаться с производителем",
+                text: isCustomer == 0
+                    ? "Участвовать"
+                    : "Связаться с производителем",
                 onPressed: () {}))
       ]),
     );

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +11,11 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
-import 'package:inposhiv/features/auth/presentation/widgets/custom_choose_image_button.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/search_order_bloc/search_order_bloc.dart';
+import 'package:inposhiv/features/onboarding/customer/data/models/fabric_type_model.dart';
+import 'package:inposhiv/features/onboarding/customer/presentation/blocs/get_fabric_types_bloc/get_fabric_types_bloc.dart';
+import 'package:inposhiv/features/survey/domain/entities/categories_entity.dart';
+import 'package:inposhiv/features/survey/presentation/blocs/get_categories_bloc/get_categories_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -20,236 +26,213 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _ChooseCategoryScreenState extends State<SearchScreen> {
-  final List<String> _items = [
-    'Блузки',
-    'Кофты',
-    'Худи',
-    'Свитшоты'
-  ]; // List of dropdown items
-  final List<String> _materials = ['Хлопок', 'Шерсть', 'Лен', 'шелк'];
-  String? _selectedValue; // Selected dropdown value
+  List<Subcategory>? _subcategories; // List of dropdown items
+  List<FabricTypeModel>? _fabricTypes;
+  Subcategory? _selectedSubCategory; // Selected dropdown value
+  List<CategoriesEntity>? categories;
+  CategoriesEntity? category;
+  FabricTypeModel? _selectedFabricType;
+  final TextEditingController _searchText = TextEditingController();
 
-  // bool _isDropdownOpen = false;
-  String? category;
-  String? _selectedValueForSecond; // Selected dropdown value
-
-  final List<XFile>? _selectedImages = [];
-  final int _maxImages = 3;
-  final ImagePicker _picker = ImagePicker();
   @override
   void initState() {
-    _selectedValue = _items.first;
-    _selectedValueForSecond = _materials.first;
+    // _selectedValue = _items.first;
+    callBlocEvent();
+    getFabrics();
     super.initState();
+  }
+
+  void callBlocEvent() {
+    BlocProvider.of<GetCategoriesBloc>(context)
+        .add(const GetCategoriesEvent.getAllCategories());
+  }
+
+  void getFabrics() {
+    BlocProvider.of<GetFabricTypesBloc>(context)
+        .add(const GetFabricTypesEvent.getFabricTypes());
   }
 
   @override
   Widget build(BuildContext context) {
     bool isAndroid = Platform.isAndroid;
     return Scaffold(
-      body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Stack(children: [
-          ListView(
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(top: isAndroid ? 5.h : 0),
-                  child: TextField(
-                    textAlign: TextAlign.center,
-                    cursorColor: AppColors.borderColor,
-                    decoration: InputDecoration(
-                        filled: true,
-                        hintText: "Поиск по названию товара",
-                        hintStyle: AppFonts.w400s16,
-                        fillColor: AppColors.containersGrey,
-                        prefixIconConstraints:
-                            BoxConstraints(maxHeight: 24.h, maxWidth: 54.w),
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.only(left: 10.w),
-                          child: SvgPicture.asset(
-                            SvgImages.search,
-                            height: 24.h,
-                            width: 24.w,
-                          ),
-                        ),
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(50.r))),
-                  )),
-              Padding(
-                  padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                  child: CustomChooseImageButton(
-                    onTap: () {
-                      _pickImageFromGallery();
-                    },
-                    text: "Добавить фото",
-                    icon: Icons.add,
-                  )),
-              CustomChooseImageButton(
-                onTap: () {
-                  _pickImageFromCamera();
+      body: BlocListener<SearchOrderBloc, SearchOrderState>(
+        listener: (context, state) {
+          state.maybeWhen(
+              loading: () {
+                print("loading");
+                EasyLoading.show(
+                  indicator: const CircularProgressIndicator.adaptive(),
+                  status: "loading",
+                  maskType: EasyLoadingMaskType.black,
+                );
+              },
+              loaded: (modelList) {
+                EasyLoading.dismiss();
+
+                GoRouter.of(context).pushReplacementNamed("main",
+                    queryParameters: {"isFromSearch": "true"});
+              },
+              error: (errorText) {
+                EasyLoading.dismiss();
+              },
+              orElse: () {});
+        },
+        child: BlocListener<GetCategoriesBloc, GetCategoriesState>(
+          listener: (context, state) {
+            state.maybeWhen(
+                loaded: (entity) {
+                  setState(() {
+                    categories = entity;
+                  });
                 },
-                text: "Сделать новое фото",
-                icon: Icons.camera_alt_outlined,
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                child: Text(
-                  "Тип одежды",
-                  style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
-                ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: CustomChooseRoleWidget(
-                      isChoosed: category == "Мужская",
-                      onTap: () {
-                        setState(() {
-                          category = "Мужская";
-                        });
-                      },
-                      text: "Мужская",
+                orElse: () {});
+          },
+          child: BlocListener<GetFabricTypesBloc, GetFabricTypesState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                orElse: () {},
+                loaded: (model) {
+                  setState(() {
+                    _fabricTypes = model;
+                  });
+                },
+              );
+            },
+            child: SafeArea(
+                child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Stack(children: [
+                ListView(
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.only(top: isAndroid ? 5.h : 0),
+                        child: TextField(
+                          controller: _searchText,
+                          textAlign: TextAlign.center,
+                          cursorColor: AppColors.borderColor,
+                          decoration: InputDecoration(
+                              filled: true,
+                              hintText: "Поиск по названию товара",
+                              hintStyle: AppFonts.w400s16,
+                              fillColor: AppColors.containersGrey,
+                              prefixIconConstraints: BoxConstraints(
+                                  maxHeight: 24.h, maxWidth: 54.w),
+                              prefixIcon: Padding(
+                                padding: EdgeInsets.only(left: 10.w),
+                                child: SvgPicture.asset(
+                                  SvgImages.search,
+                                  height: 24.h,
+                                  width: 24.w,
+                                ),
+                              ),
+                              border: OutlineInputBorder(
+                                  borderSide: BorderSide.none,
+                                  borderRadius: BorderRadius.circular(50.r))),
+                        )),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                      child: Text(
+                        "Тип одежды",
+                        style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Expanded(
-                    child: CustomChooseRoleWidget(
-                      isChoosed: category == "Женская",
-                      onTap: () {
-                        setState(() {
-                          category = "Женская";
-                        });
-                      },
-                      text: "Женская",
+                    SizedBox(
+                        height: 50.h,
+                        child: ListView.separated(
+                            separatorBuilder: (context, index) => SizedBox(
+                                  width: 7.w,
+                                ),
+                            scrollDirection: Axis.horizontal,
+                            itemCount: categories?.length ?? 0,
+                            itemBuilder: (context, index) {
+                              return CustomChooseRoleWidget(
+                                  text: categories?[index].name ?? "",
+                                  isChoosed: categories?[index] == category,
+                                  onTap: () {
+                                    setState(() {
+                                      category = categories?[index];
+                                      _subcategories =
+                                          category?.subcategories ?? [];
+                                          _selectedSubCategory = null;
+                                    });
+                                  });
+                            })),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                      child: Text(
+                        "Категория",
+                        style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  Expanded(
-                    child: CustomChooseRoleWidget(
-                      isChoosed: category == "Детская",
-                      onTap: () {
-                        setState(() {
-                          category = "Детская";
-                        });
-                      },
-                      text: "Детская",
+                    DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            hintText: "Выберите тип одежды",
+                            filled: true,
+                            fillColor: AppColors.containersGrey,
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10.r))),
+                        value: _selectedSubCategory,
+                        dropdownColor: Colors.white,
+                        items: (_subcategories ?? [])
+                            .map((toElement) => DropdownMenuItem(
+                                value: toElement,
+                                child: Text(toElement.name ?? "")))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedSubCategory = value;
+                          });
+                        }),
+                    Padding(
+                      padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                      child: Text(
+                        "Материал",
+                        style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+                      ),
                     ),
-                  )
-                ],
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                child: Text(
-                  "Категория",
-                  style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+                    DropdownButtonFormField(
+                        decoration: InputDecoration(
+                            filled: true,
+                            hintText: "Выберите материал",
+                            fillColor: AppColors.containersGrey,
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(10.r))),
+                        value: _selectedFabricType,
+                        dropdownColor: Colors.white,
+                        items: (_fabricTypes ?? [])
+                            .map((toElement) => DropdownMenuItem(
+                                value: toElement,
+                                child: Text(toElement.name ?? "")))
+                            .toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedFabricType = value;
+                          });
+                        }),
+                  ],
                 ),
-              ),
-              DropdownButtonFormField(
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors.containersGrey,
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10.r))),
-                  value: _selectedValue,
-                  dropdownColor: Colors.white,
-                  items: _items
-                      .map((toElement) => DropdownMenuItem(
-                          value: toElement, child: Text(toElement)))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedValue = value;
-                    });
-                  }),
-              Padding(
-                padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                child: Text(
-                  "Материал",
-                  style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
-                ),
-              ),
-              DropdownButtonFormField(
-                  decoration: InputDecoration(
-                      filled: true,
-                      fillColor: AppColors.containersGrey,
-                      border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10.r))),
-                  value: _selectedValueForSecond,
-                  dropdownColor: Colors.white,
-                  items: _materials
-                      .map((toElement) => DropdownMenuItem(
-                          value: toElement, child: Text(toElement)))
-                      .toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedValueForSecond = value;
-                    });
-                  }),
-            ],
+                Positioned(
+                  bottom: 10.h,
+                  left: 0.w,
+                  right: 0.w,
+                  child: CustomButton(
+                      text: "Поиск",
+                      onPressed: () {
+                        BlocProvider.of<SearchOrderBloc>(context).add(
+                            SearchOrderEvent.search(
+                                _selectedFabricType?.name ?? "",
+                                category?.name ?? "",
+                                _searchText.text));
+                      }),
+                )
+              ]),
+            )),
           ),
-          Positioned(
-            bottom: 10.h,
-            left: 0.w,
-            right: 0.w,
-            child: CustomButton(
-                text: "Поиск",
-                onPressed: () {
-                  GoRouter.of(context).pushReplacementNamed("main",
-                      queryParameters: {"isFromSearch": "true"});
-                }),
-          )
-        ]),
-      )),
+        ),
+      ),
     );
-  }
-
-  Future<void> _pickImageFromCamera() async {
-    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-    if (image != null) {
-      setState(() {
-        if (_selectedImages!.length >= _maxImages) {
-          _selectedImages.removeLast(); // Remove the last image
-        }
-        _selectedImages.add(image); // Add the new image
-      });
-    }
-  }
-
-  Future<void> _pickImageFromGallery() async {
-    final List<XFile>? images = await _picker.pickMultiImage();
-    if (images != null) {
-      setState(() {
-        if (_selectedImages!.length + images.length > _maxImages) {
-          // If the selected images exceed the max, remove the last few images
-          int overflowCount =
-              (_selectedImages.length + images.length) - _maxImages;
-          _selectedImages.removeRange(
-              _selectedImages.length - overflowCount, _selectedImages.length);
-        }
-        _selectedImages.addAll(images
-            .take(_maxImages - _selectedImages.length)); // Add new images
-      });
-    }
-  }
-
-  void _replaceLastImages(List<XFile> newImages) {
-    setState(() {
-      int removeCount = newImages.length; // How many images to remove
-      if (_selectedImages!.length >= removeCount) {
-        // Remove the last few images
-        _selectedImages.removeRange(
-            _selectedImages.length - removeCount, _selectedImages.length);
-      }
-      // Add new images
-      _selectedImages.addAll(newImages);
-    });
   }
 }

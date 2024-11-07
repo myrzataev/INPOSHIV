@@ -14,6 +14,7 @@ class CustomProfileTextField extends StatefulWidget {
   final Widget suffixIcon;
   final TextAlign textAlign;
   final bool hasValidator;
+  final Function(String? value) validator;
   final List<TextInputFormatter>? textInputFormatter;
   const CustomProfileTextField(
       {super.key,
@@ -25,7 +26,8 @@ class CustomProfileTextField extends StatefulWidget {
       required this.suffixIcon,
       this.hasValidator = false,
       this.textInputFormatter,
-      this.textAlign = TextAlign.center});
+      this.textAlign = TextAlign.center,
+      required this.validator});
 
   @override
   State<CustomProfileTextField> createState() => _CustomProfileTextFieldState();
@@ -51,44 +53,47 @@ class _CustomProfileTextFieldState extends State<CustomProfileTextField> {
           style: AppFonts.w400s16,
         ),
         TextFormField(
-          controller: widget.controller,
-          keyboardType: widget.textInputType,
-          textAlign: widget.textAlign,
-          cursorColor: AppColors.borderColorGrey,
-          obscureText: widget.obscureText ? isObscured : false,
-          obscuringCharacter: "*",
-          style: AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
-          inputFormatters: widget.textInputFormatter,
-          decoration: InputDecoration(
-              suffixIcon: InkWell(
-                  onTap: () {
-                    setState(() {
-                      isObscured = !isObscured;
-                    });
-                  },
-                  child: isObscured
-                      ? widget.suffixIcon
-                      : widget.obscureText
-                          ? const Icon(Icons.visibility_off_outlined)
-                          : widget.suffixIcon),
-              suffixIconConstraints:
-                  BoxConstraints(maxHeight: 24.h, maxWidth: 24.w),
-              focusedBorder: const UnderlineInputBorder(
-                  borderSide: BorderSide(width: 1, color: Color(0xffA0A0A0))),
-              hintText: widget.hintText,
-              hintStyle:
-                  AppFonts.w700s20.copyWith(color: const Color(0xffA0A0A0)),
-              border:
-                  const UnderlineInputBorder(borderSide: BorderSide(width: 1))),
-          validator: widget.hasValidator
-              ? (value) {
-                  if (value == null || value.isEmpty) {
-                    return "Это поле является обязательным";
-                  }
-                  return null;
-                }
-              : null,
-        ),
+          
+            controller: widget.controller,
+            keyboardType: widget.textInputType,
+            textAlign: widget.textAlign,
+            cursorColor: AppColors.borderColorGrey,
+            obscureText: widget.obscureText ? isObscured : false,
+            obscuringCharacter: "*",
+            style: AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
+            inputFormatters: widget.textInputFormatter,
+            decoration: InputDecoration(
+                suffixIcon: InkWell(
+                    onTap: () {
+                      setState(() {
+                        isObscured = !isObscured;
+                      });
+                    },
+                    child: isObscured
+                        ? widget.suffixIcon
+                        : widget.obscureText
+                            ? const Icon(Icons.visibility_off_outlined)
+                            : widget.suffixIcon),
+                suffixIconConstraints:
+                    BoxConstraints(maxHeight: 24.h, maxWidth: 24.w),
+                focusedBorder: const UnderlineInputBorder(
+                    borderSide: BorderSide(width: 1, color: Color(0xffA0A0A0))),
+                hintText: widget.hintText,
+                hintStyle:
+                    AppFonts.w700s20.copyWith(color: const Color(0xffA0A0A0)),
+                border: const UnderlineInputBorder(
+                    borderSide: BorderSide(width: 1))),
+            validator: (value) => widget.validator(value)
+
+            // widget.hasValidator
+            // (value) {
+            //     if (value == null || value.isEmpty) {
+            //       return "Это поле является обязательным";
+            //     }
+            //     return null;
+            //   }
+            //     : null,
+            ),
       ],
     );
   }

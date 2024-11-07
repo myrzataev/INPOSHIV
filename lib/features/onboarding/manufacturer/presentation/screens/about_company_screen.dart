@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,11 +11,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/onboarding/customer/presentation/providers/order_provider.dart';
-import 'package:inposhiv/features/onboarding/manufacturer/presentation/blocs/manufacturer_bloc/manufacturer_bloc.dart';
 import 'package:inposhiv/features/survey/data/models/job_priorities_model.dart';
-import 'package:inposhiv/features/survey/data/models/manufacturer_survey_model.dart';
-import 'package:inposhiv/features/survey/domain/repositories/send_manufacturer_survery_repo.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/send_manufacturers_survey_bloc/send_manufacturers_survey_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/providers/categories_provider.dart';
 import 'package:inposhiv/features/survey/presentation/providers/priorities_provider.dart';
@@ -52,109 +50,135 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
       body: SafeArea(
           child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(top: 5.h),
-                      child: InkWell(
-                        customBorder: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.r)),
-                        onTap: () {
-                          GoRouter.of(context).pop();
-                        },
-                        child: SvgPicture.asset(
-                          SvgImages.goback,
-                          height: 40.h,
-                          width: 40.w,
+        child: BlocListener<SendManufacturersSurveyBloc,
+            SendManufacturersSurveyState>(
+          listener: (context, state) {
+            state.maybeWhen(
+                loading: () => showDialog(
+                      context: context,
+                      builder: (context) => const Dialog(
+                        child: Center(
+                          child: CircularProgressIndicator.adaptive(),
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Row(
-                        children: [
-                          Text(
-                            "Шаг 2 ",
-                            style: AppFonts.w400s16.copyWith(
-                                fontFamily: "SF Pro",
-                                color: const Color(0xff324D19)),
+                loaded: (model) {
+                  GoRouter.of(context).pop();
+                  GoRouter.of(context).pushNamed("profileReady", extra: model);
+                },
+                error: (errorText) {
+                  GoRouter.of(context).pop();
+                  // GoRouter.of(context).pushNamed("profileReady");
+                },
+                orElse: () {});
+          },
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(top: 5.h),
+                        child: InkWell(
+                          customBorder: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.r)),
+                          onTap: () {
+                            GoRouter.of(context).pop();
+                          },
+                          child: SvgPicture.asset(
+                            SvgImages.goback,
+                            height: 40.h,
+                            width: 40.w,
                           ),
-                          Text(
-                            "из 2",
-                            style:
-                                AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
-                          ),
-                        ],
+                        ),
                       ),
-                    ),
-                    Text(
-                      "Напишите небольшое описание компании",
-                      style: AppFonts.w700s36
-                          .copyWith(height: 0.8, fontWeight: FontWeight.bold),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Text(
-                        "В описании должно быть не более 110 символов",
-                        style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Шаг 2 ",
+                              style: AppFonts.w400s16.copyWith(
+                                  fontFamily: "SF Pro",
+                                  color: const Color(0xff324D19)),
+                            ),
+                            Text(
+                              "из 2",
+                              style: AppFonts.w400s16
+                                  .copyWith(fontFamily: "SF Pro"),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                    Form(
-                      key: _formKey,
-                      child: Padding(
-                          padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                          child: TextFormField(
-                            controller: controller,
-                            maxLines: null,
-                            keyboardType: TextInputType.multiline,
-                            style: AppFonts.w400s16,
-                            decoration: const InputDecoration(
-                                focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(
-                                        color: AppColors.borderColor))),
-                            validator: (value) {
-                              if ((value?.length ?? 0) < 110) {
-                                return "В описании должно быть не более 110 символов";
-                              }
-                              return null;
-                            },
-                          )),
-                    ),
-                  ],
+                      Text(
+                        "Напишите небольшое описание компании",
+                        style: AppFonts.w700s36
+                            .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Text(
+                          "В описании должно быть не более 110 символов",
+                          style:
+                              AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+                        ),
+                      ),
+                      Form(
+                        key: _formKey,
+                        child: Padding(
+                            padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
+                            child: TextFormField(
+                              controller: controller,
+                              maxLines: null,
+                              keyboardType: TextInputType.multiline,
+                              style: AppFonts.w400s16,
+                              decoration: const InputDecoration(
+                                  focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppColors.borderColor))),
+                              validator: (value) {
+                                if ((value?.length ?? 0) < 110) {
+                                  return "В описании должно быть не более 110 символов";
+                                }
+                                return null;
+                              },
+                            )),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 10.h),
-              child: CustomButton(
-                  text: "Дальше",
-                  onPressed: () {
-                    // if (_formKey.currentState!.validate()) {
-                    sendData(
-                        manufacturersPriorities: manufacturersPriorities ?? {},
-                        images: images,
-                        monthProductsVolume: monthProductsVolume ?? "",
-                        clothingCategories: categories!
-                            .where((e) => e != null) // Filter out null values
-                            .map((e) => e!) // Unwrap non-null values
-                            .toList(),
-                        vm: vm,
-                        manufacturerPrioritiesList: manufacturersPriorities!
-                            // ignore: unnecessary_null_comparison
-                            .where((e) => e != null)
-                            .map((e) => e)
-                            .toList());
-                    // GoRouter.of(context).pushNamed("profileReady",
-                    //     queryParameters: {"description": controller.text});
-                    // }
-                  }),
-            )
-          ],
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.h),
+                child: CustomButton(
+                    text: "Дальше",
+                    onPressed: () {
+                      // if (_formKey.currentState!.validate()) {
+                      sendData(
+                          companyDescription: controller.text,
+                          manufacturersPriorities:
+                              manufacturersPriorities ?? {},
+                          images: images,
+                          monthProductsVolume: monthProductsVolume ?? "",
+                          clothingCategories: categories!
+                              .where((e) => e != null) // Filter out null values
+                              .map((e) => e!) // Unwrap non-null values
+                              .toList(),
+                          vm: vm,
+                          manufacturerPrioritiesList: manufacturersPriorities!
+                              // ignore: unnecessary_null_comparison
+                              .where((e) => e != null)
+                              .map((e) => e)
+                              .toList());
+                      // GoRouter.of(context).pushNamed("profileReady",
+                      //     queryParameters: {"description": controller.text});
+                      // }
+                    }),
+              )
+            ],
+          ),
         ),
       )),
     );
@@ -162,33 +186,49 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
 
   void sendData(
       {required Set<JobPrioritiesModel> manufacturersPriorities,
+      required String companyDescription,
       required List<XFile>? images,
       required String monthProductsVolume,
       required List clothingCategories,
       required List manufacturerPrioritiesList,
       required CategoriesProvider vm}) async {
-    BlocProvider.of<SendManufacturersSurveyBloc>(context)
-        .add(SendManufacturersSurveyEvent.sendData(data: {
-      "clothingCategoriesList": {
-        "name": vm.selectedCategoryName,
-        "id": vm.selectedCategoryId,
-        "slug" : vm.selectedSlug,
-        "subcategories": clothingCategories.map((element) =>
-        // print("runtime type is :${element.id.runtimeType}"))
-            ClothingCategoriesList(
-                    name: element.name, id: element.id, slug: element.slug)
-                .toJson())
-      },
-      "manufacturerPrioritiesList":
-          manufacturersPriorities.map((element) => ClothingCategoriesList(
-                name: element.name,
-                id: element.id,
-                slug: element.slug,
-              ).toJson()),
-      "monthProductsVolume": int.tryParse(monthProductsVolume),
-      // "photos": await Future.wait(images!.map((image) async {
-      //   return await MultipartFile.fromFile(image.path, filename: image.name);
-      // }).toList()),
-    }, manufacturerId: preferences.getString("customerId") ?? ""));
+    final queryParams = {
+      "companyDescription": companyDescription,
+      'clothingCategoriesList': jsonEncode([
+        {
+          "name": vm.selectedCategoryName,
+          "id": vm.selectedCategoryId,
+          "slug": vm.selectedSlug,
+          "subcategories": clothingCategories
+              .map((element) => {
+                    "name": element.name,
+                    "id": element.id,
+                    "slug": element.slug
+                  })
+              .toList(),
+        }
+      ]),
+      'monthProductsVolume': int.tryParse(monthProductsVolume),
+      'manufacturerPrioritiesList': jsonEncode(manufacturersPriorities
+          .map((element) =>
+              {"name": element.name, "id": element.id, "slug": element.slug})
+          .toList()),
+      'manufacturerUuid': preferences.getString("customerId") ?? "",
+    };
+    final formData = FormData();
+    if (images != null) {
+      for (var image in images) {
+        formData.files.add(MapEntry(
+          'photos',
+          await MultipartFile.fromFile(image.path, filename: image.name),
+        ));
+      }
+    }
+    print(queryParams);
+    BlocProvider.of<SendManufacturersSurveyBloc>(context).add(
+        SendManufacturersSurveyEvent.sendData(
+            data: queryParams,
+            photo: formData,
+            manufacturerId: preferences.getString("customerId") ?? ""));
   }
 }

@@ -8,29 +8,35 @@ import 'dart:convert';
 part 'create_manufacturers_profile_model.freezed.dart';
 part 'create_manufacturers_profile_model.g.dart';
 
-List<CreateManufacturersProfileModel> createManufacturersProfileModelFromJson(String str) => List<CreateManufacturersProfileModel>.from(json.decode(str).map((x) => CreateManufacturersProfileModel.fromJson(x)));
+CreateManufacturersProfileModel createManufacturersProfileModelFromJson(String str) => CreateManufacturersProfileModel.fromJson(json.decode(str));
 
-String createManufacturersProfileModelToJson(List<CreateManufacturersProfileModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String createManufacturersProfileModelToJson(CreateManufacturersProfileModel data) => json.encode(data.toJson());
 
 @freezed
 class CreateManufacturersProfileModel with _$CreateManufacturersProfileModel {
     const factory CreateManufacturersProfileModel({
-        dynamic id,
-        dynamic userId,
-        dynamic userUuid,
-        String? manufacturerUuid,
-        dynamic username,
-        dynamic legalStatus,
+        String? legalStatus,
         String? trustLevel,
         String? companyName,
-        dynamic city,
-        dynamic monthProductsVolume,
-        dynamic companyDescription,
-        int? rating,
-        dynamic clothingCategoriesList,
-        dynamic manufacturerPrioritiesList,
-        List<dynamic>? photosUrls,
+        String? companyDescription,
+        String? city,
+        List<ClothingCategoriesList>? clothingCategoriesList,
+        int? monthProductsVolume,
+        List<ClothingCategoriesList>? manufacturerPrioritiesList,
+        List<String>? photos,
     }) = _CreateManufacturersProfileModel;
 
     factory CreateManufacturersProfileModel.fromJson(Map<String, dynamic> json) => _$CreateManufacturersProfileModelFromJson(json);
+}
+
+@freezed
+class ClothingCategoriesList with _$ClothingCategoriesList {
+    const factory ClothingCategoriesList({
+        int? id,
+        String? slug,
+        String? name,
+        List<ClothingCategoriesList>? subcategories,
+    }) = _ClothingCategoriesList;
+
+    factory ClothingCategoriesList.fromJson(Map<String, dynamic> json) => _$ClothingCategoriesListFromJson(json);
 }
