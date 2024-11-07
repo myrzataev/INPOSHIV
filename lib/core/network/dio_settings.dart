@@ -13,7 +13,7 @@ class DioSettings {
 
   Dio dio = Dio(
     BaseOptions(
-      baseUrl: "http://192.168.31.141:8080/",
+      baseUrl: "http://192.168.31.208:8080/",
       contentType: "application/json",
       headers: {
         "Accept": "application/json",

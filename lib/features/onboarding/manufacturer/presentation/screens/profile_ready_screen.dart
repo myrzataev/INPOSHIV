@@ -49,10 +49,10 @@ class _OrderReadyScreenState extends State<ProfileReadyScreen> {
         child: BlocListener<ManufacturerBloc, ManufacturerState>(
           listener: (context, state) {
             state.maybeWhen(
-              createdProfile: (model) {
-                      context.goNamed("main", extra: false);
-              },
-              orElse: () {});
+                createdProfile: (model) {
+                  // context.goNamed("main", extra: false);
+                },
+                orElse: () {});
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,21 +156,14 @@ class _OrderReadyScreenState extends State<ProfileReadyScreen> {
               CustomButton(
                   text: "Найти заказы",
                   onPressed: () async {
-                    context.goNamed("main", extra: false);
-                    BlocProvider.of<ManufacturerBloc>(context)
-                        .add(ManufacturerEvent.createProfile(
-                            formData: FormData.fromMap({
-                              "username": preferences.getString("userName"),
-                              "companyName": "Фортилайнс",
-                              "description": widget.descriptionOfCompany,
-                              "companySize": 45,
-                              "photos":
-                                  await Future.wait(images!.map((image) async {
-                                return await MultipartFile.fromFile(image.path,
-                                    filename: image.name);
-                              }))
-                            }),
-                            userId: preferences.getString("customerId") ?? ""));
+                    // await Future.wait(images!.map((image) async {
+                    //   print(image.name);
+                    //   return await MultipartFile.fromFile(image.path,
+                    //       filename: image.name,
+                    //       contentType: DioMediaType("image", "jpg"));
+                    // }));
+                    // context.goNamed("main", extra: false);
+                   
                   }),
             ],
           ),

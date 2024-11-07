@@ -233,13 +233,12 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                   text: "Начать аукцион",
                   onPressed: () async {
                     final formDataMap = {
-                      "categoryId": 1,
-                      // vm.categoryId,
+                      "categoryId": vm.categoryId,
                       "products[0].fabricId": vm.fabricId,
                       "products[0].sizeId": 1,
                       "products[0].priceUsd": vm.priceUsd,
                       "products[0].priceRub": vm.priceRub,
-                      "products[0].name": "штаны",
+                      "products[0].name": "Штаны",
                       "products[0].photos":
                           await Future.wait(images!.map((image) async {
                         return await MultipartFile.fromFile(image.path,

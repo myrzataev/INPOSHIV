@@ -45,7 +45,8 @@ class SpecifyMonthlySalesScreen extends StatelessWidget {
                 onPressed: () {
                   GoRouter.of(context).pushNamed("importantThingsListScreen",
                       queryParameters: {
-                        "importantThingsListScreen": controller.text
+                        "monthSalesVolume": controller.text,
+
                       });
                 },
               ),

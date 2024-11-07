@@ -24,6 +24,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
   TextEditingController passwordController = TextEditingController();
   bool rememberMe = false;
   final _formKey = GlobalKey<FormState>();
+  final preferences = locator<SharedPreferences>();
   @override
   void dispose() {
     emailController.dispose();
@@ -35,7 +36,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
   @override
   Widget build(BuildContext context) {
     final int role = Provider.of<RoleProvider>(context, listen: true).role;
-    SharedPreferences preferences = locator<SharedPreferences>();
+
 
     return Scaffold(
       body: SafeArea(

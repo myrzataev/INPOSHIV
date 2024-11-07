@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -248,7 +247,9 @@ class _MainScreenState extends State<MainScreen> {
                                                                         horizontal:
                                                                             14.w),
                                                                 child: Text(
-                                                                  "Очень надежный",
+                                                                  currentItem
+                                                                          .trustLevel ??
+                                                                      "",
                                                                   style: AppFonts
                                                                       .w400s16
                                                                       .copyWith(

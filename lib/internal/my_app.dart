@@ -69,13 +69,17 @@ import 'package:inposhiv/features/onboarding/manufacturer/presentation/blocs/man
 import 'package:inposhiv/features/survey/data/data_source/get_categories_ds.dart';
 import 'package:inposhiv/features/survey/data/data_source/get_job_priorities_ds.dart';
 import 'package:inposhiv/features/survey/data/data_source/send_custome_survey_ds.dart';
+import 'package:inposhiv/features/survey/data/data_source/send_manufacturer_survey_ds.dart';
 import 'package:inposhiv/features/survey/data/repositories/get_categories_repo_impl.dart';
 import 'package:inposhiv/features/survey/data/repositories/get_job_prioritities_list_repoimpl.dart';
 import 'package:inposhiv/features/survey/data/repositories/send_customer_survey_repo_impl.dart';
+import 'package:inposhiv/features/survey/data/repositories/send_manufacturer_survey_repoimpl.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/get_categories_bloc/get_categories_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/get_job_priorities_bloc/get_job_priorities_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/send_customer_survey_data_bloc/send_customer_survey_data_bloc.dart';
+import 'package:inposhiv/features/survey/presentation/blocs/send_manufacturers_survey_bloc/send_manufacturers_survey_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/providers/categories_provider.dart';
+import 'package:inposhiv/features/survey/presentation/providers/priorities_provider.dart';
 import 'package:inposhiv/services/keyboard_unfocuser.dart';
 import 'package:inposhiv/services/messaging_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
@@ -299,7 +303,14 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => GetManufacturersRepoimpl(
                 getManufacturersDs:
-                    RepositoryProvider.of<GetManufacturersDs>(context)))
+                    RepositoryProvider.of<GetManufacturersDs>(context))),
+        RepositoryProvider(
+            create: (context) => SendManufacturerSurveyDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => SendManufacturerSurveryRepoImpl(
+                sendManufacturerSurveyDs:
+                    RepositoryProvider.of<SendManufacturerSurveyDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -393,7 +404,13 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
               create: (context) => GetManufacturersProfileBloc(
                   getManufacturersRepoimpl:
-                      RepositoryProvider.of<GetManufacturersRepoimpl>(context)))
+                      RepositoryProvider.of<GetManufacturersRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => SendManufacturersSurveyBloc(
+                  sendManufacturerSurveryRepoImpl:
+                      RepositoryProvider.of<SendManufacturerSurveryRepoImpl>(
+                          context)))
         ],
         child: MultiProvider(
           providers: [
@@ -404,7 +421,8 @@ class _MyAppState extends State<MyApp> {
             ChangeNotifierProvider(
                 create: (context) =>
                     PlatformProvider(platformIsAndroid: isAndroid)),
-            ChangeNotifierProvider(create: (context) => CategoriesProvider())
+            ChangeNotifierProvider(create: (context) => CategoriesProvider()),
+            ChangeNotifierProvider(create: (context)=> PrioritiesProvider())
           ],
           child: TextFieldUnfocus(
             child: ScreenUtilInit(

@@ -70,6 +70,8 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
   Widget build(BuildContext context) {
     final int role = Provider.of<RoleProvider>(context, listen: true).role;
     bool isCustomer = role == 1;
+    isCustomer = false;
+
     return Scaffold(
       body: SafeArea(
         child: Padding(

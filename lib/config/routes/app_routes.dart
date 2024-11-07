@@ -8,7 +8,6 @@ import 'package:inposhiv/features/about_app/presentation/screens/settings_screen
 import 'package:inposhiv/features/auth/presentation/screens/authorization_screen.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/detailed_view_screen.dart';
-import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/approve_invoice_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/order_detail_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/see_doc_screen.dart';
@@ -69,10 +68,10 @@ final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation:
         // "/",
-        "/main",
+        // "/main",
     // "/registration",
     //  "/chooseImageSource",
-    //  "/surveyStartScreen",
+     "/surveyStartScreen",
     routes: [
       GoRoute(
         path: "/",

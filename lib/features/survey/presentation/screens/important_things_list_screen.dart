@@ -17,6 +17,7 @@ import 'package:inposhiv/features/survey/data/models/manufacturer_survey_model.d
 import 'package:inposhiv/features/survey/presentation/blocs/get_job_priorities_bloc/get_job_priorities_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/send_customer_survey_data_bloc/send_customer_survey_data_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/providers/categories_provider.dart';
+import 'package:inposhiv/features/survey/presentation/providers/priorities_provider.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,6 +63,7 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
     final role = Provider.of<RoleProvider>(context).role;
 
     bool isCustomer = role == 1;
+    print("/////////$isCustomer $role");
     setState(() {
       isCustomerForEvent = isCustomer;
     });
@@ -179,50 +181,14 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
                 textAlign: TextAlign.start,
               ),
             ),
-            ElevatedButton(
-                onPressed: () {
-                  // print(customer_survey_response_model.CustomerSurveyModel(
-                  //         clothingCategoriesList: [
-                  //       ClothingCategoriesList(
-                  //           name: Provider.of<CategoriesProvider>(context,
-                  //                       listen: false)
-                  //                   .selectedCategoryName ??
-                  //               "",
-                  //           slug: Provider.of<CategoriesProvider>(context,
-                  //                       listen: false)
-                  //                   .selectedSlug ??
-                  //               "",
-                  //           subcategories: Provider.of<CategoriesProvider>(
-                  //                       context,
-                  //                       listen: false)
-                  //                   .subcategoriesList
-                  //                   ?.map((element) => Subcategory(
-                  //                         name: Provider.of<CategoriesProvider>(
-                  //                                     context,
-                  //                                     listen: false)
-                  //                                 .selectedCategoryName ??
-                  //                             "",
-                  //                         slug: Provider.of<CategoriesProvider>(
-                  //                                     context,
-                  //                                     listen: false)
-                  //                                 .selectedSlug ??
-                  //                             "",
-                  //                       ))
-                  //                   .toList() ??
-                  //               [])
-                  //     ],
-                  //         monthSalesVolume:
-                  //             int.tryParse(widget.monthSalesVolume) ?? 0,
-                  //         customerPrioritiesList: selectedValues
-                  //             .map((model) => JobPrioritiesList(
-                  //                   id: model.id,
-                  //                   slug: model.slug ?? "",
-                  //                   name: model.name ?? "",
-                  //                 ))
-                  //             .toList())
-                  //     .toJson());
-                },
-                child: Text("data")),
+            // ElevatedButton(
+            //     onPressed: () {
+            //       print(Provider.of<PrioritiesProvider>(context, listen: false)
+            //           .selectedManufacturerPriorities);
+            //                 print(Provider.of<PrioritiesProvider>(context, listen: false)
+            //           .monthProductsVolume);
+            //     },
+            //     child: Text("data")),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h, top: 37.h),
               child: CustomButton(
@@ -232,107 +198,63 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
                       ? BlocProvider.of<SendCustomerSurveyDataBloc>(context)
                           .add(SendCustomerSurveyDataEvent.senData(
                               userId: preferences.getString("customerId") ?? "",
-                              customerSurveyData: isCustomer
-                                  ? CustomerSurveyModel(
-                                          clothingCategoriesList: [
-                                          ClothingCategoriesList(
-                                              name: Provider.of<CategoriesProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .selectedCategoryName ??
-                                                  "",
-                                              slug:
-                                                  Provider.of<CategoriesProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .selectedSlug ??
-                                                      "",
-                                              subcategories:
-                                                  Provider.of<CategoriesProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .subcategoriesList
-                                                          ?.map(
-                                                              (element) =>
-                                                                  customer_survey_response_model
-                                                                      .ClothingCategoriesList(
-                                                                    name: Provider.of<CategoriesProvider>(context,
-                                                                                listen: false)
-                                                                            .selectedCategoryName ??
-                                                                        "",
-                                                                    slug: Provider.of<CategoriesProvider>(context,
-                                                                                listen: false)
-                                                                            .selectedSlug ??
-                                                                        "",
-                                                                  ))
-                                                          .toList() ??
-                                                      [])
-                                        ],
-                                          monthSalesVolume: int.tryParse(
-                                                  widget.monthSalesVolume) ??
-                                              0,
-                                          customerPrioritiesList: selectedValues
-                                              .map((model) =>
-                                                  ClothingCategoriesList(
-                                                    id: model.id,
-                                                    slug: model.slug ?? "",
-                                                    name: model.name ?? "",
-                                                  ))
-                                              .toList())
-                                      .toJson()
-                                  : manufacturer_survey_response_model
-                                          .ManufacturerSurveyModel(
-                                              clothingCategoriesList: [
-                                          manufacturer_survey_response_model
-                                              .ClothingCategoriesList(
-                                                  name: Provider.of<
-                                                                  CategoriesProvider>(
-                                                              context,
-                                                              listen: false)
-                                                          .selectedCategoryName ??
-                                                      "",
-                                                  slug:
-                                                      Provider.of<CategoriesProvider>(
+                              customerSurveyData: CustomerSurveyModel(
+                                      clothingCategoriesList: [
+                                    ClothingCategoriesList(
+                                        name: Provider.of<CategoriesProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .selectedCategoryName ??
+                                            "",
+                                        slug: Provider.of<CategoriesProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .selectedSlug ??
+                                            "",
+                                        subcategories: Provider.of<
+                                                        CategoriesProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .subcategoriesList
+                                                ?.map((element) =>
+                                                    customer_survey_response_model
+                                                        .ClothingCategoriesList(
+                                                      name: Provider.of<
+                                                                      CategoriesProvider>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .selectedCategoryName ??
+                                                          "",
+                                                      slug: Provider.of<
+                                                                      CategoriesProvider>(
                                                                   context,
                                                                   listen: false)
                                                               .selectedSlug ??
                                                           "",
-                                                  subcategories:
-                                                      Provider.of<CategoriesProvider>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .subcategoriesList
-                                                              ?.map(
-                                                                  (element) =>
-                                                                      manufacturer_survey_response_model
-                                                                          .ClothingCategoriesList(
-                                                                        name: Provider.of<CategoriesProvider>(context, listen: false).selectedCategoryName ??
-                                                                            "",
-                                                                        slug: Provider.of<CategoriesProvider>(context, listen: false).selectedSlug ??
-                                                                            "",
-                                                                      ))
-                                                              .toList() ??
-                                                          [])
-                                        ],
-                                              monthProductsVolume: int.tryParse(
-                                                      widget
-                                                          .monthSalesVolume) ??
-                                                  0,
-                                              manufacturerPrioritiesList:
-                                                  selectedValues
-                                                      .map((model) =>
-                                                          manufacturer_survey_response_model
-                                                              .ClothingCategoriesList(
-                                                            id: model.id,
-                                                            slug: model.slug ??
-                                                                "",
-                                                            name: model.name ??
-                                                                "",
-                                                          ))
-                                                      .toList())
-                                      .toJson()))
-                      : GoRouter.of(context).pushNamed("endOfSurveyScreen");
+                                                    ))
+                                                .toList() ??
+                                            [])
+                                  ],
+                                      monthSalesVolume: int.tryParse(
+                                              widget.monthSalesVolume) ??
+                                          0,
+                                      customerPrioritiesList: selectedValues
+                                          .map(
+                                              (model) => ClothingCategoriesList(
+                                                    id: model.id,
+                                                    slug: model.slug ?? "",
+                                                    name: model.name ?? "",
+                                                  ))
+                                          .toList())
+                                  .toJson()))
+                      : Provider.of<PrioritiesProvider>(context, listen: false)
+                          .updateManufacturerPriorities(
+                              newValue: selectedValues);
+                  Provider.of<PrioritiesProvider>(context, listen: false)
+                      .updateMonthProductsVolume(
+                          newValue: widget.monthSalesVolume);
                   GoRouter.of(context).pushNamed("endOfSurveyScreen");
+                  // GoRouter.of(context).pushNamed("endOfSurveyScreen");
                 },
               ),
             ),

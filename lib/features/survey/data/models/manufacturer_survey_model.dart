@@ -18,6 +18,7 @@ class ManufacturerSurveyModel with _$ManufacturerSurveyModel {
         List<ClothingCategoriesList>? clothingCategoriesList,
         int? monthProductsVolume,
         List<ClothingCategoriesList>? manufacturerPrioritiesList,
+        
     }) = _ManufacturerSurveyModel;
 
     factory ManufacturerSurveyModel.fromJson(Map<String, dynamic> json) => _$ManufacturerSurveyModelFromJson(json);

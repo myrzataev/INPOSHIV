@@ -31,7 +31,7 @@ class _ChooseSpecializationScreenState
 
   String? _selectedGenderSlug; // Selected dropdown value
   String? _selectedGenderName; // Selected dropdown value
-
+  int? __selectedGenderId;
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -94,7 +94,6 @@ class _ChooseSpecializationScreenState
                             ));
                       }).toList(),
                       onChanged: (value) {
-                       
                         setState(() {
                           _selectedGenderSlug = value;
                           final selectedGender = _gender.firstWhere(
@@ -104,6 +103,7 @@ class _ChooseSpecializationScreenState
                           // Update _selectedGenderName
                           if (selectedGender != null) {
                             _selectedGenderName = selectedGender.name ?? "";
+                            __selectedGenderId = selectedGender.id;
                           }
                         });
                       }),
@@ -252,8 +252,9 @@ class _ChooseSpecializationScreenState
                         ),
                         // ElevatedButton(
                         //     onPressed: () {
-                        //       debugPrint(_selectedGenderName);
-                        //       debugPrint(_selectedGenderSlug);
+                        //       print(Provider.of<CategoriesProvider>(context,
+                        //               listen: false)
+                        //           .selectedCategoryId);
                         //     },
                         //     child: Text("data")),
                         Padding(
@@ -281,13 +282,14 @@ class _ChooseSpecializationScreenState
                                     : Provider.of<CategoriesProvider>(context,
                                             listen: false)
                                         .updateValues(
+                                            id: __selectedGenderId ?? 0,
                                             valueForSlug:
                                                 _selectedGenderSlug ?? "",
                                             valueForSubcategoriesList:
-                                                selectedCategories
-                                                ,
-                                                categoryName: _selectedGenderName??""
-                                                );
+                                                selectedCategories,
+                                            categoryName:
+                                                _selectedGenderName ?? "");
+
                                 GoRouter.of(context)
                                     .pushNamed("specifyMonthlySalesScreen");
                               },
