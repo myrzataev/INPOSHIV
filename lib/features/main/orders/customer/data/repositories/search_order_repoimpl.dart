@@ -7,7 +7,10 @@ class SearchOrderRepoImpl implements SearchOrderRepo {
   SearchOrderRepoImpl({required this.searchOrderDs});
   @override
   Future<List<CustomerOrdersModel>> searchOrder(
-      String fabricType, String category, String productName) async {
-    return await searchOrderDs.searchOrder(fabricType, category, productName);
+      {required String fabricType,
+      required String category,
+      required String productName}) async {
+    return await searchOrderDs.searchOrder(
+        fabricType: fabricType, category: category, productName: productName);
   }
 }

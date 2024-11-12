@@ -6,7 +6,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -60,7 +59,6 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
         listener: (context, state) {
           state.maybeWhen(
               loading: () {
-                print("loading");
                 EasyLoading.show(
                   indicator: const CircularProgressIndicator.adaptive(),
                   status: "loading",
@@ -71,7 +69,8 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
                 EasyLoading.dismiss();
 
                 GoRouter.of(context).pushReplacementNamed("main",
-                    queryParameters: {"isFromSearch": "true"});
+                    queryParameters: {"isFromSearch": "true"},
+                    extra: modelList);
               },
               error: (errorText) {
                 EasyLoading.dismiss();
@@ -154,7 +153,7 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
                                       category = categories?[index];
                                       _subcategories =
                                           category?.subcategories ?? [];
-                                          _selectedSubCategory = null;
+                                      _selectedSubCategory = null;
                                     });
                                   });
                             })),
@@ -223,9 +222,9 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
                       onPressed: () {
                         BlocProvider.of<SearchOrderBloc>(context).add(
                             SearchOrderEvent.search(
-                                _selectedFabricType?.name ?? "",
-                                category?.name ?? "",
-                                _searchText.text));
+                                fabricType: _selectedFabricType?.name ?? "",
+                                category: _selectedSubCategory?.name ?? "",
+                                productName: _searchText.text));
                       }),
                 )
               ]),

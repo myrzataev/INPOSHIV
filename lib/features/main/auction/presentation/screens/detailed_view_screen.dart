@@ -14,6 +14,7 @@ import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bl
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
+import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,8 +45,8 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
   }
 
   getCurrency() {
-    BlocProvider.of<CreateOrderBloc>(context)
-        .add(const CreateOrderEvent.getCurrentCurrencyEvent());
+    BlocProvider.of<CurrentCurrencyBloc>(context)
+        .add(const CurrentCurrencyEvent.getCurrentCurrencyEvent());
   }
 
   @override
@@ -75,7 +76,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                       },
                       orElse: () {});
                 },
-                child: BlocListener<CreateOrderBloc, CreateOrderState>(
+                child: BlocListener<CurrentCurrencyBloc, CurrentCurrencyState>(
                   listener: (context, state) {
                     state.maybeWhen(
                         currencyLoaded: (model) => setState(() {

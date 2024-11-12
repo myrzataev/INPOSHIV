@@ -20,18 +20,21 @@ mixin _$GetCategoriesEvent {
   TResult when<TResult extends Object?>({
     required TResult Function() getAllCategories,
     required TResult Function(String slug) getSpecificCategory,
+    required TResult Function() getProductCategory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getAllCategories,
     TResult? Function(String slug)? getSpecificCategory,
+    TResult? Function()? getProductCategory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getAllCategories,
     TResult Function(String slug)? getSpecificCategory,
+    TResult Function()? getProductCategory,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -39,18 +42,21 @@ mixin _$GetCategoriesEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) getAllCategories,
     required TResult Function(_GetSpecificCategory value) getSpecificCategory,
+    required TResult Function(_GetProductCategory value) getProductCategory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? getAllCategories,
     TResult? Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult? Function(_GetProductCategory value)? getProductCategory,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? getAllCategories,
     TResult Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult Function(_GetProductCategory value)? getProductCategory,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -120,6 +126,7 @@ class _$StartedImpl implements _Started {
   TResult when<TResult extends Object?>({
     required TResult Function() getAllCategories,
     required TResult Function(String slug) getSpecificCategory,
+    required TResult Function() getProductCategory,
   }) {
     return getAllCategories();
   }
@@ -129,6 +136,7 @@ class _$StartedImpl implements _Started {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getAllCategories,
     TResult? Function(String slug)? getSpecificCategory,
+    TResult? Function()? getProductCategory,
   }) {
     return getAllCategories?.call();
   }
@@ -138,6 +146,7 @@ class _$StartedImpl implements _Started {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getAllCategories,
     TResult Function(String slug)? getSpecificCategory,
+    TResult Function()? getProductCategory,
     required TResult orElse(),
   }) {
     if (getAllCategories != null) {
@@ -151,6 +160,7 @@ class _$StartedImpl implements _Started {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) getAllCategories,
     required TResult Function(_GetSpecificCategory value) getSpecificCategory,
+    required TResult Function(_GetProductCategory value) getProductCategory,
   }) {
     return getAllCategories(this);
   }
@@ -160,6 +170,7 @@ class _$StartedImpl implements _Started {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? getAllCategories,
     TResult? Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult? Function(_GetProductCategory value)? getProductCategory,
   }) {
     return getAllCategories?.call(this);
   }
@@ -169,6 +180,7 @@ class _$StartedImpl implements _Started {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? getAllCategories,
     TResult Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult Function(_GetProductCategory value)? getProductCategory,
     required TResult orElse(),
   }) {
     if (getAllCategories != null) {
@@ -253,6 +265,7 @@ class _$GetSpecificCategoryImpl implements _GetSpecificCategory {
   TResult when<TResult extends Object?>({
     required TResult Function() getAllCategories,
     required TResult Function(String slug) getSpecificCategory,
+    required TResult Function() getProductCategory,
   }) {
     return getSpecificCategory(slug);
   }
@@ -262,6 +275,7 @@ class _$GetSpecificCategoryImpl implements _GetSpecificCategory {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? getAllCategories,
     TResult? Function(String slug)? getSpecificCategory,
+    TResult? Function()? getProductCategory,
   }) {
     return getSpecificCategory?.call(slug);
   }
@@ -271,6 +285,7 @@ class _$GetSpecificCategoryImpl implements _GetSpecificCategory {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getAllCategories,
     TResult Function(String slug)? getSpecificCategory,
+    TResult Function()? getProductCategory,
     required TResult orElse(),
   }) {
     if (getSpecificCategory != null) {
@@ -284,6 +299,7 @@ class _$GetSpecificCategoryImpl implements _GetSpecificCategory {
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) getAllCategories,
     required TResult Function(_GetSpecificCategory value) getSpecificCategory,
+    required TResult Function(_GetProductCategory value) getProductCategory,
   }) {
     return getSpecificCategory(this);
   }
@@ -293,6 +309,7 @@ class _$GetSpecificCategoryImpl implements _GetSpecificCategory {
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? getAllCategories,
     TResult? Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult? Function(_GetProductCategory value)? getProductCategory,
   }) {
     return getSpecificCategory?.call(this);
   }
@@ -302,6 +319,7 @@ class _$GetSpecificCategoryImpl implements _GetSpecificCategory {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? getAllCategories,
     TResult Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult Function(_GetProductCategory value)? getProductCategory,
     required TResult orElse(),
   }) {
     if (getSpecificCategory != null) {
@@ -325,6 +343,117 @@ abstract class _GetSpecificCategory implements GetCategoriesEvent {
 }
 
 /// @nodoc
+abstract class _$$GetProductCategoryImplCopyWith<$Res> {
+  factory _$$GetProductCategoryImplCopyWith(_$GetProductCategoryImpl value,
+          $Res Function(_$GetProductCategoryImpl) then) =
+      __$$GetProductCategoryImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GetProductCategoryImplCopyWithImpl<$Res>
+    extends _$GetCategoriesEventCopyWithImpl<$Res, _$GetProductCategoryImpl>
+    implements _$$GetProductCategoryImplCopyWith<$Res> {
+  __$$GetProductCategoryImplCopyWithImpl(_$GetProductCategoryImpl _value,
+      $Res Function(_$GetProductCategoryImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of GetCategoriesEvent
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$GetProductCategoryImpl implements _GetProductCategory {
+  const _$GetProductCategoryImpl();
+
+  @override
+  String toString() {
+    return 'GetCategoriesEvent.getProductCategory()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is _$GetProductCategoryImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() getAllCategories,
+    required TResult Function(String slug) getSpecificCategory,
+    required TResult Function() getProductCategory,
+  }) {
+    return getProductCategory();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? getAllCategories,
+    TResult? Function(String slug)? getSpecificCategory,
+    TResult? Function()? getProductCategory,
+  }) {
+    return getProductCategory?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? getAllCategories,
+    TResult Function(String slug)? getSpecificCategory,
+    TResult Function()? getProductCategory,
+    required TResult orElse(),
+  }) {
+    if (getProductCategory != null) {
+      return getProductCategory();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Started value) getAllCategories,
+    required TResult Function(_GetSpecificCategory value) getSpecificCategory,
+    required TResult Function(_GetProductCategory value) getProductCategory,
+  }) {
+    return getProductCategory(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Started value)? getAllCategories,
+    TResult? Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult? Function(_GetProductCategory value)? getProductCategory,
+  }) {
+    return getProductCategory?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Started value)? getAllCategories,
+    TResult Function(_GetSpecificCategory value)? getSpecificCategory,
+    TResult Function(_GetProductCategory value)? getProductCategory,
+    required TResult orElse(),
+  }) {
+    if (getProductCategory != null) {
+      return getProductCategory(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetProductCategory implements GetCategoriesEvent {
+  const factory _GetProductCategory() = _$GetProductCategoryImpl;
+}
+
+/// @nodoc
 mixin _$GetCategoriesState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
@@ -334,6 +463,9 @@ mixin _$GetCategoriesState {
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
     required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -344,6 +476,9 @@ mixin _$GetCategoriesState {
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
     TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -354,6 +489,9 @@ mixin _$GetCategoriesState {
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
     TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -367,6 +505,10 @@ mixin _$GetCategoriesState {
     required TResult Function(_SpecificCategoryError value)
         errorSpecificCategory,
     required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -377,6 +519,10 @@ mixin _$GetCategoriesState {
     TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -387,6 +533,10 @@ mixin _$GetCategoriesState {
     TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -460,6 +610,9 @@ class _$InitialImpl implements _Initial {
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
     required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
   }) {
     return initial();
   }
@@ -473,6 +626,9 @@ class _$InitialImpl implements _Initial {
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
     TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
   }) {
     return initial?.call();
   }
@@ -486,6 +642,9 @@ class _$InitialImpl implements _Initial {
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
     TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -505,6 +664,10 @@ class _$InitialImpl implements _Initial {
     required TResult Function(_SpecificCategoryError value)
         errorSpecificCategory,
     required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
   }) {
     return initial(this);
   }
@@ -518,6 +681,10 @@ class _$InitialImpl implements _Initial {
     TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
   }) {
     return initial?.call(this);
   }
@@ -531,6 +698,10 @@ class _$InitialImpl implements _Initial {
     TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -591,6 +762,9 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
     required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
   }) {
     return loading();
   }
@@ -604,6 +778,9 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
     TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
   }) {
     return loading?.call();
   }
@@ -617,6 +794,9 @@ class _$LoadingImpl implements _Loading {
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
     TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -636,6 +816,10 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(_SpecificCategoryError value)
         errorSpecificCategory,
     required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
   }) {
     return loading(this);
   }
@@ -649,6 +833,10 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
   }) {
     return loading?.call(this);
   }
@@ -662,6 +850,10 @@ class _$LoadingImpl implements _Loading {
     TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -756,6 +948,9 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
     required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
   }) {
     return loaded(entity);
   }
@@ -769,6 +964,9 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
     TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
   }) {
     return loaded?.call(entity);
   }
@@ -782,6 +980,9 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
     TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -801,6 +1002,10 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(_SpecificCategoryError value)
         errorSpecificCategory,
     required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
   }) {
     return loaded(this);
   }
@@ -814,6 +1019,10 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
   }) {
     return loaded?.call(this);
   }
@@ -827,6 +1036,10 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -933,6 +1146,9 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
     required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
   }) {
     return specificCategoryLoaded(entity);
   }
@@ -946,6 +1162,9 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
     TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
   }) {
     return specificCategoryLoaded?.call(entity);
   }
@@ -959,6 +1178,9 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
     TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (specificCategoryLoaded != null) {
@@ -978,6 +1200,10 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     required TResult Function(_SpecificCategoryError value)
         errorSpecificCategory,
     required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
   }) {
     return specificCategoryLoaded(this);
   }
@@ -991,6 +1217,10 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
   }) {
     return specificCategoryLoaded?.call(this);
   }
@@ -1004,6 +1234,10 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (specificCategoryLoaded != null) {
@@ -1104,6 +1338,9 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
     required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
   }) {
     return errorSpecificCategory(errorText);
   }
@@ -1117,6 +1354,9 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
     TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
   }) {
     return errorSpecificCategory?.call(errorText);
   }
@@ -1130,6 +1370,9 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
     TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (errorSpecificCategory != null) {
@@ -1149,6 +1392,10 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     required TResult Function(_SpecificCategoryError value)
         errorSpecificCategory,
     required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
   }) {
     return errorSpecificCategory(this);
   }
@@ -1162,6 +1409,10 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
   }) {
     return errorSpecificCategory?.call(this);
   }
@@ -1175,6 +1426,10 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (errorSpecificCategory != null) {
@@ -1272,6 +1527,9 @@ class _$ErrorImpl implements _Error {
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
     required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
   }) {
     return error(errorText);
   }
@@ -1285,6 +1543,9 @@ class _$ErrorImpl implements _Error {
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
     TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
   }) {
     return error?.call(errorText);
   }
@@ -1298,6 +1559,9 @@ class _$ErrorImpl implements _Error {
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
     TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1317,6 +1581,10 @@ class _$ErrorImpl implements _Error {
     required TResult Function(_SpecificCategoryError value)
         errorSpecificCategory,
     required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
   }) {
     return error(this);
   }
@@ -1330,6 +1598,10 @@ class _$ErrorImpl implements _Error {
     TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
   }) {
     return error?.call(this);
   }
@@ -1343,6 +1615,10 @@ class _$ErrorImpl implements _Error {
     TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
     TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
     TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -1362,4 +1638,361 @@ abstract class _Error implements GetCategoriesState {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GetProductCategoriesLoadedImplCopyWith<$Res> {
+  factory _$$GetProductCategoriesLoadedImplCopyWith(
+          _$GetProductCategoriesLoadedImpl value,
+          $Res Function(_$GetProductCategoriesLoadedImpl) then) =
+      __$$GetProductCategoriesLoadedImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({List<ProductCategoriesModel> model});
+}
+
+/// @nodoc
+class __$$GetProductCategoriesLoadedImplCopyWithImpl<$Res>
+    extends _$GetCategoriesStateCopyWithImpl<$Res,
+        _$GetProductCategoriesLoadedImpl>
+    implements _$$GetProductCategoriesLoadedImplCopyWith<$Res> {
+  __$$GetProductCategoriesLoadedImplCopyWithImpl(
+      _$GetProductCategoriesLoadedImpl _value,
+      $Res Function(_$GetProductCategoriesLoadedImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of GetCategoriesState
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? model = null,
+  }) {
+    return _then(_$GetProductCategoriesLoadedImpl(
+      model: null == model
+          ? _value._model
+          : model // ignore: cast_nullable_to_non_nullable
+              as List<ProductCategoriesModel>,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$GetProductCategoriesLoadedImpl implements _GetProductCategoriesLoaded {
+  const _$GetProductCategoriesLoadedImpl(
+      {required final List<ProductCategoriesModel> model})
+      : _model = model;
+
+  final List<ProductCategoriesModel> _model;
+  @override
+  List<ProductCategoriesModel> get model {
+    if (_model is EqualUnmodifiableListView) return _model;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_model);
+  }
+
+  @override
+  String toString() {
+    return 'GetCategoriesState.getProductCategoriesLoaded(model: $model)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetProductCategoriesLoadedImpl &&
+            const DeepCollectionEquality().equals(other._model, _model));
+  }
+
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(_model));
+
+  /// Create a copy of GetCategoriesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$GetProductCategoriesLoadedImplCopyWith<_$GetProductCategoriesLoadedImpl>
+      get copyWith => __$$GetProductCategoriesLoadedImplCopyWithImpl<
+          _$GetProductCategoriesLoadedImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<CategoriesEntity> entity) loaded,
+    required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
+    required TResult Function(String errorText) errorSpecificCategory,
+    required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
+  }) {
+    return getProductCategoriesLoaded(model);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<CategoriesEntity> entity)? loaded,
+    TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
+    TResult? Function(String errorText)? errorSpecificCategory,
+    TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
+  }) {
+    return getProductCategoriesLoaded?.call(model);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<CategoriesEntity> entity)? loaded,
+    TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
+    TResult Function(String errorText)? errorSpecificCategory,
+    TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
+    required TResult orElse(),
+  }) {
+    if (getProductCategoriesLoaded != null) {
+      return getProductCategoriesLoaded(model);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_SpecificCategoryLoaded value)
+        specificCategoryLoaded,
+    required TResult Function(_SpecificCategoryError value)
+        errorSpecificCategory,
+    required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
+  }) {
+    return getProductCategoriesLoaded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
+    TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
+  }) {
+    return getProductCategoriesLoaded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
+    TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
+    TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
+    required TResult orElse(),
+  }) {
+    if (getProductCategoriesLoaded != null) {
+      return getProductCategoriesLoaded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetProductCategoriesLoaded implements GetCategoriesState {
+  const factory _GetProductCategoriesLoaded(
+          {required final List<ProductCategoriesModel> model}) =
+      _$GetProductCategoriesLoadedImpl;
+
+  List<ProductCategoriesModel> get model;
+
+  /// Create a copy of GetCategoriesState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$GetProductCategoriesLoadedImplCopyWith<_$GetProductCategoriesLoadedImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$GetProductCategoriesErrorImplCopyWith<$Res> {
+  factory _$$GetProductCategoriesErrorImplCopyWith(
+          _$GetProductCategoriesErrorImpl value,
+          $Res Function(_$GetProductCategoriesErrorImpl) then) =
+      __$$GetProductCategoriesErrorImplCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class __$$GetProductCategoriesErrorImplCopyWithImpl<$Res>
+    extends _$GetCategoriesStateCopyWithImpl<$Res,
+        _$GetProductCategoriesErrorImpl>
+    implements _$$GetProductCategoriesErrorImplCopyWith<$Res> {
+  __$$GetProductCategoriesErrorImplCopyWithImpl(
+      _$GetProductCategoriesErrorImpl _value,
+      $Res Function(_$GetProductCategoriesErrorImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of GetCategoriesState
+  /// with the given fields replaced by the non-null parameter values.
+}
+
+/// @nodoc
+
+class _$GetProductCategoriesErrorImpl implements _GetProductCategoriesError {
+  const _$GetProductCategoriesErrorImpl();
+
+  @override
+  String toString() {
+    return 'GetCategoriesState.getProductCategoriesError()';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$GetProductCategoriesErrorImpl);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() initial,
+    required TResult Function() loading,
+    required TResult Function(List<CategoriesEntity> entity) loaded,
+    required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
+    required TResult Function(String errorText) errorSpecificCategory,
+    required TResult Function(String errorText) error,
+    required TResult Function(List<ProductCategoriesModel> model)
+        getProductCategoriesLoaded,
+    required TResult Function() getProductCategoriesError,
+  }) {
+    return getProductCategoriesError();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function()? initial,
+    TResult? Function()? loading,
+    TResult? Function(List<CategoriesEntity> entity)? loaded,
+    TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
+    TResult? Function(String errorText)? errorSpecificCategory,
+    TResult? Function(String errorText)? error,
+    TResult? Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult? Function()? getProductCategoriesError,
+  }) {
+    return getProductCategoriesError?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? initial,
+    TResult Function()? loading,
+    TResult Function(List<CategoriesEntity> entity)? loaded,
+    TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
+    TResult Function(String errorText)? errorSpecificCategory,
+    TResult Function(String errorText)? error,
+    TResult Function(List<ProductCategoriesModel> model)?
+        getProductCategoriesLoaded,
+    TResult Function()? getProductCategoriesError,
+    required TResult orElse(),
+  }) {
+    if (getProductCategoriesError != null) {
+      return getProductCategoriesError();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(_Initial value) initial,
+    required TResult Function(_Loading value) loading,
+    required TResult Function(_Loaded value) loaded,
+    required TResult Function(_SpecificCategoryLoaded value)
+        specificCategoryLoaded,
+    required TResult Function(_SpecificCategoryError value)
+        errorSpecificCategory,
+    required TResult Function(_Error value) error,
+    required TResult Function(_GetProductCategoriesLoaded value)
+        getProductCategoriesLoaded,
+    required TResult Function(_GetProductCategoriesError value)
+        getProductCategoriesError,
+  }) {
+    return getProductCategoriesError(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(_Initial value)? initial,
+    TResult? Function(_Loading value)? loading,
+    TResult? Function(_Loaded value)? loaded,
+    TResult? Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
+    TResult? Function(_SpecificCategoryError value)? errorSpecificCategory,
+    TResult? Function(_Error value)? error,
+    TResult? Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult? Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
+  }) {
+    return getProductCategoriesError?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(_Initial value)? initial,
+    TResult Function(_Loading value)? loading,
+    TResult Function(_Loaded value)? loaded,
+    TResult Function(_SpecificCategoryLoaded value)? specificCategoryLoaded,
+    TResult Function(_SpecificCategoryError value)? errorSpecificCategory,
+    TResult Function(_Error value)? error,
+    TResult Function(_GetProductCategoriesLoaded value)?
+        getProductCategoriesLoaded,
+    TResult Function(_GetProductCategoriesError value)?
+        getProductCategoriesError,
+    required TResult orElse(),
+  }) {
+    if (getProductCategoriesError != null) {
+      return getProductCategoriesError(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class _GetProductCategoriesError implements GetCategoriesState {
+  const factory _GetProductCategoriesError() = _$GetProductCategoriesErrorImpl;
 }

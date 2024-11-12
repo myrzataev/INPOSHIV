@@ -52,6 +52,7 @@ class _FirstTrackingScreen extends State<TrackingScreen> {
                     },
                     children: [
                       Stage1(
+                        controller: TextEditingController(),
                         onTap: () {
                           if (currentIndex < 1) {
                             _pageController.nextPage(

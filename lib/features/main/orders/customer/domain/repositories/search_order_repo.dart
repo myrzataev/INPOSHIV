@@ -2,5 +2,7 @@ import 'package:inposhiv/features/main/auction/data/models/customer_orders_model
 
 abstract interface class SearchOrderRepo {
   Future<List<CustomerOrdersModel>> searchOrder(
-      String fabricType, String category, String productName);
+      {required String fabricType,
+      required String category,
+      required String productName});
 }

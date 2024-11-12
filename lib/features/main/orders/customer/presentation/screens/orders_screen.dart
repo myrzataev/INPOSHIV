@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,6 +19,7 @@ import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.d
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/comment_column.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_card.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_widget.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
 import 'package:inposhiv/features/tracking/presentation/screens/tracking_screen.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
@@ -64,7 +67,13 @@ class _OrdersScreenState extends State<OrdersScreen>
       });
     controller.repeat(reverse: false);
     isCustomer = preferences.getBool("isCustomer") ?? true;
-    (isCustomer ?? true) ? callBlocForCustomer() : callBlocForManufacturer();
+    if (isCustomer ?? true) {
+      callBlocForCustomer();
+      getCustomerInvoices();
+    } else {
+      (callBlocForManufacturer());
+    }
+    ;
     super.initState();
   }
 
@@ -78,6 +87,12 @@ class _OrdersScreenState extends State<OrdersScreen>
     BlocProvider.of<CustomerAuctionsBloc>(context).add(
         CustomerAuctionsEvent.getCustomerAuctions(
             customerId: preferences.getString("customerId") ?? ""));
+  }
+
+  getCustomerInvoices() {
+    BlocProvider.of<GetManufacturerInvoicesBloc>(context).add(
+        GetManufacturerInvoicesEvent.getManufacturerInvoices(
+            manufactureId: preferences.getString("customerId") ?? ""));
   }
 
   @override
@@ -401,179 +416,59 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 ),
                               );
                             }),
-                        openedDetailedView
-                            ? SingleChildScrollView(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    CustomSearchWidget(
-                                        onTap: () {
-                                          setState(() {
-                                            openedDetailedView = false;
-                                          });
-                                        },
-                                        child:
-                                            SvgPicture.asset(SvgImages.goback)),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 20.h),
-                                      child: InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const TrackingScreen()));
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: AppColors.containersGrey,
-                                              borderRadius:
-                                                  BorderRadius.circular(15.r)),
-                                          child: Padding(
-                                            padding: EdgeInsets.all(10.h),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Этап 2",
-                                                  style: AppFonts.w400s16,
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 4.h),
-                                                  child: Text(
-                                                    "Пошив",
-                                                    style: AppFonts.w700s18,
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 8.h),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                        color: Colors.white,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    15.r)),
-                                                    child: CustomProgressBar(
-                                                      progress: 0.5.toInt(),
-                                                    ),
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 10.h),
-                                                  child: SizedBox(
-                                                    height: 65.h,
-                                                    child: ListView.separated(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        itemBuilder:
-                                                            (context, index) {
-                                                          return ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        10.r),
-                                                            child: Image.asset(
-                                                                Images.good1),
-                                                          );
-                                                        },
-                                                        separatorBuilder:
-                                                            (context, index) {
-                                                          return SizedBox(
-                                                            width: 5.w,
-                                                          );
-                                                        },
-                                                        itemCount: 3),
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "Комментарии от производителя",
-                                                  style: AppFonts.w400s14
-                                                      .copyWith(),
-                                                ),
-                                                const CommentColumn(
-                                                  comment:
-                                                      "Все готово к началу производства",
-                                                  data: "18.04.2024",
-                                                ),
-                                                const CommentColumn(
-                                                  comment:
-                                                      "Все готово к началу производства",
-                                                  data: "18.04.2024",
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 10.h),
-                                                  child: CustomButton(
-                                                    text: "Подтвердить",
-                                                    onPressed: () {},
-                                                    sizedTemporary: true,
-                                                    height: 50,
-                                                  ),
-                                                )
-                                              ],
+                        BlocBuilder<GetManufacturerInvoicesBloc,
+                            GetManufacturerInvoicesState>(
+                          builder: (context, state) {
+                            return state.maybeWhen(
+                                loading: () => const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    ),
+                                error: (errorText) => Center(
+                                      child: Text(errorText),
+                                    ),
+                                loaded: (model) {
+                                  // if (model.isNotEmpty) {
+                                  return ListView.separated(
+                                      itemCount: model.length,
+                                      separatorBuilder: (context, index) =>
+                                          SizedBox(
+                                            height: 10.h,
+                                          ),
+                                      itemBuilder: (context, index) {
+                                        return InkWell(
+                                          onTap: () => GoRouter.of(context)
+                                              .pushNamed(
+                                                  "detailedTrackingScreen",
+                                                  queryParameters: {
+                                                "invoiceId":
+                                                    model[index].invoiceUuid
+                                                // model[index].invoiceUuid
+                                              }),
+                                          child: Container(
+                                            height: 40.h,
+                                            decoration: BoxDecoration(
+                                                color: AppColors.cardsColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        15.r)),
+                                            child: Center(
+                                              child: Text("Заказ № $index"),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                            : Column(
-                                children: [
-                                  Text(
-                                    "Отслеживайте ваш заказ ",
-                                    style: AppFonts.w700s36,
-                                  ),
-                                  Expanded(
-                                    child: ListView.separated(
-                                        itemCount:
-                                            TrackingStatusData.data.length,
-                                        separatorBuilder: (context, index) =>
-                                            const Divider(
-                                              color: AppColors.borderColorGrey,
-                                            ),
-                                        itemBuilder: (context, index) {
-                                          final currentItem = mockData[index];
-                                          return Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 8.h,
-                                                horizontal: 10.w),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  currentItem.steps,
-                                                  style: AppFonts.w400s16.copyWith(
-                                                      color: currentItem.isDone
-                                                          ? AppColors
-                                                              .accentTextColor
-                                                          : AppColors
-                                                              .regularGreyColor),
-                                                ),
-                                                SvgPicture.asset(
-                                                  SvgImages.progress,
-                                                  color: currentItem.isDone
-                                                      ? AppColors
-                                                          .accentTextColor
-                                                      : AppColors
-                                                          .regularGreyColor,
-                                                )
-                                              ],
-                                            ),
-                                          );
-                                        }),
-                                  )
-                                ],
-                              )
+                                        );
+                                      });
+                                  // } else {
+                                  //   return const Center(
+                                  //     child: Text("empty"),
+                                  //   );
+                                  // }
+                                },
+                                orElse: () {
+                                  return const SizedBox.shrink();
+                                });
+                          },
+                        )
                       ],
                     ),
                   ))

@@ -1,8 +1,7 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:dio/dio.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,10 +26,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class OrderReadyScreen extends StatefulWidget {
   final String totalPriceInRuble;
-
+  final int orderId;
   const OrderReadyScreen({
     super.key,
     required this.totalPriceInRuble,
+    required this.orderId,
   });
 
   @override
@@ -48,6 +48,8 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
     bool? isAndroid = Provider.of<PlatformProvider>(context).platformIsAndroid;
     List<XFile>? images =
         Provider.of<PhotoProvider>(context, listen: true).selectedPhotos;
+    List<PlatformFile>? files =
+        Provider.of<PhotoProvider>(context, listen: true).selectedFiles;
     List<SizeModelWithController> sizesVm =
         Provider.of<SizeProvider>(context, listen: true).sizes;
     int totalCount =
@@ -59,28 +61,16 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BlocListener<CreateOrderBloc, CreateOrderState>(
+            BlocListener<CreateAuctionBloc, CreateAuctionState>(
               listener: (context, state) {
                 state.maybeWhen(
-                    createOrderLoaded: (model) {
-                      BlocProvider.of<CreateAuctionBloc>(context).add(
-                          CreateAuctionEvent.createAuction(
-                              orderId: model.orderId ?? 0));
-                    },
-                    createOrderError: (errorText) =>
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(SnackBar(content: Text(errorText))),
+                    auctionCreated: () => context.goNamed(
+                          "main",
+                          // extra: true
+                        ),
                     orElse: () {});
               },
-              child: BlocListener<CreateAuctionBloc, CreateAuctionState>(
-                listener: (context, state) {
-                  state.maybeWhen(
-                      auctionCreated: () =>
-                          context.goNamed("main", extra: true),
-                      orElse: () {});
-                },
-                child: const SizedBox.shrink(),
-              ),
+              child: const SizedBox.shrink(),
             ),
             CustomSearchWidget(
                 onTap: () {
@@ -133,32 +123,6 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                         ]);
                       },
                     ),
-                    // Positioned(
-                    //   top: 10.h,
-                    //   left: 10.w,
-                    //   right: 10.w,
-                    //   child: Row(
-                    //     // mainAxisAlignment:
-                    //     //     MainAxisAlignment.spaceBetween,
-                    //     children: [
-                    //       Container(
-                    //         alignment: Alignment.center,
-                    //         height: 36.h,
-                    //         decoration: BoxDecoration(
-                    //             color: Colors.white,
-                    //             borderRadius: BorderRadius.circular(60.r)),
-                    //         child: Padding(
-                    //           padding: EdgeInsets.symmetric(horizontal: 14.w),
-                    //           child: Text(
-                    //             "Очень надежный",
-                    //             style: AppFonts.w400s16
-                    //                 .copyWith(color: AppColors.accentTextColor),
-                    //           ),
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // ),
                     Positioned(
                       bottom: 10.h,
                       child: DotsIndicator(
@@ -237,38 +201,9 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
               child: CustomButton(
                   text: "Начать аукцион",
                   onPressed: () async {
-                    final formDataMap = {
-                      "categoryId": vm.categoryId,
-                      "fabricId": vm.fabricId,
-                      "priceUsd": vm.priceUsd,
-                      "priceRub": vm.priceRub,
-                      "productName": vm.productName,
-                      "quantity": totalCount,
-                      "sizeQuantitiesJson": jsonEncode({
-                        "1": sizesVm[0].quantity,
-                        "2": sizesVm[1].quantity,
-                        "3": sizesVm[2].quantity,
-                        "4": sizesVm[3].quantity,
-                        "5": sizesVm[4].quantity,
-                        "6": sizesVm[5].quantity,
-                      }),
-                      "photos": await Future.wait(images!.map((image) async {
-                        return await MultipartFile.fromFile(image.path,
-                            filename: image.name);
-                      })),
-                    };
-
-                    final formData = FormData.fromMap(formDataMap);
-                    // print(formData);
-                    formData.fields.forEach((field) {
-                      print('Key: ${field.key}, Value: ${field.value}');
-                    });
-                    BlocProvider.of<CreateOrderBloc>(context).add(
-                      CreateOrderEvent.createOrder(
-                        formData,
-                        preferences.getString("customerId") ?? "",
-                      ),
-                    );
+                    BlocProvider.of<CreateAuctionBloc>(context).add(
+                        CreateAuctionEvent.createAuction(
+                            orderId: widget.orderId));
                   }),
             )
           ],

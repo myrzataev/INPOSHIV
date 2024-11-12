@@ -10,6 +10,10 @@ class GetCategoriesState with _$GetCategoriesState {
       {required List<Subcategory?> entity}) = _SpecificCategoryLoaded;
   const factory GetCategoriesState.errorSpecificCategory(
       {required String errorText}) = _SpecificCategoryError;
-
   const factory GetCategoriesState.error({required String errorText}) = _Error;
+  const factory GetCategoriesState.getProductCategoriesLoaded(
+          {required List<ProductCategoriesModel> model}) =
+      _GetProductCategoriesLoaded;
+  const factory GetCategoriesState.getProductCategoriesError() =
+      _GetProductCategoriesError;
 }

@@ -17,6 +17,7 @@ import 'package:inposhiv/features/survey/presentation/providers/categories_provi
 import 'package:inposhiv/features/survey/presentation/providers/priorities_provider.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:inposhiv/services/showdialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -54,14 +55,7 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
             SendManufacturersSurveyState>(
           listener: (context, state) {
             state.maybeWhen(
-                loading: () => showDialog(
-                      context: context,
-                      builder: (context) => const Dialog(
-                        child: Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        ),
-                      ),
-                    ),
+                loading: () => Showdialog.showLoaderDialog(context),
                 loaded: (model) {
                   GoRouter.of(context).pop();
                   GoRouter.of(context).pushNamed("profileReady", extra: model);

@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,12 +9,14 @@ class CustomChoosePaymentWidget extends StatelessWidget {
   final bool? isChoosed;
   final Function onTap;
   final String icon;
+  final bool isActive;
   const CustomChoosePaymentWidget(
       {super.key,
       required this.text,
       required this.onTap,
       this.isChoosed,
-      required this.icon});
+      required this.icon,
+      required this.isActive});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class CustomChoosePaymentWidget extends StatelessWidget {
           onTap();
         },
         child: Ink(
-            height: 80.h,
+            height: 100.h,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10.r),
               border: Border.all(
@@ -43,14 +44,25 @@ class CustomChoosePaymentWidget extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 5.w),
                 child: Row(
                   children: [
-                    SvgPicture.asset(icon),
+                    SvgPicture.asset(
+                      icon,
+                      color: isActive ? Colors.black : AppColors.borderColor,
+                    ),
                     SizedBox(
                       width: 20.w,
                     ),
-                    Text(
-                      text,
-                      style: AppFonts.w400s16
-                          .copyWith(color: const Color(0xff101010)),
+                    SizedBox(
+                      width: 300.w,
+                      child: Text(
+                        text,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                        softWrap: true,
+                        style: AppFonts.w400s16.copyWith(
+                            color: isActive
+                                ? const Color(0xff101010)
+                                : AppColors.regularGreyColor),
+                      ),
                     ),
                   ],
                 ),

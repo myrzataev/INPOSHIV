@@ -13,7 +13,8 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthorizationScreen extends StatefulWidget {
-  const AuthorizationScreen({super.key});
+  final String phoneNumber;
+  const AuthorizationScreen({super.key, required this.phoneNumber});
 
   @override
   State<AuthorizationScreen> createState() => _AuthorizationScreenState();
@@ -29,7 +30,14 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    emailController.text = widget.phoneNumber;
+    super.initState();
   }
 
   @override
@@ -123,7 +131,10 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                           preferences.setString(
                               "refreshToken", entity.refreshToken ?? "");
                           preferences.setString("token", entity.token ?? "");
-
+                          preferences.setString(
+                              "userId", entity.userUuid ?? "");
+                          preferences.setString("customerId",
+                              entity.customerOrManufacturerUuid ?? "");
                           GoRouter.of(context).pushNamed("surveyStartScreen");
                         },
                         orElse: () {

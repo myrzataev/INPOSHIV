@@ -6,14 +6,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/chat/data/models/chat_rooms_model.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
+import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
@@ -29,9 +32,10 @@ class _ChatTabState extends State<ChatTab> {
   final preferences = locator<SharedPreferences>();
   List<ChatRoomsModel> _cachedModel = [];
   StompClient? stompClient;
-
+  bool? isCustomer;
   @override
   void initState() {
+    isCustomer = preferences.getBool("isCustomer");
     connect();
     callBloc();
     super.initState();
@@ -45,15 +49,14 @@ class _ChatTabState extends State<ChatTab> {
 
   void callBloc() {
     BlocProvider.of<ChatRoomsBloc>(context).add(ChatRoomsEvent.getChatRoomsList(
-        userUuid:
-         preferences.getString("userId") ?? ""));
+        userUuid: preferences.getString("userId") ?? ""));
   }
 
   void connect() {
     print("connect method is calling");
     stompClient = StompClient(
       config: StompConfig.sockJS(
-        url: 'http://192.168.31.208:8080/ws',
+        url: '${UrlRoutes.baseUrl}/ws',
         onConnect: (StompFrame frame) {
           stompClient!.subscribe(
             destination: "/getChatRooms/${preferences.getString("userId")}",
@@ -137,8 +140,11 @@ class _ChatTabState extends State<ChatTab> {
                         ),
                     chatRoomsLoaded: (model) {
                       if (model.isEmpty) {
-                        return  Center(
-                          child: Text("Начните переписываться", style: AppFonts.w700s16,),
+                        return Center(
+                          child: Text(
+                            "Начните переписываться",
+                            style: AppFonts.w700s16,
+                          ),
                         );
                       } else {
                         return _buildChatRoomsList(model, () {
@@ -175,6 +181,10 @@ class _ChatTabState extends State<ChatTab> {
             final currentItem = model[index];
             return InkWell(
               onTap: () {
+                Provider.of<ChatProvider>(context, listen: false)
+                    .updateChatRoomId(currentItem.chatUuid ?? "");
+                Provider.of<ChatProvider>(context, listen: false)
+                    .updateReceipentId(currentItem.recipientUuid ?? "");
                 GoRouter.of(context).pushNamed(
                   "chatScreen",
                   queryParameters: {
@@ -192,7 +202,9 @@ class _ChatTabState extends State<ChatTab> {
                       padding: EdgeInsets.only(right: 10.w),
                       child: CircleAvatar(
                         radius: 25.r,
-                        backgroundImage: const AssetImage(Images.sewingMachine),
+                        backgroundImage: AssetImage((isCustomer ?? true)
+                            ? Images.sewingMachine
+                            : Images.seller),
                       ),
                     ),
                     SizedBox(
@@ -202,7 +214,9 @@ class _ChatTabState extends State<ChatTab> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            currentItem.recipientName ?? "",
+                            (isCustomer ?? true)
+                                ? currentItem.recipientName ?? ""
+                                : currentItem.senderName ?? "",
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             softWrap: true,
@@ -228,11 +242,14 @@ class _ChatTabState extends State<ChatTab> {
                               currentItem.localDateTime?.toString() ?? "",
                               style: AppFonts.w400s16,
                             ),
-                            SvgPicture.asset(
-                              SvgImages.send,
-                              height: 20.h,
-                              width: 20.w,
-                            )
+                            ((currentItem.lastMessageSenderUuid ?? "") ==
+                                    (preferences.getString("userId") ?? ""))
+                                ? SvgPicture.asset(
+                                    SvgImages.send,
+                                    height: 20.h,
+                                    width: 20.w,
+                                  )
+                                : const SizedBox.shrink()
                           ],
                         ),
                       ],

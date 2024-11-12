@@ -85,8 +85,6 @@ class _AuctionScreenState extends State<AuctionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    int value = 0;
-    print(isCustomer);
     return Scaffold(
       drawer: const CustomDrawer(),
       body: SafeArea(
@@ -130,8 +128,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                     final currentItem =
                                         customerOrdersModel[index];
                                     return Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 10.w, vertical: 10.h),
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 10.h),
                                       child: InkWell(
                                         onTap: () {
                                           GoRouter.of(context).pushNamed(

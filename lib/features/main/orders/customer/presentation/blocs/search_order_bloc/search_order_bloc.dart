@@ -14,8 +14,14 @@ class SearchOrderBloc extends Bloc<SearchOrderEvent, SearchOrderState> {
     on<SearchOrderEvent>((event, emit) async {
       try {
         emit(const SearchOrderState.loading());
+
         final result = await searchOrderRepoImpl.searchOrder(
-            event.fabricType, event.category, event.productName);
+            fabricType: event.fabricType,
+            category: event.category,
+            productName: event.productName);
+        print("in bloc ${event.category}");
+        print("in bloc ${event.fabricType}");
+        print("in bloc ${event.productName}");
         emit(SearchOrderState.loaded(modelList: result));
       } catch (e) {
         emit(SearchOrderState.error(errorText: e.toString()));

@@ -152,7 +152,7 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
                       }
                       Provider.of<OrderProvider>(context, listen: false)
                           .updateFabricId(id: _selectedValue?.id ?? 0);
-                      GoRouter.of(context).pushNamed("setQuantityScreen");
+                      GoRouter.of(context).pushNamed("setQuantityWithoutSizeScreen");
                     }),
               )
             ],

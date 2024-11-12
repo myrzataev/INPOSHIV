@@ -14,8 +14,8 @@ class DioSettings {
   Dio dio = Dio(
     BaseOptions(
       baseUrl: 
-      // "https://24redirect.ru/",
-      "http://192.168.31.208:8080/",
+      // "http://192.168.31.209:8080/",
+      "https://24redirect.ru/",
       contentType: "application/json",
       headers: {
         "Accept": "application/json",

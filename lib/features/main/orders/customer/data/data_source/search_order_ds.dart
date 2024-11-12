@@ -6,13 +6,17 @@ class SearchOrderDs {
   final Dio dio;
   SearchOrderDs({required this.dio});
   Future<List<CustomerOrdersModel>> searchOrder(
-      String fabricType, String category, String productName) async {
-    final Response response = await dio.get(UrlRoutes.searchOrder,
-        queryParameters: {
-          "material": fabricType,
-          "category": category,
-          "productName": productName
-        });
+      {required String fabricType,
+      required String category,
+      required String productName}) async {
+        print(category);
+    final Response response =
+        await dio.get(UrlRoutes.searchOrder, queryParameters: {
+      if (fabricType.isNotEmpty) "material": fabricType,
+      if (category.isNotEmpty) "category": category,
+      if (productName.isNotEmpty) "productName": productName,
+     
+    });
     final List responseList = response.data;
     return responseList
         .map((element) => CustomerOrdersModel.fromJson(element))

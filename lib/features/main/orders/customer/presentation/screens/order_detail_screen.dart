@@ -129,7 +129,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         ],
                       ),
                     ),
-                  
+
                     CustomOrderDetailRow(
                       title: "Пункт доставки",
                       controller: addressController,
@@ -282,6 +282,9 @@ class CustomAttachDocument extends StatelessWidget {
             Text(
               text,
               style: AppFonts.w400s16,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
             ),
             Column(
               children: [
@@ -290,61 +293,11 @@ class CustomAttachDocument extends StatelessWidget {
                       onTap();
                     },
                     icon: SvgPicture.asset(SvgImages.document)),
-                // AnimatedSwitcher(
-                //   duration: const Duration(milliseconds: 300),
-                //   switchInCurve: Curves.easeIn,
-                //   switchOutCurve: Curves.easeOut,
-                //   child: (isShown ?? false)
-                //       ? Column(
-                //           key: ValueKey<int>(1), // Key for switching animation
-                //           children: [
-                //             TextButton(
-                //               onPressed: () {},
-                //               child: Text("data"),
-                //             ),
-                //             TextButton(
-                //               onPressed: () {},
-                //               child: Text("data"),
-                //             ),
-                //           ],
-                //         )
-                //       : SizedBox.shrink(key: ValueKey<int>(2)),
-                // )
               ],
             )
           ],
         ),
-        files != null
-            ? SizedBox(
-                height: 60.h,
-                child: ListView.separated(
-                    itemCount: files?.length ?? 0,
-                    separatorBuilder: (context, index) => SizedBox(
-                          width: 20.w,
-                        ),
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          GoRouter.of(context).pushNamed("seeDoc",
-                              queryParameters: {"path": files?[index].path});
-                        },
-                        child: Column(
-                          children: [
-                            const Icon(
-                              Icons.edit_document,
-                              color: AppColors.accentTextColor,
-                            ),
-                            Text(
-                              files?[index].name ?? "",
-                              style: AppFonts.w400s16
-                                  .copyWith(color: AppColors.accentTextColor),
-                            )
-                          ],
-                        ),
-                      );
-                    }))
-            : const SizedBox.shrink()
+      
       ],
     );
   }

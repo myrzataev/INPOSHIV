@@ -43,3 +43,5 @@ class ProductsList with _$ProductsList {
 
     factory ProductsList.fromJson(Map<String, dynamic> json) => _$ProductsListFromJson(json);
 }
+
+

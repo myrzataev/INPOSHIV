@@ -13,33 +13,20 @@ part 'create_order_state.dart';
 part 'create_order_bloc.freezed.dart';
 
 class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
-  final GetCurrentCurrencyImpl getCurrentCurrencyImpl;
+
   final CreateOrderRepoImpl createOrderRepoImpl;
   final GetSizesRepoimpl getSizesRepoimpl;
   CreateOrderBloc(
-      {required this.getCurrentCurrencyImpl,
+      {
       required this.getSizesRepoimpl,
       required this.createOrderRepoImpl})
       : super(const _Initial()) {
-    on<_GetCurrentCurrencyEvent>((event, emit) async {
-      await getCurrency(event, emit);
-    });
     on<_GetSizes>((event, emit) async {
       await getSizes(event: event, emit: emit);
     });
     on<_CreateOrder>((event, emit) async {
       await createOrder(event: event, emit: emit);
     });
-  }
-  Future<void> getCurrency(
-      CreateOrderEvent event, Emitter<CreateOrderState> emit) async {
-    emit(const CreateOrderState.loading());
-    try {
-      final result = await getCurrentCurrencyImpl.getCurrentCurrency();
-      emit(CreateOrderState.currencyLoaded(model: result));
-    } catch (e) {
-      emit(CreateOrderState.getCurrencyError(errorText: e.toString()));
-    }
   }
 
   Future<void> getSizes(
@@ -66,13 +53,13 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       final customerUuid = (event).customerUuid;
 
       // Call your repository to create the order
-     final result = await createOrderRepoImpl.creatOrder(
+      final result = await createOrderRepoImpl.creatOrder(
         formData: formData,
         customerUuid: customerUuid,
       );
 
       // Handle success (you might want to emit a success state here)
-      emit( CreateOrderState.createOrderLoaded(model: result));
+      emit(CreateOrderState.createOrderLoaded(model: result));
     } catch (e) {
       // Handle error
       emit(CreateOrderState.createOrderError(errorText: e.toString()));

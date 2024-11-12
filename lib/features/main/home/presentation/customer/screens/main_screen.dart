@@ -9,8 +9,10 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
+import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_bloc/get_auctions_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
@@ -27,9 +29,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MainScreen extends StatefulWidget {
   final bool isFromSearch;
+  final List<CustomerOrdersModel>? auctionsList;
+
   final bool? hasDialog;
   const MainScreen(
-      {super.key, required this.isFromSearch, this.hasDialog = false});
+      {super.key,
+      required this.isFromSearch,
+      this.hasDialog = false,
+      this.auctionsList});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -97,6 +104,8 @@ class _MainScreenState extends State<MainScreen> {
     final int role = Provider.of<RoleProvider>(context).role;
     List<SizeModelWithController> sizesVm =
         Provider.of<SizeProvider>(context, listen: true).sizes;
+    final List<CustomerOrdersModel> auctionsList = widget.auctionsList ?? [];
+
     return Scaffold(
       drawer: const CustomDrawer(),
       body: SafeArea(
@@ -111,7 +120,7 @@ class _MainScreenState extends State<MainScreen> {
                   ? Padding(
                       padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
                       child: Text(
-                        "По вашему поиску мы нашли 132 подходящих производителей",
+                        "По вашему поиску мы нашли ${auctionsList.length} подходящих ${(isCustomer ?? true) ? "производителей" : "заказов"} ",
                         style: AppFonts.w700s20.copyWith(
                           color: AppColors.accentTextColor,
                         ),
@@ -124,9 +133,7 @@ class _MainScreenState extends State<MainScreen> {
                       builder: (context, state) {
                         return state.maybeWhen(
                           orElse: () {
-                            return const Center(
-                              child: Text("default"),
-                            );
+                            return const SizedBox.shrink();
                           },
                           error: (errorText) => Center(
                             child: Text(errorText),

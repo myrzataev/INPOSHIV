@@ -16,6 +16,10 @@ class LoginDs {
   Future<LoginEntity> modelToEntity(
       {required String phoneNumber, required String password}) async {
     final model = await login(phoneNumber: phoneNumber, password: password);
-    return LoginEntity(refreshToken: model.refreshToken, token: model.token, );
+    return LoginEntity(
+        refreshToken: model.refreshToken,
+        token: model.token,
+        userUuid: model.userUuid,
+        customerOrManufacturerUuid: model.customerOrManufacturerUuid);
   }
 }

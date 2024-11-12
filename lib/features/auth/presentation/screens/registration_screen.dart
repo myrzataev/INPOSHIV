@@ -337,7 +337,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   entity.customerOrManufacturerUuid ?? "");
                               preferences.setBool(
                                   "isCustomer", entity.role == "CUSTOMER");
-                              GoRouter.of(context).pushNamed("authorization");
+                              GoRouter.of(context).pushNamed("authorization", queryParameters: {
+                                "number": phoneController.text
+                              });
                             },
                             error: (error) => ScaffoldMessenger.of(context)
                                 .showSnackBar(SnackBar(content: Text(error))),

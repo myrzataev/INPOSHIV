@@ -11,6 +11,8 @@ _$LoginResponseModelImpl _$$LoginResponseModelImplFromJson(
     _$LoginResponseModelImpl(
       token: json['token'] as String?,
       refreshToken: json['refreshToken'] as String?,
+      userUuid: json['userUuid'] as String?,
+      customerOrManufacturerUuid: json['customerOrManufacturerUuid'] as String?,
     );
 
 Map<String, dynamic> _$$LoginResponseModelImplToJson(
@@ -18,4 +20,6 @@ Map<String, dynamic> _$$LoginResponseModelImplToJson(
     <String, dynamic>{
       'token': instance.token,
       'refreshToken': instance.refreshToken,
+      'userUuid': instance.userUuid,
+      'customerOrManufacturerUuid': instance.customerOrManufacturerUuid,
     };

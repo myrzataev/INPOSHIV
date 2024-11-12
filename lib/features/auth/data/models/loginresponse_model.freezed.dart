@@ -22,6 +22,8 @@ LoginResponseModel _$LoginResponseModelFromJson(Map<String, dynamic> json) {
 mixin _$LoginResponseModel {
   String? get token => throw _privateConstructorUsedError;
   String? get refreshToken => throw _privateConstructorUsedError;
+  String? get userUuid => throw _privateConstructorUsedError;
+  String? get customerOrManufacturerUuid => throw _privateConstructorUsedError;
 
   /// Serializes this LoginResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -39,7 +41,11 @@ abstract class $LoginResponseModelCopyWith<$Res> {
           LoginResponseModel value, $Res Function(LoginResponseModel) then) =
       _$LoginResponseModelCopyWithImpl<$Res, LoginResponseModel>;
   @useResult
-  $Res call({String? token, String? refreshToken});
+  $Res call(
+      {String? token,
+      String? refreshToken,
+      String? userUuid,
+      String? customerOrManufacturerUuid});
 }
 
 /// @nodoc
@@ -59,6 +65,8 @@ class _$LoginResponseModelCopyWithImpl<$Res, $Val extends LoginResponseModel>
   $Res call({
     Object? token = freezed,
     Object? refreshToken = freezed,
+    Object? userUuid = freezed,
+    Object? customerOrManufacturerUuid = freezed,
   }) {
     return _then(_value.copyWith(
       token: freezed == token
@@ -68,6 +76,14 @@ class _$LoginResponseModelCopyWithImpl<$Res, $Val extends LoginResponseModel>
       refreshToken: freezed == refreshToken
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      userUuid: freezed == userUuid
+          ? _value.userUuid
+          : userUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerOrManufacturerUuid: freezed == customerOrManufacturerUuid
+          ? _value.customerOrManufacturerUuid
+          : customerOrManufacturerUuid // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -81,7 +97,11 @@ abstract class _$$LoginResponseModelImplCopyWith<$Res>
       __$$LoginResponseModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? token, String? refreshToken});
+  $Res call(
+      {String? token,
+      String? refreshToken,
+      String? userUuid,
+      String? customerOrManufacturerUuid});
 }
 
 /// @nodoc
@@ -99,6 +119,8 @@ class __$$LoginResponseModelImplCopyWithImpl<$Res>
   $Res call({
     Object? token = freezed,
     Object? refreshToken = freezed,
+    Object? userUuid = freezed,
+    Object? customerOrManufacturerUuid = freezed,
   }) {
     return _then(_$LoginResponseModelImpl(
       token: freezed == token
@@ -109,6 +131,14 @@ class __$$LoginResponseModelImplCopyWithImpl<$Res>
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      userUuid: freezed == userUuid
+          ? _value.userUuid
+          : userUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerOrManufacturerUuid: freezed == customerOrManufacturerUuid
+          ? _value.customerOrManufacturerUuid
+          : customerOrManufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -116,7 +146,11 @@ class __$$LoginResponseModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LoginResponseModelImpl implements _LoginResponseModel {
-  const _$LoginResponseModelImpl({this.token, this.refreshToken});
+  const _$LoginResponseModelImpl(
+      {this.token,
+      this.refreshToken,
+      this.userUuid,
+      this.customerOrManufacturerUuid});
 
   factory _$LoginResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginResponseModelImplFromJson(json);
@@ -125,10 +159,14 @@ class _$LoginResponseModelImpl implements _LoginResponseModel {
   final String? token;
   @override
   final String? refreshToken;
+  @override
+  final String? userUuid;
+  @override
+  final String? customerOrManufacturerUuid;
 
   @override
   String toString() {
-    return 'LoginResponseModel(token: $token, refreshToken: $refreshToken)';
+    return 'LoginResponseModel(token: $token, refreshToken: $refreshToken, userUuid: $userUuid, customerOrManufacturerUuid: $customerOrManufacturerUuid)';
   }
 
   @override
@@ -138,12 +176,19 @@ class _$LoginResponseModelImpl implements _LoginResponseModel {
             other is _$LoginResponseModelImpl &&
             (identical(other.token, token) || other.token == token) &&
             (identical(other.refreshToken, refreshToken) ||
-                other.refreshToken == refreshToken));
+                other.refreshToken == refreshToken) &&
+            (identical(other.userUuid, userUuid) ||
+                other.userUuid == userUuid) &&
+            (identical(other.customerOrManufacturerUuid,
+                    customerOrManufacturerUuid) ||
+                other.customerOrManufacturerUuid ==
+                    customerOrManufacturerUuid));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, token, refreshToken);
+  int get hashCode => Object.hash(
+      runtimeType, token, refreshToken, userUuid, customerOrManufacturerUuid);
 
   /// Create a copy of LoginResponseModel
   /// with the given fields replaced by the non-null parameter values.
@@ -165,7 +210,9 @@ class _$LoginResponseModelImpl implements _LoginResponseModel {
 abstract class _LoginResponseModel implements LoginResponseModel {
   const factory _LoginResponseModel(
       {final String? token,
-      final String? refreshToken}) = _$LoginResponseModelImpl;
+      final String? refreshToken,
+      final String? userUuid,
+      final String? customerOrManufacturerUuid}) = _$LoginResponseModelImpl;
 
   factory _LoginResponseModel.fromJson(Map<String, dynamic> json) =
       _$LoginResponseModelImpl.fromJson;
@@ -174,6 +221,10 @@ abstract class _LoginResponseModel implements LoginResponseModel {
   String? get token;
   @override
   String? get refreshToken;
+  @override
+  String? get userUuid;
+  @override
+  String? get customerOrManufacturerUuid;
 
   /// Create a copy of LoginResponseModel
   /// with the given fields replaced by the non-null parameter values.

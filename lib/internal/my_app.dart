@@ -45,18 +45,25 @@ import 'package:inposhiv/features/main/chat/data/repositories/send_message_repoi
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
+import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_manufacturers_ds.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_user_info_ds.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_manufacturers_repoimpl.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_user_info_repoimpl.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/data/data_source/confirm_tracking_stage_ds.dart';
+import 'package:inposhiv/features/main/orders/customer/data/data_source/order_tracking_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/search_order_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/send_invoice_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/send_order_details_ds.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/confirm_tracking_stage_repoimpl.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/order_tracking_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/search_order_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_invoice_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_order_details_repo_impl.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/confirm_tracking_stage_bloc/confirm_tracking_stage_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/order_tracking_bloc/order_tracking_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/search_order_bloc/search_order_bloc.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_manufacturer_invoices_ds.dart';
@@ -71,6 +78,7 @@ import 'package:inposhiv/features/onboarding/customer/data/repositories/get_curr
 import 'package:inposhiv/features/onboarding/customer/data/repositories/get_fabric_types_repoimpl.dart';
 import 'package:inposhiv/features/onboarding/customer/data/repositories/get_sizes_repoimpl.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
+import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/get_fabric_types_bloc/get_fabric_types_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/providers/order_provider.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/data/data_source/create_manufacturer_profile_ds.dart';
@@ -340,7 +348,21 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => GetManufacturerInvoicesRepoimpl(
                 getManufacturerInvoicesDs:
-                    RepositoryProvider.of<GetManufacturerInvoicesDs>(context)))
+                    RepositoryProvider.of<GetManufacturerInvoicesDs>(context))),
+        RepositoryProvider(
+            create: (context) => OrderTrackingDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => OrderTrackingRepoimpl(
+                orderTrackingDs:
+                    RepositoryProvider.of<OrderTrackingDs>(context))),
+        RepositoryProvider(
+            create: (context) => ConfirmTrackingStageDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => ConfirmTrackingStageRepoimpl(
+                confirmTrackingStageDs:
+                    RepositoryProvider.of<ConfirmTrackingStageDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -369,13 +391,16 @@ class _MyAppState extends State<MyApp> {
                       RepositoryProvider.of<GetFabricTypesRepoimpl>(context))),
           BlocProvider(
             create: (context) => CreateOrderBloc(
-                getCurrentCurrencyImpl:
-                    RepositoryProvider.of<GetCurrentCurrencyImpl>(context),
                 getSizesRepoimpl:
                     RepositoryProvider.of<GetSizesRepoimpl>(context),
                 createOrderRepoImpl:
                     RepositoryProvider.of<CreateOrderRepoImpl>(context)),
           ),
+          BlocProvider(
+              create: (context) => CurrentCurrencyBloc(
+                    getCurrentCurrencyImpl:
+                        RepositoryProvider.of<GetCurrentCurrencyImpl>(context),
+                  )),
           BlocProvider(
               create: (context) => GetAuctionMembersBloc(
                   getAuctionMembersRepoimpl:
@@ -454,6 +479,15 @@ class _MyAppState extends State<MyApp> {
               create: (context) => GetManufacturerInvoicesBloc(
                   getManufacturerInvoicesRepoimpl:
                       RepositoryProvider.of<GetManufacturerInvoicesRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => OrderTrackingBloc(
+                  orderTrackingRepoimpl:
+                      RepositoryProvider.of<OrderTrackingRepoimpl>(context))),
+          BlocProvider(
+              create: (context) => ConfirmTrackingStageBloc(
+                  confirmTrackingStageRepoimpl:
+                      RepositoryProvider.of<ConfirmTrackingStageRepoimpl>(
                           context)))
         ],
         child: MultiProvider(
@@ -466,7 +500,8 @@ class _MyAppState extends State<MyApp> {
                 create: (context) =>
                     PlatformProvider(platformIsAndroid: isAndroid)),
             ChangeNotifierProvider(create: (context) => CategoriesProvider()),
-            ChangeNotifierProvider(create: (context) => PrioritiesProvider())
+            ChangeNotifierProvider(create: (context) => PrioritiesProvider()),
+            ChangeNotifierProvider(create: (context) => ChatProvider())
           ],
           child: TextFieldUnfocus(
             child: ScreenUtilInit(

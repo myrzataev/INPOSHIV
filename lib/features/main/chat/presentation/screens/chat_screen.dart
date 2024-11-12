@@ -8,6 +8,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -24,11 +25,13 @@ class ChatScreen extends StatefulWidget {
   final String chatUuid;
   final String receipentUuid;
   final String orderId;
+  final String autoMessage;
   const ChatScreen(
       {super.key,
       required this.chatUuid,
       required this.receipentUuid,
-      required this.orderId});
+      required this.orderId,
+      required this.autoMessage});
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -39,6 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   StompClient? stompClient;
   final preferences = locator<SharedPreferences>();
+  bool? isCustomer;
   String? chatUuid; // Static UUID, modify this as needed
   List<types.Message> _messages = []; // List of chat messages
   // String? chatUuidMock =
@@ -50,24 +54,48 @@ class _ChatScreenState extends State<ChatScreen> {
 
   late final _currentUser;
   late final _secondUser;
+  bool isConnected = false;
+
   @override
   void initState() {
-    chatUuid = widget.chatUuid;
-    _currentUser =
-        // types.User(id: "219b0af9-7149-4230-9e63-a49cd45aee56");
-        types.User(id: preferences.getString("userId") ?? "");
-    _secondUser = types.User(id: widget.receipentUuid);
-    BlocProvider.of<ChatsBloc>(context).add(ChatsEvent.getChatRoomHistory(
-        chatRoomUuid: chatUuid ?? "",
-        model: const PagebleModel(page: 0, size: 1, sort: [])));
-    types.User(id: preferences.getString("userId") ?? "");
     super.initState();
+
+    isCustomer = preferences.getBool("isCustomer");
+    chatUuid = widget.chatUuid;
+    _currentUser = types.User(id: preferences.getString("userId") ?? "");
+    _secondUser = types.User(id: widget.receipentUuid);
+
+    // Fetch chat room history when screen loads
+    BlocProvider.of<ChatsBloc>(context).add(ChatsEvent.getChatRoomHistory(
+      chatRoomUuid: chatUuid ?? "",
+      model: const PagebleModel(page: 0, size: 1, sort: []),
+    ));
+
     connect(); // Establish WebSocket connection when the screen loads
+
+    // Check if autoMessage is not null and not empty, then send it automatically
+   sendAutoMessageWithDelay();
+  }
+
+  void sendAutoMessageWithDelay() {
+    // Wait for 2 seconds and check if WebSocket is connected
+    Future.delayed(Duration(seconds: 1), () {
+      if (isConnected && widget.autoMessage.isNotEmpty) {
+        _handleSendPressed(
+          types.PartialText(text: widget.autoMessage),
+          widget.receipentUuid,
+          widget.chatUuid,
+        );
+        print("Auto message sent: ${widget.autoMessage}");
+      } else {
+        print("WebSocket not connected or no auto message to send.");
+      }
+    });
   }
 
   @override
   void dispose() {
-    disconnect(); // Close WebSocket connection when the screen is disposed
+    // disconnect(); // Close WebSocket connection when the screen is disposed
     super.dispose();
   }
 
@@ -75,13 +103,13 @@ class _ChatScreenState extends State<ChatScreen> {
   void connect() {
     stompClient = StompClient(
       config: StompConfig.sockJS(
-        url: 'http://192.168.31.208:8080/ws', // Replace with your WebSocket URL
+        url: '${UrlRoutes.baseUrl}/ws', // Replace with your WebSocket URL
         onConnect: (StompFrame frame) {
           debugPrint('Connected to WebSocket');
           debugPrint('Frame Headers: ${frame.headers}');
           debugPrint('Frame Body: ${frame.body}');
           debugPrint("Subscribing to /queue/messages/$chatUuid");
-
+          isConnected = true;
           stompClient!.subscribe(
             destination: "/queue/messages/$chatUuid", // Chat destination
             callback: (StompFrame frame) {
@@ -92,10 +120,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 var receivedMessage = jsonDecode(frame.body!);
                 print('Received frame message: ${receivedMessage}');
 
-                if (receivedMessage['senderUuid'] != 
-                // senderIdMock
-                    _currentUser.id
-                    ) {
+                if (receivedMessage['senderUuid'] !=
+                    // senderIdMock
+                    _currentUser.id) {
                   _handleIncomingMessage(
                       receivedMessage); // Handle incoming message
                 } else {}
@@ -133,7 +160,33 @@ class _ChatScreenState extends State<ChatScreen> {
         content: message.text));
   }
 
-  void _handleSendPressed(types.PartialText message) {
+  void sendAutoMessage() {
+    print("this method is triggering");
+    print("receipent id is ${widget.receipentUuid}");
+    print("chat id is ${widget.chatUuid}");
+    // print("receipent id is ${widget.receipentUuid}");
+    stompClient?.send(
+      destination:
+          "/app/sendMessage/$chatUuid", // The destination where messages are sent
+      body: jsonEncode({
+        "recipientUuid":
+            // "f9b4d387-871a-4123-9a73-70830c220e88",
+            widget
+                .receipentUuid, // Replace this with logic to get recipient's UUID
+        'senderUuid':
+            // "9e205782-e9ea-40e0-9465-19efbe7709ea",
+            _currentUser.id,
+        "content": "test message", // The actual message content
+        'chatUuid': widget.chatUuid,
+      }),
+    );
+  }
+
+  void _handleSendPressed(
+    types.PartialText message,
+    String receipentId,
+    String chatUuid,
+  ) {
     if (stompClient != null && stompClient!.connected) {
       print("///////sending");
       final textMessage = types.TextMessage(
@@ -151,14 +204,15 @@ class _ChatScreenState extends State<ChatScreen> {
         destination:
             "/app/sendMessage/$chatUuid", // The destination where messages are sent
         body: jsonEncode({
-          "recipientUuid":
-              // "f9b4d387-871a-4123-9a73-70830c220e88",
-              _secondUser.id, // Replace this with logic to get recipient's UUID
+          "recipientUuid": receipentId,
+          // "f9b4d387-871a-4123-9a73-70830c220e88",
+          // _secondUser.id, // Replace this with logic to get recipient's UUID
           'senderUuid':
               // "9e205782-e9ea-40e0-9465-19efbe7709ea",
               _currentUser.id,
           "content": message.text, // The actual message content
-          'chatUuid': widget.chatUuid,
+          'chatUuid': chatUuid
+          //  widget.chatUuid,
         }),
       );
       print("///////sended");
@@ -186,7 +240,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void disconnect() {
-    stompClient?.deactivate(); // Deactivate the WebSocket connection
+    // stompClient?.deactivate(); // Deactivate the WebSocket connection
     print('Disconnected');
   }
 
@@ -205,7 +259,9 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 65.w),
               child: CustomButton(
-                  text: "Сформировать заказ",
+                  text: (isCustomer ?? true)
+                      ? "Сформировать заказ"
+                      : "Счет на оплату",
                   onPressed: () {
                     // String? userIdFromPrefs = preferences.getString("userId");
 
@@ -217,7 +273,8 @@ class _ChatScreenState extends State<ChatScreen> {
                     //   print("User ID does not match _secondUser ID");
                     // }
 
-                    GoRouter.of(context).pushNamed("orderDetails",
+                    GoRouter.of(context).pushNamed(
+                        (isCustomer ?? true) ? "orderDetails" : "invoiceScreen",
                         queryParameters: {"orderId": "1"});
                   }),
             ),
@@ -332,9 +389,12 @@ class _ChatScreenState extends State<ChatScreen> {
               ),
             ),
             messages: _messages, // Display the list of messages
-            onSendPressed:
-                //  sendMessage,
-                _handleSendPressed, // What happens when the user sends a message
+            onSendPressed: (message) {
+              _handleSendPressed(
+                  message, widget.receipentUuid, widget.chatUuid);
+            }
+            //  sendMessage,
+            , // What happens when the user sends a message
             user: _currentUser),
       ),
     );
@@ -365,59 +425,59 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget buildChatInputBar() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
-      child: Row(
-        children: [
-          // Attachment icon
-          IconButton(
-            icon: SvgPicture.asset(
-                SvgImages.document), // Replace with your attachment icon SVG
-            onPressed: () {
-              // Handle attachment press
-            },
-          ),
+  // Widget buildChatInputBar() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 8.0),
+  //     child: Row(
+  //       children: [
+  //         // Attachment icon
+  //         IconButton(
+  //           icon: SvgPicture.asset(
+  //               SvgImages.document), // Replace with your attachment icon SVG
+  //           onPressed: () {
+  //             // Handle attachment press
+  //           },
+  //         ),
 
-          // Input field
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-              decoration: BoxDecoration(
-                color: Colors.white, // Background color
-                borderRadius: BorderRadius.circular(20.0), // Rounded corners
-                border:
-                    Border.all(color: Colors.grey.shade300), // Optional border
-              ),
-              child: TextField(
-                decoration: const InputDecoration(
-                  hintText: "Сообщение", // Hint text
-                  border: InputBorder.none, // No border for clean UI
-                ),
-                style: const TextStyle(fontSize: 16.0), // Customize text style
-                onChanged: (text) {
-                  // Handle text change
-                },
-              ),
-            ),
-          ),
+  //         // Input field
+  //         Expanded(
+  //           child: Container(
+  //             padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+  //             decoration: BoxDecoration(
+  //               color: Colors.white, // Background color
+  //               borderRadius: BorderRadius.circular(20.0), // Rounded corners
+  //               border:
+  //                   Border.all(color: Colors.grey.shade300), // Optional border
+  //             ),
+  //             child: TextField(
+  //               decoration: const InputDecoration(
+  //                 hintText: "Сообщение", // Hint text
+  //                 border: InputBorder.none, // No border for clean UI
+  //               ),
+  //               style: const TextStyle(fontSize: 16.0), // Customize text style
+  //               onChanged: (text) {
+  //                 // Handle text change
+  //               },
+  //             ),
+  //           ),
+  //         ),
 
-          const SizedBox(
-              width: 10.0), // Spacing between input field and send button
+  //         const SizedBox(
+  //             width: 10.0), // Spacing between input field and send button
 
-          // Send button (circle)
-          CircleAvatar(
-            radius: 20, // Size of the button
-            backgroundColor: Colors.green, // Background color
-            child: IconButton(
-              icon: Icon(Icons.send, color: Colors.white), // Send icon
-              onPressed: () {
-                _handleSendPressed(types.PartialText(text: "text"));
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  //         // Send button (circle)
+  //         CircleAvatar(
+  //           radius: 20, // Size of the button
+  //           backgroundColor: Colors.green, // Background color
+  //           child: IconButton(
+  //             icon: Icon(Icons.send, color: Colors.white), // Send icon
+  //             onPressed: () {
+  //               _handleSendPressed(types.PartialText(text: "text"));
+  //             },
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 }

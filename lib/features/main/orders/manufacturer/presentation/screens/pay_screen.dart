@@ -74,6 +74,7 @@ class _PayScreenState extends State<PayScreen> {
                                               child: Row(
                                                 children: [
                                                   CustomChoosePaymentWidget(
+                                                    isActive: true,
                                                       text: "30 дней",
                                                       icon: SvgImages.lock,
                                                       onTap: () {
@@ -86,6 +87,7 @@ class _PayScreenState extends State<PayScreen> {
                                                             horizontal: 10.w),
                                                     child:
                                                         CustomChoosePaymentWidget(
+                                                          isActive: true,
                                                             text: "60 дней",
                                                             icon:
                                                                 SvgImages.lock,
@@ -96,6 +98,7 @@ class _PayScreenState extends State<PayScreen> {
                                                             }),
                                                   ),
                                                   CustomChoosePaymentWidget(
+                                                    isActive: true,
                                                       text: "90 дней",
                                                       icon: SvgImages.lock,
                                                       onTap: () {

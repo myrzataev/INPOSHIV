@@ -137,15 +137,15 @@ class __$$SearchOrderImplCopyWithImpl<$Res>
     Object? productName = null,
   }) {
     return _then(_$SearchOrderImpl(
-      null == fabricType
+      fabricType: null == fabricType
           ? _value.fabricType
           : fabricType // ignore: cast_nullable_to_non_nullable
               as String,
-      null == category
+      category: null == category
           ? _value.category
           : category // ignore: cast_nullable_to_non_nullable
               as String,
-      null == productName
+      productName: null == productName
           ? _value.productName
           : productName // ignore: cast_nullable_to_non_nullable
               as String,
@@ -156,7 +156,10 @@ class __$$SearchOrderImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SearchOrderImpl implements _SearchOrder {
-  const _$SearchOrderImpl(this.fabricType, this.category, this.productName);
+  const _$SearchOrderImpl(
+      {required this.fabricType,
+      required this.category,
+      required this.productName});
 
   @override
   final String fabricType;
@@ -257,8 +260,10 @@ class _$SearchOrderImpl implements _SearchOrder {
 }
 
 abstract class _SearchOrder implements SearchOrderEvent {
-  const factory _SearchOrder(final String fabricType, final String category,
-      final String productName) = _$SearchOrderImpl;
+  const factory _SearchOrder(
+      {required final String fabricType,
+      required final String category,
+      required final String productName}) = _$SearchOrderImpl;
 
   @override
   String get fabricType;

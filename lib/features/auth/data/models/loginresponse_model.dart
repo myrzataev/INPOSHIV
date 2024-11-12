@@ -1,3 +1,7 @@
+// To parse this JSON data, do
+//
+//     final loginResponseModel = loginResponseModelFromJson(jsonString);
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 
@@ -13,6 +17,8 @@ class LoginResponseModel with _$LoginResponseModel {
     const factory LoginResponseModel({
         String? token,
         String? refreshToken,
+        String? userUuid,
+        String? customerOrManufacturerUuid,
     }) = _LoginResponseModel;
 
     factory LoginResponseModel.fromJson(Map<String, dynamic> json) => _$LoginResponseModelFromJson(json);

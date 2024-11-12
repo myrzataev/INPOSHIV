@@ -8,6 +8,8 @@ class LoginEntity with _$LoginEntity {
     const factory LoginEntity({
         String? token,
         String? refreshToken,
+        String? userUuid,
+        String? customerOrManufacturerUuid,
     }) = _LoginEntity;
 
 }
