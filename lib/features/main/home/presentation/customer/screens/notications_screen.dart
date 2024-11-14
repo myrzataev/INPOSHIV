@@ -8,6 +8,7 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/notification_card.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_order_details_bloc/get_order_details_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,7 +22,7 @@ class NoticationsScreen extends StatefulWidget {
 
 class _NoticationsScreen extends State<NoticationsScreen> {
   final preferences = locator<SharedPreferences>();
-
+  bool? isCustomer;
   getCustomerInvoices() {
     BlocProvider.of<GetManufacturerInvoicesBloc>(context).add(
         GetManufacturerInvoicesEvent.getManufacturerInvoices(
@@ -30,7 +31,9 @@ class _NoticationsScreen extends State<NoticationsScreen> {
 
   @override
   void initState() {
-    getCustomerInvoices();
+    isCustomer = preferences.getBool("isCustomer");
+
+    // getCustomerInvoices();
     super.initState();
   }
 
@@ -55,51 +58,133 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                     onTap: () {}, child: SvgPicture.asset(SvgImages.search))
               ],
             ),
-            BlocBuilder<GetManufacturerInvoicesBloc,
-                GetManufacturerInvoicesState>(
-              builder: (context, state) {
-                return state.maybeWhen(
-                    loading: () => const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        ),
-                    error: (errorText) => Center(
-                          child: Text(errorText),
-                        ),
-                    loaded: (model) {
-                      if (model.isNotEmpty) {
-                        return Expanded(
-                            child: Padding(
-                          padding: EdgeInsets.only(top: 30.h),
-                          child: ListView.separated(
-                              itemBuilder: (context, index) {
-                                return NotificationCard(
-                                  title: "Счет на оплату",
-                                  onTap: () {
-                                    context.go(
-                                        "/orders/invoiceScreenForCustomer",
-                                        extra: model[index]);
+            (isCustomer ?? true)
+                ? BlocBuilder<GetManufacturerInvoicesBloc,
+                    GetManufacturerInvoicesState>(
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                          loading: () => const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              ),
+                          error: (errorText) => Center(
+                                child: Text(errorText),
+                              ),
+                          loaded: (model) {
+                            if (model.isNotEmpty) {
+                              return Expanded(
+                                  child: Padding(
+                                padding: EdgeInsets.only(top: 30.h),
+                                child: ListView.separated(
+                                    itemBuilder: (context, index) {
+                                      return NotificationCard(
+                                        title: "Счет на оплату",
+                                        onTap: () {
+                                          context.go(
+                                              "/orders/invoiceScreenForCustomer",
+                                              extra: model[index]);
+                                        },
+                                        description: "Подтвердите",
+                                      );
+                                    },
+                                    separatorBuilder: (index, context) {
+                                      return SizedBox(
+                                        height: 7.h,
+                                      );
+                                    },
+                                    itemCount: model.length),
+                              ));
+                            } else {
+                              return const Center(
+                                child: Text("Пусто"),
+                              );
+                            }
+                          },
+                          orElse: () {
+                            return Expanded(
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 30.h),
+                              child: ListView.separated(
+                                  itemBuilder: (context, index) {
+                                    return NotificationCard(
+                                      title: "Счет на оплату",
+                                      onTap: () {
+                                        // context.go("/orders/invoiceScreenForCustomer",
+                                        //     extra: model[index]);
+                                      },
+                                      description: "Подтвердите",
+                                    );
                                   },
-                                  description: "Подтвердите",
-                                );
-                              },
-                              separatorBuilder: (index, context) {
-                                return SizedBox(
-                                  height: 7.h,
-                                );
-                              },
-                              itemCount: model.length),
-                        ));
-                      } else {
-                        return const Center(
-                          child: Text("Пусто"),
-                        );
-                      }
+                                  separatorBuilder: (index, context) {
+                                    return SizedBox(
+                                      height: 7.h,
+                                    );
+                                  },
+                                  itemCount: 12),
+                            ));
+                          });
                     },
-                    orElse: () {
-                      return const SizedBox.shrink();
-                    });
-              },
-            )
+                  )
+                : BlocBuilder<GetOrderDetailsBloc, GetOrderDetailsState>(
+                    builder: (context, state) {
+                      return state.maybeWhen(
+                          loading: () => const Center(
+                                child: CircularProgressIndicator.adaptive(),
+                              ),
+                          error: (errorText) => Center(
+                                child: Text(errorText),
+                              ),
+                          loaded: (model) {
+                            return Expanded(
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 30.h),
+                              child: ListView.separated(
+                                  itemBuilder: (context, index) {
+                                    return NotificationCard(
+                                      title: "Счет на оплату",
+                                      onTap: () {
+                                        print("object");
+                                        context.go(
+                                            "/orders/orderDetailsForManufacturer",
+                                            extra: model);
+                                      },
+                                      description: "Подтвердите",
+                                    );
+                                  },
+                                  separatorBuilder: (index, context) {
+                                    return SizedBox(
+                                      height: 7.h,
+                                    );
+                                  },
+                                  itemCount: 1),
+                            ));
+                          },
+                          orElse: () {
+                            return Expanded(
+                                child: Padding(
+                              padding: EdgeInsets.only(top: 30.h),
+                              child: ListView.separated(
+                                  itemBuilder: (context, index) {
+                                    return NotificationCard(
+                                      title: "Счет на оплату",
+                                      onTap: () {
+                                        context.go(
+                                          "/orders/orderDetailsForManufacturer",
+                                          // extra: model
+                                        );
+                                      },
+                                      description: "Подтвердите",
+                                    );
+                                  },
+                                  separatorBuilder: (index, context) {
+                                    return SizedBox(
+                                      height: 7.h,
+                                    );
+                                  },
+                                  itemCount: 1),
+                            ));
+                          });
+                    },
+                  )
           ],
         ),
       )),

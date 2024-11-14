@@ -3,14 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/end_of_tracking.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/stage1.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/stage2.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/stage3.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/stage4.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/stage5.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/stage6.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/stage7.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/end_of_tracking.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage2.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage3.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage4.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage5.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage6.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage7.dart';
 import 'package:inposhiv/resources/resources.dart';
 
 class TrackingScreen extends StatefulWidget {
@@ -51,83 +51,83 @@ class _FirstTrackingScreen extends State<TrackingScreen> {
                       });
                     },
                     children: [
-                      Stage1(
-                        controller: TextEditingController(),
-                        onTap: () {
-                          if (currentIndex < 1) {
-                            _pageController.nextPage(
-                              duration: Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {}
-                        },
-                      ),
-                      Stage2(
-                        currentIndexOfData: 10,
-                        onTap: () {
-                          if (currentIndex < 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {}
-                        },
-                      ),
-                      Stage3(
-                        currentIndexOfData: 20,
-                        onTap: () {
-                          if (currentIndex < 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {}
-                        },
-                      ),
-                      Stage4(
-                        currentIndexOfData: 30,
-                        onTap: () {
-                          if (currentIndex < 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {}
-                        },
-                      ),
-                      Stage5(
-                        currentIndexOfData: 40,
-                        onTap: () {
-                          if (currentIndex < 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {}
-                        },
-                      ),
-                      Stage6(
-                        currentIndexOfData: 50,
-                        onTap: () {
-                          if (currentIndex < 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {}
-                        },
-                      ),
-                      Stage7(
-                        onTap: () {
-                          if (currentIndex < 1) {
-                            _pageController.nextPage(
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.easeInOut,
-                            );
-                          } else {}
-                        },
-                      ),
-                      const EndOfTracking()
+                      // Stage1(
+                      //   controller: TextEditingController(),
+                      //   onTap: () {
+                      //     if (currentIndex < 1) {
+                      //       _pageController.nextPage(
+                      //         duration: Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //     } else {}
+                      //   },
+                      // ),
+                      // Stage2ForCustomer(
+                      //   currentIndexOfData: 10,
+                      //   onTap: () {
+                      //     if (currentIndex < 1) {
+                      //       _pageController.nextPage(
+                      //         duration: const Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //     } else {}
+                      //   },
+                      // ),
+                      // Stage3ForCustomer(
+                      //   currentIndexOfData: 20,
+                      //   onTap: () {
+                      //     if (currentIndex < 1) {
+                      //       _pageController.nextPage(
+                      //         duration: const Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //     } else {}
+                      //   },
+                      // ),
+                      // Stage4ForCustomer(
+                      //   currentIndexOfData: 30,
+                      //   onTap: () {
+                      //     if (currentIndex < 1) {
+                      //       _pageController.nextPage(
+                      //         duration: const Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //     } else {}
+                      //   },
+                      // ),
+                      // Stage5ForCustomer(
+                      //   currentIndexOfData: 40,
+                      //   onTap: () {
+                      //     if (currentIndex < 1) {
+                      //       _pageController.nextPage(
+                      //         duration: const Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //     } else {}
+                      //   },
+                      // ),
+                      // Stage6ForCustomer(
+                      //   currentIndexOfData: 50,
+                      //   onTap: () {
+                      //     if (currentIndex < 1) {
+                      //       _pageController.nextPage(
+                      //         duration: const Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //     } else {}
+                      //   },
+                      // ),
+                      // Stage7ForCustomer(
+                      //   onTap: () {
+                      //     if (currentIndex < 1) {
+                      //       _pageController.nextPage(
+                      //         duration: const Duration(milliseconds: 300),
+                      //         curve: Curves.easeInOut,
+                      //       );
+                      //     } else {}
+                      //   },
+                      // ),
+                      // const EndOfTracking()
                       // Добавьте другие этапы по мере необходимости
                     ],
                   ),

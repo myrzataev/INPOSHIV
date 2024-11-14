@@ -4,14 +4,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/payment_row.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/payment_row.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 import 'package:inposhiv/resources/resources.dart';
 
-class Stage7 extends StatelessWidget {
+class Stage7ForCustomer extends StatelessWidget {
   final Function onTap;
-  const Stage7({
+  final TextEditingController controller;
+  const Stage7ForCustomer({
     super.key,
     required this.onTap,
+    required this.controller,
   });
 
   @override
@@ -62,12 +65,12 @@ class Stage7 extends StatelessWidget {
                 ),
               ),
               // Add vertical padding to each section
-              PaymentRow(
-                  title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
-              PaymentRow(
-                  title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
-              PaymentRow(
-                  title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
+              // PaymentRow(
+              //     title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
+              // PaymentRow(
+              //     title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
+              // PaymentRow(
+              //     title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: Text(
@@ -75,30 +78,14 @@ class Stage7 extends StatelessWidget {
                   style: AppFonts.w400s14,
                 ),
               ),
-              Row(
-                children: [
-                  SvgPicture.asset(SvgImages.document),
-                  SizedBox(width: 10.w),
-                  Expanded(
-                    // Use Expanded to prevent overflow
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 5.w),
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: "Сообщение",
-                          hintStyle: AppFonts.w400s16,
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Image.asset(
-                    Images.send,
-                    height: 40.h,
-                    width: 40.w,
-                  )
-                ],
-              ),
+              CustomTrackingComment(
+                  onTap: () {
+                    onTap();
+                  },
+                  onFilePicked: (filePath) {},
+                  onImagePickedFromGallery: (imagePath) {},
+                  onImagePickedFromCamera: (imagePath) {},
+                  controller: controller),
               // const Spacer(),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5.h),

@@ -67,8 +67,11 @@ import 'package:inposhiv/features/main/orders/customer/presentation/blocs/order_
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/search_order_bloc/search_order_bloc.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_manufacturer_invoices_ds.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_order_detail_ds.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_manufacturer_invoices_repoimpl.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_order_details_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_order_details_bloc/get_order_details_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/create_order_ds.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/get_currency_ds.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/get_fabric_types_ds.dart';
@@ -362,7 +365,14 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => ConfirmTrackingStageRepoimpl(
                 confirmTrackingStageDs:
-                    RepositoryProvider.of<ConfirmTrackingStageDs>(context)))
+                    RepositoryProvider.of<ConfirmTrackingStageDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetOrderDetailDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetOrderDetailsRepoImpl(
+                getOrderDetailDs:
+                    RepositoryProvider.of<GetOrderDetailDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -488,7 +498,11 @@ class _MyAppState extends State<MyApp> {
               create: (context) => ConfirmTrackingStageBloc(
                   confirmTrackingStageRepoimpl:
                       RepositoryProvider.of<ConfirmTrackingStageRepoimpl>(
-                          context)))
+                          context))),
+          BlocProvider(
+              create: (context) => GetOrderDetailsBloc(
+                  getOrderDetailsRepoImpl:
+                      RepositoryProvider.of<GetOrderDetailsRepoImpl>(context)))
         ],
         child: MultiProvider(
           providers: [

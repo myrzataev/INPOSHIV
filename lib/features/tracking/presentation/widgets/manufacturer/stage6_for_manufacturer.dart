@@ -1,17 +1,19 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/features/main/orders/customer/presentation/widgets/comment_column.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
+import 'package:inposhiv/resources/resources.dart';
 
-class Stage4 extends StatelessWidget {
+class Stage6ForManufacturer extends StatelessWidget {
   final Function onTap;
-  const Stage4({
+  const Stage6ForManufacturer({
     super.key,
-    required this.currentIndexOfData, required this.onTap,
+    required this.currentIndexOfData,
+    required this.onTap,
   });
 
   final int currentIndexOfData;
@@ -28,13 +30,13 @@ class Stage4 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Этап 4",
+              "Этап 6",
               style: AppFonts.w400s16,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.h),
               child: Text(
-                "Отдел контроля качества",
+                "Отгружено",
                 style: AppFonts.w700s18,
               ),
             ),
@@ -46,33 +48,39 @@ class Stage4 extends StatelessWidget {
                     borderRadius: BorderRadius.circular(15.r)),
                 child: CustomProgressBar(
                   progress: currentIndexOfData,
+                  text: "Заказ на месте",
                 ),
               ),
             ),
             Text(
-              "Комментарии от производителя",
-              style: AppFonts.w400s14.copyWith(),
+              "Акт о выполненных работах",
+              style: AppFonts.w400s14.copyWith(
+                  decoration: TextDecoration.underline,
+                  color: AppColors.accentTextColor),
             ),
-            const CommentColumn(
-              comment: "Все готово к началу производства",
-              data: "18.04.2024",
+            Text(
+              "У вас 7 дней для оценки заказа",
+              style: AppFonts.w700s18,
             ),
-            const CommentColumn(
-              comment:
-                  "Было взято на проверку 500шт, все сделано хорошо",
-              data: "20.04.2024",
-            ),     const Spacer(),
+            Text(
+              "Чтобы осмотреть его, оценить и написать в случае каких-то спорных моментов. ",
+              style: AppFonts.w400s16,
+            ),
+            const Spacer(),
+            CustomTrackingComment(
+                controller: TextEditingController(), onTap: onTap),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: CustomButton(
                 text: "Подтвердить",
                 onPressed: () {
-                onTap();
+                  onTap();
                 },
                 sizedTemporary: true,
                 height: 50,
               ),
-            )
+            ),
+           
           ],
         ),
       ),

@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_row_withoutextfield.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_withouttextfield.dart';
@@ -50,6 +49,7 @@ class _InvoiceScreen extends State<InvoiceScreen> {
   double amountWithAdditional = 0;
   bool isShown = false;
   final preferences = locator<SharedPreferences>();
+
   @override
   void dispose() {
     amountController.dispose();
@@ -70,6 +70,10 @@ class _InvoiceScreen extends State<InvoiceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool alreadySended = preferences.getBool(
+            Provider.of<ChatProvider>(context, listen: false).chatRoomId ??
+                "") ??
+        false;
     return Scaffold(
       body: SafeArea(
           child: BlocListener<CurrentCurrencyBloc, CurrentCurrencyState>(
@@ -239,22 +243,30 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                     ),
                   ),
                 ),
+                // ElevatedButton(
+                //     onPressed: () {
+                //       preferences.remove(
+                //           Provider.of<ChatProvider>(context, listen: false)
+                //                   .chatRoomId ??
+                //               "");
+                //     },
+                //     child: Text("data")),
+
                 CustomButton(
                     text: "Подтвердить и перейти к оплате",
                     onPressed: () {
-                      _showAuctionDetail();
-                      // BlocProvider.of<OrdersBloc>(context)
-                      //     .add(OrdersEvent.sendInvoice(invoice: {
-                      //   "orderId": widget.orderId,
-                      //   "preliminaryQuantity": 1000,
-                      //   "pricePerUnit": retailPriceController.text,
-                      //   "preliminaryAmount": totalPriceWithoutAdditionalInRuble,
-                      //   "lekalaCost": exampleController.text,
-                      //   "sampleCost": priceForLecalaController.text,
-                      //   "deliveryCost": deliveryPriceController.text,
-                      //   "discount": discountController.text,
-                      //   "totalAmount": totalPriceWithAdditionalInRuble
-                      // }, orderId: widget.orderId));
+                      BlocProvider.of<OrdersBloc>(context)
+                          .add(OrdersEvent.sendInvoice(invoice: {
+                        "orderId": widget.orderId,
+                        "preliminaryQuantity": amountController.text,
+                        "pricePerUnit": retailPriceController.text,
+                        "preliminaryAmount": totalPriceWithoutAdditionalInRuble,
+                        "lekalaCost": exampleController.text,
+                        "sampleCost": priceForLecalaController.text,
+                        "deliveryCost": deliveryPriceController.text,
+                        "discount": discountController.text,
+                        "totalAmount": totalPriceWithAdditionalInRuble
+                      }, orderId: widget.orderId));
                     })
               ],
             ),
@@ -370,41 +382,41 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                         text: "Запросить реквизиты",
                         icon: SvgImages.lock,
                         onTap: () {
-                          // print(
-                          //   Provider.of<ChatProvider>(context, listen: false)
-                          //       .receipentId,
-                          // );
-                          // print(
-                          //   Provider.of<ChatProvider>(context, listen: false)
-                          //       .chatRoomId,
-                          // );
-                          // BlocProvider.of<ChatsBloc>(context).add(
-                          //     ChatsEvent.sendMessage(
-                          //         chatUuid: Provider.of<ChatProvider>(context,
-                          //                     listen: false)
-                          //                 .chatRoomId ??
-                          //             "",
-                          //         senderUuid:
-                          //             preferences.getString("userId") ?? "",
-                          //         recipientUuid: Provider.of<ChatProvider>(
-                          //                     context,
-                          //                     listen: false)
-                          //                 .receipentId ??
-                          //             "",
-                          //         content: "AutoMessage"));
-                          context.goNamed("chatScreen", queryParameters: {
-                            "receipentUuid":
-                                // "8ba821e4-249e-4847-b86a-2af23097bb41",
-                             Provider.of<ChatProvider>(context,
-                                    listen: false)
-                                .receipentId,
-                            "chatUuid":
-                                // "8ba821e4-249e-4847-b86a-2af23097bb41_b52bbbc4-cdfc-4c61-bfa3-36b5ea37029c",
-                             Provider.of<ChatProvider>(context,
-                                    listen: false)
-                                .chatRoomId,
-                            "autoMessage": "Пришлите, пожалуйста, свои реквизиты"
-                          });
+                          showDialog(
+                              context: context,
+                              builder: (context) => CustomDialog(
+                                  title:
+                                      "При выборе этого способа оплаты платформа не несет ответственности за оплату",
+                                  description:
+                                      "Все риски, связанные с оплатой вы берете на себя",
+                                  button: CustomButton(
+                                      text: "Запросить реквизиты",
+                                      onPressed: () {
+                                        preferences.setBool(
+                                            Provider.of<ChatProvider>(context,
+                                                        listen: false)
+                                                    .chatRoomId ??
+                                                "",
+                                            true);
+                                        context.goNamed("chatScreen",
+                                            queryParameters: {
+                                              "receipentUuid":
+                                                  // "8ba821e4-249e-4847-b86a-2af23097bb41",
+                                                  Provider.of<ChatProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .receipentId,
+                                              "chatUuid":
+                                                  // "8ba821e4-249e-4847-b86a-2af23097bb41_b52bbbc4-cdfc-4c61-bfa3-36b5ea37029c",
+                                                  Provider.of<ChatProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .chatRoomId,
+                                              "autoMessage":
+                                                  "Пришлите, пожалуйста, свои реквизиты"
+                                            });
+                                      })));
+
                           // GoRouter.of(context).pushNamed("payScreen");
                         }),
                     // CustomChoosePaymentWidget(

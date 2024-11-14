@@ -15,10 +15,10 @@ _$OrderDetailsModelImpl _$$OrderDetailsModelImplFromJson(
       color: json['color'] as String?,
       quantity: (json['quantity'] as num?)?.toInt(),
       technicalDocuments: (json['technicalDocuments'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => e as String?)
           .toList(),
       lekalaDocuments: (json['lekalaDocuments'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => e as String?)
           .toList(),
       deadline: json['deadline'] == null
           ? null
@@ -26,10 +26,10 @@ _$OrderDetailsModelImpl _$$OrderDetailsModelImplFromJson(
       discount: (json['discount'] as num?)?.toInt(),
       deliveryPoint: json['deliveryPoint'] as String?,
       technicalDocumentUrls: (json['technicalDocumentUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => e as String?)
           .toList(),
       lekalaDocumentUrls: (json['lekalaDocumentUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => e as String?)
           .toList(),
     );
 

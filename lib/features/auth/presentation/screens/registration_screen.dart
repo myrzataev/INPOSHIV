@@ -371,7 +371,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         onPressed: () {
                           // GoRouter.of(context).pushNamed("authorization");
                    
-                           _submitForm(isCustomer);
+                           _submitForm(isCustomer, preferences.getString("firebaseToken")
+                           );
                          
                         }),
                   )
@@ -384,12 +385,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void _submitForm(bool isCustomer) {
+  void _submitForm(bool isCustomer, String? firebaseToken ) {
     if (_formKey.currentState!.validate() && ischecked) {
       setState(() {
         isErrorVisible = false;
         BlocProvider.of<AuthBloc>(context).add(AuthEvent.auth(
             model: UserModel(
+              firebaseToken: firebaseToken,
                 role: isCustomer ? "CUSTOMER" : "MANUFACTURER",
                 firstAndLastName: nameController.text,
                 phoneNumber: phoneController.text.replaceAll(" ", ""),

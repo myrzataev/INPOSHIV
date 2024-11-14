@@ -11,12 +11,14 @@ import 'package:inposhiv/features/main/auction/presentation/screens/detailed_vie
 import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/notications_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
+import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/approve_invoice_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/detailed_tracking_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/invoice_screen_for_customer.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/order_detail_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/see_doc_screen.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/screens/invoice_screen.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/screens/order_details_screen_for_manufacturer.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/screens/pay_screen.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_without_size_screen.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/about_company_screen.dart';
@@ -338,6 +340,7 @@ final GoRouter router = GoRouter(
                   // parentNavigatorKey: _shellNavigatorKey,
                   pageBuilder: (context, state) {
                     // bool? hasDialog = state.extra as bool? ;
+
                     final auctionList =
                         state.extra as List<CustomerOrdersModel>? ?? [];
                     final hasDialod = state.uri.queryParameters["hasDialod"];
@@ -560,6 +563,16 @@ final GoRouter router = GoRouter(
                     builder: (context, state) {
                       return OrderDetailScreen(
                         orderId: state.uri.queryParameters["orderId"] ?? "",
+                      );
+                    },
+                  ),
+                  GoRoute(
+                    path: "orderDetailsForManufacturer",
+                    name: "orderDetailsForManufacturer",
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return OrderDetailsScreenForManufacturer(
+                        orderId: state.extra  as String,
                       );
                     },
                   ),

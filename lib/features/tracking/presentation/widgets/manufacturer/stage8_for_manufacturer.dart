@@ -1,18 +1,20 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 import 'package:inposhiv/resources/resources.dart';
 
-class Stage6 extends StatelessWidget {
+class Stage8ForManufacturer extends StatelessWidget {
   final Function onTap;
-  const Stage6({
+  const Stage8ForManufacturer({
     super.key,
-    required this.currentIndexOfData, required this.onTap,
+    required this.currentIndexOfData,
+    required this.onTap,
   });
 
   final int currentIndexOfData;
@@ -29,13 +31,13 @@ class Stage6 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Этап 6",
+              "Этап 8",
               style: AppFonts.w400s16,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.h),
               child: Text(
-                "Приемка заказа",
+                "ОтгруЗаказчик оценил и принял заказжено",
                 style: AppFonts.w700s18,
               ),
             ),
@@ -46,7 +48,7 @@ class Stage6 extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.r)),
                 child: CustomProgressBar(
-                  progress: currentIndexOfData,
+                  progress: 70,
                   text: "Заказ на месте",
                 ),
               ),
@@ -57,39 +59,42 @@ class Stage6 extends StatelessWidget {
                   decoration: TextDecoration.underline,
                   color: AppColors.accentTextColor),
             ),
-            Text(
-              "У вас 7 дней для оценки заказа",
-              style: AppFonts.w700s18,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: Text(
+                "Выберите уровень надежности заказчика",
+                style: AppFonts.w700s18,
+              ),
             ),
             Text(
-              "Чтобы осмотреть его, оценить и написать в случае каких-то спорных моментов. ",
+              "Оцените уровень надежности производителя",
               style: AppFonts.w400s16,
             ),
-            Row(
-              children: [
-                SvgPicture.asset(SvgImages.document),
-                SizedBox(width: 10.w),
-                Expanded(
-                  // Use Expanded to prevent overflow
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 5.w),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: "Сообщение",
-                        hintStyle: AppFonts.w400s16,
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                  ),
-                ),
-                Image.asset(
-                  Images.send,
-                  height: 40.h,
-                  width: 40.w,
-                )
-              ],
+            RatingBar.builder(
+              initialRating: 3,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: false,
+              itemCount: 5,
+              itemPadding: EdgeInsets.symmetric(horizontal: 10.w),
+              itemBuilder: (context, _) => const Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (rating) {
+                print(rating);
+              },
             ),
-                 const Spacer(),
+            const Spacer(),
+            Center(
+              child: TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    "Оставить отзыв",
+                    style: AppFonts.w400s16
+                        .copyWith(color: AppColors.accentTextColor),
+                  )),
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: CustomButton(
@@ -101,20 +106,6 @@ class Stage6 extends StatelessWidget {
                 height: 50,
               ),
             ),
-            Center(
-              child: TextButton(
-                  onPressed: () {
-                    // showDialog(context: context, builder: (context)=> AlertDialog(
-                    //   title: ,
-                    // ));
-                  },
-                  child: Text(
-                    "Подать апелляцию",
-                    style: AppFonts.w400s16.copyWith(
-                        color: AppColors.accentTextColor,
-                        decoration: TextDecoration.underline),
-                  )),
-            )
           ],
         ),
       ),

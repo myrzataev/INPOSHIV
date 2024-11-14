@@ -6,15 +6,16 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/comment_column.dart';
+import 'package:inposhiv/resources/resources.dart';
 
-class Stage5 extends StatelessWidget {
+class Stage3ForCustomer extends StatelessWidget {
   final Function onTap;
-  const Stage5({
+  const Stage3ForCustomer({
     super.key,
     required this.currentIndexOfData, required this.onTap,
   });
 
-  final int currentIndexOfData;
+  final double currentIndexOfData;
 
   @override
   Widget build(BuildContext context) {
@@ -28,13 +29,13 @@ class Stage5 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Этап 5",
+              "Этап 3",
               style: AppFonts.w400s16,
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.h),
               child: Text(
-                "Готово к отгрузке",
+                "Пошив",
                 style: AppFonts.w700s18,
               ),
             ),
@@ -45,9 +46,29 @@ class Stage5 extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.r)),
                 child: CustomProgressBar(
-                  progress: currentIndexOfData,
-                  text: "Отгружается",
+                  // Pass the progress value as a double between 0 and 1
+                  progress: currentIndexOfData.toInt(),
                 ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: SizedBox(
+                height: 65.h,
+                child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemBuilder: (context, index) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(10.r),
+                        child: Image.asset(Images.good1),
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        width: 5.w,
+                      );
+                    },
+                    itemCount: 3),
               ),
             ),
             Text(
@@ -59,10 +80,10 @@ class Stage5 extends StatelessWidget {
               data: "18.04.2024",
             ),
             const CommentColumn(
-              comment:
-                  "Было взято на проверку 500шт, все сделано хорошо",
+              comment: "Треть товара отшито",
               data: "20.04.2024",
-            ),     const Spacer(),
+            ),
+                 const Spacer(),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: CustomButton(

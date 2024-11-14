@@ -16,6 +16,7 @@ import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.d
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/calculate_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,6 +32,8 @@ class DetailedViewScreen extends StatefulWidget {
 class _DetailedViewScreenState extends State<DetailedViewScreen> {
   SharedPreferences preferences = locator<SharedPreferences>();
   double? currency;
+  CalculateService calculateService = CalculateService();
+  double? totalPriceInDollar;
   @override
   void initState() {
     callBloc();
@@ -81,6 +84,15 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                     state.maybeWhen(
                         currencyLoaded: (model) => setState(() {
                               currency = model.rate ?? 0;
+                              totalPriceInDollar =
+                                  calculateService.calculateTotalPriceInRuble(
+                                      ruble: widget
+                                              .model.products?.first.priceUsd
+                                              ?.toDouble() ??
+                                          0,
+                                      totalCount: widget
+                                              .model.products?.first.quantity ??
+                                          0);
                             }),
                         orElse: () {});
                   },
@@ -151,10 +163,43 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                 ),
                               ],
                             ),
-                            Text(
-                              "${widget.model.products?.first.priceRub?.toStringAsFixed(2) ?? ""} руб за единицу, итого 348 000 руб",
-                              style: AppFonts.w400s16,
+                            Row(
+                              children: [
+                                Text(
+                                  "${widget.model.products?.first.priceUsd?.toStringAsFixed(2) ?? ""} \$",
+                                  style: AppFonts.w400s16.copyWith(
+                                      color: AppColors.accentTextColor),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 84.w),
+                                  child: Text(
+                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceUsd?.toDouble() ?? 0, totalCount: widget.model.products?.first.quantity ?? 0)} \$",
+                                    style: AppFonts.w400s16.copyWith(
+                                        color: AppColors.accentTextColor),
+                                  ),
+                                ),
+                              ],
                             ),
+                            Row(
+                              children: [
+                                Text(
+                                  "${widget.model.products?.first.priceRub?.toStringAsFixed(2) ?? ""} руб",
+                                  style: AppFonts.w400s16,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(left: 48.w),
+                                  child: Text(
+                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceRub ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0)} руб",
+                                    style: AppFonts.w400s16,
+                                  ),
+                                )
+                              ],
+                            ),
+                            Text(
+                              "${widget.model.products?.first.description.toString()}",
+                              style: AppFonts.w400s16
+                                  .copyWith(color: AppColors.accentTextColor),
+                            )
                           ],
                         ),
                       ),
@@ -295,45 +340,65 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                               )
                                             ],
                                           ),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: 10.h),
-                                            child: SizedBox(
-                                              height: 40.h,
-                                              width: double.infinity,
-                                              child: MaterialButton(
-                                                onPressed: () {
-                                                  context
-                                                      .go("/chat/chatScreen");
-                                                  BlocProvider.of<
-                                                              CreateChatRoomBloc>(
-                                                          context)
-                                                      .add(CreateChatRoomEvent
-                                                          .createChatRoom(
-                                                              chatData: {
-                                                        "userUid": preferences
-                                                            .getString(
-                                                                "userId"),
-                                                        "senderUuid":
-                                                            preferences
-                                                                .getString(
-                                                                    "userId"),
-                                                        "recipientUuid": currentItem
-                                                            .manufacturerUserUuid
-                                                      }));
-                                                },
-                                                color:
-                                                    AppColors.buttonGreenColor,
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.r)),
-                                                child: Text(
-                                                  "Связаться",
-                                                  style: AppFonts.w400s16
-                                                      .copyWith(
-                                                          color: AppColors
-                                                              .accentTextColor),
+                                          BlocListener<CreateChatRoomBloc,
+                                              CreateChatRoomState>(
+                                            listener: (context, state) {
+                                              state.maybeWhen(
+                                                  createdChatRoomSuccess:
+                                                      (model) {
+                                                    context.goNamed(
+                                                        "chatScreen",
+                                                        queryParameters: {
+                                                          "receipentUuid": model
+                                                              .recipientUuid,
+                                                          "chatUuid":
+                                                              model.chatUuid,
+                                                          "orderId": widget
+                                                              .model.orderId
+                                                              .toString()
+                                                        });
+                                                  },
+                                                  orElse: () {});
+                                            },
+                                            child: Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 10.h),
+                                              child: SizedBox(
+                                                height: 40.h,
+                                                width: double.infinity,
+                                                child: MaterialButton(
+                                                  onPressed: () {
+                                                    BlocProvider.of<
+                                                                CreateChatRoomBloc>(
+                                                            context)
+                                                        .add(CreateChatRoomEvent
+                                                            .createChatRoom(
+                                                                chatData: {
+                                                          "userUid": preferences
+                                                              .getString(
+                                                                  "userId"),
+                                                          "senderUuid":
+                                                              preferences
+                                                                  .getString(
+                                                                      "userId"),
+                                                          "recipientUuid":
+                                                              currentItem
+                                                                  .manufacturerUserUuid
+                                                        }));
+                                                  },
+                                                  color: AppColors
+                                                      .buttonGreenColor,
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.r)),
+                                                  child: Text(
+                                                    "Связаться",
+                                                    style: AppFonts.w400s16
+                                                        .copyWith(
+                                                            color: AppColors
+                                                                .accentTextColor),
+                                                  ),
                                                 ),
                                               ),
                                             ),

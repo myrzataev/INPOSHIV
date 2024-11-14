@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
@@ -6,13 +5,15 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/comment_column.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 import 'package:inposhiv/resources/resources.dart';
 
-class Stage3 extends StatelessWidget {
+class Stage3ForManufacturer extends StatelessWidget {
   final Function onTap;
-  const Stage3({
+  const Stage3ForManufacturer({
     super.key,
-    required this.currentIndexOfData, required this.onTap,
+    required this.currentIndexOfData,
+    required this.onTap,
   });
 
   final double currentIndexOfData;
@@ -83,13 +84,16 @@ class Stage3 extends StatelessWidget {
               comment: "Треть товара отшито",
               data: "20.04.2024",
             ),
-                 const Spacer(),
+            
+            const Spacer(),
+            CustomTrackingComment(
+                controller: TextEditingController(), onTap: onTap),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: CustomButton(
                 text: "Подтвердить",
                 onPressed: () {
-                 onTap();
+                  onTap();
                 },
                 sizedTemporary: true,
                 height: 50,

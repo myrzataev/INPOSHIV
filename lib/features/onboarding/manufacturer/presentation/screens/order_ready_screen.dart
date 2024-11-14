@@ -64,10 +64,8 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
             BlocListener<CreateAuctionBloc, CreateAuctionState>(
               listener: (context, state) {
                 state.maybeWhen(
-                    auctionCreated: () => context.goNamed(
-                          "main",
-                          // extra: true
-                        ),
+                    auctionCreated: () => context.goNamed("main",
+                        queryParameters: {"hasDialog": "true"}),
                     orElse: () {});
               },
               child: const SizedBox.shrink(),

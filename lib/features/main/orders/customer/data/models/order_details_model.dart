@@ -20,13 +20,13 @@ class OrderDetailsModel with _$OrderDetailsModel {
         int? material,
         String? color,
         int? quantity,
-        List<String>? technicalDocuments,
-        List<String>? lekalaDocuments,
+        List<String?>? technicalDocuments,
+        List<String?>? lekalaDocuments,
         DateTime? deadline,
         int? discount,
         String? deliveryPoint,
-        List<String>? technicalDocumentUrls,
-        List<String>? lekalaDocumentUrls,
+        List<String?>? technicalDocumentUrls,
+        List<String?>? lekalaDocumentUrls,
     }) = _OrderDetailsModel;
 
     factory OrderDetailsModel.fromJson(Map<String, dynamic> json) => _$OrderDetailsModelFromJson(json);

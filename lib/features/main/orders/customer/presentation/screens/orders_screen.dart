@@ -429,35 +429,39 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     ),
                                 loaded: (model) {
                                   // if (model.isNotEmpty) {
-                                  return ListView.separated(
-                                      itemCount: model.length,
-                                      separatorBuilder: (context, index) =>
-                                          SizedBox(
-                                            height: 10.h,
-                                          ),
-                                      itemBuilder: (context, index) {
-                                        return InkWell(
-                                          onTap: () => GoRouter.of(context)
-                                              .pushNamed(
-                                                  "detailedTrackingScreen",
-                                                  queryParameters: {
-                                                "invoiceId":
-                                                    model[index].invoiceUuid
-                                                // model[index].invoiceUuid
-                                              }),
-                                          child: Container(
-                                            height: 40.h,
-                                            decoration: BoxDecoration(
-                                                color: AppColors.cardsColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        15.r)),
-                                            child: Center(
-                                              child: Text("Заказ № $index"),
+                                  return RefreshIndicator.adaptive(
+                                    onRefresh: () async =>
+                                        getCustomerInvoices(),
+                                    child: ListView.separated(
+                                        itemCount: model.length,
+                                        separatorBuilder: (context, index) =>
+                                            SizedBox(
+                                              height: 10.h,
                                             ),
-                                          ),
-                                        );
-                                      });
+                                        itemBuilder: (context, index) {
+                                          return InkWell(
+                                            onTap: () => GoRouter.of(context)
+                                                .pushNamed(
+                                                    "detailedTrackingScreen",
+                                                    queryParameters: {
+                                                  "invoiceId":
+                                                      model[index].invoiceUuid
+                                                  // model[index].invoiceUuid
+                                                }),
+                                            child: Container(
+                                              height: 40.h,
+                                              decoration: BoxDecoration(
+                                                  color: AppColors.cardsColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.r)),
+                                              child: Center(
+                                                child: Text("Заказ № $index"),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  );
                                   // } else {
                                   //   return const Center(
                                   //     child: Text("empty"),
@@ -465,7 +469,39 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   // }
                                 },
                                 orElse: () {
-                                  return const SizedBox.shrink();
+                                  return RefreshIndicator.adaptive(
+                                    onRefresh: () async =>
+                                        getCustomerInvoices(),
+                                    child: ListView.separated(
+                                        itemCount: 3,
+                                        separatorBuilder: (context, index) =>
+                                            SizedBox(
+                                              height: 10.h,
+                                            ),
+                                        itemBuilder: (context, index) {
+                                          return InkWell(
+                                            onTap: () => GoRouter.of(context)
+                                                .pushNamed(
+                                                    "detailedTrackingScreen",
+                                                    queryParameters: {
+                                                  "invoiceId": ""
+                                                  // model[index].invoiceUuid
+                                                  // model[index].invoiceUuid
+                                                }),
+                                            child: Container(
+                                              height: 40.h,
+                                              decoration: BoxDecoration(
+                                                  color: AppColors.cardsColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.r)),
+                                              child: Center(
+                                                child: Text("Заказ № $index"),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  );
                                 });
                           },
                         )
@@ -486,6 +522,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                             : "Показать подробно",
                         onPressed: () {
                           setState(() {
+                            GoRouter.of(context).pushNamed(
+                                "detailedTrackingScreen",
+                                queryParameters: {
+                                  "invoiceId": ""
+                                  // model[index].invoiceUuid
+                                  // model[index].invoiceUuid
+                                });
                             openedDetailedView =
                                 openedDetailedView ? false : true;
                           });

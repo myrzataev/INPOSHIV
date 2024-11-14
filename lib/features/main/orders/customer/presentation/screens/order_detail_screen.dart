@@ -8,6 +8,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_detail_row.dart';
+import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
@@ -52,169 +53,187 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
       body: SafeArea(
           child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CustomSearchWidget(
+        child: BlocListener<OrdersBloc, OrdersState>(
+          listener: (context, state) {
+            state.maybeWhen(
+                orderDetailsSended: (model) => showDialog(
+                    context: context,
+                    builder: (context) => CustomDialog(
+                        title:
+                            "Мы отправили эти данные производителю для подтверждения",
+                        description: "Мы уведомим вас, когда он это сделает",
+                        button: CustomButton(
+                            text: "Понятно",
+                            onPressed: () {
+                              GoRouter.of(context).pop();
+                            }))),
+                orderDetailsError: (errorText) => showDialog(
+                    context: context,
+                    builder: (context) => CustomDialog(
+                        title: "Что-то пошло не так",
+                        description: "Попробуйте снова",
+                        button:
+                            CustomButton(text: "Понятно", onPressed: () {}))),
+                orElse: () {});
+          },
+          child: Column(
+            children: [
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomSearchWidget(
+                          onTap: () {
+                            GoRouter.of(context).pop();
+                          },
+                          child: SvgPicture.asset(SvgImages.goback)),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 20.h),
+                        child: Text(
+                          "Данные заказа",
+                          style: AppFonts.w700s20
+                              .copyWith(color: AppColors.accentTextColor),
+                        ),
+                      ),
+                      CustomOrderDetailRow(
+                        controller: orderNameController,
+                        title: "Наименование товара",
+                        value: "Женское платье",
+                      ),
+                      CustomOrderDetailRow(
+                        controller: fabricTypeController,
+                        title: "Материал",
+                        value: "Хлопок",
+                      ),
+                      CustomOrderDetailRow(
+                        controller: colorController,
+                        title: "Цвет ткани",
+                        value: "Черный",
+                      ),
+                      // CustomOrderDetailRow(
+                      //   controller: expirationController,
+                      //   title: "Сроки",
+                      //   value: "16.04.2024 – 20.05.2024",
+                      // ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 5.h),
+                        child: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.max,
+                              children: [
+                                Text(
+                                  "Сроки",
+                                  style: AppFonts.w400s16,
+                                ),
+                                SizedBox(
+                                  width: 50.w,
+                                ),
+                                DateRangePickerExample(
+                                  controller: expirationController,
+                                )
+                                // Expanded(
+                                //   child: TextField(
+                                //     readOnly: true,
+                                //     onTap: () {
+                                //       pickDate();
+                                //     },
+                                //     controller: expirationController,
+                                //     // value,
+
+                                //   ),
+                                // )
+                              ],
+                            ),
+                            const Divider(
+                              color: AppColors.borderColorGrey,
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      CustomOrderDetailRow(
+                        title: "Пункт доставки",
+                        controller: addressController,
+                        value: "Манаса 119",
+                      ),
+                      CustomAttachDocument(
+                        isShown: isShown,
+                        files: filesForTech,
+                        text: "Тех. задание",
                         onTap: () {
-                          GoRouter.of(context).pop();
+                          _pickFiles(0);
                         },
-                        child: SvgPicture.asset(SvgImages.goback)),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20.h),
-                      child: Text(
-                        "Данные заказа",
-                        style: AppFonts.w700s20
-                            .copyWith(color: AppColors.accentTextColor),
+                        fileName: "file.pdf",
                       ),
-                    ),
-                    CustomOrderDetailRow(
-                      controller: orderNameController,
-                      title: "Наименование товара",
-                      value: "Женское платье",
-                    ),
-                    CustomOrderDetailRow(
-                      controller: fabricTypeController,
-                      title: "Материал",
-                      value: "Хлопок",
-                    ),
-                    CustomOrderDetailRow(
-                      controller: colorController,
-                      title: "Цвет ткани",
-                      value: "Черный",
-                    ),
-                    // CustomOrderDetailRow(
-                    //   controller: expirationController,
-                    //   title: "Сроки",
-                    //   value: "16.04.2024 – 20.05.2024",
-                    // ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 5.h),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                "Сроки",
-                                style: AppFonts.w400s16,
-                              ),
-                              SizedBox(
-                                width: 50.w,
-                              ),
-                              DateRangePickerExample(
-                                controller: expirationController,
-                              )
-                              // Expanded(
-                              //   child: TextField(
-                              //     readOnly: true,
-                              //     onTap: () {
-                              //       pickDate();
-                              //     },
-                              //     controller: expirationController,
-                              //     // value,
-
-                              //   ),
-                              // )
-                            ],
-                          ),
-                          const Divider(
-                            color: AppColors.borderColorGrey,
-                          ),
-                        ],
+                      CustomAttachDocument(
+                        text: "Лекала",
+                        files: filesForLecala,
+                        onTap: () {
+                          _pickFiles(1);
+                        },
                       ),
-                    ),
-
-                    CustomOrderDetailRow(
-                      title: "Пункт доставки",
-                      controller: addressController,
-                      value: "Манаса 119",
-                    ),
-                    CustomAttachDocument(
-                      isShown: isShown,
-                      files: filesForTech,
-                      text: "Тех. задание",
-                      onTap: () {
-                        _pickFiles(0);
-                      },
-                      fileName: "file.pdf",
-                    ),
-                    CustomAttachDocument(
-                      text: "Лекала",
-                      files: filesForLecala,
-                      onTap: () {
-                        _pickFiles(1);
-                      },
-                    ),
-                    CustomAttachDocument(
-                      text: "Договор",
-                      files: filesForDoc,
-                      onTap: () {
-                        _pickFiles(2);
-                      },
-                    ),
-                  ],
+                      CustomAttachDocument(
+                        text: "Договор",
+                        files: filesForDoc,
+                        onTap: () {
+                          _pickFiles(2);
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            ElevatedButton(
-                onPressed: () {
-                  GoRouter.of(context).pushNamed("invoiceScreen",
-                      queryParameters: {"orderId": "1"});
-                },
-                child: const Text("data")),
-            CustomButton(
-                text: "Подтвердите правильность данных",
-                onPressed: () {
-                  // context.goNamed("auction");
-                  // Future.delayed(const Duration(milliseconds: 200), () {
-                  //   showDialog(
-                  //     // ignore: use_build_context_synchronously
-                  //     context: context,
-                  //     builder: (context) => CustomDialog(
-                  //       title:
-                  //           "Мы отправили эти данные производителю для подтверждения",
-                  //       description: "Мы уведомим вас, когда он это сделает",
-                  //       button: CustomButton(
-                  //         text: "Понятно",
-                  //         onPressed: () {
-                  //         GoRouter.of(context).pushNamed("invoiceScreen");
-                  //          // Close the dialog
-                  //         },
-                  //       ),
-                  //     ),
-                  //   );
-                  // });
-                  BlocProvider.of<OrdersBloc>(context)
-                      .add(OrdersEvent.sendOrderDetails(
-                          orderDetails: OrderDetailsModel(
-                            orderId: int.tryParse(widget.orderId),
-                            productName: orderNameController.text,
-                            material: 0,
-                            color: colorController.text,
-                            quantity: 100,
-                            deliveryPoint: addressController.text,
-                            discount: int.tryParse(discountController.text),
-                            deadline:
-                                DateTime.tryParse(expirationController.text),
-                            technicalDocumentUrls: filesForDoc
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                            technicalDocuments: filesForDoc
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                            lekalaDocumentUrls: filesForLecala
-                                ?.map((element) => element.path ?? "")
-                                .toList(),
-                          ).toJson(),
-                          orderId: widget.orderId));
-                })
-          ],
+              CustomButton(
+                  text: "Подтвердите правильность данных",
+                  onPressed: () {
+                    // context.goNamed("auction");
+                    // Future.delayed(const Duration(milliseconds: 200), () {
+                    //   showDialog(
+                    //     // ignore: use_build_context_synchronously
+                    //     context: context,
+                    //     builder: (context) => CustomDialog(
+                    //       title:
+                    //           "Мы отправили эти данные производителю для подтверждения",
+                    //       description: "Мы уведомим вас, когда он это сделает",
+                    //       button: CustomButton(
+                    //         text: "Понятно",
+                    //         onPressed: () {
+                    //         GoRouter.of(context).pushNamed("invoiceScreen");
+                    //          // Close the dialog
+                    //         },
+                    //       ),
+                    //     ),
+                    //   );
+                    // });
+                    BlocProvider.of<OrdersBloc>(context)
+                        .add(OrdersEvent.sendOrderDetails(
+                            orderDetails: OrderDetailsModel(
+                              orderId: int.tryParse(widget.orderId),
+                              productName: orderNameController.text,
+                              material: 0,
+                              color: colorController.text,
+                              quantity: 100,
+                              deliveryPoint: addressController.text,
+                              discount: int.tryParse(discountController.text),
+                              deadline:
+                                  DateTime.tryParse(expirationController.text),
+                              technicalDocumentUrls: filesForDoc
+                                  ?.map((element) => element.path ?? "")
+                                  .toList(),
+                              technicalDocuments: filesForDoc
+                                  ?.map((element) => element.path ?? "")
+                                  .toList(),
+                              lekalaDocumentUrls: filesForLecala
+                                  ?.map((element) => element.path ?? "")
+                                  .toList(),
+                            ).toJson(),
+                            orderId: widget.orderId));
+                  })
+            ],
+          ),
         ),
       )),
     );
@@ -294,10 +313,45 @@ class CustomAttachDocument extends StatelessWidget {
                     },
                     icon: SvgPicture.asset(SvgImages.document)),
               ],
-            )
+            ),
           ],
         ),
-      
+        (files != null)
+            ? Padding(
+                padding: EdgeInsets.only(top: 10.h, left: 10.w),
+                child: SizedBox(
+                    height: 60.h,
+                    child: ListView.separated(
+                        itemCount: files?.length ?? 0,
+                        separatorBuilder: (context, index) => SizedBox(
+                              width: 20.w,
+                            ),
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () {
+                              GoRouter.of(context).pushNamed("seeDoc",
+                                  queryParameters: {
+                                    "path": files?[index].path
+                                  });
+                            },
+                            child: Column(
+                              children: [
+                                const Icon(
+                                  Icons.edit_document,
+                                  color: AppColors.accentTextColor,
+                                ),
+                                Text(
+                                  files?[index].name ?? "",
+                                  style: AppFonts.w400s16.copyWith(
+                                      color: AppColors.accentTextColor),
+                                )
+                              ],
+                            ),
+                          );
+                        })),
+              )
+            : const SizedBox.shrink()
       ],
     );
   }

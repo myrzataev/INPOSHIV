@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
 import 'package:inposhiv/internal/my_app.dart';
 import 'package:inposhiv/services/messaging_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
@@ -23,27 +25,11 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
-void configLoading() {
-  EasyLoading.instance
-    ..displayDuration = const Duration(milliseconds: 2000)
-    ..indicatorType = EasyLoadingIndicatorType.fadingCircle
-    ..loadingStyle = EasyLoadingStyle.dark
-    ..indicatorSize = 45.0
-    ..radius = 10.0
-    ..progressColor = Colors.yellow
-    ..backgroundColor = Colors.green
-    ..indicatorColor = Colors.yellow
-    ..textColor = Colors.yellow
-    ..maskColor = Colors.blue.withOpacity(0.5)
-    ..userInteractions = true
-    ..dismissOnTap = false;
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp();
-  configLoading();
+
 // Register background message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -63,13 +49,21 @@ void main() async {
 
     _messageStreamController.sink.add(message);
   });
+ 
+  
 
+  // RemoteMessage? initialMessage =
+  //     await FirebaseMessaging.instance.getInitialMessage();
+  // if (initialMessage != null) {
+  //   _handleNotificationNavigation(initialMessage);
+  // }
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);
   HydratedBloc.storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
+
   // Uri? initialLink;
   // try {
   //   initialLink = await getInitialUri();

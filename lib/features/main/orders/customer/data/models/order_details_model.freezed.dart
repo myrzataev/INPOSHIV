@@ -25,13 +25,14 @@ mixin _$OrderDetailsModel {
   int? get material => throw _privateConstructorUsedError;
   String? get color => throw _privateConstructorUsedError;
   int? get quantity => throw _privateConstructorUsedError;
-  List<String>? get technicalDocuments => throw _privateConstructorUsedError;
-  List<String>? get lekalaDocuments => throw _privateConstructorUsedError;
+  List<String?>? get technicalDocuments => throw _privateConstructorUsedError;
+  List<String?>? get lekalaDocuments => throw _privateConstructorUsedError;
   DateTime? get deadline => throw _privateConstructorUsedError;
   int? get discount => throw _privateConstructorUsedError;
   String? get deliveryPoint => throw _privateConstructorUsedError;
-  List<String>? get technicalDocumentUrls => throw _privateConstructorUsedError;
-  List<String>? get lekalaDocumentUrls => throw _privateConstructorUsedError;
+  List<String?>? get technicalDocumentUrls =>
+      throw _privateConstructorUsedError;
+  List<String?>? get lekalaDocumentUrls => throw _privateConstructorUsedError;
 
   /// Serializes this OrderDetailsModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,13 +56,13 @@ abstract class $OrderDetailsModelCopyWith<$Res> {
       int? material,
       String? color,
       int? quantity,
-      List<String>? technicalDocuments,
-      List<String>? lekalaDocuments,
+      List<String?>? technicalDocuments,
+      List<String?>? lekalaDocuments,
       DateTime? deadline,
       int? discount,
       String? deliveryPoint,
-      List<String>? technicalDocumentUrls,
-      List<String>? lekalaDocumentUrls});
+      List<String?>? technicalDocumentUrls,
+      List<String?>? lekalaDocumentUrls});
 }
 
 /// @nodoc
@@ -116,11 +117,11 @@ class _$OrderDetailsModelCopyWithImpl<$Res, $Val extends OrderDetailsModel>
       technicalDocuments: freezed == technicalDocuments
           ? _value.technicalDocuments
           : technicalDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       lekalaDocuments: freezed == lekalaDocuments
           ? _value.lekalaDocuments
           : lekalaDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       deadline: freezed == deadline
           ? _value.deadline
           : deadline // ignore: cast_nullable_to_non_nullable
@@ -136,11 +137,11 @@ class _$OrderDetailsModelCopyWithImpl<$Res, $Val extends OrderDetailsModel>
       technicalDocumentUrls: freezed == technicalDocumentUrls
           ? _value.technicalDocumentUrls
           : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       lekalaDocumentUrls: freezed == lekalaDocumentUrls
           ? _value.lekalaDocumentUrls
           : lekalaDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
     ) as $Val);
   }
 }
@@ -159,13 +160,13 @@ abstract class _$$OrderDetailsModelImplCopyWith<$Res>
       int? material,
       String? color,
       int? quantity,
-      List<String>? technicalDocuments,
-      List<String>? lekalaDocuments,
+      List<String?>? technicalDocuments,
+      List<String?>? lekalaDocuments,
       DateTime? deadline,
       int? discount,
       String? deliveryPoint,
-      List<String>? technicalDocumentUrls,
-      List<String>? lekalaDocumentUrls});
+      List<String?>? technicalDocumentUrls,
+      List<String?>? lekalaDocumentUrls});
 }
 
 /// @nodoc
@@ -218,11 +219,11 @@ class __$$OrderDetailsModelImplCopyWithImpl<$Res>
       technicalDocuments: freezed == technicalDocuments
           ? _value._technicalDocuments
           : technicalDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       lekalaDocuments: freezed == lekalaDocuments
           ? _value._lekalaDocuments
           : lekalaDocuments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       deadline: freezed == deadline
           ? _value.deadline
           : deadline // ignore: cast_nullable_to_non_nullable
@@ -238,11 +239,11 @@ class __$$OrderDetailsModelImplCopyWithImpl<$Res>
       technicalDocumentUrls: freezed == technicalDocumentUrls
           ? _value._technicalDocumentUrls
           : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       lekalaDocumentUrls: freezed == lekalaDocumentUrls
           ? _value._lekalaDocumentUrls
           : lekalaDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
     ));
   }
 }
@@ -256,13 +257,13 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
       this.material,
       this.color,
       this.quantity,
-      final List<String>? technicalDocuments,
-      final List<String>? lekalaDocuments,
+      final List<String?>? technicalDocuments,
+      final List<String?>? lekalaDocuments,
       this.deadline,
       this.discount,
       this.deliveryPoint,
-      final List<String>? technicalDocumentUrls,
-      final List<String>? lekalaDocumentUrls})
+      final List<String?>? technicalDocumentUrls,
+      final List<String?>? lekalaDocumentUrls})
       : _technicalDocuments = technicalDocuments,
         _lekalaDocuments = lekalaDocuments,
         _technicalDocumentUrls = technicalDocumentUrls,
@@ -281,9 +282,9 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
   final String? color;
   @override
   final int? quantity;
-  final List<String>? _technicalDocuments;
+  final List<String?>? _technicalDocuments;
   @override
-  List<String>? get technicalDocuments {
+  List<String?>? get technicalDocuments {
     final value = _technicalDocuments;
     if (value == null) return null;
     if (_technicalDocuments is EqualUnmodifiableListView)
@@ -292,9 +293,9 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<String>? _lekalaDocuments;
+  final List<String?>? _lekalaDocuments;
   @override
-  List<String>? get lekalaDocuments {
+  List<String?>? get lekalaDocuments {
     final value = _lekalaDocuments;
     if (value == null) return null;
     if (_lekalaDocuments is EqualUnmodifiableListView) return _lekalaDocuments;
@@ -308,9 +309,9 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
   final int? discount;
   @override
   final String? deliveryPoint;
-  final List<String>? _technicalDocumentUrls;
+  final List<String?>? _technicalDocumentUrls;
   @override
-  List<String>? get technicalDocumentUrls {
+  List<String?>? get technicalDocumentUrls {
     final value = _technicalDocumentUrls;
     if (value == null) return null;
     if (_technicalDocumentUrls is EqualUnmodifiableListView)
@@ -319,9 +320,9 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<String>? _lekalaDocumentUrls;
+  final List<String?>? _lekalaDocumentUrls;
   @override
-  List<String>? get lekalaDocumentUrls {
+  List<String?>? get lekalaDocumentUrls {
     final value = _lekalaDocumentUrls;
     if (value == null) return null;
     if (_lekalaDocumentUrls is EqualUnmodifiableListView)
@@ -405,13 +406,13 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
       final int? material,
       final String? color,
       final int? quantity,
-      final List<String>? technicalDocuments,
-      final List<String>? lekalaDocuments,
+      final List<String?>? technicalDocuments,
+      final List<String?>? lekalaDocuments,
       final DateTime? deadline,
       final int? discount,
       final String? deliveryPoint,
-      final List<String>? technicalDocumentUrls,
-      final List<String>? lekalaDocumentUrls}) = _$OrderDetailsModelImpl;
+      final List<String?>? technicalDocumentUrls,
+      final List<String?>? lekalaDocumentUrls}) = _$OrderDetailsModelImpl;
 
   factory _OrderDetailsModel.fromJson(Map<String, dynamic> json) =
       _$OrderDetailsModelImpl.fromJson;
@@ -427,9 +428,9 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
   @override
   int? get quantity;
   @override
-  List<String>? get technicalDocuments;
+  List<String?>? get technicalDocuments;
   @override
-  List<String>? get lekalaDocuments;
+  List<String?>? get lekalaDocuments;
   @override
   DateTime? get deadline;
   @override
@@ -437,9 +438,9 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
   @override
   String? get deliveryPoint;
   @override
-  List<String>? get technicalDocumentUrls;
+  List<String?>? get technicalDocumentUrls;
   @override
-  List<String>? get lekalaDocumentUrls;
+  List<String?>? get lekalaDocumentUrls;
 
   /// Create a copy of OrderDetailsModel
   /// with the given fields replaced by the non-null parameter values.

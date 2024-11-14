@@ -37,7 +37,7 @@ class ChatScreen extends StatefulWidget {
   State<ChatScreen> createState() => _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   final ScrollController scrollController = ScrollController();
 
   StompClient? stompClient;
@@ -59,6 +59,7 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
 
     isCustomer = preferences.getBool("isCustomer");
     chatUuid = widget.chatUuid;
@@ -70,11 +71,11 @@ class _ChatScreenState extends State<ChatScreen> {
       chatRoomUuid: chatUuid ?? "",
       model: const PagebleModel(page: 0, size: 1, sort: []),
     ));
-
+    print("||||||||||||||||| bloc Calling");
     connect(); // Establish WebSocket connection when the screen loads
 
     // Check if autoMessage is not null and not empty, then send it automatically
-   sendAutoMessageWithDelay();
+    sendAutoMessageWithDelay();
   }
 
   void sendAutoMessageWithDelay() {
@@ -96,7 +97,16 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void dispose() {
     // disconnect(); // Close WebSocket connection when the screen is disposed
+    WidgetsBinding.instance.removeObserver(this);
+
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      connect(); // Reconnect or refresh data
+    }
   }
 
   // Establish a WebSocket connection using StompClient
@@ -273,9 +283,15 @@ class _ChatScreenState extends State<ChatScreen> {
                     //   print("User ID does not match _secondUser ID");
                     // }
 
-                    GoRouter.of(context).pushNamed(
-                        (isCustomer ?? true) ? "orderDetails" : "invoiceScreen",
-                        queryParameters: {"orderId": "1"});
+                    (isCustomer ?? true)
+                        ? GoRouter.of(context).pushNamed("orderDetails",
+
+                            //  "invoiceScreen",
+                            queryParameters: {"orderId": "1"})
+                        : GoRouter.of(context)
+                            .pushNamed("orderDetailsForManufacturer", extra: "1"
+                                //  "invoiceScreen",
+                                );
                   }),
             ),
           ),
@@ -290,43 +306,44 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: BlocListener<ChatsBloc, ChatsState>(
         listener: (context, state) {
+          print("calling blocc");
           state.maybeWhen(
-              loading: () => showDialog(
-                  context: context,
-                  barrierDismissible: true,
-                  builder: (context) => Dialog(
-                        backgroundColor: Colors.transparent,
-                        child: SizedBox(
-                          height: 20.h,
-                          width: 20.w,
-                          child: const Center(
-                            child: CircularProgressIndicator.adaptive(),
-                          ),
-                        ),
-                      )),
+              // loading: () => showDialog(
+              //     context: context,
+              //     barrierDismissible: true,
+              //     builder: (context) => Dialog(
+              //           backgroundColor: Colors.transparent,
+              //           child: SizedBox(
+              //             height: 20.h,
+              //             width: 20.w,
+              //             child: const Center(
+              //               child: CircularProgressIndicator.adaptive(),
+              //             ),
+              //           ),
+              //         )),
               getChatroomHistoryError: (errorext) {
-                GoRouter.of(context).pop();
-              },
-              getChatroomHistoryLoaded: (model) {
-                GoRouter.of(context).pop();
-                List<types.TextMessage> historyMessages =
-                    model.map<types.TextMessage>((element) {
-                  return types.TextMessage(
-                    author: element.senderUuid == _currentUser.id
-                        ? _currentUser
-                        : _secondUser,
-                    id: element.messageUuid.toString(), // Use messageUuid as ID
-                    createdAt: DateTime.now()
-                        .millisecondsSinceEpoch, // Replace with actual timestamp from the response if available
-                    text: element.content ?? "", // The message content
-                  );
-                }).toList();
+            // GoRouter.of(context).pop();
+          }, getChatroomHistoryLoaded: (model) {
+            // GoRouter.of(context).pop();
+            List<types.TextMessage> historyMessages =
+                model.map<types.TextMessage>((element) {
+              return types.TextMessage(
+                author: element.senderUuid == _currentUser.id
+                    ? _currentUser
+                    : _secondUser,
+                id: element.messageUuid.toString(), // Use messageUuid as ID
+                createdAt: DateTime.now()
+                    .millisecondsSinceEpoch, // Replace with actual timestamp from the response if available
+                text: element.content ?? "", // The message content
+              );
+            }).toList();
 
-                setState(() {
-                  _messages.insertAll(0, historyMessages.reversed);
-                });
-              },
-              orElse: () {});
+            setState(() {
+              _messages.insertAll(0, historyMessages.reversed);
+            });
+          }, orElse: () {
+            // GoRouter.of(context).pop();
+          });
         },
         child: Chat(
             emptyState: Padding(
@@ -373,15 +390,6 @@ class _ChatScreenState extends State<ChatScreen> {
                         textWithDots(
                             text:
                                 "Наше приложение не несет ответственности за договоренности вне данного приложения."),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30.h, bottom: 10.h),
-                          child: CustomButton(
-                            text: "Понятно",
-                            onPressed: () {},
-                            sizedTemporary: true,
-                            height: 40,
-                          ),
-                        )
                       ],
                     ),
                   ),
