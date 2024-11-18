@@ -136,10 +136,12 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                widget.name,
-                style:
-                    AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
+              Expanded(
+                child: Text(
+                  widget.name,
+                  style:
+                      AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
+                ),
               ),
               Text(
                 "${widget.quantity} штук",

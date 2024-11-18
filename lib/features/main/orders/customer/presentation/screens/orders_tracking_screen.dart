@@ -34,7 +34,6 @@ import 'package:inposhiv/features/tracking/presentation/widgets/manufacturer/sta
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/date_time_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
-import 'package:inposhiv/services/showdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdersTrackingScreen extends StatefulWidget {
@@ -96,74 +95,306 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             ),
             Expanded(
               child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      currentIndex = index;
-                    });
-                  },
-                  children: widgets.sublist(0, activeStage)),
-            ),
+                controller: _pageController,
+                onPageChanged: (index) {
+                  setState(() {
+                    currentIndex = index;
+                  });
+                },
+                children: widgets,
+              ),
+            )
+            // Expanded(
+            //   child: PageView(
+            //     controller: _pageController,
+            // onPageChanged: (index) {
+            //   setState(() {
+            //     currentIndex = index;
+            //   });
+            // },
+            //     children: widgets.sublist(0, 8).map((widget) {
+            //       return ConstrainedBox(
+            //         constraints: BoxConstraints(
+            //           maxHeight: MediaQuery.of(context)
+            //               .size
+            //               .height, // Constrain height
+            //         ),
+            //         child: widget,
+            //       );
+            //     }).toList(),
+            //   ),
+            // ),
           ],
         ),
       )),
     );
   }
-void confirmTrackingStage({
-  required String invoiceUuid,
-  required String orderId,
-  required String activeStage,
-  required List<NamedFile>? allCheckFiles, // Nullable
-  required bool stageAccepted,
-  required String? comment, // Nullable
-}) async {
-  // Prepare FormData
-  List<MultipartFile> allChecksMultipart = [];
-  if (allCheckFiles != null) {
-    for (var namedFile in allCheckFiles) {
-      allChecksMultipart.add(
-        await MultipartFile.fromFile(
-          namedFile.file.path,
-          filename: namedFile.name, // Use the custom file name
-        ),
-      );
+
+  void confirmTrackingStage({
+    required String invoiceUuid,
+    required String orderId,
+    required String activeStage,
+    List<NamedFile>? allCheckFiles, // Nullable
+    required bool stageAccepted,
+    String? comment, // Nullable
+  }) async {
+    // Prepare FormData
+    List<MultipartFile> allChecksMultipart = [];
+    if (allCheckFiles != null) {
+      for (var namedFile in allCheckFiles) {
+        allChecksMultipart.add(
+          await MultipartFile.fromFile(
+            namedFile.file.path,
+            filename: namedFile.name, // Use the custom file name
+          ),
+        );
+      }
     }
+
+    // Add files only if present
+    FormData formData = FormData.fromMap({
+      if (allChecksMultipart.isNotEmpty) "allChecks": allChecksMultipart,
+    });
+
+    // Prepare query parameters
+    Map<String, dynamic> queryParameters = {
+      "invoiceUuid": invoiceUuid,
+      "orderId": orderId,
+      "activeStage": activeStage,
+      "stageAccepted": stageAccepted,
+      if (comment != null)
+        "comment": comment, // Will be null if comment is null
+    };
+
+    // Debugging
+    for (var field in formData.fields) {
+      print('Field: ${field.key} = ${field.value}');
+    }
+
+    for (var file in formData.files) {
+      print('File: ${file.key} = ${file.value.filename}');
+    }
+
+    print('Query Parameters: $queryParameters');
+
+    // API call using BlocProvider
+    BlocProvider.of<ConfirmTrackingStageBloc>(context).add(
+      ConfirmTrackingStageEvent.confirmStage(
+        body: formData,
+        queryParameters: queryParameters,
+      ),
+    );
   }
 
-  // Add files only if present
-  FormData formData = FormData.fromMap({
-    if (allChecksMultipart.isNotEmpty) "allChecks": allChecksMultipart,
-  });
-
-  // Prepare query parameters
-  Map<String, dynamic> queryParameters = {
-    "invoiceUuid": invoiceUuid,
-    "orderId": orderId,
-    "activeStage": activeStage,
-    "stageAccepted": stageAccepted,
-    "comment": comment, // Will be null if comment is null
-  };
-
-  // Debugging
-  for (var field in formData.fields) {
-    print('Field: ${field.key} = ${field.value}');
+  List<Widget> customerWidgets() {
+    return [
+      Stage1(
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "PARTIAL_PAYMENT"),
+        onFilePicked: (filePath, fileName) {
+          setState(() {
+            paymentCheck = filePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromCamera: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromGallery: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        controller: controllers[0],
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: widget.model.orderId?.toString() ?? "",
+            activeStage: "PARTIAL_PAYMENT",
+            allCheckFiles: [
+              NamedFile(
+                  file: File(paymentCheck ?? ""),
+                  name: paymentCheckFileName ?? "")
+            ],
+            stageAccepted: false,
+            comment: controllers[0].text,
+          );
+          // if (currentIndex < 1) {
+          //   _pageController.nextPage(
+          //     duration: const Duration(milliseconds: 300),
+          //     curve: Curves.easeInOut,
+          //   );
+          // } else {}
+        },
+        attachDocument: () async {},
+        onTapForCheck: () {
+          paymentCheck != null
+              ? GoRouter.of(context)
+                  .pushNamed("seeDoc", queryParameters: {"path": paymentCheck})
+              : null;
+        },
+        check: PlatformFile(name: "name", size: 340),
+      ),
+      Stage2ForCustomer(
+        allComments: filterComments(
+            allComents: trackingModel?.allComments,
+            stage: "FABRIC_PURCHASE_AND_CUTTING"),
+        currentIndexOfData: 10,
+        comment: "При раскройке получилось 520шт",
+        date: "16.04.2024",
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: trackingModel?.activeStageId?.toString() ?? "",
+            allCheckFiles: [
+              NamedFile(
+                  file: File(paymentCheck ?? ""),
+                  name: paymentCheckFileName ?? "")
+            ],
+            stageAccepted: false,
+            comment: 'hellloooo',
+          );
+          if (currentIndex < 1) {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {}
+        },
+      ),
+      Stage3ForCustomer(
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "SEWING"),
+        currentIndexOfData: 20,
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "SEWING",
+            stageAccepted: true,
+            // comment: 'hellloooo',
+          );
+          // if (currentIndex < 1) {
+          //   _pageController.nextPage(
+          //     duration: const Duration(milliseconds: 300),
+          //     curve: Curves.easeInOut,
+          //   );
+          // } else {}
+        },
+      ),
+      Stage4ForCustomer(
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "QUALITY_CONTROL"),
+        currentIndexOfData: 30,
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "QUALITY_CONTROL",
+            stageAccepted: true,
+          );
+          if (currentIndex < 1) {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {}
+        },
+      ),
+      Stage5ForCustomer(
+        currentIndexOfData: 40,
+        allComments: filterComments(
+            allComents: trackingModel?.allComments,
+            stage: "READY_FOR_SHIPMENT"),
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "READY_FOR_SHIPMENT",
+            stageAccepted: true,
+          );
+          if (currentIndex < 1) {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {}
+        },
+      ),
+      Stage6ForCustomer(
+        currentIndexOfData: 50,
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "FINAL_PAYMENT",
+            stageAccepted: true,
+          );
+          if (currentIndex < 1) {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {}
+        },
+      ),
+      Stage7ForCustomer(
+        controller: controllers[1],
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "FINAL_PAYMENT"),
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "FINAL_PAYMENT",
+            allCheckFiles: [
+              NamedFile(
+                  file: File(paymentCheck ?? ""),
+                  name: paymentCheckFileName ?? "")
+            ],
+            stageAccepted: false,
+            comment: controllers[1].text,
+          );
+          if (currentIndex < 1) {
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+            );
+          } else {}
+        },
+      ),
+      Part2Stage6(
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "ORDER_RECEIVED",
+            stageAccepted: false,
+          );
+        },
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "ORDER_RECEIVED"),
+      ),
+      Stage7part2(
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "ORDER_CLOSED",
+            stageAccepted: false,
+            comment: 'hellloooo',
+          );
+        },
+        controller: TextEditingController(),
+      ),
+      const EndOfTracking()
+    ];
   }
-
-  for (var file in formData.files) {
-    print('File: ${file.key} = ${file.value.filename}');
-  }
-
-  print('Query Parameters: $queryParameters');
-
-  // API call using BlocProvider
-  BlocProvider.of<ConfirmTrackingStageBloc>(context).add(
-    ConfirmTrackingStageEvent.confirmStage(
-      body: formData,
-      queryParameters: queryParameters,
-    ),
-  );
-}
-
 
   List<Widget> manufacturerWidgets() {
     return [
@@ -194,12 +425,6 @@ void confirmTrackingStage({
             stageAccepted: true,
             comment: null,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
         },
       ),
       Stage2ForManufacturer(
@@ -222,7 +447,8 @@ void confirmTrackingStage({
           });
         },
         allComments: filterComments(
-            allComents: trackingModel?.allComments, stage: "SEWING"),
+            allComents: trackingModel?.allComments,
+            stage: "FABRIC_PURCHASE_AND_CUTTING"),
         currentIndexOfData: 10,
         controller: controllers[1],
         attachDocument: () async {
@@ -252,6 +478,7 @@ void confirmTrackingStage({
         },
       ),
       Stage3ForManufacturer(
+        allFiles: [paymentCheck ?? ""],
         onFilePicked: (filePath, fileName) {
           setState(() {
             paymentCheck = filePath;
@@ -271,21 +498,21 @@ void confirmTrackingStage({
           });
         },
         allComments: filterComments(
-            allComents: trackingModel?.allComments, stage: "QUALITY_CONTROL"),
+            allComents: trackingModel?.allComments, stage: "SEWING"),
         controller: controllers[2],
         currentIndexOfData: 20,
         onTap: () {
           confirmTrackingStage(
-            invoiceUuid: widget.model.invoiceUuid ?? "",
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: "FABRIC_PURCHASE_AND_CUTTING",
+            activeStage: "SEWING",
             allCheckFiles: [
               NamedFile(
                   file: File(paymentCheck ?? ""),
                   name: paymentCheckFileName ?? "")
             ],
             stageAccepted: false,
-            comment: controllers[1].text,
+            comment: controllers[2].text,
           );
           if (currentIndex < 1) {
             _pageController.nextPage(
@@ -315,15 +542,14 @@ void confirmTrackingStage({
           });
         },
         allComments: filterComments(
-            allComents: trackingModel?.allComments,
-            stage: "READY_FOR_SHIPMENT"),
+            allComents: trackingModel?.allComments, stage: "QUALITY_CONTROL"),
         controller: controllers[3],
         currentIndexOfData: 30,
         onTap: () {
           confirmTrackingStage(
             invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: "FABRIC_PURCHASE_AND_CUTTING",
+            activeStage: "QUALITY_CONTROL",
             allCheckFiles: [
               NamedFile(
                   file: File(paymentCheck ?? ""),
@@ -360,28 +586,42 @@ void confirmTrackingStage({
           });
         },
         allComments: filterComments(
-            allComents: trackingModel?.allComments, stage: "SHIPPED"),
+            allComents: trackingModel?.allComments,
+            stage: "READY_FOR_SHIPMENT"),
         controller: controllers[5],
         currentIndexOfData: 40,
-        onTap: () {
+        onTap: () async {
           confirmTrackingStage(
             invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: widget.model.orderId?.toString() ?? "",
-            activeStage: "FABRIC_PURCHASE_AND_CUTTING",
+            activeStage: "READY_FOR_SHIPMENT",
             allCheckFiles: [
               NamedFile(
                   file: File(paymentCheck ?? ""),
                   name: paymentCheckFileName ?? "")
             ],
             stageAccepted: false,
-            comment: controllers[1].text,
+            comment: controllers[5].text,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+          // print("object");
+          // confirmTrackingStage(
+          //   invoiceUuid: trackingModel?.invoiceUuid ?? "",
+          //   orderId: widget.model.orderId?.toString() ?? "",
+          //   activeStage: "READY_FOR_SHIPMENT",
+          // allCheckFiles: [
+          //   NamedFile(
+          //       file: File(paymentCheck ?? ""),
+          //       name: paymentCheckFileName ?? "")
+          // ],
+          //   stageAccepted: false,
+          // comment: controllers[1].text,
+          // );
+          // if (currentIndex < 1) {
+          //   _pageController.nextPage(
+          //     duration: const Duration(milliseconds: 300),
+          //     curve: Curves.easeInOut,
+          //   );
+          // } else {}
         },
       ),
       Stage6ForManufacturer(
@@ -436,236 +676,6 @@ void confirmTrackingStage({
       ),
       Stage8ForManufacturer(currentIndexOfData: 70, onTap: () {}),
       const EndOfTrackingForManufacturer()
-    ];
-  }
-
-  List<Widget> customerWidgets() {
-    return [
-      Stage1(
-        allComments: filterComments(
-            allComents: trackingModel?.allComments, stage: "PARTIAL_PAYMENT"),
-        onFilePicked: (filePath, fileName) {
-          setState(() {
-            paymentCheck = filePath;
-            paymentCheckFileName = fileName;
-          });
-        },
-        onImagePickedFromCamera: (imagePath, fileName) {
-          setState(() {
-            paymentCheck = imagePath;
-            paymentCheckFileName = fileName;
-          });
-        },
-        onImagePickedFromGallery: (imagePath, fileName) {
-          setState(() {
-            paymentCheck = imagePath;
-            paymentCheckFileName = fileName;
-          });
-        },
-        controller: controllers[0],
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: widget.model.orderId?.toString() ?? "",
-            activeStage: "PARTIAL_PAYMENT",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: controllers[0].text,
-          );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
-        },
-        attachDocument: () async {},
-        onTapForCheck: () {
-          paymentCheck != null
-              ? GoRouter.of(context)
-                  .pushNamed("seeDoc", queryParameters: {"path": paymentCheck})
-              : null;
-        },
-        check: PlatformFile(name: "name", size: 340),
-      ),
-      Stage2ForCustomer(
-        currentIndexOfData: 10,
-        comment: "При раскройке получилось 520шт",
-        date: "16.04.2024",
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
-        },
-      ),
-      Stage3ForCustomer(
-        currentIndexOfData: 20,
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
-        },
-      ),
-      Stage4ForCustomer(
-        currentIndexOfData: 30,
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
-        },
-      ),
-      Stage5ForCustomer(
-        currentIndexOfData: 40,
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
-        },
-      ),
-      Stage6ForCustomer(
-        currentIndexOfData: 50,
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
-        },
-      ),
-      Stage7ForCustomer(
-        controller: controllers[1],
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
-        },
-      ),
-      Part2Stage6(
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-        },
-      ),
-      Stage7part2(
-        onTap: () {
-          confirmTrackingStage(
-            invoiceUuid: trackingModel?.invoiceUuid ?? "",
-            orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
-          );
-        },
-        controller: TextEditingController(),
-      ),
-      const EndOfTracking()
     ];
   }
 

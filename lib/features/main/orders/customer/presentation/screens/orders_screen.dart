@@ -438,7 +438,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 GoRouter.of(context).pushNamed(
                                 "detailedTrackingScreen",
                                 queryParameters: {
-                                  "invoiceId": "c11bc0f3-7b57-4bd2-b247-44a9b8eac03f"
+                                  "invoiceId": "f83c06e5-fc39-4810-99a2-2e0265136636"
                                   // model[index].invoiceUuid
                                   // model[index].invoiceUuid
                                 });

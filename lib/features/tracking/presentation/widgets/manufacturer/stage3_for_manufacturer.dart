@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
-import 'package:inposhiv/resources/resources.dart';
 
 class Stage3ForManufacturer extends StatelessWidget {
   final Function onTap;
@@ -17,6 +16,7 @@ class Stage3ForManufacturer extends StatelessWidget {
       onImagePickedFromGallery;
   final void Function(String imagePath, String fileName)?
       onImagePickedFromCamera;
+  final List<String>? allFiles;
   const Stage3ForManufacturer({
     super.key,
     required this.currentIndexOfData,
@@ -26,6 +26,7 @@ class Stage3ForManufacturer extends StatelessWidget {
     this.onFilePicked,
     this.onImagePickedFromGallery,
     this.onImagePickedFromCamera,
+    required this.allFiles,
   });
 
   final double currentIndexOfData;
@@ -64,26 +65,33 @@ class Stage3ForManufacturer extends StatelessWidget {
                 ),
               ),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: SizedBox(
-                height: 65.h,
-                child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return ClipRRect(
-                        borderRadius: BorderRadius.circular(10.r),
-                        child: Image.asset(Images.good1),
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        width: 5.w,
-                      );
-                    },
-                    itemCount: 3),
-              ),
-            ),
+            (allFiles != null && (allFiles?.isNotEmpty??true) )
+                ? Padding(
+                    padding: EdgeInsets.symmetric(vertical: 10.h),
+                    child: SizedBox(
+                      height: 65.h,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return IconButton(
+                                onPressed: () {
+                                  GoRouter.of(context).pushNamed("seeDoc",
+                                      queryParameters: {
+                                        "path": allComments[index],
+                                      },
+                                      extra: false);
+                                },
+                                icon: const Icon(Icons.file_present));
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              width: 5.w,
+                            );
+                          },
+                          itemCount: allFiles?.length ?? 0),
+                    ),
+                  )
+                : const SizedBox.shrink(),
             Text(
               "Комментарии от производителя",
               style: AppFonts.w400s14.copyWith(),
@@ -122,17 +130,7 @@ class Stage3ForManufacturer extends StatelessWidget {
               onImagePickedFromCamera: onImagePickedFromCamera,
               onImagePickedFromGallery: onImagePickedFromGallery,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: CustomButton(
-                text: "Подтвердить",
-                onPressed: () {
-                  onTap();
-                },
-                sizedTemporary: true,
-                height: 50,
-              ),
-            )
+            
           ],
         ),
       ),

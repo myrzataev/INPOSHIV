@@ -72,7 +72,7 @@ class Stage1 extends StatelessWidget {
                     ),
                     Text("Комментарии от заказчика", style: AppFonts.w400s14),
                     SizedBox(
-                        height: 200.h,
+                      height: 200.h,
                         child: ListView.separated(
                             itemBuilder: (context, index) {
                               final currentItem = allComments[index];

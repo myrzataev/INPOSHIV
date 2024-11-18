@@ -294,14 +294,23 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        currentItem.products
-                                                                ?.first.name ??
-                                                            "",
-                                                        style: AppFonts.w700s20
-                                                            .copyWith(
-                                                                color: AppColors
-                                                                    .accentTextColor),
+                                                      Expanded(
+                                                        child: Text(
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          softWrap: true,
+                                                          currentItem
+                                                                  .products
+                                                                  ?.first
+                                                                  .name ??
+                                                              "",
+                                                          style: AppFonts
+                                                              .w700s20
+                                                              .copyWith(
+                                                                  color: AppColors
+                                                                      .accentTextColor),
+                                                        ),
                                                       ),
                                                       // const Spacer(),
                                                       Padding(
@@ -656,12 +665,14 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                     MainAxisAlignment
                                                                         .spaceBetween,
                                                                 children: [
-                                                                  Text(
-                                                                    item.productsList?.first
-                                                                            .name ??
-                                                                        "",
-                                                                    style: AppFonts
-                                                                        .w700s16,
+                                                                  Expanded(
+                                                                    child: Text(
+                                                                      item.productsList?.first
+                                                                              .name ??
+                                                                          "",
+                                                                      style: AppFonts
+                                                                          .w700s16,
+                                                                    ),
                                                                   ),
                                                                   Text(
                                                                     "${item.productsList?.first.quantity ?? 580} штук",

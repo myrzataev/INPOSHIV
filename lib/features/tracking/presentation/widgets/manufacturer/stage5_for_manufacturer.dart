@@ -95,7 +95,10 @@ class Stage5ForManufacturer extends StatelessWidget {
             const Spacer(),
             CustomTrackingComment(
               controller: controller,
-              onTap: onTap,
+              onTap: () {
+                print("onTap is calling");
+                onTap();
+              },
               onFilePicked: onFilePicked,
               onImagePickedFromCamera: onImagePickedFromCamera,
               onImagePickedFromGallery: onImagePickedFromGallery,

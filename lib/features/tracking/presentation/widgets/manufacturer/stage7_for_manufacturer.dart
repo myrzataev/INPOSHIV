@@ -34,94 +34,79 @@ class Stage7ForManufacturer extends StatelessWidget {
           borderRadius: BorderRadius.circular(10.r)),
       child: Padding(
         padding: EdgeInsets.all(10.h),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "Этап 7",
-                style: AppFonts.w400s16,
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 20.h, top: 5.h),
-                child: Text(
-                  "Оплата второй части заказа",
-                  style: AppFonts.w700s18,
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Этап 7",
+                      style: AppFonts.w400s16,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 20.h, top: 5.h),
+                      child: Text(
+                        "Оплата второй части заказа",
+                        style: AppFonts.w700s18,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () => onTapForCheck(),
+                      child: Text(
+                        "Чек об оплате",
+                        style: AppFonts.w400s16.copyWith(
+                          decoration: TextDecoration.underline,
+                          color: AppColors.accentTextColor,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "Комментарии от заказчика",
+                      style: AppFonts.w400s14,
+                    ),
+                    SizedBox(
+                        height: 200.h,
+                        child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              final currentItem = allComments[index];
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    currentItem["comment"] ?? "",
+                                    style: AppFonts.w400s16.copyWith(
+                                        color: AppColors.accentTextColor),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(bottom: 20.h),
+                                    child: Text(currentItem["date"] ?? "",
+                                        style: AppFonts.w400s12),
+                                  ),
+                                ],
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: 3.h,
+                              );
+                            },
+                            itemCount: allComments.length)),
+
+                    // const Spacer(),
+                  ],
                 ),
               ),
-              InkWell(
-                onTap: () => onTapForCheck(),
-                child: Text(
-                  "Чек об оплате",
-                  style: AppFonts.w400s16.copyWith(
-                    decoration: TextDecoration.underline,
-                    color: AppColors.accentTextColor,
-                  ),
-                ),
-              ),
-              Text(
-                "Комментарии от заказчика",
-                style: AppFonts.w400s14,
-              ),
-              Expanded(
-                  child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        final currentItem = allComments[index];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              currentItem["comment"] ?? "",
-                              style: AppFonts.w400s16
-                                  .copyWith(color: AppColors.accentTextColor),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 20.h),
-                              child: Text(currentItem["date"] ?? "",
-                                  style: AppFonts.w400s12),
-                            ),
-                          ],
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 3.h,
-                        );
-                      },
-                      itemCount: allComments.length)),
-              // Add vertical padding to each section
-              // PaymentRow(
-              //     title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
-              // PaymentRow(
-              //     title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
-              // PaymentRow(
-              //     title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
-              // Padding(
-              //   padding: EdgeInsets.symmetric(vertical: 10.h),
-              //   child: Text(
-              //     "Добавьте комментарии и фотографии для производителя",
-              //     style: AppFonts.w400s14,
-              //   ),
-              // ),
-              CustomTrackingComment(
-                controller: controller,
-                onTap: onTap,
-                onFilePicked: onFilePicked,
-                onImagePickedFromCamera: onImagePickedFromCamera,
-                onImagePickedFromGallery: onImagePickedFromGallery,
-              ),
-              // const Spacer(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 5.h),
-                child: CustomButton(
-                  text: "Оплатить",
-                  onPressed: () {
-                    onTap();
-                  },
-                ),
-              ),
-            ],
-          ),
+            ),
+            CustomTrackingComment(
+              controller: controller,
+              onTap: onTap,
+              onFilePicked: onFilePicked,
+              onImagePickedFromCamera: onImagePickedFromCamera,
+              onImagePickedFromGallery: onImagePickedFromGallery,
+            ),
+          ],
         ),
       ),
     );

@@ -151,9 +151,11 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  widget.model.products?.first.name ?? "",
-                                  style: AppFonts.w700s16,
+                                Expanded(
+                                  child: Text(
+                                    widget.model.products?.first.name ?? "",
+                                    style: AppFonts.w700s16,
+                                  ),
                                 ),
                                 Text(
                                   "${widget.model.products?.first.quantity ?? 0} штук",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -13,6 +14,7 @@ class Stage2ForManufacturer extends StatelessWidget {
   final TextEditingController controller;
   final Function attachDocument;
   final List<Map<String, String?>> allComments;
+
   final void Function(String filePath, String fileName)? onFilePicked;
   final void Function(String imagePath, String fileName)?
       onImagePickedFromGallery;
@@ -99,7 +101,8 @@ class Stage2ForManufacturer extends StatelessWidget {
                           ),
                           Text("Комментарии от производителя",
                               style: AppFonts.w400s14),
-                          Expanded(
+                          SizedBox(
+                            height: 250.h,
                               child: ListView.separated(
                                   itemBuilder: (context, index) {
                                     final currentItem = allComments[index];

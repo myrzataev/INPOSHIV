@@ -7,8 +7,9 @@ import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 
 class Part2Stage6 extends StatelessWidget {
   final Function onTap;
+  final List<Map<String, String?>> allComments;
   const Part2Stage6({
-    super.key, required this.onTap,
+    super.key, required this.onTap, required this.allComments,
   });
 
   @override
@@ -56,14 +57,33 @@ class Part2Stage6 extends StatelessWidget {
                 style: AppFonts.w700s18,
               ),
             ),
-            Text(
-              "При отгрузке 10 ед. были испорчены, отгружено 500шт",
-              style: AppFonts.w400s16,
-            ),
-            Text(
-              "18.04.2024",
-              style: AppFonts.w400s12,
-            ),
+            SizedBox(
+                  height: 200.h,
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        final currentItem = allComments[index];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentItem["comment"] ?? "",
+                              style: AppFonts.w400s16
+                                  .copyWith(color: AppColors.accentTextColor),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 20.h),
+                              child: Text(currentItem["date"] ?? "",
+                                  style: AppFonts.w400s12),
+                            ),
+                          ],
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 3.h,
+                        );
+                      },
+                      itemCount: allComments.length)),
             Center(
               child: TextButton(
                   onPressed: () {

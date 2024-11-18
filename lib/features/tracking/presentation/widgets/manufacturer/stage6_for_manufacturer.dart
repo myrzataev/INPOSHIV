@@ -1,21 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
-import 'package:inposhiv/resources/resources.dart';
 
 class Stage6ForManufacturer extends StatelessWidget {
   final Function onTap;
-    final TextEditingController controller;
-
+  final TextEditingController controller;
+  final void Function(String filePath, String fileName)? onFilePicked;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromGallery;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromCamera;
+  final List<String>? allFiles;
   const Stage6ForManufacturer({
     super.key,
     required this.currentIndexOfData,
-    required this.onTap, required this.controller, 
+    required this.onTap,
+    required this.controller,
+    this.onFilePicked,
+    this.onImagePickedFromGallery,
+    this.onImagePickedFromCamera,
+    this.allFiles,
   });
 
   final int currentIndexOfData;
@@ -70,19 +77,12 @@ class Stage6ForManufacturer extends StatelessWidget {
             ),
             const Spacer(),
             CustomTrackingComment(
-                controller: controller, onTap: onTap),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: CustomButton(
-                text: "Подтвердить",
-                onPressed: () {
-                  onTap();
-                },
-                sizedTemporary: true,
-                height: 50,
-              ),
+              controller: controller,
+              onTap: onTap,
+              onFilePicked: onFilePicked,
+              onImagePickedFromCamera: onImagePickedFromCamera,
+              onImagePickedFromGallery: onImagePickedFromGallery,
             ),
-           
           ],
         ),
       ),
