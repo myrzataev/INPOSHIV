@@ -257,7 +257,9 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                     onPressed: () {
                       BlocProvider.of<OrdersBloc>(context)
                           .add(OrdersEvent.sendInvoice(invoice: {
-                        "orderId": widget.orderId,
+                        "manufacturerUuid": preferences.getString("customerId"),
+                        "orderId": 1,
+                        //  widget.orderId,
                         "preliminaryQuantity": amountController.text,
                         "pricePerUnit": retailPriceController.text,
                         "preliminaryAmount": totalPriceWithoutAdditionalInRuble,

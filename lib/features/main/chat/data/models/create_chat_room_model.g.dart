@@ -9,33 +9,35 @@ part of 'create_chat_room_model.dart';
 _$CreateChatRoomModelImpl _$$CreateChatRoomModelImplFromJson(
         Map<String, dynamic> json) =>
     _$CreateChatRoomModelImpl(
-      messageUuid: json['messageUuid'] as String?,
       chatUuid: json['chatUuid'] as String?,
       senderUuid: json['senderUuid'] as String?,
+      recipientUuid: json['recipientUuid'] as String?,
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
       senderName: json['senderName'] as String?,
       recipientName: json['recipientName'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      recipientUuid: json['recipientUuid'] as String?,
-      content: json['content'] as String?,
-      type: (json['type'] as num?)?.toInt(),
-      messageStatus: json['messageStatus'] as String?,
-      startedAt: json['startedAt'] == null
+      lastMessageUuid: json['lastMessageUuid'] as String?,
+      lastMessageContent: json['lastMessageContent'] as String?,
+      lastMessageSenderUuid: json['lastMessageSenderUuid'] as String?,
+      orderId: (json['orderId'] as num?)?.toInt(),
+      lastMessageDate: json['lastMessageDate'] == null
           ? null
-          : DateTime.parse(json['startedAt'] as String),
+          : DateTime.parse(json['lastMessageDate'] as String),
     );
 
 Map<String, dynamic> _$$CreateChatRoomModelImplToJson(
         _$CreateChatRoomModelImpl instance) =>
     <String, dynamic>{
-      'messageUuid': instance.messageUuid,
       'chatUuid': instance.chatUuid,
       'senderUuid': instance.senderUuid,
+      'recipientUuid': instance.recipientUuid,
+      'createdAt': instance.createdAt?.toIso8601String(),
       'senderName': instance.senderName,
       'recipientName': instance.recipientName,
-      'imageUrl': instance.imageUrl,
-      'recipientUuid': instance.recipientUuid,
-      'content': instance.content,
-      'type': instance.type,
-      'messageStatus': instance.messageStatus,
-      'startedAt': instance.startedAt?.toIso8601String(),
+      'lastMessageUuid': instance.lastMessageUuid,
+      'lastMessageContent': instance.lastMessageContent,
+      'lastMessageSenderUuid': instance.lastMessageSenderUuid,
+      'orderId': instance.orderId,
+      'lastMessageDate': instance.lastMessageDate?.toIso8601String(),
     };

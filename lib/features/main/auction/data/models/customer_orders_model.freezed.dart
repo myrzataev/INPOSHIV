@@ -20,12 +20,17 @@ CustomerOrdersModel _$CustomerOrdersModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CustomerOrdersModel {
+  int? get categoryId => throw _privateConstructorUsedError;
+  int? get fabricId => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
   int? get orderId => throw _privateConstructorUsedError;
   int? get orderStatus => throw _privateConstructorUsedError;
   List<Product>? get products => throw _privateConstructorUsedError;
   String? get customerName => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
   List<String>? get auctonsUuid => throw _privateConstructorUsedError;
+  List<AuctionProcessDtoList>? get auctionProcessDtoList =>
+      throw _privateConstructorUsedError;
 
   /// Serializes this CustomerOrdersModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -44,12 +49,16 @@ abstract class $CustomerOrdersModelCopyWith<$Res> {
       _$CustomerOrdersModelCopyWithImpl<$Res, CustomerOrdersModel>;
   @useResult
   $Res call(
-      {int? orderId,
+      {int? categoryId,
+      int? fabricId,
+      String? description,
+      int? orderId,
       int? orderStatus,
       List<Product>? products,
       String? customerName,
       DateTime? createdAt,
-      List<String>? auctonsUuid});
+      List<String>? auctonsUuid,
+      List<AuctionProcessDtoList>? auctionProcessDtoList});
 }
 
 /// @nodoc
@@ -67,14 +76,30 @@ class _$CustomerOrdersModelCopyWithImpl<$Res, $Val extends CustomerOrdersModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? categoryId = freezed,
+    Object? fabricId = freezed,
+    Object? description = freezed,
     Object? orderId = freezed,
     Object? orderStatus = freezed,
     Object? products = freezed,
     Object? customerName = freezed,
     Object? createdAt = freezed,
     Object? auctonsUuid = freezed,
+    Object? auctionProcessDtoList = freezed,
   }) {
     return _then(_value.copyWith(
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fabricId: freezed == fabricId
+          ? _value.fabricId
+          : fabricId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
@@ -99,6 +124,10 @@ class _$CustomerOrdersModelCopyWithImpl<$Res, $Val extends CustomerOrdersModel>
           ? _value.auctonsUuid
           : auctonsUuid // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      auctionProcessDtoList: freezed == auctionProcessDtoList
+          ? _value.auctionProcessDtoList
+          : auctionProcessDtoList // ignore: cast_nullable_to_non_nullable
+              as List<AuctionProcessDtoList>?,
     ) as $Val);
   }
 }
@@ -112,12 +141,16 @@ abstract class _$$CustomerOrdersModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? orderId,
+      {int? categoryId,
+      int? fabricId,
+      String? description,
+      int? orderId,
       int? orderStatus,
       List<Product>? products,
       String? customerName,
       DateTime? createdAt,
-      List<String>? auctonsUuid});
+      List<String>? auctonsUuid,
+      List<AuctionProcessDtoList>? auctionProcessDtoList});
 }
 
 /// @nodoc
@@ -133,14 +166,30 @@ class __$$CustomerOrdersModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? categoryId = freezed,
+    Object? fabricId = freezed,
+    Object? description = freezed,
     Object? orderId = freezed,
     Object? orderStatus = freezed,
     Object? products = freezed,
     Object? customerName = freezed,
     Object? createdAt = freezed,
     Object? auctonsUuid = freezed,
+    Object? auctionProcessDtoList = freezed,
   }) {
     return _then(_$CustomerOrdersModelImpl(
+      categoryId: freezed == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fabricId: freezed == fabricId
+          ? _value.fabricId
+          : fabricId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
@@ -165,6 +214,10 @@ class __$$CustomerOrdersModelImplCopyWithImpl<$Res>
           ? _value._auctonsUuid
           : auctonsUuid // ignore: cast_nullable_to_non_nullable
               as List<String>?,
+      auctionProcessDtoList: freezed == auctionProcessDtoList
+          ? _value._auctionProcessDtoList
+          : auctionProcessDtoList // ignore: cast_nullable_to_non_nullable
+              as List<AuctionProcessDtoList>?,
     ));
   }
 }
@@ -173,18 +226,29 @@ class __$$CustomerOrdersModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
   const _$CustomerOrdersModelImpl(
-      {this.orderId,
+      {this.categoryId,
+      this.fabricId,
+      this.description,
+      this.orderId,
       this.orderStatus,
       final List<Product>? products,
       this.customerName,
       this.createdAt,
-      final List<String>? auctonsUuid})
+      final List<String>? auctonsUuid,
+      final List<AuctionProcessDtoList>? auctionProcessDtoList})
       : _products = products,
-        _auctonsUuid = auctonsUuid;
+        _auctonsUuid = auctonsUuid,
+        _auctionProcessDtoList = auctionProcessDtoList;
 
   factory _$CustomerOrdersModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CustomerOrdersModelImplFromJson(json);
 
+  @override
+  final int? categoryId;
+  @override
+  final int? fabricId;
+  @override
+  final String? description;
   @override
   final int? orderId;
   @override
@@ -213,9 +277,20 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<AuctionProcessDtoList>? _auctionProcessDtoList;
+  @override
+  List<AuctionProcessDtoList>? get auctionProcessDtoList {
+    final value = _auctionProcessDtoList;
+    if (value == null) return null;
+    if (_auctionProcessDtoList is EqualUnmodifiableListView)
+      return _auctionProcessDtoList;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'CustomerOrdersModel(orderId: $orderId, orderStatus: $orderStatus, products: $products, customerName: $customerName, createdAt: $createdAt, auctonsUuid: $auctonsUuid)';
+    return 'CustomerOrdersModel(categoryId: $categoryId, fabricId: $fabricId, description: $description, orderId: $orderId, orderStatus: $orderStatus, products: $products, customerName: $customerName, createdAt: $createdAt, auctonsUuid: $auctonsUuid, auctionProcessDtoList: $auctionProcessDtoList)';
   }
 
   @override
@@ -223,6 +298,12 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CustomerOrdersModelImpl &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
+            (identical(other.fabricId, fabricId) ||
+                other.fabricId == fabricId) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
             (identical(other.orderStatus, orderStatus) ||
                 other.orderStatus == orderStatus) &&
@@ -232,19 +313,25 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             const DeepCollectionEquality()
-                .equals(other._auctonsUuid, _auctonsUuid));
+                .equals(other._auctonsUuid, _auctonsUuid) &&
+            const DeepCollectionEquality()
+                .equals(other._auctionProcessDtoList, _auctionProcessDtoList));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      categoryId,
+      fabricId,
+      description,
       orderId,
       orderStatus,
       const DeepCollectionEquality().hash(_products),
       customerName,
       createdAt,
-      const DeepCollectionEquality().hash(_auctonsUuid));
+      const DeepCollectionEquality().hash(_auctonsUuid),
+      const DeepCollectionEquality().hash(_auctionProcessDtoList));
 
   /// Create a copy of CustomerOrdersModel
   /// with the given fields replaced by the non-null parameter values.
@@ -265,16 +352,27 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
 
 abstract class _CustomerOrdersModel implements CustomerOrdersModel {
   const factory _CustomerOrdersModel(
-      {final int? orderId,
-      final int? orderStatus,
-      final List<Product>? products,
-      final String? customerName,
-      final DateTime? createdAt,
-      final List<String>? auctonsUuid}) = _$CustomerOrdersModelImpl;
+          {final int? categoryId,
+          final int? fabricId,
+          final String? description,
+          final int? orderId,
+          final int? orderStatus,
+          final List<Product>? products,
+          final String? customerName,
+          final DateTime? createdAt,
+          final List<String>? auctonsUuid,
+          final List<AuctionProcessDtoList>? auctionProcessDtoList}) =
+      _$CustomerOrdersModelImpl;
 
   factory _CustomerOrdersModel.fromJson(Map<String, dynamic> json) =
       _$CustomerOrdersModelImpl.fromJson;
 
+  @override
+  int? get categoryId;
+  @override
+  int? get fabricId;
+  @override
+  String? get description;
   @override
   int? get orderId;
   @override
@@ -287,6 +385,8 @@ abstract class _CustomerOrdersModel implements CustomerOrdersModel {
   DateTime? get createdAt;
   @override
   List<String>? get auctonsUuid;
+  @override
+  List<AuctionProcessDtoList>? get auctionProcessDtoList;
 
   /// Create a copy of CustomerOrdersModel
   /// with the given fields replaced by the non-null parameter values.
@@ -294,6 +394,249 @@ abstract class _CustomerOrdersModel implements CustomerOrdersModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$CustomerOrdersModelImplCopyWith<_$CustomerOrdersModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+AuctionProcessDtoList _$AuctionProcessDtoListFromJson(
+    Map<String, dynamic> json) {
+  return _AuctionProcessDtoList.fromJson(json);
+}
+
+/// @nodoc
+mixin _$AuctionProcessDtoList {
+  int? get auctionId => throw _privateConstructorUsedError;
+  String? get manufacturerUuid => throw _privateConstructorUsedError;
+  int? get bidPrice => throw _privateConstructorUsedError;
+  DateTime? get bidTime => throw _privateConstructorUsedError;
+  int? get bidCount => throw _privateConstructorUsedError;
+
+  /// Serializes this AuctionProcessDtoList to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of AuctionProcessDtoList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $AuctionProcessDtoListCopyWith<AuctionProcessDtoList> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $AuctionProcessDtoListCopyWith<$Res> {
+  factory $AuctionProcessDtoListCopyWith(AuctionProcessDtoList value,
+          $Res Function(AuctionProcessDtoList) then) =
+      _$AuctionProcessDtoListCopyWithImpl<$Res, AuctionProcessDtoList>;
+  @useResult
+  $Res call(
+      {int? auctionId,
+      String? manufacturerUuid,
+      int? bidPrice,
+      DateTime? bidTime,
+      int? bidCount});
+}
+
+/// @nodoc
+class _$AuctionProcessDtoListCopyWithImpl<$Res,
+        $Val extends AuctionProcessDtoList>
+    implements $AuctionProcessDtoListCopyWith<$Res> {
+  _$AuctionProcessDtoListCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of AuctionProcessDtoList
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? auctionId = freezed,
+    Object? manufacturerUuid = freezed,
+    Object? bidPrice = freezed,
+    Object? bidTime = freezed,
+    Object? bidCount = freezed,
+  }) {
+    return _then(_value.copyWith(
+      auctionId: freezed == auctionId
+          ? _value.auctionId
+          : auctionId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bidPrice: freezed == bidPrice
+          ? _value.bidPrice
+          : bidPrice // ignore: cast_nullable_to_non_nullable
+              as int?,
+      bidTime: freezed == bidTime
+          ? _value.bidTime
+          : bidTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      bidCount: freezed == bidCount
+          ? _value.bidCount
+          : bidCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$AuctionProcessDtoListImplCopyWith<$Res>
+    implements $AuctionProcessDtoListCopyWith<$Res> {
+  factory _$$AuctionProcessDtoListImplCopyWith(
+          _$AuctionProcessDtoListImpl value,
+          $Res Function(_$AuctionProcessDtoListImpl) then) =
+      __$$AuctionProcessDtoListImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? auctionId,
+      String? manufacturerUuid,
+      int? bidPrice,
+      DateTime? bidTime,
+      int? bidCount});
+}
+
+/// @nodoc
+class __$$AuctionProcessDtoListImplCopyWithImpl<$Res>
+    extends _$AuctionProcessDtoListCopyWithImpl<$Res,
+        _$AuctionProcessDtoListImpl>
+    implements _$$AuctionProcessDtoListImplCopyWith<$Res> {
+  __$$AuctionProcessDtoListImplCopyWithImpl(_$AuctionProcessDtoListImpl _value,
+      $Res Function(_$AuctionProcessDtoListImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of AuctionProcessDtoList
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? auctionId = freezed,
+    Object? manufacturerUuid = freezed,
+    Object? bidPrice = freezed,
+    Object? bidTime = freezed,
+    Object? bidCount = freezed,
+  }) {
+    return _then(_$AuctionProcessDtoListImpl(
+      auctionId: freezed == auctionId
+          ? _value.auctionId
+          : auctionId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      bidPrice: freezed == bidPrice
+          ? _value.bidPrice
+          : bidPrice // ignore: cast_nullable_to_non_nullable
+              as int?,
+      bidTime: freezed == bidTime
+          ? _value.bidTime
+          : bidTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      bidCount: freezed == bidCount
+          ? _value.bidCount
+          : bidCount // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$AuctionProcessDtoListImpl implements _AuctionProcessDtoList {
+  const _$AuctionProcessDtoListImpl(
+      {this.auctionId,
+      this.manufacturerUuid,
+      this.bidPrice,
+      this.bidTime,
+      this.bidCount});
+
+  factory _$AuctionProcessDtoListImpl.fromJson(Map<String, dynamic> json) =>
+      _$$AuctionProcessDtoListImplFromJson(json);
+
+  @override
+  final int? auctionId;
+  @override
+  final String? manufacturerUuid;
+  @override
+  final int? bidPrice;
+  @override
+  final DateTime? bidTime;
+  @override
+  final int? bidCount;
+
+  @override
+  String toString() {
+    return 'AuctionProcessDtoList(auctionId: $auctionId, manufacturerUuid: $manufacturerUuid, bidPrice: $bidPrice, bidTime: $bidTime, bidCount: $bidCount)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$AuctionProcessDtoListImpl &&
+            (identical(other.auctionId, auctionId) ||
+                other.auctionId == auctionId) &&
+            (identical(other.manufacturerUuid, manufacturerUuid) ||
+                other.manufacturerUuid == manufacturerUuid) &&
+            (identical(other.bidPrice, bidPrice) ||
+                other.bidPrice == bidPrice) &&
+            (identical(other.bidTime, bidTime) || other.bidTime == bidTime) &&
+            (identical(other.bidCount, bidCount) ||
+                other.bidCount == bidCount));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, auctionId, manufacturerUuid, bidPrice, bidTime, bidCount);
+
+  /// Create a copy of AuctionProcessDtoList
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$AuctionProcessDtoListImplCopyWith<_$AuctionProcessDtoListImpl>
+      get copyWith => __$$AuctionProcessDtoListImplCopyWithImpl<
+          _$AuctionProcessDtoListImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$AuctionProcessDtoListImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _AuctionProcessDtoList implements AuctionProcessDtoList {
+  const factory _AuctionProcessDtoList(
+      {final int? auctionId,
+      final String? manufacturerUuid,
+      final int? bidPrice,
+      final DateTime? bidTime,
+      final int? bidCount}) = _$AuctionProcessDtoListImpl;
+
+  factory _AuctionProcessDtoList.fromJson(Map<String, dynamic> json) =
+      _$AuctionProcessDtoListImpl.fromJson;
+
+  @override
+  int? get auctionId;
+  @override
+  String? get manufacturerUuid;
+  @override
+  int? get bidPrice;
+  @override
+  DateTime? get bidTime;
+  @override
+  int? get bidCount;
+
+  /// Create a copy of AuctionProcessDtoList
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$AuctionProcessDtoListImplCopyWith<_$AuctionProcessDtoListImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 Product _$ProductFromJson(Map<String, dynamic> json) {
@@ -307,8 +650,8 @@ mixin _$Product {
   int? get fabricId => throw _privateConstructorUsedError;
   int? get quantity => throw _privateConstructorUsedError;
   Map<String, int>? get sizeQuantities => throw _privateConstructorUsedError;
-  dynamic get description => throw _privateConstructorUsedError;
-  int? get priceUsd => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  double? get priceUsd => throw _privateConstructorUsedError;
   double? get priceRub => throw _privateConstructorUsedError;
   List<String>? get photos => throw _privateConstructorUsedError;
 
@@ -332,8 +675,8 @@ abstract class $ProductCopyWith<$Res> {
       int? fabricId,
       int? quantity,
       Map<String, int>? sizeQuantities,
-      dynamic description,
-      int? priceUsd,
+      String? description,
+      double? priceUsd,
       double? priceRub,
       List<String>? photos});
 }
@@ -387,11 +730,11 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       priceUsd: freezed == priceUsd
           ? _value.priceUsd
           : priceUsd // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       priceRub: freezed == priceRub
           ? _value.priceRub
           : priceRub // ignore: cast_nullable_to_non_nullable
@@ -417,8 +760,8 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       int? fabricId,
       int? quantity,
       Map<String, int>? sizeQuantities,
-      dynamic description,
-      int? priceUsd,
+      String? description,
+      double? priceUsd,
       double? priceRub,
       List<String>? photos});
 }
@@ -470,11 +813,11 @@ class __$$ProductImplCopyWithImpl<$Res>
       description: freezed == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       priceUsd: freezed == priceUsd
           ? _value.priceUsd
           : priceUsd // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as double?,
       priceRub: freezed == priceRub
           ? _value.priceRub
           : priceRub // ignore: cast_nullable_to_non_nullable
@@ -525,9 +868,9 @@ class _$ProductImpl implements _Product {
   }
 
   @override
-  final dynamic description;
+  final String? description;
   @override
-  final int? priceUsd;
+  final double? priceUsd;
   @override
   final double? priceRub;
   final List<String>? _photos;
@@ -559,8 +902,8 @@ class _$ProductImpl implements _Product {
                 other.quantity == quantity) &&
             const DeepCollectionEquality()
                 .equals(other._sizeQuantities, _sizeQuantities) &&
-            const DeepCollectionEquality()
-                .equals(other.description, description) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
             (identical(other.priceUsd, priceUsd) ||
                 other.priceUsd == priceUsd) &&
             (identical(other.priceRub, priceRub) ||
@@ -577,7 +920,7 @@ class _$ProductImpl implements _Product {
       fabricId,
       quantity,
       const DeepCollectionEquality().hash(_sizeQuantities),
-      const DeepCollectionEquality().hash(description),
+      description,
       priceUsd,
       priceRub,
       const DeepCollectionEquality().hash(_photos));
@@ -605,8 +948,8 @@ abstract class _Product implements Product {
       final int? fabricId,
       final int? quantity,
       final Map<String, int>? sizeQuantities,
-      final dynamic description,
-      final int? priceUsd,
+      final String? description,
+      final double? priceUsd,
       final double? priceRub,
       final List<String>? photos}) = _$ProductImpl;
 
@@ -623,9 +966,9 @@ abstract class _Product implements Product {
   @override
   Map<String, int>? get sizeQuantities;
   @override
-  dynamic get description;
+  String? get description;
   @override
-  int? get priceUsd;
+  double? get priceUsd;
   @override
   double? get priceRub;
   @override

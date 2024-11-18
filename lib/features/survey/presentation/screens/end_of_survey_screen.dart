@@ -40,7 +40,7 @@ class EndOfSurveyScreen extends StatelessWidget {
                   ? "Давайте создадим ваш первый заказ!"
                   : "Давайте создадим ваш профиль!",
               style: AppFonts.w700s36
-                  .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                  .copyWith(height: 1, fontWeight: FontWeight.bold),
             ),
             Center(
               child: Padding(

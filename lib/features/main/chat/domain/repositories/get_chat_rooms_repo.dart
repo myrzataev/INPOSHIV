@@ -1,5 +1,5 @@
-import 'package:inposhiv/features/main/chat/data/models/chat_rooms_model.dart';
+import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.dart';
 
 abstract interface class GetChatRoomsRepo {
-  Future<List<ChatRoomsModel>> getChats({required String userUuid});
+  Future<List<CreateChatRoomModel>> getChats({required String userUuid});
 }

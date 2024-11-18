@@ -6,8 +6,9 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 
 class Part2Stage6 extends StatelessWidget {
+  final Function onTap;
   const Part2Stage6({
-    super.key,
+    super.key, required this.onTap,
   });
 
   @override
@@ -22,7 +23,7 @@ class Part2Stage6 extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Этап 6",
+              "Этап 8",
               style: AppFonts.w400s16,
             ),
             Padding(
@@ -66,9 +67,7 @@ class Part2Stage6 extends StatelessWidget {
             Center(
               child: TextButton(
                   onPressed: () {
-                    // showDialog(context: context, builder: (context)=> AlertDialog(
-                    //   title: ,
-                    // ));
+                    onTap();
                   },
                   child: Text(
                     "Задать вопросы",

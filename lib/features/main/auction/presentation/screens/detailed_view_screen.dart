@@ -173,7 +173,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(left: 84.w),
                                   child: Text(
-                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceUsd?.toDouble() ?? 0, totalCount: widget.model.products?.first.quantity ?? 0)} \$",
+                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceUsd?.toDouble() ?? 0, totalCount: widget.model.products?.first.quantity ?? 0).toStringAsFixed(2)} \$",
                                     style: AppFonts.w400s16.copyWith(
                                         color: AppColors.accentTextColor),
                                   ),
@@ -189,7 +189,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                 Padding(
                                   padding: EdgeInsets.only(left: 48.w),
                                   child: Text(
-                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceRub ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0)} руб",
+                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceRub?.toDouble() ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0).toStringAsFixed(2)} руб",
                                     style: AppFonts.w400s16,
                                   ),
                                 )
@@ -353,8 +353,8 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                               .recipientUuid,
                                                           "chatUuid":
                                                               model.chatUuid,
-                                                          "orderId": widget
-                                                              .model.orderId
+                                                          "orderId": model
+                                                              .orderId
                                                               .toString()
                                                         });
                                                   },
@@ -383,7 +383,9 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                                       "userId"),
                                                           "recipientUuid":
                                                               currentItem
-                                                                  .manufacturerUserUuid
+                                                                  .manufacturerUserUuid,
+                                                          "orderId": widget
+                                                              .model.orderId
                                                         }));
                                                   },
                                                   color: AppColors

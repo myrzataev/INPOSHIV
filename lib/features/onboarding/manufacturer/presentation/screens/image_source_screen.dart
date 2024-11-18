@@ -78,8 +78,6 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
 
   @override
   Widget build(BuildContext context) {
-   
-
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -87,6 +85,7 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+             
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: Row(
@@ -97,23 +96,23 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
                           fontFamily: "SF Pro", color: const Color(0xff324D19)),
                     ),
                     Text(
-                      "из ${(isCustomer??true) ? 5 : 2} ",
+                      "из ${(isCustomer ?? true) ? 5 : 2} ",
                       style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                     ),
                   ],
                 ),
               ),
               Text(
-                (isCustomer??true)
+                (isCustomer ?? true)
                     ? "Для аукциона загрузите фото товара"
                     : "Загрузите фото своих работ",
                 style: AppFonts.w700s36
-                    .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                    .copyWith(height: 1, fontWeight: FontWeight.bold),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: Text(
-                  (isCustomer??true)
+                  (isCustomer ?? true)
                       ? "Загрузите фотографии ваших работ\nВы можете загрузить не более 5 фотографий"
                       : "Вы можете загрузить не более 5 фотографий",
                   style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
@@ -198,8 +197,9 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
                           onPressed: () {
                             // role == 1
                             //     ?
-                            GoRouter.of(context).pushNamed(
-                                (isCustomer??true) ? "chooseCategory" : "aboutCompany");
+                            GoRouter.of(context).pushNamed((isCustomer ?? true)
+                                ? "chooseCategory"
+                                : "aboutCompany");
                             // : GoRouter.of(context)
                             //     .pushNamed("aboutCompany");
 

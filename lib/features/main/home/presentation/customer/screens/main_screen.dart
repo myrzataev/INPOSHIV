@@ -221,7 +221,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                                   child: CircularProgressIndicator.adaptive(),
                                                                                 ),
                                                                             fit: BoxFit
-                                                                                .cover,
+                                                                                .contain,
                                                                             // height: 350.h,
                                                                             width: double
                                                                                 .infinity,
@@ -247,8 +247,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                       .center,
                                                               height: 36.h,
                                                               decoration: BoxDecoration(
-                                                                  color: Colors
-                                                                      .white,
+                                                                  color: AppColors.accentTextColor,
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
@@ -259,14 +258,13 @@ class _MainScreenState extends State<MainScreen> {
                                                                         horizontal:
                                                                             14.w),
                                                                 child: Text(
-                                                                  currentItem
-                                                                          .trustLevel ??
+                                                                  "Надежный" ??
                                                                       "",
                                                                   style: AppFonts
                                                                       .w400s16
                                                                       .copyWith(
                                                                           color:
-                                                                              AppColors.accentTextColor),
+                                                                              Colors.white),
                                                                 ),
                                                               ),
                                                             ),
@@ -538,7 +536,7 @@ class _MainScreenState extends State<MainScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "${currentItem.productsList?.first.priceRub?.toStringAsFixed(2)} руб за единицу, итого ${calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
+                                                  "${currentItem.productsList?.first.priceRub?.toStringAsFixed(2)} руб за ед,  ${calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
                                                   style: AppFonts.w400s16,
                                                 ),
                                                 Padding(

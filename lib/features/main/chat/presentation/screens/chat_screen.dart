@@ -273,6 +273,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       ? "Сформировать заказ"
                       : "Счет на оплату",
                   onPressed: () {
+                    print(widget.orderId);
                     // String? userIdFromPrefs = preferences.getString("userId");
 
                     // if (userIdFromPrefs != null &&
@@ -287,11 +288,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         ? GoRouter.of(context).pushNamed("orderDetails",
 
                             //  "invoiceScreen",
-                            queryParameters: {"orderId": "1"})
-                        : GoRouter.of(context)
-                            .pushNamed("orderDetailsForManufacturer", extra: "1"
-                                //  "invoiceScreen",
-                                );
+                            queryParameters: {"orderId": widget.orderId})
+                        : GoRouter.of(context).pushNamed(
+                            "orderDetailsForManufacturer",
+                            extra: widget.orderId
+                            //  "invoiceScreen",
+                            );
                   }),
             ),
           ),

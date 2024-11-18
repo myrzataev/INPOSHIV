@@ -33,7 +33,7 @@ class _NoticationsScreen extends State<NoticationsScreen> {
   void initState() {
     isCustomer = preferences.getBool("isCustomer");
 
-    // getCustomerInvoices();
+    getCustomerInvoices();
     super.initState();
   }
 
@@ -94,9 +94,28 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                                     itemCount: model.length),
                               ));
                             } else {
-                              return const Center(
-                                child: Text("Пусто"),
-                              );
+                               return Expanded(
+                                  child: Padding(
+                                padding: EdgeInsets.only(top: 30.h),
+                                child: ListView.separated(
+                                    itemBuilder: (context, index) {
+                                      return NotificationCard(
+                                        title: "Счет на оплату",
+                                        onTap: () {
+                                          context.go(
+                                              "/orders/invoiceScreenForCustomer",
+                                              extra: model[index]);
+                                        },
+                                        description: "Подтвердите",
+                                      );
+                                    },
+                                    separatorBuilder: (index, context) {
+                                      return SizedBox(
+                                        height: 7.h,
+                                      );
+                                    },
+                                    itemCount: 1),
+                              ));
                             }
                           },
                           orElse: () {
@@ -108,8 +127,9 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                                     return NotificationCard(
                                       title: "Счет на оплату",
                                       onTap: () {
-                                        // context.go("/orders/invoiceScreenForCustomer",
-                                        //     extra: model[index]);
+                                        context.go("/orders/invoiceScreenForCustomer",
+                                            // extra: model[index]
+                                            );
                                       },
                                       description: "Подтвердите",
                                     );
@@ -119,7 +139,7 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                                       height: 7.h,
                                     );
                                   },
-                                  itemCount: 12),
+                                  itemCount: 1),
                             ));
                           });
                     },

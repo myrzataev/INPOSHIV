@@ -23,7 +23,10 @@ mixin _$TrackingModel {
   int? get id => throw _privateConstructorUsedError;
   String? get invoiceUuid => throw _privateConstructorUsedError;
   int? get orderId => throw _privateConstructorUsedError;
-  String? get activeStage => throw _privateConstructorUsedError;
+  dynamic get stageAccepted => throw _privateConstructorUsedError;
+  dynamic get activeStage => throw _privateConstructorUsedError;
+  int? get activeStageId => throw _privateConstructorUsedError;
+  String? get activeStageDescription => throw _privateConstructorUsedError;
   List<AllC>? get allChecks => throw _privateConstructorUsedError;
   List<AllC>? get allComments => throw _privateConstructorUsedError;
 
@@ -47,7 +50,10 @@ abstract class $TrackingModelCopyWith<$Res> {
       {int? id,
       String? invoiceUuid,
       int? orderId,
-      String? activeStage,
+      dynamic stageAccepted,
+      dynamic activeStage,
+      int? activeStageId,
+      String? activeStageDescription,
       List<AllC>? allChecks,
       List<AllC>? allComments});
 }
@@ -70,7 +76,10 @@ class _$TrackingModelCopyWithImpl<$Res, $Val extends TrackingModel>
     Object? id = freezed,
     Object? invoiceUuid = freezed,
     Object? orderId = freezed,
+    Object? stageAccepted = freezed,
     Object? activeStage = freezed,
+    Object? activeStageId = freezed,
+    Object? activeStageDescription = freezed,
     Object? allChecks = freezed,
     Object? allComments = freezed,
   }) {
@@ -87,9 +96,21 @@ class _$TrackingModelCopyWithImpl<$Res, $Val extends TrackingModel>
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as int?,
+      stageAccepted: freezed == stageAccepted
+          ? _value.stageAccepted
+          : stageAccepted // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       activeStage: freezed == activeStage
           ? _value.activeStage
           : activeStage // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      activeStageId: freezed == activeStageId
+          ? _value.activeStageId
+          : activeStageId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      activeStageDescription: freezed == activeStageDescription
+          ? _value.activeStageDescription
+          : activeStageDescription // ignore: cast_nullable_to_non_nullable
               as String?,
       allChecks: freezed == allChecks
           ? _value.allChecks
@@ -115,7 +136,10 @@ abstract class _$$TrackingModelImplCopyWith<$Res>
       {int? id,
       String? invoiceUuid,
       int? orderId,
-      String? activeStage,
+      dynamic stageAccepted,
+      dynamic activeStage,
+      int? activeStageId,
+      String? activeStageDescription,
       List<AllC>? allChecks,
       List<AllC>? allComments});
 }
@@ -136,7 +160,10 @@ class __$$TrackingModelImplCopyWithImpl<$Res>
     Object? id = freezed,
     Object? invoiceUuid = freezed,
     Object? orderId = freezed,
+    Object? stageAccepted = freezed,
     Object? activeStage = freezed,
+    Object? activeStageId = freezed,
+    Object? activeStageDescription = freezed,
     Object? allChecks = freezed,
     Object? allComments = freezed,
   }) {
@@ -153,9 +180,21 @@ class __$$TrackingModelImplCopyWithImpl<$Res>
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
               as int?,
+      stageAccepted: freezed == stageAccepted
+          ? _value.stageAccepted
+          : stageAccepted // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       activeStage: freezed == activeStage
           ? _value.activeStage
           : activeStage // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      activeStageId: freezed == activeStageId
+          ? _value.activeStageId
+          : activeStageId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      activeStageDescription: freezed == activeStageDescription
+          ? _value.activeStageDescription
+          : activeStageDescription // ignore: cast_nullable_to_non_nullable
               as String?,
       allChecks: freezed == allChecks
           ? _value._allChecks
@@ -176,7 +215,10 @@ class _$TrackingModelImpl implements _TrackingModel {
       {this.id,
       this.invoiceUuid,
       this.orderId,
+      this.stageAccepted,
       this.activeStage,
+      this.activeStageId,
+      this.activeStageDescription,
       final List<AllC>? allChecks,
       final List<AllC>? allComments})
       : _allChecks = allChecks,
@@ -192,7 +234,13 @@ class _$TrackingModelImpl implements _TrackingModel {
   @override
   final int? orderId;
   @override
-  final String? activeStage;
+  final dynamic stageAccepted;
+  @override
+  final dynamic activeStage;
+  @override
+  final int? activeStageId;
+  @override
+  final String? activeStageDescription;
   final List<AllC>? _allChecks;
   @override
   List<AllC>? get allChecks {
@@ -215,7 +263,7 @@ class _$TrackingModelImpl implements _TrackingModel {
 
   @override
   String toString() {
-    return 'TrackingModel(id: $id, invoiceUuid: $invoiceUuid, orderId: $orderId, activeStage: $activeStage, allChecks: $allChecks, allComments: $allComments)';
+    return 'TrackingModel(id: $id, invoiceUuid: $invoiceUuid, orderId: $orderId, stageAccepted: $stageAccepted, activeStage: $activeStage, activeStageId: $activeStageId, activeStageDescription: $activeStageDescription, allChecks: $allChecks, allComments: $allComments)';
   }
 
   @override
@@ -227,8 +275,14 @@ class _$TrackingModelImpl implements _TrackingModel {
             (identical(other.invoiceUuid, invoiceUuid) ||
                 other.invoiceUuid == invoiceUuid) &&
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
-            (identical(other.activeStage, activeStage) ||
-                other.activeStage == activeStage) &&
+            const DeepCollectionEquality()
+                .equals(other.stageAccepted, stageAccepted) &&
+            const DeepCollectionEquality()
+                .equals(other.activeStage, activeStage) &&
+            (identical(other.activeStageId, activeStageId) ||
+                other.activeStageId == activeStageId) &&
+            (identical(other.activeStageDescription, activeStageDescription) ||
+                other.activeStageDescription == activeStageDescription) &&
             const DeepCollectionEquality()
                 .equals(other._allChecks, _allChecks) &&
             const DeepCollectionEquality()
@@ -242,7 +296,10 @@ class _$TrackingModelImpl implements _TrackingModel {
       id,
       invoiceUuid,
       orderId,
-      activeStage,
+      const DeepCollectionEquality().hash(stageAccepted),
+      const DeepCollectionEquality().hash(activeStage),
+      activeStageId,
+      activeStageDescription,
       const DeepCollectionEquality().hash(_allChecks),
       const DeepCollectionEquality().hash(_allComments));
 
@@ -267,7 +324,10 @@ abstract class _TrackingModel implements TrackingModel {
       {final int? id,
       final String? invoiceUuid,
       final int? orderId,
-      final String? activeStage,
+      final dynamic stageAccepted,
+      final dynamic activeStage,
+      final int? activeStageId,
+      final String? activeStageDescription,
       final List<AllC>? allChecks,
       final List<AllC>? allComments}) = _$TrackingModelImpl;
 
@@ -281,7 +341,13 @@ abstract class _TrackingModel implements TrackingModel {
   @override
   int? get orderId;
   @override
-  String? get activeStage;
+  dynamic get stageAccepted;
+  @override
+  dynamic get activeStage;
+  @override
+  int? get activeStageId;
+  @override
+  String? get activeStageDescription;
   @override
   List<AllC>? get allChecks;
   @override
@@ -302,7 +368,6 @@ AllC _$AllCFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$AllC {
   int? get id => throw _privateConstructorUsedError;
-  OrderTracking? get orderTracking => throw _privateConstructorUsedError;
   String? get orderStage => throw _privateConstructorUsedError;
   String? get fileUrl => throw _privateConstructorUsedError;
   DateTime? get createdAt => throw _privateConstructorUsedError;
@@ -324,13 +389,10 @@ abstract class $AllCCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      OrderTracking? orderTracking,
       String? orderStage,
       String? fileUrl,
       DateTime? createdAt,
       String? content});
-
-  $OrderTrackingCopyWith<$Res>? get orderTracking;
 }
 
 /// @nodoc
@@ -349,7 +411,6 @@ class _$AllCCopyWithImpl<$Res, $Val extends AllC>
   @override
   $Res call({
     Object? id = freezed,
-    Object? orderTracking = freezed,
     Object? orderStage = freezed,
     Object? fileUrl = freezed,
     Object? createdAt = freezed,
@@ -360,10 +421,6 @@ class _$AllCCopyWithImpl<$Res, $Val extends AllC>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      orderTracking: freezed == orderTracking
-          ? _value.orderTracking
-          : orderTracking // ignore: cast_nullable_to_non_nullable
-              as OrderTracking?,
       orderStage: freezed == orderStage
           ? _value.orderStage
           : orderStage // ignore: cast_nullable_to_non_nullable
@@ -382,20 +439,6 @@ class _$AllCCopyWithImpl<$Res, $Val extends AllC>
               as String?,
     ) as $Val);
   }
-
-  /// Create a copy of AllC
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @pragma('vm:prefer-inline')
-  $OrderTrackingCopyWith<$Res>? get orderTracking {
-    if (_value.orderTracking == null) {
-      return null;
-    }
-
-    return $OrderTrackingCopyWith<$Res>(_value.orderTracking!, (value) {
-      return _then(_value.copyWith(orderTracking: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -407,14 +450,10 @@ abstract class _$$AllCImplCopyWith<$Res> implements $AllCCopyWith<$Res> {
   @useResult
   $Res call(
       {int? id,
-      OrderTracking? orderTracking,
       String? orderStage,
       String? fileUrl,
       DateTime? createdAt,
       String? content});
-
-  @override
-  $OrderTrackingCopyWith<$Res>? get orderTracking;
 }
 
 /// @nodoc
@@ -430,7 +469,6 @@ class __$$AllCImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = freezed,
-    Object? orderTracking = freezed,
     Object? orderStage = freezed,
     Object? fileUrl = freezed,
     Object? createdAt = freezed,
@@ -441,10 +479,6 @@ class __$$AllCImplCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
-      orderTracking: freezed == orderTracking
-          ? _value.orderTracking
-          : orderTracking // ignore: cast_nullable_to_non_nullable
-              as OrderTracking?,
       orderStage: freezed == orderStage
           ? _value.orderStage
           : orderStage // ignore: cast_nullable_to_non_nullable
@@ -469,20 +503,13 @@ class __$$AllCImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AllCImpl implements _AllC {
   const _$AllCImpl(
-      {this.id,
-      this.orderTracking,
-      this.orderStage,
-      this.fileUrl,
-      this.createdAt,
-      this.content});
+      {this.id, this.orderStage, this.fileUrl, this.createdAt, this.content});
 
   factory _$AllCImpl.fromJson(Map<String, dynamic> json) =>
       _$$AllCImplFromJson(json);
 
   @override
   final int? id;
-  @override
-  final OrderTracking? orderTracking;
   @override
   final String? orderStage;
   @override
@@ -494,7 +521,7 @@ class _$AllCImpl implements _AllC {
 
   @override
   String toString() {
-    return 'AllC(id: $id, orderTracking: $orderTracking, orderStage: $orderStage, fileUrl: $fileUrl, createdAt: $createdAt, content: $content)';
+    return 'AllC(id: $id, orderStage: $orderStage, fileUrl: $fileUrl, createdAt: $createdAt, content: $content)';
   }
 
   @override
@@ -503,8 +530,6 @@ class _$AllCImpl implements _AllC {
         (other.runtimeType == runtimeType &&
             other is _$AllCImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.orderTracking, orderTracking) ||
-                other.orderTracking == orderTracking) &&
             (identical(other.orderStage, orderStage) ||
                 other.orderStage == orderStage) &&
             (identical(other.fileUrl, fileUrl) || other.fileUrl == fileUrl) &&
@@ -515,8 +540,8 @@ class _$AllCImpl implements _AllC {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, id, orderTracking, orderStage, fileUrl, createdAt, content);
+  int get hashCode =>
+      Object.hash(runtimeType, id, orderStage, fileUrl, createdAt, content);
 
   /// Create a copy of AllC
   /// with the given fields replaced by the non-null parameter values.
@@ -537,7 +562,6 @@ class _$AllCImpl implements _AllC {
 abstract class _AllC implements AllC {
   const factory _AllC(
       {final int? id,
-      final OrderTracking? orderTracking,
       final String? orderStage,
       final String? fileUrl,
       final DateTime? createdAt,
@@ -547,8 +571,6 @@ abstract class _AllC implements AllC {
 
   @override
   int? get id;
-  @override
-  OrderTracking? get orderTracking;
   @override
   String? get orderStage;
   @override
@@ -563,286 +585,5 @@ abstract class _AllC implements AllC {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$AllCImplCopyWith<_$AllCImpl> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-OrderTracking _$OrderTrackingFromJson(Map<String, dynamic> json) {
-  return _OrderTracking.fromJson(json);
-}
-
-/// @nodoc
-mixin _$OrderTracking {
-  int? get id => throw _privateConstructorUsedError;
-  String? get invoiceUuid => throw _privateConstructorUsedError;
-  int? get orderId => throw _privateConstructorUsedError;
-  String? get activeStage => throw _privateConstructorUsedError;
-  List<String>? get allChecks => throw _privateConstructorUsedError;
-  List<String>? get allComments => throw _privateConstructorUsedError;
-
-  /// Serializes this OrderTracking to a JSON map.
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of OrderTracking
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  $OrderTrackingCopyWith<OrderTracking> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $OrderTrackingCopyWith<$Res> {
-  factory $OrderTrackingCopyWith(
-          OrderTracking value, $Res Function(OrderTracking) then) =
-      _$OrderTrackingCopyWithImpl<$Res, OrderTracking>;
-  @useResult
-  $Res call(
-      {int? id,
-      String? invoiceUuid,
-      int? orderId,
-      String? activeStage,
-      List<String>? allChecks,
-      List<String>? allComments});
-}
-
-/// @nodoc
-class _$OrderTrackingCopyWithImpl<$Res, $Val extends OrderTracking>
-    implements $OrderTrackingCopyWith<$Res> {
-  _$OrderTrackingCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  /// Create a copy of OrderTracking
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? invoiceUuid = freezed,
-    Object? orderId = freezed,
-    Object? activeStage = freezed,
-    Object? allChecks = freezed,
-    Object? allComments = freezed,
-  }) {
-    return _then(_value.copyWith(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      invoiceUuid: freezed == invoiceUuid
-          ? _value.invoiceUuid
-          : invoiceUuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      orderId: freezed == orderId
-          ? _value.orderId
-          : orderId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      activeStage: freezed == activeStage
-          ? _value.activeStage
-          : activeStage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      allChecks: freezed == allChecks
-          ? _value.allChecks
-          : allChecks // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      allComments: freezed == allComments
-          ? _value.allComments
-          : allComments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$OrderTrackingImplCopyWith<$Res>
-    implements $OrderTrackingCopyWith<$Res> {
-  factory _$$OrderTrackingImplCopyWith(
-          _$OrderTrackingImpl value, $Res Function(_$OrderTrackingImpl) then) =
-      __$$OrderTrackingImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call(
-      {int? id,
-      String? invoiceUuid,
-      int? orderId,
-      String? activeStage,
-      List<String>? allChecks,
-      List<String>? allComments});
-}
-
-/// @nodoc
-class __$$OrderTrackingImplCopyWithImpl<$Res>
-    extends _$OrderTrackingCopyWithImpl<$Res, _$OrderTrackingImpl>
-    implements _$$OrderTrackingImplCopyWith<$Res> {
-  __$$OrderTrackingImplCopyWithImpl(
-      _$OrderTrackingImpl _value, $Res Function(_$OrderTrackingImpl) _then)
-      : super(_value, _then);
-
-  /// Create a copy of OrderTracking
-  /// with the given fields replaced by the non-null parameter values.
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? id = freezed,
-    Object? invoiceUuid = freezed,
-    Object? orderId = freezed,
-    Object? activeStage = freezed,
-    Object? allChecks = freezed,
-    Object? allComments = freezed,
-  }) {
-    return _then(_$OrderTrackingImpl(
-      id: freezed == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as int?,
-      invoiceUuid: freezed == invoiceUuid
-          ? _value.invoiceUuid
-          : invoiceUuid // ignore: cast_nullable_to_non_nullable
-              as String?,
-      orderId: freezed == orderId
-          ? _value.orderId
-          : orderId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      activeStage: freezed == activeStage
-          ? _value.activeStage
-          : activeStage // ignore: cast_nullable_to_non_nullable
-              as String?,
-      allChecks: freezed == allChecks
-          ? _value._allChecks
-          : allChecks // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      allComments: freezed == allComments
-          ? _value._allComments
-          : allComments // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$OrderTrackingImpl implements _OrderTracking {
-  const _$OrderTrackingImpl(
-      {this.id,
-      this.invoiceUuid,
-      this.orderId,
-      this.activeStage,
-      final List<String>? allChecks,
-      final List<String>? allComments})
-      : _allChecks = allChecks,
-        _allComments = allComments;
-
-  factory _$OrderTrackingImpl.fromJson(Map<String, dynamic> json) =>
-      _$$OrderTrackingImplFromJson(json);
-
-  @override
-  final int? id;
-  @override
-  final String? invoiceUuid;
-  @override
-  final int? orderId;
-  @override
-  final String? activeStage;
-  final List<String>? _allChecks;
-  @override
-  List<String>? get allChecks {
-    final value = _allChecks;
-    if (value == null) return null;
-    if (_allChecks is EqualUnmodifiableListView) return _allChecks;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  final List<String>? _allComments;
-  @override
-  List<String>? get allComments {
-    final value = _allComments;
-    if (value == null) return null;
-    if (_allComments is EqualUnmodifiableListView) return _allComments;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
-  @override
-  String toString() {
-    return 'OrderTracking(id: $id, invoiceUuid: $invoiceUuid, orderId: $orderId, activeStage: $activeStage, allChecks: $allChecks, allComments: $allComments)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$OrderTrackingImpl &&
-            (identical(other.id, id) || other.id == id) &&
-            (identical(other.invoiceUuid, invoiceUuid) ||
-                other.invoiceUuid == invoiceUuid) &&
-            (identical(other.orderId, orderId) || other.orderId == orderId) &&
-            (identical(other.activeStage, activeStage) ||
-                other.activeStage == activeStage) &&
-            const DeepCollectionEquality()
-                .equals(other._allChecks, _allChecks) &&
-            const DeepCollectionEquality()
-                .equals(other._allComments, _allComments));
-  }
-
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      invoiceUuid,
-      orderId,
-      activeStage,
-      const DeepCollectionEquality().hash(_allChecks),
-      const DeepCollectionEquality().hash(_allComments));
-
-  /// Create a copy of OrderTracking
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$OrderTrackingImplCopyWith<_$OrderTrackingImpl> get copyWith =>
-      __$$OrderTrackingImplCopyWithImpl<_$OrderTrackingImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$OrderTrackingImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _OrderTracking implements OrderTracking {
-  const factory _OrderTracking(
-      {final int? id,
-      final String? invoiceUuid,
-      final int? orderId,
-      final String? activeStage,
-      final List<String>? allChecks,
-      final List<String>? allComments}) = _$OrderTrackingImpl;
-
-  factory _OrderTracking.fromJson(Map<String, dynamic> json) =
-      _$OrderTrackingImpl.fromJson;
-
-  @override
-  int? get id;
-  @override
-  String? get invoiceUuid;
-  @override
-  int? get orderId;
-  @override
-  String? get activeStage;
-  @override
-  List<String>? get allChecks;
-  @override
-  List<String>? get allComments;
-
-  /// Create a copy of OrderTracking
-  /// with the given fields replaced by the non-null parameter values.
-  @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
-  _$$OrderTrackingImplCopyWith<_$OrderTrackingImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

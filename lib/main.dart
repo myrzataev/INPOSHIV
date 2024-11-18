@@ -64,14 +64,14 @@ void main() async {
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
 
-  // Uri? initialLink;
-  // try {
-  //   initialLink = await getInitialUri();
-  //   print('Initial deep link: $initialLink');
-  // } catch (e) {
-  //   print('Error occurred while retrieving initial link: $e');
-  // }
+  Uri? initialLink;
+  try {
+    initialLink = await getInitialUri();
+    print('Initial deep link: $initialLink');
+  } catch (e) {
+    print('Error occurred while retrieving initial link: $e');
+  }
   runApp(MyApp(
-      // initialLink: initialLink,
+      initialLink: initialLink,
       ));
 }

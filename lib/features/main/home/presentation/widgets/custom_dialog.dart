@@ -41,6 +41,7 @@ class CustomDialog extends StatelessWidget {
             ),
             Text(
               title,
+              
               style:
                   AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
             ),

@@ -211,7 +211,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     BlocProvider.of<OrdersBloc>(context)
                         .add(OrdersEvent.sendOrderDetails(
                             orderDetails: OrderDetailsModel(
-                              orderId: int.tryParse(widget.orderId),
+                              orderId: 2,
+                              // int.tryParse(widget.orderId),
                               productName: orderNameController.text,
                               material: 0,
                               color: colorController.text,
@@ -230,7 +231,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                                   ?.map((element) => element.path ?? "")
                                   .toList(),
                             ).toJson(),
-                            orderId: widget.orderId));
+                            orderId: "2"));
                   })
             ],
           ),

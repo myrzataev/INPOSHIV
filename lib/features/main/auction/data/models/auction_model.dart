@@ -21,10 +21,23 @@ class AuctionModel with _$AuctionModel {
         dynamic endTime,
         String? auctionUuid,
         List<ProductsList>? productsList,
-        List<dynamic>? auctionProcesses,
+        List<AuctionProcess>? auctionProcesses,
     }) = _AuctionModel;
 
     factory AuctionModel.fromJson(Map<String, dynamic> json) => _$AuctionModelFromJson(json);
+}
+
+@freezed
+class AuctionProcess with _$AuctionProcess {
+    const factory AuctionProcess({
+        int? auctionId,
+        String? manufacturerUuid,
+        int? bidPrice,
+        DateTime? bidTime,
+        int? bidCount,
+    }) = _AuctionProcess;
+
+    factory AuctionProcess.fromJson(Map<String, dynamic> json) => _$AuctionProcessFromJson(json);
 }
 
 @freezed
@@ -35,7 +48,7 @@ class ProductsList with _$ProductsList {
         int? fabricId,
         int? quantity,
         Map<String, int>? sizeQuantities,
-        dynamic description,
+        String? description,
         int? priceUsd,
         double? priceRub,
         List<String>? photos,
@@ -43,5 +56,3 @@ class ProductsList with _$ProductsList {
 
     factory ProductsList.fromJson(Map<String, dynamic> json) => _$ProductsListFromJson(json);
 }
-
-

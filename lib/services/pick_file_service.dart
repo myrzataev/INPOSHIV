@@ -1,4 +1,3 @@
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,9 +17,9 @@ abstract class PickFileService {
 }
 
 class FilePickerButton extends StatelessWidget {
-  final void Function(String filePath)? onFilePicked;
-  final void Function(String imagePath)? onImagePickedFromGallery;
-  final void Function(String imagePath)? onImagePickedFromCamera;
+  final void Function(String filePath, String fileName)? onFilePicked;
+  final void Function(String imagePath, String fileName)? onImagePickedFromGallery;
+  final void Function(String imagePath, String fileName)? onImagePickedFromCamera;
 
   FilePickerButton({
     super.key,
@@ -34,23 +33,25 @@ class FilePickerButton extends StatelessWidget {
   Future<void> _pickFile(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null && onFilePicked != null) {
-      onFilePicked!(result.files.single.path!);
+      final filePath = result.files.single.path!;
+      final fileName = result.files.single.name; // Extract file name
+      onFilePicked!(filePath, fileName);
     }
   }
 
   Future<void> _pickImageFromGallery(BuildContext context) async {
-    final XFile? image =
-        await _imagePicker.pickImage(source: ImageSource.gallery);
+    final XFile? image = await _imagePicker.pickImage(source: ImageSource.gallery);
     if (image != null && onImagePickedFromGallery != null) {
-      onImagePickedFromGallery!(image.path);
+      final fileName = image.name; // Extract file name from XFile
+      onImagePickedFromGallery!(image.path, fileName);
     }
   }
 
   Future<void> _pickImageFromCamera(BuildContext context) async {
-    final XFile? photo =
-        await _imagePicker.pickImage(source: ImageSource.camera);
+    final XFile? photo = await _imagePicker.pickImage(source: ImageSource.camera);
     if (photo != null && onImagePickedFromCamera != null) {
-      onImagePickedFromCamera!(photo.path);
+      final fileName = photo.name; // Extract file name from XFile
+      onImagePickedFromCamera!(photo.path, fileName);
     }
   }
 
@@ -62,24 +63,24 @@ class FilePickerButton extends StatelessWidget {
         return Wrap(
           children: [
             ListTile(
-              leading: Icon(Icons.insert_drive_file),
-              title: Text('Files from Memory'),
+              leading: const Icon(Icons.insert_drive_file),
+              title: const Text("Документ"),
               onTap: () {
                 Navigator.pop(context);
                 _pickFile(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.photo_library),
-              title: Text('Photos from Gallery'),
+              leading: const Icon(Icons.photo_library),
+              title: const Text("Изображение"),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromGallery(context);
               },
             ),
             ListTile(
-              leading: Icon(Icons.camera_alt),
-              title: Text('Take Photo with Camera'),
+              leading: const Icon(Icons.camera_alt),
+              title: const Text("Камера"),
               onTap: () {
                 Navigator.pop(context);
                 _pickImageFromCamera(context);

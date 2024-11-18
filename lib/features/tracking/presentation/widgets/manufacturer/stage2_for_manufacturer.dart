@@ -1,12 +1,9 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/features/main/orders/customer/presentation/widgets/comment_column.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 import 'package:inposhiv/resources/resources.dart';
 
@@ -15,12 +12,22 @@ class Stage2ForManufacturer extends StatelessWidget {
   final double currentIndexOfData;
   final TextEditingController controller;
   final Function attachDocument;
+  final List<Map<String, String?>> allComments;
+  final void Function(String filePath, String fileName)? onFilePicked;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromGallery;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromCamera;
   const Stage2ForManufacturer({
     super.key,
     required this.currentIndexOfData,
     required this.onTap,
     required this.controller,
     required this.attachDocument,
+    required this.allComments,
+    this.onFilePicked,
+    this.onImagePickedFromGallery,
+    this.onImagePickedFromCamera,
   });
 
   @override
@@ -92,10 +99,34 @@ class Stage2ForManufacturer extends StatelessWidget {
                           ),
                           Text("Комментарии от производителя",
                               style: AppFonts.w400s14),
-                          const CommentColumn(
-                            comment: "При раскройке получилось 520шт",
-                            data: "18.04.2024",
-                          ),
+                          Expanded(
+                              child: ListView.separated(
+                                  itemBuilder: (context, index) {
+                                    final currentItem = allComments[index];
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          currentItem["comment"] ?? "",
+                                          style: AppFonts.w400s16.copyWith(
+                                              color: AppColors.accentTextColor),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsets.only(bottom: 20.h),
+                                          child: Text(currentItem["date"] ?? "",
+                                              style: AppFonts.w400s12),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                  separatorBuilder: (context, index) {
+                                    return SizedBox(
+                                      height: 3.h,
+                                    );
+                                  },
+                                  itemCount: allComments.length)),
                         ],
                       ),
                     ),
@@ -104,9 +135,9 @@ class Stage2ForManufacturer extends StatelessWidget {
                       onTap: () {
                         onTap();
                       },
-                      onFilePicked: (filePath) {},
-                      onImagePickedFromGallery: (imagePath) {},
-                      onImagePickedFromCamera: (imagePath) {},
+                      onFilePicked: onFilePicked,
+                      onImagePickedFromGallery: onImagePickedFromGallery,
+                      onImagePickedFromCamera: onImagePickedFromCamera,
                       controller: controller),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 10.h),

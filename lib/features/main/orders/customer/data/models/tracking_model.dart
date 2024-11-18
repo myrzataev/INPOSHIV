@@ -18,7 +18,10 @@ class TrackingModel with _$TrackingModel {
         int? id,
         String? invoiceUuid,
         int? orderId,
-        String? activeStage,
+        dynamic stageAccepted,
+        dynamic activeStage,
+        int? activeStageId,
+        String? activeStageDescription,
         List<AllC>? allChecks,
         List<AllC>? allComments,
     }) = _TrackingModel;
@@ -30,7 +33,6 @@ class TrackingModel with _$TrackingModel {
 class AllC with _$AllC {
     const factory AllC({
         int? id,
-        OrderTracking? orderTracking,
         String? orderStage,
         String? fileUrl,
         DateTime? createdAt,
@@ -38,18 +40,4 @@ class AllC with _$AllC {
     }) = _AllC;
 
     factory AllC.fromJson(Map<String, dynamic> json) => _$AllCFromJson(json);
-}
-
-@freezed
-class OrderTracking with _$OrderTracking {
-    const factory OrderTracking({
-        int? id,
-        String? invoiceUuid,
-        int? orderId,
-        String? activeStage,
-        List<String>? allChecks,
-        List<String>? allComments,
-    }) = _OrderTracking;
-
-    factory OrderTracking.fromJson(Map<String, dynamic> json) => _$OrderTrackingFromJson(json);
 }

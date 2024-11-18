@@ -20,17 +20,17 @@ CreateChatRoomModel _$CreateChatRoomModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CreateChatRoomModel {
-  String? get messageUuid => throw _privateConstructorUsedError;
   String? get chatUuid => throw _privateConstructorUsedError;
   String? get senderUuid => throw _privateConstructorUsedError;
+  String? get recipientUuid => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
   String? get senderName => throw _privateConstructorUsedError;
   String? get recipientName => throw _privateConstructorUsedError;
-  String? get imageUrl => throw _privateConstructorUsedError;
-  String? get recipientUuid => throw _privateConstructorUsedError;
-  String? get content => throw _privateConstructorUsedError;
-  int? get type => throw _privateConstructorUsedError;
-  String? get messageStatus => throw _privateConstructorUsedError;
-  DateTime? get startedAt => throw _privateConstructorUsedError;
+  String? get lastMessageUuid => throw _privateConstructorUsedError;
+  String? get lastMessageContent => throw _privateConstructorUsedError;
+  String? get lastMessageSenderUuid => throw _privateConstructorUsedError;
+  int? get orderId => throw _privateConstructorUsedError;
+  DateTime? get lastMessageDate => throw _privateConstructorUsedError;
 
   /// Serializes this CreateChatRoomModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -49,17 +49,17 @@ abstract class $CreateChatRoomModelCopyWith<$Res> {
       _$CreateChatRoomModelCopyWithImpl<$Res, CreateChatRoomModel>;
   @useResult
   $Res call(
-      {String? messageUuid,
-      String? chatUuid,
+      {String? chatUuid,
       String? senderUuid,
+      String? recipientUuid,
+      DateTime? createdAt,
       String? senderName,
       String? recipientName,
-      String? imageUrl,
-      String? recipientUuid,
-      String? content,
-      int? type,
-      String? messageStatus,
-      DateTime? startedAt});
+      String? lastMessageUuid,
+      String? lastMessageContent,
+      String? lastMessageSenderUuid,
+      int? orderId,
+      DateTime? lastMessageDate});
 }
 
 /// @nodoc
@@ -77,23 +77,19 @@ class _$CreateChatRoomModelCopyWithImpl<$Res, $Val extends CreateChatRoomModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? messageUuid = freezed,
     Object? chatUuid = freezed,
     Object? senderUuid = freezed,
+    Object? recipientUuid = freezed,
+    Object? createdAt = freezed,
     Object? senderName = freezed,
     Object? recipientName = freezed,
-    Object? imageUrl = freezed,
-    Object? recipientUuid = freezed,
-    Object? content = freezed,
-    Object? type = freezed,
-    Object? messageStatus = freezed,
-    Object? startedAt = freezed,
+    Object? lastMessageUuid = freezed,
+    Object? lastMessageContent = freezed,
+    Object? lastMessageSenderUuid = freezed,
+    Object? orderId = freezed,
+    Object? lastMessageDate = freezed,
   }) {
     return _then(_value.copyWith(
-      messageUuid: freezed == messageUuid
-          ? _value.messageUuid
-          : messageUuid // ignore: cast_nullable_to_non_nullable
-              as String?,
       chatUuid: freezed == chatUuid
           ? _value.chatUuid
           : chatUuid // ignore: cast_nullable_to_non_nullable
@@ -102,6 +98,14 @@ class _$CreateChatRoomModelCopyWithImpl<$Res, $Val extends CreateChatRoomModel>
           ? _value.senderUuid
           : senderUuid // ignore: cast_nullable_to_non_nullable
               as String?,
+      recipientUuid: freezed == recipientUuid
+          ? _value.recipientUuid
+          : recipientUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       senderName: freezed == senderName
           ? _value.senderName
           : senderName // ignore: cast_nullable_to_non_nullable
@@ -110,29 +114,25 @@ class _$CreateChatRoomModelCopyWithImpl<$Res, $Val extends CreateChatRoomModel>
           ? _value.recipientName
           : recipientName // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      lastMessageUuid: freezed == lastMessageUuid
+          ? _value.lastMessageUuid
+          : lastMessageUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      recipientUuid: freezed == recipientUuid
-          ? _value.recipientUuid
-          : recipientUuid // ignore: cast_nullable_to_non_nullable
+      lastMessageContent: freezed == lastMessageContent
+          ? _value.lastMessageContent
+          : lastMessageContent // ignore: cast_nullable_to_non_nullable
               as String?,
-      content: freezed == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
+      lastMessageSenderUuid: freezed == lastMessageSenderUuid
+          ? _value.lastMessageSenderUuid
+          : lastMessageSenderUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
+      orderId: freezed == orderId
+          ? _value.orderId
+          : orderId // ignore: cast_nullable_to_non_nullable
               as int?,
-      messageStatus: freezed == messageStatus
-          ? _value.messageStatus
-          : messageStatus // ignore: cast_nullable_to_non_nullable
-              as String?,
-      startedAt: freezed == startedAt
-          ? _value.startedAt
-          : startedAt // ignore: cast_nullable_to_non_nullable
+      lastMessageDate: freezed == lastMessageDate
+          ? _value.lastMessageDate
+          : lastMessageDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ) as $Val);
   }
@@ -147,17 +147,17 @@ abstract class _$$CreateChatRoomModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? messageUuid,
-      String? chatUuid,
+      {String? chatUuid,
       String? senderUuid,
+      String? recipientUuid,
+      DateTime? createdAt,
       String? senderName,
       String? recipientName,
-      String? imageUrl,
-      String? recipientUuid,
-      String? content,
-      int? type,
-      String? messageStatus,
-      DateTime? startedAt});
+      String? lastMessageUuid,
+      String? lastMessageContent,
+      String? lastMessageSenderUuid,
+      int? orderId,
+      DateTime? lastMessageDate});
 }
 
 /// @nodoc
@@ -173,23 +173,19 @@ class __$$CreateChatRoomModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? messageUuid = freezed,
     Object? chatUuid = freezed,
     Object? senderUuid = freezed,
+    Object? recipientUuid = freezed,
+    Object? createdAt = freezed,
     Object? senderName = freezed,
     Object? recipientName = freezed,
-    Object? imageUrl = freezed,
-    Object? recipientUuid = freezed,
-    Object? content = freezed,
-    Object? type = freezed,
-    Object? messageStatus = freezed,
-    Object? startedAt = freezed,
+    Object? lastMessageUuid = freezed,
+    Object? lastMessageContent = freezed,
+    Object? lastMessageSenderUuid = freezed,
+    Object? orderId = freezed,
+    Object? lastMessageDate = freezed,
   }) {
     return _then(_$CreateChatRoomModelImpl(
-      messageUuid: freezed == messageUuid
-          ? _value.messageUuid
-          : messageUuid // ignore: cast_nullable_to_non_nullable
-              as String?,
       chatUuid: freezed == chatUuid
           ? _value.chatUuid
           : chatUuid // ignore: cast_nullable_to_non_nullable
@@ -198,6 +194,14 @@ class __$$CreateChatRoomModelImplCopyWithImpl<$Res>
           ? _value.senderUuid
           : senderUuid // ignore: cast_nullable_to_non_nullable
               as String?,
+      recipientUuid: freezed == recipientUuid
+          ? _value.recipientUuid
+          : recipientUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       senderName: freezed == senderName
           ? _value.senderName
           : senderName // ignore: cast_nullable_to_non_nullable
@@ -206,29 +210,25 @@ class __$$CreateChatRoomModelImplCopyWithImpl<$Res>
           ? _value.recipientName
           : recipientName // ignore: cast_nullable_to_non_nullable
               as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
+      lastMessageUuid: freezed == lastMessageUuid
+          ? _value.lastMessageUuid
+          : lastMessageUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      recipientUuid: freezed == recipientUuid
-          ? _value.recipientUuid
-          : recipientUuid // ignore: cast_nullable_to_non_nullable
+      lastMessageContent: freezed == lastMessageContent
+          ? _value.lastMessageContent
+          : lastMessageContent // ignore: cast_nullable_to_non_nullable
               as String?,
-      content: freezed == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
+      lastMessageSenderUuid: freezed == lastMessageSenderUuid
+          ? _value.lastMessageSenderUuid
+          : lastMessageSenderUuid // ignore: cast_nullable_to_non_nullable
               as String?,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
+      orderId: freezed == orderId
+          ? _value.orderId
+          : orderId // ignore: cast_nullable_to_non_nullable
               as int?,
-      messageStatus: freezed == messageStatus
-          ? _value.messageStatus
-          : messageStatus // ignore: cast_nullable_to_non_nullable
-              as String?,
-      startedAt: freezed == startedAt
-          ? _value.startedAt
-          : startedAt // ignore: cast_nullable_to_non_nullable
+      lastMessageDate: freezed == lastMessageDate
+          ? _value.lastMessageDate
+          : lastMessageDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ));
   }
@@ -238,47 +238,47 @@ class __$$CreateChatRoomModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CreateChatRoomModelImpl implements _CreateChatRoomModel {
   const _$CreateChatRoomModelImpl(
-      {this.messageUuid,
-      this.chatUuid,
+      {this.chatUuid,
       this.senderUuid,
+      this.recipientUuid,
+      this.createdAt,
       this.senderName,
       this.recipientName,
-      this.imageUrl,
-      this.recipientUuid,
-      this.content,
-      this.type,
-      this.messageStatus,
-      this.startedAt});
+      this.lastMessageUuid,
+      this.lastMessageContent,
+      this.lastMessageSenderUuid,
+      this.orderId,
+      this.lastMessageDate});
 
   factory _$CreateChatRoomModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CreateChatRoomModelImplFromJson(json);
 
   @override
-  final String? messageUuid;
-  @override
   final String? chatUuid;
   @override
   final String? senderUuid;
+  @override
+  final String? recipientUuid;
+  @override
+  final DateTime? createdAt;
   @override
   final String? senderName;
   @override
   final String? recipientName;
   @override
-  final String? imageUrl;
+  final String? lastMessageUuid;
   @override
-  final String? recipientUuid;
+  final String? lastMessageContent;
   @override
-  final String? content;
+  final String? lastMessageSenderUuid;
   @override
-  final int? type;
+  final int? orderId;
   @override
-  final String? messageStatus;
-  @override
-  final DateTime? startedAt;
+  final DateTime? lastMessageDate;
 
   @override
   String toString() {
-    return 'CreateChatRoomModel(messageUuid: $messageUuid, chatUuid: $chatUuid, senderUuid: $senderUuid, senderName: $senderName, recipientName: $recipientName, imageUrl: $imageUrl, recipientUuid: $recipientUuid, content: $content, type: $type, messageStatus: $messageStatus, startedAt: $startedAt)';
+    return 'CreateChatRoomModel(chatUuid: $chatUuid, senderUuid: $senderUuid, recipientUuid: $recipientUuid, createdAt: $createdAt, senderName: $senderName, recipientName: $recipientName, lastMessageUuid: $lastMessageUuid, lastMessageContent: $lastMessageContent, lastMessageSenderUuid: $lastMessageSenderUuid, orderId: $orderId, lastMessageDate: $lastMessageDate)';
   }
 
   @override
@@ -286,43 +286,44 @@ class _$CreateChatRoomModelImpl implements _CreateChatRoomModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CreateChatRoomModelImpl &&
-            (identical(other.messageUuid, messageUuid) ||
-                other.messageUuid == messageUuid) &&
             (identical(other.chatUuid, chatUuid) ||
                 other.chatUuid == chatUuid) &&
             (identical(other.senderUuid, senderUuid) ||
                 other.senderUuid == senderUuid) &&
+            (identical(other.recipientUuid, recipientUuid) ||
+                other.recipientUuid == recipientUuid) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
             (identical(other.senderName, senderName) ||
                 other.senderName == senderName) &&
             (identical(other.recipientName, recipientName) ||
                 other.recipientName == recipientName) &&
-            (identical(other.imageUrl, imageUrl) ||
-                other.imageUrl == imageUrl) &&
-            (identical(other.recipientUuid, recipientUuid) ||
-                other.recipientUuid == recipientUuid) &&
-            (identical(other.content, content) || other.content == content) &&
-            (identical(other.type, type) || other.type == type) &&
-            (identical(other.messageStatus, messageStatus) ||
-                other.messageStatus == messageStatus) &&
-            (identical(other.startedAt, startedAt) ||
-                other.startedAt == startedAt));
+            (identical(other.lastMessageUuid, lastMessageUuid) ||
+                other.lastMessageUuid == lastMessageUuid) &&
+            (identical(other.lastMessageContent, lastMessageContent) ||
+                other.lastMessageContent == lastMessageContent) &&
+            (identical(other.lastMessageSenderUuid, lastMessageSenderUuid) ||
+                other.lastMessageSenderUuid == lastMessageSenderUuid) &&
+            (identical(other.orderId, orderId) || other.orderId == orderId) &&
+            (identical(other.lastMessageDate, lastMessageDate) ||
+                other.lastMessageDate == lastMessageDate));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      messageUuid,
       chatUuid,
       senderUuid,
+      recipientUuid,
+      createdAt,
       senderName,
       recipientName,
-      imageUrl,
-      recipientUuid,
-      content,
-      type,
-      messageStatus,
-      startedAt);
+      lastMessageUuid,
+      lastMessageContent,
+      lastMessageSenderUuid,
+      orderId,
+      lastMessageDate);
 
   /// Create a copy of CreateChatRoomModel
   /// with the given fields replaced by the non-null parameter values.
@@ -343,43 +344,43 @@ class _$CreateChatRoomModelImpl implements _CreateChatRoomModel {
 
 abstract class _CreateChatRoomModel implements CreateChatRoomModel {
   const factory _CreateChatRoomModel(
-      {final String? messageUuid,
-      final String? chatUuid,
+      {final String? chatUuid,
       final String? senderUuid,
+      final String? recipientUuid,
+      final DateTime? createdAt,
       final String? senderName,
       final String? recipientName,
-      final String? imageUrl,
-      final String? recipientUuid,
-      final String? content,
-      final int? type,
-      final String? messageStatus,
-      final DateTime? startedAt}) = _$CreateChatRoomModelImpl;
+      final String? lastMessageUuid,
+      final String? lastMessageContent,
+      final String? lastMessageSenderUuid,
+      final int? orderId,
+      final DateTime? lastMessageDate}) = _$CreateChatRoomModelImpl;
 
   factory _CreateChatRoomModel.fromJson(Map<String, dynamic> json) =
       _$CreateChatRoomModelImpl.fromJson;
 
   @override
-  String? get messageUuid;
-  @override
   String? get chatUuid;
   @override
   String? get senderUuid;
+  @override
+  String? get recipientUuid;
+  @override
+  DateTime? get createdAt;
   @override
   String? get senderName;
   @override
   String? get recipientName;
   @override
-  String? get imageUrl;
+  String? get lastMessageUuid;
   @override
-  String? get recipientUuid;
+  String? get lastMessageContent;
   @override
-  String? get content;
+  String? get lastMessageSenderUuid;
   @override
-  int? get type;
+  int? get orderId;
   @override
-  String? get messageStatus;
-  @override
-  DateTime? get startedAt;
+  DateTime? get lastMessageDate;
 
   /// Create a copy of CreateChatRoomModel
   /// with the given fields replaced by the non-null parameter values.

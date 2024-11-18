@@ -135,7 +135,7 @@ class _ChooseCategoryScreenState extends State<SetQuantityScreen> {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20.h),
                   child: Text(
-                    "Минимальное количество товара равно 49 ед",
+                    "Минимальное количество товара 100 ед",
                     style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                   ),
                   // child: RichText(
@@ -282,7 +282,7 @@ class _ChooseCategoryScreenState extends State<SetQuantityScreen> {
                                             padding: EdgeInsets.symmetric(
                                                 vertical: 10.h),
                                             child: Text(
-                                              "Минимальное количество товара равно 49 ед",
+                                              "Минимальное количество товара 100 ед",
                                               style: AppFonts.w700s20.copyWith(
                                                   color: AppColors
                                                       .accentTextColor),

@@ -10,10 +10,12 @@ import 'package:inposhiv/resources/resources.dart';
 
 class Stage6ForManufacturer extends StatelessWidget {
   final Function onTap;
+    final TextEditingController controller;
+
   const Stage6ForManufacturer({
     super.key,
     required this.currentIndexOfData,
-    required this.onTap,
+    required this.onTap, required this.controller, 
   });
 
   final int currentIndexOfData;
@@ -68,7 +70,7 @@ class Stage6ForManufacturer extends StatelessWidget {
             ),
             const Spacer(),
             CustomTrackingComment(
-                controller: TextEditingController(), onTap: onTap),
+                controller: controller, onTap: onTap),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: CustomButton(

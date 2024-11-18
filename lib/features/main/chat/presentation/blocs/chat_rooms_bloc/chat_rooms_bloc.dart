@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inposhiv/features/main/chat/data/models/chat_rooms_model.dart';
+import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/get_chats_repoimpl.dart';
 
 part 'chat_rooms_event.dart';

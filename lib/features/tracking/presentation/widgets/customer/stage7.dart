@@ -82,9 +82,9 @@ class Stage7ForCustomer extends StatelessWidget {
                   onTap: () {
                     onTap();
                   },
-                  onFilePicked: (filePath) {},
-                  onImagePickedFromGallery: (imagePath) {},
-                  onImagePickedFromCamera: (imagePath) {},
+                  onFilePicked: (filePath, name) {},
+                  onImagePickedFromGallery: (imagePath, name) {},
+                  onImagePickedFromCamera: (imagePath, name) {},
                   controller: controller),
               // const Spacer(),
               Padding(

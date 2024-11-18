@@ -16,23 +16,25 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$ConfirmTrackingStageEvent {
-  String get invoiceUuid => throw _privateConstructorUsedError;
-  Map<String, dynamic> get body => throw _privateConstructorUsedError;
+  FormData get body => throw _privateConstructorUsedError;
+  Map<String, dynamic> get queryParameters =>
+      throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String invoiceUuid, Map<String, dynamic> body)
+    required TResult Function(
+            FormData body, Map<String, dynamic> queryParameters)
         confirmStage,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String invoiceUuid, Map<String, dynamic> body)?
+    TResult? Function(FormData body, Map<String, dynamic> queryParameters)?
         confirmStage,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String invoiceUuid, Map<String, dynamic> body)?
+    TResult Function(FormData body, Map<String, dynamic> queryParameters)?
         confirmStage,
     required TResult orElse(),
   }) =>
@@ -67,7 +69,7 @@ abstract class $ConfirmTrackingStageEventCopyWith<$Res> {
           $Res Function(ConfirmTrackingStageEvent) then) =
       _$ConfirmTrackingStageEventCopyWithImpl<$Res, ConfirmTrackingStageEvent>;
   @useResult
-  $Res call({String invoiceUuid, Map<String, dynamic> body});
+  $Res call({FormData body, Map<String, dynamic> queryParameters});
 }
 
 /// @nodoc
@@ -86,17 +88,17 @@ class _$ConfirmTrackingStageEventCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? invoiceUuid = null,
     Object? body = null,
+    Object? queryParameters = null,
   }) {
     return _then(_value.copyWith(
-      invoiceUuid: null == invoiceUuid
-          ? _value.invoiceUuid
-          : invoiceUuid // ignore: cast_nullable_to_non_nullable
-              as String,
       body: null == body
           ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
+              as FormData,
+      queryParameters: null == queryParameters
+          ? _value.queryParameters
+          : queryParameters // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
     ) as $Val);
   }
@@ -110,7 +112,7 @@ abstract class _$$ConfirmStageImplCopyWith<$Res>
       __$$ConfirmStageImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String invoiceUuid, Map<String, dynamic> body});
+  $Res call({FormData body, Map<String, dynamic> queryParameters});
 }
 
 /// @nodoc
@@ -126,17 +128,17 @@ class __$$ConfirmStageImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? invoiceUuid = null,
     Object? body = null,
+    Object? queryParameters = null,
   }) {
     return _then(_$ConfirmStageImpl(
-      invoiceUuid: null == invoiceUuid
-          ? _value.invoiceUuid
-          : invoiceUuid // ignore: cast_nullable_to_non_nullable
-              as String,
       body: null == body
-          ? _value._body
+          ? _value.body
           : body // ignore: cast_nullable_to_non_nullable
+              as FormData,
+      queryParameters: null == queryParameters
+          ? _value._queryParameters
+          : queryParameters // ignore: cast_nullable_to_non_nullable
               as Map<String, dynamic>,
     ));
   }
@@ -146,22 +148,22 @@ class __$$ConfirmStageImplCopyWithImpl<$Res>
 
 class _$ConfirmStageImpl implements _ConfirmStage {
   const _$ConfirmStageImpl(
-      {required this.invoiceUuid, required final Map<String, dynamic> body})
-      : _body = body;
+      {required this.body, required final Map<String, dynamic> queryParameters})
+      : _queryParameters = queryParameters;
 
   @override
-  final String invoiceUuid;
-  final Map<String, dynamic> _body;
+  final FormData body;
+  final Map<String, dynamic> _queryParameters;
   @override
-  Map<String, dynamic> get body {
-    if (_body is EqualUnmodifiableMapView) return _body;
+  Map<String, dynamic> get queryParameters {
+    if (_queryParameters is EqualUnmodifiableMapView) return _queryParameters;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableMapView(_body);
+    return EqualUnmodifiableMapView(_queryParameters);
   }
 
   @override
   String toString() {
-    return 'ConfirmTrackingStageEvent.confirmStage(invoiceUuid: $invoiceUuid, body: $body)';
+    return 'ConfirmTrackingStageEvent.confirmStage(body: $body, queryParameters: $queryParameters)';
   }
 
   @override
@@ -169,14 +171,14 @@ class _$ConfirmStageImpl implements _ConfirmStage {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ConfirmStageImpl &&
-            (identical(other.invoiceUuid, invoiceUuid) ||
-                other.invoiceUuid == invoiceUuid) &&
-            const DeepCollectionEquality().equals(other._body, _body));
+            (identical(other.body, body) || other.body == body) &&
+            const DeepCollectionEquality()
+                .equals(other._queryParameters, _queryParameters));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, invoiceUuid, const DeepCollectionEquality().hash(_body));
+      runtimeType, body, const DeepCollectionEquality().hash(_queryParameters));
 
   /// Create a copy of ConfirmTrackingStageEvent
   /// with the given fields replaced by the non-null parameter values.
@@ -189,30 +191,31 @@ class _$ConfirmStageImpl implements _ConfirmStage {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String invoiceUuid, Map<String, dynamic> body)
+    required TResult Function(
+            FormData body, Map<String, dynamic> queryParameters)
         confirmStage,
   }) {
-    return confirmStage(invoiceUuid, body);
+    return confirmStage(body, queryParameters);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(String invoiceUuid, Map<String, dynamic> body)?
+    TResult? Function(FormData body, Map<String, dynamic> queryParameters)?
         confirmStage,
   }) {
-    return confirmStage?.call(invoiceUuid, body);
+    return confirmStage?.call(body, queryParameters);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String invoiceUuid, Map<String, dynamic> body)?
+    TResult Function(FormData body, Map<String, dynamic> queryParameters)?
         confirmStage,
     required TResult orElse(),
   }) {
     if (confirmStage != null) {
-      return confirmStage(invoiceUuid, body);
+      return confirmStage(body, queryParameters);
     }
     return orElse();
   }
@@ -248,13 +251,14 @@ class _$ConfirmStageImpl implements _ConfirmStage {
 
 abstract class _ConfirmStage implements ConfirmTrackingStageEvent {
   const factory _ConfirmStage(
-      {required final String invoiceUuid,
-      required final Map<String, dynamic> body}) = _$ConfirmStageImpl;
+          {required final FormData body,
+          required final Map<String, dynamic> queryParameters}) =
+      _$ConfirmStageImpl;
 
   @override
-  String get invoiceUuid;
+  FormData get body;
   @override
-  Map<String, dynamic> get body;
+  Map<String, dynamic> get queryParameters;
 
   /// Create a copy of ConfirmTrackingStageEvent
   /// with the given fields replaced by the non-null parameter values.

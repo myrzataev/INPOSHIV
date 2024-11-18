@@ -337,13 +337,24 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   entity.customerOrManufacturerUuid ?? "");
                               preferences.setBool(
                                   "isCustomer", entity.role == "CUSTOMER");
-                              GoRouter.of(context).pushNamed("authorization", queryParameters: {
+                              GoRouter.of(context).pushNamed("authorization",
+                                  queryParameters: {
+                                    "number": phoneController.text
+                                  });
+                            },
+                            error: (error) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(content: Text(error)));
+                              GoRouter.of(context).pushNamed("authorization",
+                                  queryParameters: {
+                                    "number": phoneController.text
+                                  });
+                            },
+                            orElse: () {
+                               GoRouter.of(context).pushNamed("authorization", queryParameters: {
                                 "number": phoneController.text
                               });
-                            },
-                            error: (error) => ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(content: Text(error))),
-                            orElse: () {});
+                            });
                       },
                       child: const SizedBox.shrink()),
                   isErrorVisible
@@ -370,10 +381,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         text: "Зарегистрироваться",
                         onPressed: () {
                           // GoRouter.of(context).pushNamed("authorization");
-                   
-                           _submitForm(isCustomer, preferences.getString("firebaseToken")
-                           );
-                         
+
+                          _submitForm(isCustomer,
+                              preferences.getString("firebaseToken"));
                         }),
                   )
                 ],
@@ -385,13 +395,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void _submitForm(bool isCustomer, String? firebaseToken ) {
+  void _submitForm(bool isCustomer, String? firebaseToken) {
     if (_formKey.currentState!.validate() && ischecked) {
       setState(() {
         isErrorVisible = false;
         BlocProvider.of<AuthBloc>(context).add(AuthEvent.auth(
             model: UserModel(
-              firebaseToken: firebaseToken,
+                firebaseToken: firebaseToken,
                 role: isCustomer ? "CUSTOMER" : "MANUFACTURER",
                 firstAndLastName: nameController.text,
                 phoneNumber: phoneController.text.replaceAll(" ", ""),

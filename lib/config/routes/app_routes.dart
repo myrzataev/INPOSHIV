@@ -12,10 +12,12 @@ import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_mo
 import 'package:inposhiv/features/main/home/presentation/customer/screens/notications_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
+import 'package:inposhiv/features/main/orders/customer/data/models/tracking_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/approve_invoice_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/detailed_tracking_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/invoice_screen_for_customer.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/order_detail_screen.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_tracking_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/see_doc_screen.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/screens/invoice_screen.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/screens/order_details_screen_for_manufacturer.dart';
@@ -572,7 +574,7 @@ final GoRouter router = GoRouter(
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return OrderDetailsScreenForManufacturer(
-                        orderId: state.extra  as String,
+                        orderId: state.extra as String,
                       );
                     },
                   ),
@@ -618,11 +620,13 @@ final GoRouter router = GoRouter(
                     },
                   ),
                   GoRoute(
-                    path: "trackingFirst",
-                    name: "trackingFirst",
+                    path: "orderTracking",
+                    name: "orderTracking",
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
-                      return const TrackingScreen();
+                      return OrdersTrackingScreen(
+                        model: state.extra as TrackingModel,
+                      );
                     },
                   ),
                   GoRoute(
@@ -640,6 +644,8 @@ final GoRouter router = GoRouter(
                     builder: (context, state) {
                       return SeeDocScreen(
                         path: state.uri.queryParameters["path"] ?? "",
+                        isFromBackend: state.extra as bool,
+                        documentUrl: state.uri.queryParameters["docUrl"],
                       );
                     },
                   )

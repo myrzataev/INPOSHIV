@@ -65,7 +65,7 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
               listener: (context, state) {
                 state.maybeWhen(
                     auctionCreated: () => context.goNamed("main",
-                        queryParameters: {"hasDialog": "true"}),
+                        queryParameters: {"hasDialod": "true"}),
                     orElse: () {});
               },
               child: const SizedBox.shrink(),

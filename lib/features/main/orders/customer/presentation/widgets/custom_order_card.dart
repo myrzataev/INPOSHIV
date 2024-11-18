@@ -82,7 +82,7 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
                       borderRadius: BorderRadius.circular(15.r),
                       child: CachedNetworkImage(
                         imageUrl: widget.images[caruselIndex],
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                         width: double.infinity,
                       )),
                 ]);

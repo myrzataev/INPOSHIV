@@ -4,16 +4,28 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/features/main/orders/customer/presentation/widgets/comment_column.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 import 'package:inposhiv/resources/resources.dart';
 
 class Stage3ForManufacturer extends StatelessWidget {
   final Function onTap;
+  final List<Map<String, String?>> allComments;
+
+  final TextEditingController controller;
+  final void Function(String filePath, String fileName)? onFilePicked;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromGallery;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromCamera;
   const Stage3ForManufacturer({
     super.key,
     required this.currentIndexOfData,
     required this.onTap,
+    required this.controller,
+    required this.allComments,
+    this.onFilePicked,
+    this.onImagePickedFromGallery,
+    this.onImagePickedFromCamera,
   });
 
   final double currentIndexOfData;
@@ -76,18 +88,40 @@ class Stage3ForManufacturer extends StatelessWidget {
               "Комментарии от производителя",
               style: AppFonts.w400s14.copyWith(),
             ),
-            const CommentColumn(
-              comment: "Все готово к началу производства",
-              data: "18.04.2024",
-            ),
-            const CommentColumn(
-              comment: "Треть товара отшито",
-              data: "20.04.2024",
-            ),
-            
+            Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      final currentItem = allComments[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            currentItem["comment"] ?? "",
+                            style: AppFonts.w400s16
+                                .copyWith(color: AppColors.accentTextColor),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20.h),
+                            child: Text(currentItem["date"] ?? "",
+                                style: AppFonts.w400s12),
+                          ),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 3.h,
+                      );
+                    },
+                    itemCount: allComments.length)),
             const Spacer(),
             CustomTrackingComment(
-                controller: TextEditingController(), onTap: onTap),
+              controller: controller,
+              onTap: onTap,
+              onFilePicked: onFilePicked,
+              onImagePickedFromCamera: onImagePickedFromCamera,
+              onImagePickedFromGallery: onImagePickedFromGallery,
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: CustomButton(

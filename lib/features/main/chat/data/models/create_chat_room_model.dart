@@ -15,17 +15,17 @@ String createChatRoomModelToJson(CreateChatRoomModel data) => json.encode(data.t
 @freezed
 class CreateChatRoomModel with _$CreateChatRoomModel {
     const factory CreateChatRoomModel({
-        String? messageUuid,
         String? chatUuid,
         String? senderUuid,
+        String? recipientUuid,
+        DateTime? createdAt,
         String? senderName,
         String? recipientName,
-        String? imageUrl,
-        String? recipientUuid,
-        String? content,
-        int? type,
-        String? messageStatus,
-        DateTime? startedAt,
+        String? lastMessageUuid,
+        String? lastMessageContent,
+        String? lastMessageSenderUuid,
+        int? orderId,
+        DateTime? lastMessageDate,
     }) = _CreateChatRoomModel;
 
     factory CreateChatRoomModel.fromJson(Map<String, dynamic> json) => _$CreateChatRoomModelFromJson(json);

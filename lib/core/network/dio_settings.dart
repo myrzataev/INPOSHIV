@@ -17,6 +17,7 @@ class DioSettings {
       "http://192.168.31.209:8080/",
       // "https://24redirect.ru/",
       contentType: "application/json",
+      
       headers: {
         "Accept": "application/json",
       },

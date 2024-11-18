@@ -190,7 +190,7 @@ class _MainScreenState extends State<DetailedScreen> {
                                                                       child: CircularProgressIndicator
                                                                           .adaptive(),
                                                                     ),
-                                                            fit: BoxFit.fill,
+                                                            fit: BoxFit.contain,
                                                             // height: 350.h,
                                                             width:
                                                                 double.infinity,

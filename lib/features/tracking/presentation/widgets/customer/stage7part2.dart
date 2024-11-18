@@ -32,7 +32,7 @@ class Stage7part2 extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Этап 7",
+                "Этап 9",
                 style: AppFonts.w400s16,
               ),
               Padding(

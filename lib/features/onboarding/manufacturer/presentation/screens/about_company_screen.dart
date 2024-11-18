@@ -214,15 +214,24 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
       for (var image in images) {
         formData.files.add(MapEntry(
           'photos',
-          await MultipartFile.fromFile(image.path, filename: image.name),
+          await MultipartFile.fromFile(image.path,
+              filename: getShorterFileName(image.name)),
         ));
       }
     }
-    print(queryParams);
+    print("name of image is ${getShorterFileName(images?.first.path ?? "")}");
     BlocProvider.of<SendManufacturersSurveyBloc>(context).add(
         SendManufacturersSurveyEvent.sendData(
             data: queryParams,
             photo: formData,
             manufacturerId: preferences.getString("customerId") ?? ""));
+  }
+
+  String getShorterFileName(String filePath) {
+    String fileName = filePath.split('/').last;
+    // Keep only the last 15 characters
+    return fileName.length > 15
+        ? fileName.substring(fileName.length - 15)
+        : fileName;
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,12 +9,14 @@ import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/chat/data/models/chat_rooms_model.dart';
+import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
@@ -30,7 +31,7 @@ class ChatTab extends StatefulWidget {
 class _ChatTabState extends State<ChatTab> {
   ScrollController scrollController = ScrollController();
   final preferences = locator<SharedPreferences>();
-  List<ChatRoomsModel> _cachedModel = [];
+  List<CreateChatRoomModel> _cachedModel = [];
   StompClient? stompClient;
   bool? isCustomer;
   @override
@@ -170,7 +171,8 @@ class _ChatTabState extends State<ChatTab> {
     // );
   }
 
-  Widget _buildChatRoomsList(List<ChatRoomsModel> model, Function onRefresh) {
+  Widget _buildChatRoomsList(
+      List<CreateChatRoomModel> model, Function onRefresh) {
     return Expanded(
       child: RefreshIndicator.adaptive(
         onRefresh: () async {
@@ -190,6 +192,7 @@ class _ChatTabState extends State<ChatTab> {
                   queryParameters: {
                     "receipentUuid": currentItem.recipientUuid,
                     "chatUuid": currentItem.chatUuid,
+                    "orderId": currentItem.orderId.toString()
                   },
                 );
               },
@@ -239,8 +242,12 @@ class _ChatTabState extends State<ChatTab> {
                         Row(
                           children: [
                             Text(
-                              currentItem.localDateTime?.toString() ?? "",
+                              _formatDate(
+                                      currentItem.lastMessageDate.toString()) ??
+                                  "",
                               style: AppFonts.w400s16,
+                              overflow: TextOverflow.ellipsis,
+                              softWrap: true,
                             ),
                             ((currentItem.lastMessageSenderUuid ?? "") ==
                                     (preferences.getString("userId") ?? ""))
@@ -268,5 +275,21 @@ class _ChatTabState extends State<ChatTab> {
         ),
       ),
     );
+  }
+
+  String? _formatDate(String? dateString) {
+    if (dateString == null) return null;
+
+    try {
+      // Parse the date string into a DateTime object
+      final DateTime dateTime = DateTime.parse(dateString);
+
+      // Format the DateTime object to display only hour and minutes
+      final String formattedTime = DateFormat.Hm().format(dateTime); // 'HH:mm'
+      return formattedTime;
+    } catch (e) {
+      // Return null if parsing fails
+      return null;
+    }
   }
 }

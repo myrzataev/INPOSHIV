@@ -15,6 +15,7 @@ class EndOfTracking extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      
       decoration: BoxDecoration(
           color: AppColors.containersGrey,
           borderRadius: BorderRadius.circular(15.r)),
@@ -30,12 +31,14 @@ class EndOfTracking extends StatelessWidget {
             ),
             Text(
               "Поздравляем с завершением заказа!",
+              textScaler: TextScaler.linear(0.8),
               style: AppFonts.w700s36,
             ),
+            Spacer(),
             Center(
               child: TextButton(
                   onPressed: () {
-                   GoRouter.of(context).pushNamed("main");
+                   GoRouter.of(context).goNamed("main");
                   },
                   child: Text(
                     "Перейти на главную",
@@ -49,7 +52,7 @@ class EndOfTracking extends StatelessWidget {
               child: CustomButton(
                 text: "Создать новый заказ",
                 onPressed: () {
-                   GoRouter.of(context).pushNamed("chooseImage");
+                   GoRouter.of(context).goNamed("chooseImage");
                 },
                 sizedTemporary: true,
                 height: 50,

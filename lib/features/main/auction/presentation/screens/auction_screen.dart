@@ -1,4 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +16,8 @@ import 'package:inposhiv/features/main/auction/presentation/blocs/customer_aucti
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_bloc/get_auctions_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
+import 'package:inposhiv/features/main/home/data/mocked_data.dart';
+import 'package:inposhiv/features/main/home/presentation/customer/screens/main_screen.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dart';
 import 'package:inposhiv/resources/resources.dart';
@@ -60,6 +64,18 @@ class _AuctionScreenState extends State<AuctionScreen> {
   final TextEditingController bidPriceController = TextEditingController();
   bool? isCustomer;
   CalculateService calculateService = CalculateService();
+  final CarouselSliderController _carouselSliderController =
+      CarouselSliderController();
+  List<int> _currentIndexes = [];
+  List<bool> _isExpandedList = [];
+  List<SizesModel> sizes = [
+    SizesModel("XS", "42", 0),
+    SizesModel("S", "44", 0),
+    SizesModel("M", "46", 0),
+    SizesModel("L", "48", 0),
+    SizesModel("XL", "50", 0),
+    SizesModel("XXL", "52", 0)
+  ];
   @override
   void initState() {
     BlocProvider.of<GetAuctionsBloc>(context)
@@ -67,7 +83,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
     isCustomer = preferences.getBool("isCustomer");
     (isCustomer ?? false) ? callBloc() : print("object");
     null;
-
+    _isExpandedList = List.filled(MockedCardData.cardsList.length, false);
+    _currentIndexes = List.filled(MockedCardData.cardsList.length, 0);
     super.initState();
   }
 
@@ -111,7 +128,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(top: 10.h),
                   child: (isCustomer ?? false)
-                      ? BlocBuilder<CustomerAuctionsBloc, CustomerAuctionsState>(
+                      ? BlocBuilder<CustomerAuctionsBloc,
+                          CustomerAuctionsState>(
                           builder: (context, state) {
                             return state.maybeWhen(
                                 customerOrdersLoaded: (customerOrdersModel) {
@@ -126,125 +144,381 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                   itemBuilder: (context, index) {
                                     final currentItem =
                                         customerOrdersModel[index];
+                                    final bool currentIndexIsExpanded =
+                                        _isExpandedList[index];
+                                    final List<String> fullPhotoUrls =
+                                        currentItem.products?.first.photos
+                                                ?.map((url) =>
+                                                    "${UrlRoutes.baseUrl}$url")
+                                                .toList() ??
+                                            [];
                                     return Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.h),
-                                      child: InkWell(
-                                        onTap: () {
-                                          GoRouter.of(context).pushNamed(
-                                              "detailedViewScreen",
-                                              extra: currentItem);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: AppColors.cardsColor,
-                                            borderRadius:
-                                                BorderRadiusDirectional
-                                                    .circular(10.r),
-                                          ),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 10.w,
-                                                vertical: 10.h),
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10.h),
+                                        child: InkWell(
+                                          onTap: () {
+                                            GoRouter.of(context).pushNamed(
+                                                "detailedViewScreen",
+                                                extra: currentItem);
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.r)),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      bottom: 10.h),
-                                                  child: SizedBox(
-                                                    height: 60.h,
-                                                    child: ListView.separated(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      itemCount: currentItem
-                                                              .products
-                                                              ?.first
-                                                              .photos
-                                                              ?.length ??
-                                                          0,
-                                                      separatorBuilder:
-                                                          (context,
-                                                              indexForPhotos) {
-                                                        return SizedBox(
-                                                            width: 10.w);
-                                                      },
-                                                      itemBuilder: (context,
-                                                          indexForPhotos) {
-                                                        final List<String>
-                                                            fullPhotoUrls =
-                                                            currentItem
-                                                                    .products
-                                                                    ?.first
-                                                                    .photos
-                                                                    ?.map((url) =>
-                                                                        "${UrlRoutes.baseUrl}$url")
-                                                                    .toList() ??
-                                                                [];
-                                              
-                                                        return InkWell(
-                                                          onTap: () {
-                                                            GoRouter.of(context)
-                                                                .pushNamed(
-                                                                    "seeImage",
-                                                                    extra:
-                                                                        fullPhotoUrls);
+                                                Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      CarouselSlider.builder(
+                                                        carouselController:
+                                                            _carouselSliderController,
+                                                        itemCount: fullPhotoUrls
+                                                            .length,
+                                                        options:
+                                                            CarouselOptions(
+                                                          autoPlay: false,
+                                                          enlargeCenterPage:
+                                                              true,
+                                                          viewportFraction: 1,
+                                                          aspectRatio: 16 / 7,
+                                                          height: 300.h,
+                                                          onPageChanged:
+                                                              (indexCarousel,
+                                                                  reason) {
+                                                            setState(() {
+                                                              _currentIndexes[
+                                                                      index] =
+                                                                  indexCarousel;
+                                                            });
                                                           },
-                                                          child: ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        6.r),
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl:
-                                                                  "${UrlRoutes.baseUrl}${currentItem.products?.first.photos?[indexForPhotos]}",
+                                                        ),
+                                                        itemBuilder: (context,
+                                                            caruselIndex,
+                                                            realIndex) {
+                                                          return Stack(
+                                                              children: [
+                                                                ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(15
+                                                                            .r),
+                                                                    child: fullPhotoUrls
+                                                                            .isNotEmpty
+                                                                        ? CachedNetworkImage(
+                                                                            progressIndicatorBuilder: (context, url, progress) =>
+                                                                                const Center(
+                                                                                  child: CircularProgressIndicator.adaptive(),
+                                                                                ),
+                                                                            fit: BoxFit
+                                                                                .contain,
+                                                                            // height: 350.h,
+                                                                            width: double
+                                                                                .infinity,
+                                                                            imageUrl: fullPhotoUrls[
+                                                                                caruselIndex])
+                                                                        : Image.asset(
+                                                                            Images.good1)),
+                                                              ]);
+                                                        },
+                                                      ),
+                                                      Positioned(
+                                                        top: 10.h,
+                                                        left: 10.w,
+                                                        right: 10.w,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            const SizedBox(),
+                                                            Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              height: 36.h,
+                                                              decoration: BoxDecoration(
+                                                                  color: AppColors
+                                                                      .accentTextColor,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              60.r)),
+                                                              child: Padding(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            14.w),
+                                                                child: Text(
+                                                                  "${currentItem.auctionProcessDtoList?.length ?? 0} откликов",
+                                                                  style: AppFonts
+                                                                      .w400s16
+                                                                      .copyWith(
+                                                                          color:
+                                                                              Colors.white),
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        );
-                                                      },
-                                                    ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Positioned(
+                                                        bottom: 10.h,
+                                                        child: DotsIndicator(
+                                                          dotsCount: fullPhotoUrls
+                                                                  .isNotEmpty
+                                                              ? fullPhotoUrls
+                                                                  .length
+                                                              : 1,
+                                                          position:
+                                                              _currentIndexes[
+                                                                  index],
+                                                          decorator:
+                                                              DotsDecorator(
+                                                                  activeColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  size: Size(
+                                                                      10.w,
+                                                                      10.h)),
+                                                        ),
+                                                      )
+                                                    ]),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.h),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Text(
+                                                        currentItem.products
+                                                                ?.first.name ??
+                                                            "",
+                                                        style: AppFonts.w700s20
+                                                            .copyWith(
+                                                                color: AppColors
+                                                                    .accentTextColor),
+                                                      ),
+                                                      // const Spacer(),
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    5.w),
+                                                        child: Text(
+                                                          "${currentItem.products?.first.quantity} штук",
+                                                          style: AppFonts
+                                                              .w400s16
+                                                              .copyWith(
+                                                                  color: AppColors
+                                                                      .accentTextColor),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Text(
-                                                      currentItem.products
-                                                              ?.first.name ??
-                                                          "",
-                                                      style: AppFonts.w700s16,
-                                                    ),
-                                                    Text(
-                                                      "${currentItem.products?.first.quantity} штук",
-                                                      style: AppFonts.w400s16
-                                                          .copyWith(
-                                                        color: AppColors
-                                                            .accentTextColor,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
                                                 Text(
-                                                  "${currentItem.products?.first.priceRub?.toStringAsFixed(2) ?? ""} руб за ед, итого 348 000 руб",
+                                                  currentItem.products?.first
+                                                          .description ??
+                                                      "",
                                                   style: AppFonts.w400s16,
                                                 ),
-                                                Text(
-                                                  "${currentItem.products?.first.description.toString()}",
-                                                  style: AppFonts.w400s16
-                                                      .copyWith(
-                                                          color: AppColors
-                                                              .accentTextColor),
-                                                ),
+                                                Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            vertical: 10.h),
+                                                    child: Column(
+                                                      children: [
+                                                        InkWell(
+                                                          onTap: () {
+                                                            setState(() {
+                                                              _isExpandedList[
+                                                                      index] =
+                                                                  !_isExpandedList[
+                                                                      index];
+                                                            });
+                                                          },
+                                                          child: Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            children: [
+                                                              Text(
+                                                                "Размерный ряд",
+                                                                style: AppFonts
+                                                                    .w400s16
+                                                                    .copyWith(
+                                                                        color: AppColors
+                                                                            .accentTextColor),
+                                                              ),
+                                                              Padding(
+                                                                padding: EdgeInsets
+                                                                    .only(
+                                                                        left: 6
+                                                                            .w),
+                                                                child:
+                                                                    RotatedBox(
+                                                                  quarterTurns:
+                                                                      currentIndexIsExpanded
+                                                                          ? 2
+                                                                          : 0,
+                                                                  child: SvgPicture
+                                                                      .asset(SvgImages
+                                                                          .bottom),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        AnimatedSize(
+                                                          duration:
+                                                              const Duration(
+                                                                  milliseconds:
+                                                                      300),
+                                                          curve: Curves
+                                                              .fastOutSlowIn,
+                                                          child: currentIndexIsExpanded
+                                                              ? GridView.builder(
+                                                                  shrinkWrap: true,
+                                                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(mainAxisSpacing: 0, mainAxisExtent: 30.h, crossAxisCount: 2),
+                                                                  itemCount: currentItem.products?.first.sizeQuantities?.length ?? 0,
+                                                                  itemBuilder: (context, gridwiewIndex) {
+                                                                    return Text(
+                                                                      "${sizes[gridwiewIndex].usaSize} (${sizes[gridwiewIndex].ruSize}) – ${currentItem.products?.first.sizeQuantities?["${gridwiewIndex + 1}"]}шт",
+                                                                      style: AppFonts
+                                                                          .w400s16
+                                                                          .copyWith(
+                                                                              color: AppColors.accentTextColor),
+                                                                    );
+                                                                  })
+                                                              : const SizedBox.shrink(),
+                                                        ),
+                                                      ],
+                                                    ))
                                               ],
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    );
+                                        )
+                                        //  InkWell(
+                                        //   onTap: () {
+                                        // GoRouter.of(context).pushNamed(
+                                        //     "detailedViewScreen",
+                                        //     extra: currentItem);
+                                        //   },
+                                        //   child: Container(
+                                        //     decoration: BoxDecoration(
+                                        //       color: AppColors.cardsColor,
+                                        //       borderRadius:
+                                        //           BorderRadiusDirectional
+                                        //               .circular(10.r),
+                                        //     ),
+                                        //     child: Padding(
+                                        //       padding: EdgeInsets.symmetric(
+                                        //           horizontal: 10.w,
+                                        //           vertical: 10.h),
+                                        //       child: Column(
+                                        //         crossAxisAlignment:
+                                        //             CrossAxisAlignment.start,
+                                        //         children: [
+                                        //           Padding(
+                                        //             padding: EdgeInsets.only(
+                                        //                 bottom: 10.h),
+                                        //             child: SizedBox(
+                                        //               height: 60.h,
+                                        //               child: ListView.separated(
+                                        //                 scrollDirection:
+                                        //                     Axis.horizontal,
+                                        //                 itemCount: currentItem
+                                        //                         .products
+                                        //                         ?.first
+                                        //                         .photos
+                                        //                         ?.length ??
+                                        //                     0,
+                                        //                 separatorBuilder:
+                                        //                     (context,
+                                        //                         indexForPhotos) {
+                                        //                   return SizedBox(
+                                        //                       width: 10.w);
+                                        //                 },
+                                        //                 itemBuilder: (context,
+                                        //                     indexForPhotos) {
+                                        //                   final List<String>
+                                        //                       fullPhotoUrls =
+                                        //                       currentItem
+                                        //                               .products
+                                        //                               ?.first
+                                        //                               .photos
+                                        //                               ?.map((url) =>
+                                        //                                   "${UrlRoutes.baseUrl}$url")
+                                        //                               .toList() ??
+                                        //                           [];
+
+                                        //                   return InkWell(
+                                        //                     onTap: () {
+                                        //                       GoRouter.of(context)
+                                        //                           .pushNamed(
+                                        //                               "seeImage",
+                                        //                               extra:
+                                        //                                   fullPhotoUrls);
+                                        //                     },
+                                        //                     child: ClipRRect(
+                                        //                       borderRadius:
+                                        //                           BorderRadius
+                                        //                               .circular(
+                                        //                                   6.r),
+                                        //                       child:
+                                        //                           CachedNetworkImage(
+                                        //                         imageUrl:
+                                        //                             "${UrlRoutes.baseUrl}${currentItem.products?.first.photos?[indexForPhotos]}",
+                                        //                       ),
+                                        //                     ),
+                                        //                   );
+                                        //                 },
+                                        //               ),
+                                        //             ),
+                                        //           ),
+                                        //           Row(
+                                        //             mainAxisAlignment:
+                                        //                 MainAxisAlignment
+                                        //                     .spaceBetween,
+                                        //             children: [
+                                        //               Text(
+                                        //                 currentItem.products
+                                        //                         ?.first.name ??
+                                        //                     "",
+                                        //                 style: AppFonts.w700s16,
+                                        //               ),
+                                        //               Text(
+                                        //                 "${currentItem.products?.first.quantity} штук",
+                                        //                 style: AppFonts.w400s16
+                                        //                     .copyWith(
+                                        //                   color: AppColors
+                                        //                       .accentTextColor,
+                                        //                 ),
+                                        //               ),
+                                        //             ],
+                                        //           ),
+                                        //           Text(
+                                        //             "${currentItem.products?.first.priceRub?.toStringAsFixed(2) ?? ""} руб за ед, итого 348 000 руб",
+                                        //             style: AppFonts.w400s16,
+                                        //           ),
+                                        //           Text(
+                                        //             "${currentItem.products?.first.description.toString()}",
+                                        //             style: AppFonts.w400s16
+                                        //                 .copyWith(
+                                        //                     color: AppColors
+                                        //                         .accentTextColor),
+                                        //           ),
+                                        //         ],
+                                        //       ),
+                                        //     ),
+                                        //   ),
+                                        // ),
+                                        );
                                   },
                                 ),
                               );
@@ -274,8 +548,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                     },
                                     orElse: () {});
                               },
-                              child:
-                                  BlocBuilder<GetAuctionsBloc, GetAuctionsState>(
+                              child: BlocBuilder<GetAuctionsBloc,
+                                  GetAuctionsState>(
                                 builder: (context, state) {
                                   return state.maybeWhen(
                                       loading: () => const Center(
@@ -291,18 +565,22 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                             padding: EdgeInsets.only(top: 10.h),
                                             child: RefreshIndicator.adaptive(
                                               onRefresh: () async {
-                                                BlocProvider.of<GetAuctionsBloc>(
+                                                BlocProvider.of<
+                                                            GetAuctionsBloc>(
                                                         context)
                                                     .add(const GetAuctionsEvent
                                                         .getAuctions());
                                               },
                                               child: ListView.separated(
-                                                  itemBuilder: (context, index) {
+                                                  itemBuilder:
+                                                      (context, index) {
                                                     final item = model[index];
+
                                                     return InkWell(
                                                       onTap: () {
                                                         setState(() {
-                                                          selectedAuction = item;
+                                                          selectedAuction =
+                                                              item;
                                                         });
                                                         _showAuctionDetail(
                                                             context: context,
@@ -317,7 +595,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                     bidPriceController
                                                                         .text) ??
                                                                 0,
-                                                            currencyCode: "USD");
+                                                            currencyCode:
+                                                                "USD");
                                                       },
                                                       child: Container(
                                                         decoration: BoxDecoration(
@@ -328,57 +607,46 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                     .circular(
                                                                         10.r)),
                                                         child: Padding(
-                                                          padding:
-                                                              EdgeInsets.symmetric(
-                                                                  horizontal: 10.w,
-                                                                  vertical: 10.h),
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      10.w,
+                                                                  vertical:
+                                                                      10.h),
                                                           child: Column(
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment
                                                                     .start,
                                                             children: [
                                                               Padding(
-                                                                padding:
-                                                                    EdgeInsets.only(
+                                                                padding: EdgeInsets
+                                                                    .only(
                                                                         bottom:
                                                                             10.h),
                                                                 child: SizedBox(
                                                                   height: 60.h,
                                                                   child: ListView
                                                                       .separated(
-                                                                          scrollDirection:
-                                                                              Axis
-                                                                                  .horizontal,
-                                                                          itemCount: item
-                                                                                  .productsList
-                                                                                  ?.first
-                                                                                  .photos
-                                                                                  ?.length ??
+                                                                          scrollDirection: Axis
+                                                                              .horizontal,
+                                                                          itemCount: item.productsList?.first.photos?.length ??
                                                                               0,
-                                                                          separatorBuilder:
-                                                                              (context,
-                                                                                  index) {
+                                                                          separatorBuilder: (context,
+                                                                              index) {
                                                                             return SizedBox(
-                                                                              width:
-                                                                                  10.w,
+                                                                              width: 10.w,
                                                                             );
                                                                           },
                                                                           itemBuilder:
-                                                                              (context,
-                                                                                  indexForPhotos) {
+                                                                              (context, indexForPhotos) {
                                                                             final List<String>
                                                                                 fullPhotoUrls =
-                                                                                item.productsList?.first.photos?.map((url) => "${UrlRoutes.baseUrl}$url").toList() ??
-                                                                                    [];
+                                                                                item.productsList?.first.photos?.map((url) => "${UrlRoutes.baseUrl}$url").toList() ?? [];
                                                                             return InkWell(
-                                                                              onTap:
-                                                                                  () {
-                                                                                GoRouter.of(context).pushNamed("seeImage",
-                                                                                    extra: fullPhotoUrls);
+                                                                              onTap: () {
+                                                                                GoRouter.of(context).pushNamed("seeImage", extra: fullPhotoUrls);
                                                                               },
-                                                                              child: ClipRRect(
-                                                                                  borderRadius: BorderRadius.circular(6.r),
-                                                                                  child: Image.network("${UrlRoutes.baseUrl}${item.productsList?.first.photos?[indexForPhotos]}")),
+                                                                              child: ClipRRect(borderRadius: BorderRadius.circular(6.r), child: Image.network("${UrlRoutes.baseUrl}${item.productsList?.first.photos?[indexForPhotos]}")),
                                                                             );
                                                                           }),
                                                                 ),
@@ -389,9 +657,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                         .spaceBetween,
                                                                 children: [
                                                                   Text(
-                                                                    item
-                                                                            .productsList
-                                                                            ?.first
+                                                                    item.productsList?.first
                                                                             .name ??
                                                                         "",
                                                                     style: AppFonts
@@ -402,8 +668,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                     style: AppFonts
                                                                         .w400s16
                                                                         .copyWith(
-                                                                            color: AppColors
-                                                                                .accentTextColor),
+                                                                            color:
+                                                                                AppColors.accentTextColor),
                                                                   )
                                                                 ],
                                                               ),
@@ -413,7 +679,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                     .w400s16,
                                                               ),
                                                               TextButton(
-                                                                  onPressed: () {
+                                                                  onPressed:
+                                                                      () {
                                                                     GoRouter.of(
                                                                             context)
                                                                         .pushNamed(
@@ -431,8 +698,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                     style: AppFonts
                                                                         .w400s16
                                                                         .copyWith(
-                                                                            color: AppColors
-                                                                                .accentTextColor),
+                                                                            color:
+                                                                                AppColors.accentTextColor),
                                                                   ))
                                                             ],
                                                           ),

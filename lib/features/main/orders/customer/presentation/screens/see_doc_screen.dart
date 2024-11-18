@@ -5,15 +5,22 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class SeeDocScreen extends StatelessWidget {
   final String path;
-  const SeeDocScreen({super.key, required this.path});
+  final bool? isFromBackend;
+  final String? documentUrl;
+  const SeeDocScreen(
+      {super.key,
+      required this.path,
+      this.isFromBackend = false,
+      this.documentUrl});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        
-        child: SfPdfViewer.file(File(path))),
+          child: (isFromBackend ?? false)
+              ? SfPdfViewer.network(documentUrl ?? "")
+              : SfPdfViewer.file(File(path))),
     );
   }
 }

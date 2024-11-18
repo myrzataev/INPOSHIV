@@ -208,6 +208,14 @@ class _SetQuantityWithoutSizeScreenState
               children: [
                 TextButton(
                     onPressed: () {
+                      Provider.of<SizeProvider>(context, listen: false)
+                          .setTotalQuantity(
+                        total: (int.tryParse(quantityController.text) ?? 0),
+                      );
+                      Provider.of<PhotoProvider>(context, listen: false)
+                          .addToFiles(files: filesForTech);
+                      Provider.of<OrderProvider>(context, listen: false)
+                          .updateDescription(newDescription: controller.text);
                       GoRouter.of(context).pushNamed("setQuantityScreen");
                     },
                     child: Text(
@@ -246,7 +254,7 @@ class _SetQuantityWithoutSizeScreenState
                                           padding: EdgeInsets.symmetric(
                                               vertical: 10.h),
                                           child: Text(
-                                            "Минимальное количество товара равно 49 ед",
+                                            "Минимальное количество товара  100 ед",
                                             style: AppFonts.w700s20.copyWith(
                                                 color:
                                                     AppColors.accentTextColor),

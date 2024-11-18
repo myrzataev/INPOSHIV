@@ -1,5 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,19 +9,19 @@ import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 class Stage1ForManufacturer extends StatelessWidget {
   final Function onTap;
   final TextEditingController controller;
-  final PlatformFile? check;
+
   final Function onTapForCheck;
   final Function onTapForTextButton;
+  final List<Map<String, String?>> allComments;
 
-  final String comment;
   const Stage1ForManufacturer({
     super.key,
     required this.onTap,
     required this.controller,
-    this.check,
+
     required this.onTapForCheck,
-    required this.comment,
     required this.onTapForTextButton,
+    required this.allComments,
   });
 
   @override
@@ -48,7 +47,7 @@ class Stage1ForManufacturer extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  check != null ? onTapForCheck() : null;
+                  onTapForCheck() ;
                 },
                 child: Text(
                   "Чек об оплате",
@@ -59,15 +58,33 @@ class Stage1ForManufacturer extends StatelessWidget {
                 ),
               ),
               Text("Комментарии от заказчика", style: AppFonts.w400s14),
-              Text(
-                comment,
-                style:
-                    AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
-              ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 20.h),
-                child: Text("16.04.2024", style: AppFonts.w400s12),
-              ),
+              Expanded(
+                  child: ListView.separated(
+                      itemBuilder: (context, index) {
+                        final currentItem = allComments[index];
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              currentItem["comment"] ?? "",
+                              style: AppFonts.w400s16
+                                  .copyWith(color: AppColors.accentTextColor),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(bottom: 20.h),
+                              child: Text(currentItem["date"] ?? "",
+                                  style: AppFonts.w400s12),
+                            ),
+                          ],
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 3.h,
+                        );
+                      },
+                      itemCount: allComments.length)),
+
               // PaymentRow(
               //     title: "30%", usdAmount: "905,4 \$", rubAmount: "82912,01 ₽"),
               // PaymentRow(

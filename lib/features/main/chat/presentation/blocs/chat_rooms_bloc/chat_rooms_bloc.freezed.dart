@@ -239,7 +239,7 @@ mixin _$ChatRoomsState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatRoomsModel> model) chatRoomsLoaded,
+    required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
     required TResult Function(String errorText) chatRoomsError,
   }) =>
       throw _privateConstructorUsedError;
@@ -247,7 +247,7 @@ mixin _$ChatRoomsState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult? Function(String errorText)? chatRoomsError,
   }) =>
       throw _privateConstructorUsedError;
@@ -255,7 +255,7 @@ mixin _$ChatRoomsState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult Function(String errorText)? chatRoomsError,
     required TResult orElse(),
   }) =>
@@ -351,7 +351,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatRoomsModel> model) chatRoomsLoaded,
+    required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
     required TResult Function(String errorText) chatRoomsError,
   }) {
     return initial();
@@ -362,7 +362,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult? Function(String errorText)? chatRoomsError,
   }) {
     return initial?.call();
@@ -373,7 +373,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult Function(String errorText)? chatRoomsError,
     required TResult orElse(),
   }) {
@@ -468,7 +468,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatRoomsModel> model) chatRoomsLoaded,
+    required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
     required TResult Function(String errorText) chatRoomsError,
   }) {
     return loading();
@@ -479,7 +479,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult? Function(String errorText)? chatRoomsError,
   }) {
     return loading?.call();
@@ -490,7 +490,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult Function(String errorText)? chatRoomsError,
     required TResult orElse(),
   }) {
@@ -548,7 +548,7 @@ abstract class _$$ChatRoomsLoadedImplCopyWith<$Res> {
           $Res Function(_$ChatRoomsLoadedImpl) then) =
       __$$ChatRoomsLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ChatRoomsModel> model});
+  $Res call({List<CreateChatRoomModel> model});
 }
 
 /// @nodoc
@@ -570,7 +570,7 @@ class __$$ChatRoomsLoadedImplCopyWithImpl<$Res>
       model: null == model
           ? _value._model
           : model // ignore: cast_nullable_to_non_nullable
-              as List<ChatRoomsModel>,
+              as List<CreateChatRoomModel>,
     ));
   }
 }
@@ -578,12 +578,12 @@ class __$$ChatRoomsLoadedImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
-  const _$ChatRoomsLoadedImpl({required final List<ChatRoomsModel> model})
+  const _$ChatRoomsLoadedImpl({required final List<CreateChatRoomModel> model})
       : _model = model;
 
-  final List<ChatRoomsModel> _model;
+  final List<CreateChatRoomModel> _model;
   @override
-  List<ChatRoomsModel> get model {
+  List<CreateChatRoomModel> get model {
     if (_model is EqualUnmodifiableListView) return _model;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(_model);
@@ -620,7 +620,7 @@ class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatRoomsModel> model) chatRoomsLoaded,
+    required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
     required TResult Function(String errorText) chatRoomsError,
   }) {
     return chatRoomsLoaded(model);
@@ -631,7 +631,7 @@ class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult? Function(String errorText)? chatRoomsError,
   }) {
     return chatRoomsLoaded?.call(model);
@@ -642,7 +642,7 @@ class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult Function(String errorText)? chatRoomsError,
     required TResult orElse(),
   }) {
@@ -691,10 +691,10 @@ class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
 }
 
 abstract class _ChatRoomsLoaded implements ChatRoomsState {
-  const factory _ChatRoomsLoaded({required final List<ChatRoomsModel> model}) =
-      _$ChatRoomsLoadedImpl;
+  const factory _ChatRoomsLoaded(
+      {required final List<CreateChatRoomModel> model}) = _$ChatRoomsLoadedImpl;
 
-  List<ChatRoomsModel> get model;
+  List<CreateChatRoomModel> get model;
 
   /// Create a copy of ChatRoomsState
   /// with the given fields replaced by the non-null parameter values.
@@ -775,7 +775,7 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(List<ChatRoomsModel> model) chatRoomsLoaded,
+    required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
     required TResult Function(String errorText) chatRoomsError,
   }) {
     return chatRoomsError(errorText);
@@ -786,7 +786,7 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult? Function(String errorText)? chatRoomsError,
   }) {
     return chatRoomsError?.call(errorText);
@@ -797,7 +797,7 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(List<ChatRoomsModel> model)? chatRoomsLoaded,
+    TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
     TResult Function(String errorText)? chatRoomsError,
     required TResult orElse(),
   }) {
