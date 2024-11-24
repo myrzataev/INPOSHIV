@@ -133,6 +133,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                 if (receivedMessage['senderUuid'] !=
                     // senderIdMock
                     _currentUser.id) {
+                  print("sender is not current user");
                   _handleIncomingMessage(
                       receivedMessage); // Handle incoming message
                 } else {}
@@ -228,26 +229,25 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       print("///////sended");
     }
   }
+final receivedMessageIds = <String>{};
 
-  void _handleIncomingMessage(Map<String, dynamic> message) {
-    // Проверка, является ли текущее сообщение отправленным текущим пользователем
-    final isCurrentUserSender = message["senderUuid"] == _currentUser.id;
-    print("///////////$isCurrentUserSender");
-    // Создаем объект текстового сообщения
-    final textMessage = types.TextMessage(
-      author:
-          isCurrentUserSender ? _currentUser : _secondUser, // Определяем автора
-      id: const Uuid().v4(),
-      createdAt: DateTime.now()
-          .millisecondsSinceEpoch, // Можете заменить на фактическое время создания
-      text: message["content"], // Текст сообщения
-    );
+void _handleIncomingMessage(Map<String, dynamic> message) {
+  if (receivedMessageIds.contains(message['messageUuid'])) return;
+  receivedMessageIds.add(message['messageUuid']);
 
-    // Обновляем состояние и добавляем сообщение в список
-    setState(() {
-      _messages.insert(0, textMessage);
-    });
-  }
+  final textMessage = types.TextMessage(
+    author:
+    //  message["senderUuid"] == _currentUser.id ? _currentUser :
+      _secondUser,
+    id: message["messageUuid"],
+    createdAt: DateTime.now().millisecondsSinceEpoch,
+    text: message["content"],
+  );
+
+  setState(() {
+    _messages.insert(0, textMessage);
+  });
+}
 
   void disconnect() {
     // stompClient?.deactivate(); // Deactivate the WebSocket connection
@@ -308,7 +308,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       ),
       body: BlocListener<ChatsBloc, ChatsState>(
         listener: (context, state) {
-          print("calling blocc");
           state.maybeWhen(
               // loading: () => showDialog(
               //     context: context,

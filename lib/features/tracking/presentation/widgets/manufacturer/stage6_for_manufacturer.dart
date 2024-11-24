@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
 
 class Stage6ForManufacturer extends StatelessWidget {
   final Function onTap;
@@ -14,6 +14,8 @@ class Stage6ForManufacturer extends StatelessWidget {
   final void Function(String imagePath, String fileName)?
       onImagePickedFromCamera;
   final List<String>? allFiles;
+  final List<Map<String, String?>> allComments;
+
   const Stage6ForManufacturer({
     super.key,
     required this.currentIndexOfData,
@@ -23,6 +25,7 @@ class Stage6ForManufacturer extends StatelessWidget {
     this.onImagePickedFromGallery,
     this.onImagePickedFromCamera,
     this.allFiles,
+    required this.allComments,
   });
 
   final int currentIndexOfData;
@@ -38,6 +41,7 @@ class Stage6ForManufacturer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            
             Text(
               "Этап 6",
               style: AppFonts.w400s16,
@@ -75,6 +79,32 @@ class Stage6ForManufacturer extends StatelessWidget {
               "Чтобы осмотреть его, оценить и написать в случае каких-то спорных моментов. ",
               style: AppFonts.w400s16,
             ),
+            Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      final currentItem = allComments[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            currentItem["comment"] ?? "",
+                            style: AppFonts.w400s16
+                                .copyWith(color: AppColors.accentTextColor),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20.h),
+                            child: Text(currentItem["date"] ?? "",
+                                style: AppFonts.w400s12),
+                          ),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 3.h,
+                      );
+                    },
+                    itemCount: allComments.length)),
             const Spacer(),
             CustomTrackingComment(
               controller: controller,

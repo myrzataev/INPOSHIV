@@ -314,14 +314,15 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                           "productName": vm.productName,
                           "quantity": totalCount,
                           "description": vm.description,
-                          "sizeQuantitiesJson": jsonEncode({
-                            "1": sizesVm[0].quantity,
-                            "2": sizesVm[1].quantity,
-                            "3": sizesVm[2].quantity,
-                            "4": sizesVm[3].quantity,
-                            "5": sizesVm[4].quantity,
-                            "6": sizesVm[5].quantity,
-                          }),
+                          if (sizesVm.length > 1)
+                            "sizeQuantitiesJson": jsonEncode({
+                              "1": sizesVm[0].quantity,
+                              "2": sizesVm[1].quantity,
+                              "3": sizesVm[2].quantity,
+                              "4": sizesVm[3].quantity,
+                              "5": sizesVm[4].quantity,
+                              "6": sizesVm[5].quantity,
+                            }),
                           "photos": photos,
                           if (technicalDocuments != null)
                             "technicalDocuments": technicalDocuments,

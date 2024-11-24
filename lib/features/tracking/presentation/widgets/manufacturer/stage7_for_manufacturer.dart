@@ -3,12 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
 
 class Stage7ForManufacturer extends StatelessWidget {
   final Function onTap;
   final Function onTapForCheck;
-  final TextEditingController controller;
+
   final List<Map<String, String?>> allComments;
   final void Function(String filePath, String fileName)? onFilePicked;
   final void Function(String imagePath, String fileName)?
@@ -18,7 +18,6 @@ class Stage7ForManufacturer extends StatelessWidget {
   const Stage7ForManufacturer({
     super.key,
     required this.onTap,
-    required this.controller,
     required this.allComments,
     this.onFilePicked,
     this.onImagePickedFromGallery,
@@ -99,12 +98,16 @@ class Stage7ForManufacturer extends StatelessWidget {
                 ),
               ),
             ),
-            CustomTrackingComment(
-              controller: controller,
-              onTap: onTap,
-              onFilePicked: onFilePicked,
-              onImagePickedFromCamera: onImagePickedFromCamera,
-              onImagePickedFromGallery: onImagePickedFromGallery,
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.h),
+              child: CustomButton(
+                text: "Подтвердить",
+                onPressed: () {
+                  onTap();
+                },
+                sizedTemporary: true,
+                height: 50,
+              ),
             ),
           ],
         ),

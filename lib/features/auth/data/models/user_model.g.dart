@@ -16,6 +16,7 @@ _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
       companyName: json['companyName'] as String?,
       password: json['password'] as String?,
       firebaseToken: json['firebaseToken'] as String?,
+      telegramChatId: json['telegramChatId'] as String?,
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
       'companyName': instance.companyName,
       'password': instance.password,
       'firebaseToken': instance.firebaseToken,
+      'telegramChatId': instance.telegramChatId,
     };

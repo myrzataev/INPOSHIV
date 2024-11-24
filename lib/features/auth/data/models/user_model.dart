@@ -23,6 +23,7 @@ class UserModel with _$UserModel {
         String? companyName,
         String? password,
         String? firebaseToken,
+        String? telegramChatId,
     }) = _UserModel;
 
     factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

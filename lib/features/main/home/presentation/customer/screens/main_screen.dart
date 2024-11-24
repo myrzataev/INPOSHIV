@@ -6,10 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
@@ -50,6 +50,8 @@ class _MainScreenState extends State<MainScreen> {
   late bool? isCustomer;
   final preferences = locator<SharedPreferences>();
   CalculateService calculateService = CalculateService();
+  int? selectedAuction;
+  String? selectedAuctionUuid;
   List<SizesModel> sizes = [
     SizesModel("XS", "42", 0),
     SizesModel("S", "44", 0),
@@ -79,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
             builder: (context) => CustomDialog(
                   title:
                       "Мы уведомим вас, когда появятся отклики от производителей",
-                  description: "description",
+                  description: "",
                   button: CustomButton(
                     height: 40,
                     text: "Понятно",
@@ -247,7 +249,8 @@ class _MainScreenState extends State<MainScreen> {
                                                                       .center,
                                                               height: 36.h,
                                                               decoration: BoxDecoration(
-                                                                  color: AppColors.accentTextColor,
+                                                                  color: AppColors
+                                                                      .accentTextColor,
                                                                   borderRadius:
                                                                       BorderRadius
                                                                           .circular(
@@ -400,9 +403,9 @@ class _MainScreenState extends State<MainScreen> {
                                         padding: EdgeInsets.only(bottom: 10.h),
                                         child: InkWell(
                                           onTap: () {
-                                            GoRouter.of(context).pushNamed(
-                                                "detailed",
-                                                extra: currentItem);
+                                            // GoRouter.of(context).pushNamed(
+                                            //     "detailed",
+                                            //     extra: currentItem);
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -465,18 +468,40 @@ class _MainScreenState extends State<MainScreen> {
                                                               MainAxisAlignment
                                                                   .end,
                                                           children: [
-                                                            CircleAvatar(
-                                                              backgroundColor:
-                                                                  Colors.white,
-                                                              radius: 20.r,
-                                                              // ignore: deprecated_member_use
-                                                              child: SvgPicture
-                                                                  .asset(
-                                                                SvgImages.chat,
-                                                                // ignore: deprecated_member_use
-                                                                color: AppColors
-                                                                    .accentTextColor,
-                                                              ),
+                                                            Transform.scale(
+                                                              scale: 1.5,
+                                                              child: Checkbox(
+                                                                  side:
+                                                                      BorderSide(
+                                                                    color: Colors
+                                                                        .grey,
+                                                                    width:
+                                                                        1.5.w,
+                                                                  ),
+                                                                  value:
+                                                                      selectedAuction ==
+                                                                          index,
+                                                                  activeColor:
+                                                                      AppColors
+                                                                          .buttonGreenColor,
+                                                                  onChanged:
+                                                                      (value) {
+                                                                    setState(
+                                                                        () {
+                                                                      if (selectedAuction ==
+                                                                          index) {
+                                                                        selectedAuction =
+                                                                            null;
+                                                                        selectedAuctionUuid =
+                                                                            null;
+                                                                      } else {
+                                                                        selectedAuction =
+                                                                            index;
+                                                                        selectedAuctionUuid =
+                                                                            currentItem.auctionUuid;
+                                                                      }
+                                                                    });
+                                                                  }),
                                                             ),
                                                           ],
                                                         ),
@@ -506,17 +531,24 @@ class _MainScreenState extends State<MainScreen> {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 10.h),
                                                   child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
                                                     children: [
-                                                      Text(
-                                                        currentItem.productsList
-                                                                ?.first.name ??
-                                                            "",
-                                                        style: AppFonts.w700s20
-                                                            .copyWith(
-                                                                color: AppColors
-                                                                    .accentTextColor),
+                                                      Expanded(
+                                                        child: Text(
+                                                          currentItem
+                                                                  .productsList
+                                                                  ?.first
+                                                                  .name ??
+                                                              "",
+                                                          style: AppFonts
+                                                              .w700s20
+                                                              .copyWith(
+                                                                  color: AppColors
+                                                                      .accentTextColor),
+                                                        ),
                                                       ),
-                                                      const Spacer(),
                                                       Padding(
                                                         padding: EdgeInsets
                                                             .symmetric(
@@ -636,11 +668,14 @@ class _MainScreenState extends State<MainScreen> {
               left: 0.w,
               right: 0.w,
               child: CustomButton(
-                  text: "Создать заказ",
+                  isActive:
+                      (isCustomer ?? true) ? true : selectedAuction != null,
+                  text: (isCustomer ?? true) ? "Создать заказ" : "Участвовать",
                   onPressed: () {
                     (isCustomer ?? true)
                         ? GoRouter.of(context).pushNamed("chooseImageSource")
-                        : () {};
+                        : router.pushNamed("detailedViewScreenForManufacturer",
+                            extra: selectedAuctionUuid);
                   }))
         ]),
       )),

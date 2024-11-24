@@ -7,13 +7,14 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auction_members_bloc/get_auction_members_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/get_detailed_auction_info_bloc/get_detailed_auction_info_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/auction_screen.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
-import 'package:inposhiv/features/onboarding/customer/presentation/blocs/create_order_bloc/create_order_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
@@ -21,9 +22,8 @@ import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailedViewScreen extends StatefulWidget {
-  final CustomerOrdersModel model;
-
-  const DetailedViewScreen({super.key, required this.model});
+  final String auctionUuid;
+  const DetailedViewScreen({super.key, required this.auctionUuid});
 
   @override
   State<DetailedViewScreen> createState() => _DetailedViewScreenState();
@@ -34,17 +34,25 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
   double? currency;
   CalculateService calculateService = CalculateService();
   double? totalPriceInDollar;
+  AuctionModel? auctionModel;
   @override
   void initState() {
+    getAuctionDetails();
     callBloc();
     getCurrency();
     super.initState();
   }
 
+  getAuctionDetails() {
+    BlocProvider.of<GetDetailedAuctionInfoBloc>(context).add(
+        GetDetailedAuctionInfoEvent.getAuctionDetails(
+            auctionUuid: widget.auctionUuid));
+  }
+
   callBloc() {
     BlocProvider.of<GetAuctionMembersBloc>(context).add(
         GetAuctionMembersEvent.getAuctionMembersEvent(
-            auctionId: widget.model.auctonsUuid?.first.toString() ?? ""));
+            auctionId: widget.auctionUuid));
   }
 
   getCurrency() {
@@ -66,148 +74,187 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                     GoRouter.of(context).pop();
                   },
                   child: SvgPicture.asset(SvgImages.goback)),
-              BlocListener<ChatsBloc, ChatsState>(
+              BlocConsumer<GetDetailedAuctionInfoBloc,
+                  GetDetailedAuctionInfoState>(
                 listener: (context, state) {
                   state.maybeWhen(
-                      createChatRoomSuccess: (model) {
-                        GoRouter.of(context).pushNamed("chatScreen",
-                            queryParameters: {
-                              "orderId": "1",
-                              "receipentUuid": model.recipientUuid,
-                              "chatUuid": model.chatUuid
-                            });
+                      loaded: (loadedAuctionModel) {
+                        setState(() {
+                          auctionModel = loadedAuctionModel;
+                        });
                       },
                       orElse: () {});
                 },
-                child: BlocListener<CurrentCurrencyBloc, CurrentCurrencyState>(
-                  listener: (context, state) {
-                    state.maybeWhen(
-                        currencyLoaded: (model) => setState(() {
-                              currency = model.rate ?? 0;
-                              totalPriceInDollar =
-                                  calculateService.calculateTotalPriceInRuble(
-                                      ruble: widget
-                                              .model.products?.first.priceUsd
-                                              ?.toDouble() ??
-                                          0,
-                                      totalCount: widget
-                                              .model.products?.first.quantity ??
-                                          0);
-                            }),
-                        orElse: () {});
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.cardsColor,
-                        borderRadius: BorderRadiusDirectional.circular(10.r),
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 10.w, vertical: 10.h),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 10.h),
-                              child: SizedBox(
-                                height: 60.h,
-                                child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: widget.model.products?.first.photos
-                                          ?.length ??
-                                      0,
-                                  separatorBuilder: (context, indexForPhotos) {
-                                    return SizedBox(width: 10.w);
-                                  },
-                                  itemBuilder: (context, indexForPhotos) {
-                                    final List<String> fullPhotoUrls = widget
-                                            .model.products?.first.photos
-                                            ?.map((url) =>
-                                                "${UrlRoutes.baseUrl}$url")
-                                            .toList() ??
-                                        [];
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    loading: () => const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                    error: (errorText) => Center(
+                      child: Text(errorText),
+                    ),
+                    loaded: (auctionModel) {
+                      return BlocListener<ChatsBloc, ChatsState>(
+                        listener: (context, state) {
+                          state.maybeWhen(
+                              createChatRoomSuccess: (createChatModel) {
+                                GoRouter.of(context)
+                                    .pushNamed("chatScreen", queryParameters: {
+                                  "orderId": "1",
+                                  "receipentUuid":
+                                      createChatModel.recipientUuid,
+                                  "chatUuid": createChatModel.chatUuid
+                                });
+                              },
+                              orElse: () {});
+                        },
+                        child: BlocListener<CurrentCurrencyBloc,
+                            CurrentCurrencyState>(
+                          listener: (context, state) {
+                            state.maybeWhen(
+                                currencyLoaded: (model) => setState(() {
+                                      currency = model.rate ?? 0;
+                                      totalPriceInDollar = calculateService
+                                          .calculateTotalPriceInRuble(
+                                              ruble: auctionModel.productsList
+                                                      ?.first.priceUsd
+                                                      ?.toDouble() ??
+                                                  0,
+                                              totalCount: auctionModel
+                                                      .productsList
+                                                      ?.first
+                                                      .quantity ??
+                                                  0);
+                                    }),
+                                orElse: () {});
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.h),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.cardsColor,
+                                borderRadius:
+                                    BorderRadiusDirectional.circular(10.r),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10.w, vertical: 10.h),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: 10.h),
+                                      child: SizedBox(
+                                        height: 60.h,
+                                        child: ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: auctionModel.productsList
+                                                  ?.first.photos?.length ??
+                                              0,
+                                          separatorBuilder:
+                                              (context, indexForPhotos) {
+                                            return SizedBox(width: 10.w);
+                                          },
+                                          itemBuilder:
+                                              (context, indexForPhotos) {
+                                            final List<String> fullPhotoUrls =
+                                                auctionModel.productsList?.first
+                                                        .photos
+                                                        ?.map((url) =>
+                                                            "${UrlRoutes.baseUrl}$url")
+                                                        .toList() ??
+                                                    [];
 
-                                    return InkWell(
-                                      onTap: () {
-                                        GoRouter.of(context).pushNamed(
-                                            "seeImage",
-                                            extra: fullPhotoUrls);
-                                      },
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(6.r),
-                                        child: CachedNetworkImage(
-                                          imageUrl:
-                                              "${UrlRoutes.baseUrl}${widget.model.products?.first.photos?[indexForPhotos]}",
+                                            return InkWell(
+                                              onTap: () {
+                                                GoRouter.of(context).pushNamed(
+                                                    "seeImage",
+                                                    extra: fullPhotoUrls);
+                                              },
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(6.r),
+                                                child: CachedNetworkImage(
+                                                  imageUrl:
+                                                      "${UrlRoutes.baseUrl}${auctionModel.productsList?.first.photos?[indexForPhotos]}",
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
-                                    );
-                                  },
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Text(
+                                            auctionModel
+                                                    .productsList?.first.name ??
+                                                "",
+                                            style: AppFonts.w700s16,
+                                          ),
+                                        ),
+                                        Text(
+                                          "${auctionModel.productsList?.first.quantity ?? 0} штук",
+                                          style: AppFonts.w400s16.copyWith(
+                                            color: AppColors.accentTextColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "${auctionModel.productsList?.first.priceUsd?.toStringAsFixed(2) ?? ""} \$",
+                                          style: AppFonts.w400s16.copyWith(
+                                              color: AppColors.accentTextColor),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 84.w),
+                                          child: Text(
+                                            "${calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0).toStringAsFixed(2)} \$",
+                                            style: AppFonts.w400s16.copyWith(
+                                                color:
+                                                    AppColors.accentTextColor),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          "${auctionModel.productsList?.first.priceRub?.toStringAsFixed(2) ?? ""} руб",
+                                          style: AppFonts.w400s16,
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.only(left: 48.w),
+                                          child: Text(
+                                            "${calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub?.toDouble() ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0).toStringAsFixed(2)} руб",
+                                            style: AppFonts.w400s16,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    Text(
+                                      "${auctionModel.productsList?.first.description.toString()}",
+                                      style: AppFonts.w400s16.copyWith(
+                                          color: AppColors.accentTextColor),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    widget.model.products?.first.name ?? "",
-                                    style: AppFonts.w700s16,
-                                  ),
-                                ),
-                                Text(
-                                  "${widget.model.products?.first.quantity ?? 0} штук",
-                                  style: AppFonts.w400s16.copyWith(
-                                    color: AppColors.accentTextColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "${widget.model.products?.first.priceUsd?.toStringAsFixed(2) ?? ""} \$",
-                                  style: AppFonts.w400s16.copyWith(
-                                      color: AppColors.accentTextColor),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 84.w),
-                                  child: Text(
-                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceUsd?.toDouble() ?? 0, totalCount: widget.model.products?.first.quantity ?? 0).toStringAsFixed(2)} \$",
-                                    style: AppFonts.w400s16.copyWith(
-                                        color: AppColors.accentTextColor),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "${widget.model.products?.first.priceRub?.toStringAsFixed(2) ?? ""} руб",
-                                  style: AppFonts.w400s16,
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(left: 48.w),
-                                  child: Text(
-                                    "${calculateService.calculateTotalPriceInRuble(ruble: widget.model.products?.first.priceRub?.toDouble() ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0).toStringAsFixed(2)} руб",
-                                    style: AppFonts.w400s16,
-                                  ),
-                                )
-                              ],
-                            ),
-                            Text(
-                              "${widget.model.products?.first.description.toString()}",
-                              style: AppFonts.w400s16
-                                  .copyWith(color: AppColors.accentTextColor),
-                            )
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
+                      );
+                    },
+                    orElse: () {
+                      return const SizedBox.shrink();
+                    },
+                  );
+                },
               ),
               Expanded(child:
                   BlocBuilder<GetAuctionMembersBloc, GetAuctionMembersState>(
@@ -355,9 +402,10 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                               .recipientUuid,
                                                           "chatUuid":
                                                               model.chatUuid,
-                                                          "orderId": model
-                                                              .orderId
-                                                              .toString()
+                                                          "orderId":
+                                                              auctionModel
+                                                                  ?.orderId
+                                                                  .toString()
                                                         });
                                                   },
                                                   orElse: () {});
@@ -386,8 +434,9 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                           "recipientUuid":
                                                               currentItem
                                                                   .manufacturerUserUuid,
-                                                          "orderId": widget
-                                                              .model.orderId
+                                                          "orderId":
+                                                              auctionModel
+                                                                  ?.orderId
                                                         }));
                                                   },
                                                   color: AppColors

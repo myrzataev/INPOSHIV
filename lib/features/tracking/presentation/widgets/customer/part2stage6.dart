@@ -1,16 +1,31 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
 
-class Part2Stage6 extends StatelessWidget {
+class Stage8ForCustomer extends StatelessWidget {
   final Function onTap;
+  final TextEditingController controller;
   final List<Map<String, String?>> allComments;
-  const Part2Stage6({
-    super.key, required this.onTap, required this.allComments,
+  final void Function(String filePath, String fileName)? onFilePicked;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromGallery;
+  final void Function(String imagePath, String fileName)?
+      onImagePickedFromCamera;
+  const Stage8ForCustomer({
+    super.key,
+    required this.currentIndexOfData,
+    required this.onTap,
+    required this.controller,
+    required this.allComments,
+    this.onFilePicked,
+    this.onImagePickedFromGallery,
+    this.onImagePickedFromCamera,
   });
+
+  final int currentIndexOfData;
 
   @override
   Widget build(BuildContext context) {
@@ -30,87 +45,93 @@ class Part2Stage6 extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 4.h),
               child: Text(
-                "Отгружено",
+                "Приемка заказа",
                 style: AppFonts.w700s18,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 8.h),
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15.r)),
+                child: CustomProgressBar(
+                  progress: currentIndexOfData,
+                  text: "Заказ на месте",
+                ),
               ),
             ),
             Text(
-              "Транспортная накладная",
-              style: AppFonts.w400s16.copyWith(
-                decoration: TextDecoration.underline,
-                color: AppColors.accentTextColor,
-              ),
+              "Акт о выполненных работах",
+              style: AppFonts.w400s14.copyWith(
+                  decoration: TextDecoration.underline,
+                  color: AppColors.accentTextColor),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text(
-                "Акт о выполненных работах",
-                style: AppFonts.w400s14.copyWith(
-                    decoration: TextDecoration.underline,
-                    color: AppColors.accentTextColor),
-              ),
+            Text(
+              "У вас 7 дней для оценки заказа",
+              style: AppFonts.w700s18,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text(
-                "Комментарии от производителя",
-                style: AppFonts.w700s18,
-              ),
+            Text(
+              "Чтобы осмотреть его, оценить и написать в случае каких-то спорных моментов. ",
+              style: AppFonts.w400s16,
             ),
-            SizedBox(
-                  height: 200.h,
-                  child: ListView.separated(
-                      itemBuilder: (context, index) {
-                        final currentItem = allComments[index];
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              currentItem["comment"] ?? "",
-                              style: AppFonts.w400s16
-                                  .copyWith(color: AppColors.accentTextColor),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(bottom: 20.h),
-                              child: Text(currentItem["date"] ?? "",
-                                  style: AppFonts.w400s12),
-                            ),
-                          ],
-                        );
-                      },
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 3.h,
-                        );
-                      },
-                      itemCount: allComments.length)),
+            // Row(
+            //   children: [
+            //     SvgPicture.asset(SvgImages.document),
+            //     SizedBox(width: 10.w),
+            //     Expanded(
+            //       // Use Expanded to prevent overflow
+            //       child: Padding(
+            //         padding: EdgeInsets.symmetric(horizontal: 5.w),
+            //         child: TextField(
+            //           decoration: InputDecoration(
+            //             hintText: "Сообщение",
+            //             hintStyle: AppFonts.w400s16,
+            //             border: OutlineInputBorder(),
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //     Image.asset(
+            //       Images.send,
+            //       height: 40.h,
+            //       width: 40.w,
+            //     )
+            //   ],
+            // ),
+            const Spacer(),
+            CustomTrackingComment(
+              controller: controller,
+              onTap: onTap,
+              onFilePicked: onFilePicked,
+              onImagePickedFromCamera: onImagePickedFromCamera,
+              onImagePickedFromGallery: onImagePickedFromGallery,
+            ),
             Center(
               child: TextButton(
                   onPressed: () {
-                    onTap();
+                    // showDialog(context: context, builder: (context)=> AlertDialog(
+                    //   title: ,
+                    // ));
                   },
                   child: Text(
-                    "Задать вопросы",
+                    "Подать апелляцию",
                     style: AppFonts.w400s16.copyWith(
-                      color: AppColors.accentTextColor,
-                    ),
+                        color: AppColors.accentTextColor,
+                        decoration: TextDecoration.underline),
                   )),
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: CustomButton(
-                text: "Подтвердить",
-                onPressed: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) =>
-                  //             SeconPartTracking()));
-                },
-                sizedTemporary: true,
-                height: 50,
-              ),
-            ),
+            // Padding(
+            //   padding: EdgeInsets.symmetric(vertical: 10.h),
+            //   child: CustomButton(
+            //     text: "Подтвердить",
+            //     onPressed: () {
+            //       onTap();
+            //     },
+            //     sizedTemporary: true,
+            //     height: 50,
+            //   ),
+            // ),
           ],
         ),
       ),

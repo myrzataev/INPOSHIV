@@ -176,7 +176,9 @@ class _SetQuantityWithoutSizeScreenState
                                         onTap: () {
                                           GoRouter.of(context).pushNamed(
                                               "seeDoc",
+                                              extra: false,
                                               queryParameters: {
+                                                
                                                 "path":
                                                     filesForTech?[index].path
                                               });
@@ -299,6 +301,12 @@ class _SetQuantityWithoutSizeScreenState
                             .addToFiles(files: filesForTech);
                         Provider.of<OrderProvider>(context, listen: false)
                             .updateDescription(newDescription: controller.text);
+                        Provider.of<PhotoProvider>(context, listen: false)
+                            .addToFiles(files: filesForTech);
+                        Provider.of<OrderProvider>(context, listen: false)
+                            .updateDescription(newDescription: controller.text);
+                        // GoRouter.of(context).pushNamed("setQuantityScreen");
+
                         GoRouter.of(context).pushNamed("setPriceScreen",
                             queryParameters: {
                               "quantity": quantityController.text

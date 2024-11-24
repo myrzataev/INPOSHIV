@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/resources/resources.dart';
 
 class Stage6ForCustomer extends StatelessWidget {
   final Function onTap;
+  final List<Map<String, String?>> allComments;
+
   const Stage6ForCustomer({
     super.key,
     required this.currentIndexOfData,
     required this.onTap,
+    required this.allComments,
   });
 
   final int currentIndexOfData;
@@ -65,6 +66,32 @@ class Stage6ForCustomer extends StatelessWidget {
               "Чтобы осмотреть его, оценить и написать в случае каких-то спорных моментов. ",
               style: AppFonts.w400s16,
             ),
+            Expanded(
+                child: ListView.separated(
+                    itemBuilder: (context, index) {
+                      final currentItem = allComments[index];
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            currentItem["comment"] ?? "",
+                            style: AppFonts.w400s16
+                                .copyWith(color: AppColors.accentTextColor),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20.h),
+                            child: Text(currentItem["date"] ?? "",
+                                style: AppFonts.w400s12),
+                          ),
+                        ],
+                      );
+                    },
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 3.h,
+                      );
+                    },
+                    itemCount: allComments.length)),
             // Row(
             //   children: [
             //     SvgPicture.asset(SvgImages.document),

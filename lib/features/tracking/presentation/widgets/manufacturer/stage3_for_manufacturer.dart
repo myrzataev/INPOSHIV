@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 
 class Stage3ForManufacturer extends StatelessWidget {
@@ -60,6 +61,7 @@ class Stage3ForManufacturer extends StatelessWidget {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15.r)),
                 child: CustomProgressBar(
+                  text: "Производство",
                   // Pass the progress value as a double between 0 and 1
                   progress: currentIndexOfData.toInt(),
                 ),

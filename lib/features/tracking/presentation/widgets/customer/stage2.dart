@@ -9,15 +9,15 @@ import 'package:inposhiv/resources/resources.dart';
 class Stage2ForCustomer extends StatelessWidget {
   final Function onTap;
   final double currentIndexOfData;
-  final String comment;
+
   final List<Map<String, String?>> allComments;
-  final String date;
+
   const Stage2ForCustomer({
     super.key,
     required this.currentIndexOfData,
     required this.onTap,
-    required this.comment,
-    required this.date,
+
+  
     required this.allComments,
   });
 

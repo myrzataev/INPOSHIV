@@ -30,6 +30,7 @@ class Stage3ForCustomer extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            ElevatedButton(onPressed: (){}, child: Text("data")),
             Text(
               "Этап 3",
               style: AppFonts.w400s16,

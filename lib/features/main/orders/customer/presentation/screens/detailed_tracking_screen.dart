@@ -7,7 +7,6 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
-import 'package:inposhiv/features/main/orders/customer/presentation/blocs/confirm_tracking_stage_bloc/confirm_tracking_stage_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/order_tracking_bloc/order_tracking_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
 
@@ -17,6 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailedTrackingScreen extends StatefulWidget {
   final String invoiceUuid;
+
   const DetailedTrackingScreen({super.key, required this.invoiceUuid});
 
   @override
@@ -35,7 +35,6 @@ class _DetailedTrackingScreenState extends State<DetailedTrackingScreen> {
 
   @override
   void initState() {
-    print("invoice Id is ${widget.invoiceUuid}");
     orderTracking();
     isCustomer = preferences.getBool("isCustomer");
     super.initState();
@@ -151,51 +150,61 @@ class _DetailedTrackingScreenState extends State<DetailedTrackingScreen> {
                                 Text("Отслеживайте ваш заказ",
                                     style: AppFonts.w700s36),
                                 Expanded(
-                                  child: ListView.separated(
-                                    itemCount: mockData.length,
-                                    separatorBuilder: (context, index) =>
-                                        const Divider(
-                                            color: AppColors.borderColorGrey),
-                                    itemBuilder: (context, index) {
-                                      final currentItem = mockData[index];
-                                      return InkWell(
-                                        onTap: () {
-                                          currentItem.isDone
-                                              ? GoRouter.of(context).pushNamed(
-                                                  "orderTracking",
-                                                  extra: model)
-                                              : null;
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8.h, horizontal: 10.w),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                currentItem.steps,
-                                                style:
-                                                    AppFonts.w400s16.copyWith(
+                                  child: RefreshIndicator.adaptive(
+                                    onRefresh: () async => orderTracking(),
+                                    child: ListView.separated(
+                                      itemCount: mockData.length,
+                                      separatorBuilder: (context, index) =>
+                                          const Divider(
+                                              color: AppColors.borderColorGrey),
+                                      itemBuilder: (context, index) {
+                                        final currentItem = mockData[index];
+                                        return InkWell(
+                                          onTap: () {
+                                            currentItem.isDone
+                                                ? GoRouter.of(context)
+                                                    .pushNamed("orderTracking",
+                                                        pathParameters: {
+                                                          'activeStage':
+                                                              index.toString()
+                                                        },
+                                                        extra: model)
+                                                : null;
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical: 8.h,
+                                                horizontal: 10.w),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  currentItem.steps,
+                                                  style:
+                                                      AppFonts.w400s16.copyWith(
+                                                    color: currentItem.isDone
+                                                        ? AppColors
+                                                            .accentTextColor
+                                                        : AppColors
+                                                            .regularGreyColor,
+                                                  ),
+                                                ),
+                                                SvgPicture.asset(
+                                                  SvgImages.progress,
                                                   color: currentItem.isDone
                                                       ? AppColors
                                                           .accentTextColor
                                                       : AppColors
                                                           .regularGreyColor,
                                                 ),
-                                              ),
-                                              SvgPicture.asset(
-                                                SvgImages.progress,
-                                                color: currentItem.isDone
-                                                    ? AppColors.accentTextColor
-                                                    : AppColors
-                                                        .regularGreyColor,
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ],

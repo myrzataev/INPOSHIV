@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/customer/payment_row.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
-import 'package:inposhiv/resources/resources.dart';
 
-class Stage7part2 extends StatelessWidget {
+class Stage9Customer extends StatelessWidget {
   final Function onTap;
   final TextEditingController controller;
-  const Stage7part2({
+  final Function(double rating) onDeadlineRating;
+  final Function(double rating) onQualityRating;
+  final Function(double rating) onReliableRating;
+  final Function onFeedBackButtonPressed;
+  const Stage9Customer({
     super.key,
     required this.onTap,
     required this.controller,
+    required this.onDeadlineRating,
+    required this.onQualityRating,
+    required this.onReliableRating,
+    required this.onFeedBackButtonPressed,
   });
 
   @override
@@ -74,9 +78,7 @@ class Stage7part2 extends StatelessWidget {
                   Icons.star,
                   color: Colors.amber,
                 ),
-                onRatingUpdate: (rating) {
-                  print(rating);
-                },
+                onRatingUpdate: onDeadlineRating,
               ),
               Text(
                 "Выберите уровень качества товара",
@@ -84,45 +86,38 @@ class Stage7part2 extends StatelessWidget {
                     AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
               ),
               RatingBar.builder(
-                initialRating: 3,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: false,
-                itemCount: 5,
-                itemPadding: EdgeInsets.symmetric(horizontal: 10.w),
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (rating) {
-                  print(rating);
-                },
-              ),
+                  initialRating: 3,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 10.w),
+                  itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                  onRatingUpdate: onQualityRating),
               Text(
                 "Насколько вы бы оценили сроки выполнения заказа?",
                 style:
                     AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
               ),
               RatingBar.builder(
-                initialRating: 3,
-                minRating: 1,
-                direction: Axis.horizontal,
-                allowHalfRating: false,
-                itemCount: 5,
-                
-                itemPadding: EdgeInsets.symmetric(horizontal: 10.w),
-                itemBuilder: (context, _) => const Icon(
-                  Icons.star,
-                  color: Colors.amber,
-                ),
-                onRatingUpdate: (rating) {
-                  print(rating);
-                },
-              ),
+                  initialRating: 3,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: false,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 10.w),
+                  itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                  onRatingUpdate: onReliableRating),
               // const Spacer(),
               Center(
                 child: TextButton(
-                    onPressed: () {},
+                    onPressed: () => onFeedBackButtonPressed(),
                     child: Text(
                       "Оставить отзыв",
                       style: AppFonts.w400s16

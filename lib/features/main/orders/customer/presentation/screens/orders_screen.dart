@@ -53,24 +53,28 @@ class _OrdersScreenState extends State<OrdersScreen>
   List<AddressesModel> mockAdressesData = Addresses.adresses;
   bool openedDetailedView = false;
   CalculateService calculateService = CalculateService();
+  final ValueNotifier<int> selectedIndexNotifier = ValueNotifier<int>(0);
+
   @override
   void initState() {
+    super.initState();
+
     controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 5),
-    )..addListener(() {
-        setState(() {});
-      });
+    );
+
+    // Instead of calling setState in every frame, use it only when animation updates are required for UI
     controller.repeat(reverse: false);
+
     isCustomer = preferences.getBool("isCustomer") ?? true;
+
     if (isCustomer ?? true) {
       callBlocForCustomer();
       getCustomerInvoices();
     } else {
-      (callBlocForManufacturer());
+      callBlocForManufacturer();
     }
-    ;
-    super.initState();
   }
 
   void callBlocForManufacturer() {
@@ -93,6 +97,7 @@ class _OrdersScreenState extends State<OrdersScreen>
 
   @override
   Widget build(BuildContext context) {
+    print("building");
     return Scaffold(
       drawer: const CustomDrawer(),
       body: SafeArea(
@@ -124,21 +129,39 @@ class _OrdersScreenState extends State<OrdersScreen>
                     padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
                     child: SizedBox(
                       height: 55.h,
-                      child: ListView.separated(
+                      child: ValueListenableBuilder(
+                        valueListenable: selectedIndexNotifier,
+                        builder: (context, selectedIndex, child) =>
+                            ListView.separated(
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return CustomChoiceWidget(
+                              key: ValueKey(index),
                               isSelelected: selectedIndex == index,
                               text: tabs[index],
                               onTap: () {
-                                setState(() {
-                                  selectedIndex = index;
-                                  _currentIndex = 0;
-                                });
-                                // Animate to the corresponding page in the PageView.
-                                _pageController.animateToPage(index,
+                                if (selectedIndexNotifier.value != index) {
+                                  selectedIndexNotifier.value = index;
+                                  _pageController.animateToPage(
+                                    index,
                                     duration: const Duration(milliseconds: 200),
-                                    curve: Curves.easeInOut);
+                                    curve: Curves.easeInOut,
+                                  );
+                                }
+                                // if (selectedIndex != index) {
+                                //   // Prevent redundant state updates
+                                //   setState(() {
+                                //     selectedIndex = index;
+                                //     _currentIndex = 0;
+                                //   });
+
+                                //   // Animate to the corresponding page in the PageView.
+                                //   _pageController.animateToPage(
+                                //     index,
+                                //     duration: const Duration(milliseconds: 200),
+                                //     curve: Curves.easeInOut,
+                                //   );
+                                // }
                               },
                             );
                           },
@@ -147,7 +170,9 @@ class _OrdersScreenState extends State<OrdersScreen>
                               width: 7.w,
                             );
                           },
-                          itemCount: tabs.length),
+                          itemCount: tabs.length,
+                        ),
+                      ),
                     ),
                   ),
                   Expanded(
@@ -436,12 +461,13 @@ class _OrdersScreenState extends State<OrdersScreen>
                             return InkWell(
                               onTap: () {
                                 GoRouter.of(context).pushNamed(
-                                "detailedTrackingScreen",
-                                queryParameters: {
-                                  "invoiceId": "f83c06e5-fc39-4810-99a2-2e0265136636"
-                                  // model[index].invoiceUuid
-                                  // model[index].invoiceUuid
-                                });
+                                    "detailedTrackingScreen",
+                                    queryParameters: {
+                                      "invoiceId":
+                                          "80003819-8464-4c27-ac5f-163af49822ff"
+                                      // model[index].invoiceUuid
+                                      // model[index].invoiceUuid
+                                    });
                               },
                               child: Container(
                                 height: 40.h,
@@ -553,26 +579,29 @@ class _OrdersScreenState extends State<OrdersScreen>
             Positioned(
                 left: 0,
                 right: 0,
-                bottom: 10.h,
-                child: selectedIndex == 3
-                    ? CustomButton(
-                        text: openedDetailedView
-                            ? "Показать все этапы"
-                            : "Показать подробно",
-                        onPressed: () {
-                          setState(() {
-                            GoRouter.of(context).pushNamed(
-                                "detailedTrackingScreen",
-                                queryParameters: {
-                                  "invoiceId": "a2b2788d-4a7e-4299-b99a-59bc4c77cc88"
-                                  // model[index].invoiceUuid
-                                  // model[index].invoiceUuid
-                                });
-                            openedDetailedView =
-                                openedDetailedView ? false : true;
-                          });
-                        })
-                    : CustomButton(text: "Создать заказ", onPressed: () {}))
+                bottom: isCustomer ?? true ? 10.h : 0,
+                child: isCustomer ?? false
+                    ? (selectedIndex == 3
+                        ? CustomButton(
+                            text: openedDetailedView
+                                ? "Показать все этапы"
+                                : "Показать подробно",
+                            onPressed: () {
+                              setState(() {
+                                GoRouter.of(context).pushNamed(
+                                    "detailedTrackingScreen",
+                                    queryParameters: {
+                                      "invoiceId":
+                                          "80003819-8464-4c27-ac5f-163af49822ff"
+                                      // model[index].invoiceUuid
+                                      // model[index].invoiceUuid
+                                    });
+                                openedDetailedView =
+                                    openedDetailedView ? false : true;
+                              });
+                            })
+                        : CustomButton(text: "Создать заказ", onPressed: () {}))
+                    : const SizedBox.shrink())
           ]),
         ),
       ),

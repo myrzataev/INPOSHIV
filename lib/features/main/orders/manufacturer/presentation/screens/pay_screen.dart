@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -29,7 +30,9 @@ class _PayScreenState extends State<PayScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomSearchWidget(
-                onTap: () {}, child: SvgPicture.asset(SvgImages.goback)),
+                onTap: () {
+                  router.pop();
+                }, child: SvgPicture.asset(SvgImages.goback)),
             Padding(
               padding: EdgeInsets.only(top: 20.h),
               child: SingleChildScrollView(

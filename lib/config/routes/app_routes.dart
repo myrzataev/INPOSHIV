@@ -5,13 +5,12 @@ import 'package:inposhiv/features/about_app/presentation/screens/faq_screen.dart
 import 'package:inposhiv/features/about_app/presentation/screens/secured_deal_screen.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/settings_screen.dart';
 import 'package:inposhiv/features/auth/presentation/screens/authorization_screen.dart';
-import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
+import 'package:inposhiv/features/main/auction/presentation/screens/detailed_view_for_manufacturer_screen.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/detailed_view_screen.dart';
 import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/notications_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
-import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/tracking_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/approve_invoice_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/detailed_tracking_screen.dart';
@@ -66,7 +65,6 @@ import 'package:inposhiv/features/main/home/presentation/customer/screens/search
 import 'package:inposhiv/features/main/home/presentation/customer/screens/top_up_balance_screen.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/user_profile_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
-import 'package:inposhiv/features/tracking/presentation/screens/tracking_screen.dart';
 import 'package:inposhiv/internal/bottom_navigation_bar.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -75,7 +73,7 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
     initialLocation:
-        //  "/",
+        // "/",
         "/main",
     // "/registration",
     //  "/chooseImageSource",
@@ -137,8 +135,11 @@ final GoRouter router = GoRouter(
         name: "registration",
         builder: (context, state) {
           final phoneNumber = state.uri.queryParameters["number"];
+          final chatUid = state.uri.queryParameters["chatId"];
+
           return RegistrationScreen(
             phoneNumber: phoneNumber,
+            chatUuid: chatUid,
           );
         },
       ),
@@ -501,8 +502,16 @@ final GoRouter router = GoRouter(
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return DetailedViewScreen(
-                        model: state.extra as CustomerOrdersModel,
-                      );
+                          auctionUuid: state.extra as String? ?? "");
+                    },
+                  ),
+                  GoRoute(
+                    path: "detailedViewScreenForManufacturer",
+                    name: "detailedViewScreenForManufacturer",
+                    parentNavigatorKey: _rootNavigatorKey,
+                    builder: (context, state) {
+                      return DetailedViewForManufacturerScreen(
+                          auctionId: state.extra as String? ?? "");
                     },
                   ),
                 ])
@@ -620,13 +629,14 @@ final GoRouter router = GoRouter(
                     },
                   ),
                   GoRoute(
-                    path: "orderTracking",
+                    path: "orderTracking/:activeStage",
                     name: "orderTracking",
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return OrdersTrackingScreen(
-                        model: state.extra as TrackingModel,
-                      );
+                          model: state.extra as TrackingModel,
+                          activeStage:
+                              state.pathParameters["activeStage"] ?? "");
                     },
                   ),
                   GoRoute(

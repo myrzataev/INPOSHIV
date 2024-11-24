@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -91,7 +92,7 @@ class _InvoiceScreen extends State<InvoiceScreen> {
             state.maybeWhen(
                 loading: () => showLoaderDialog(context),
                 invoiceSended: (model) {
-                  GoRouter.of(context).pop();
+                  router.pop();
                   showDialog(
                       context: context,
                       builder: (context) => CustomDialog(
@@ -104,6 +105,9 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                                   GoRouter.of(context).pop();
                                 }),
                           ));
+                },
+                invoiceError: (errorText) {
+                  router.pop();
                 },
                 orElse: () {});
           },

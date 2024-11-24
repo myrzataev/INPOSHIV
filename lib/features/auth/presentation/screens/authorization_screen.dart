@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/blocs/login/login_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:inposhiv/services/showdialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -122,12 +124,13 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 BlocListener<LoginBloc, LoginState>(
                   listener: (context, state) {
                     state.maybeWhen(
-                        loading: () => const Dialog(
-                              child: Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              ),
-                            ),
+                        loading: () => Showdialog.showLoaderDialog(context),
+                        error: (errorText) {
+                          router.pop();
+                          
+                        },
                         loaded: (entity) {
+                          router.pop();
                           preferences.setString(
                               "refreshToken", entity.refreshToken ?? "");
                           preferences.setString("token", entity.token ?? "");
@@ -161,7 +164,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                     text: "Войти",
                     onPressed: () {
                       BlocProvider.of<LoginBloc>(context).add(LoginEvent.login(
-                          phoneNumber: emailController.text,
+                          phoneNumber: emailController.text.replaceAll(" ", ""),
                           password: passwordController.text));
                     })
               ],

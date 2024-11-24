@@ -28,6 +28,7 @@ mixin _$UserModel {
   String? get companyName => throw _privateConstructorUsedError;
   String? get password => throw _privateConstructorUsedError;
   String? get firebaseToken => throw _privateConstructorUsedError;
+  String? get telegramChatId => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -52,7 +53,8 @@ abstract class $UserModelCopyWith<$Res> {
       String? city,
       String? companyName,
       String? password,
-      String? firebaseToken});
+      String? firebaseToken,
+      String? telegramChatId});
 }
 
 /// @nodoc
@@ -78,6 +80,7 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     Object? companyName = freezed,
     Object? password = freezed,
     Object? firebaseToken = freezed,
+    Object? telegramChatId = freezed,
   }) {
     return _then(_value.copyWith(
       role: freezed == role
@@ -112,6 +115,10 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
           ? _value.firebaseToken
           : firebaseToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      telegramChatId: freezed == telegramChatId
+          ? _value.telegramChatId
+          : telegramChatId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -132,7 +139,8 @@ abstract class _$$UserModelImplCopyWith<$Res>
       String? city,
       String? companyName,
       String? password,
-      String? firebaseToken});
+      String? firebaseToken,
+      String? telegramChatId});
 }
 
 /// @nodoc
@@ -156,6 +164,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
     Object? companyName = freezed,
     Object? password = freezed,
     Object? firebaseToken = freezed,
+    Object? telegramChatId = freezed,
   }) {
     return _then(_$UserModelImpl(
       role: freezed == role
@@ -190,6 +199,10 @@ class __$$UserModelImplCopyWithImpl<$Res>
           ? _value.firebaseToken
           : firebaseToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      telegramChatId: freezed == telegramChatId
+          ? _value.telegramChatId
+          : telegramChatId // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -205,7 +218,8 @@ class _$UserModelImpl implements _UserModel {
       this.city,
       this.companyName,
       this.password,
-      this.firebaseToken});
+      this.firebaseToken,
+      this.telegramChatId});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -226,10 +240,12 @@ class _$UserModelImpl implements _UserModel {
   final String? password;
   @override
   final String? firebaseToken;
+  @override
+  final String? telegramChatId;
 
   @override
   String toString() {
-    return 'UserModel(role: $role, firstAndLastName: $firstAndLastName, phoneNumber: $phoneNumber, email: $email, city: $city, companyName: $companyName, password: $password, firebaseToken: $firebaseToken)';
+    return 'UserModel(role: $role, firstAndLastName: $firstAndLastName, phoneNumber: $phoneNumber, email: $email, city: $city, companyName: $companyName, password: $password, firebaseToken: $firebaseToken, telegramChatId: $telegramChatId)';
   }
 
   @override
@@ -249,13 +265,24 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.password, password) ||
                 other.password == password) &&
             (identical(other.firebaseToken, firebaseToken) ||
-                other.firebaseToken == firebaseToken));
+                other.firebaseToken == firebaseToken) &&
+            (identical(other.telegramChatId, telegramChatId) ||
+                other.telegramChatId == telegramChatId));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, role, firstAndLastName,
-      phoneNumber, email, city, companyName, password, firebaseToken);
+  int get hashCode => Object.hash(
+      runtimeType,
+      role,
+      firstAndLastName,
+      phoneNumber,
+      email,
+      city,
+      companyName,
+      password,
+      firebaseToken,
+      telegramChatId);
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -282,7 +309,8 @@ abstract class _UserModel implements UserModel {
       final String? city,
       final String? companyName,
       final String? password,
-      final String? firebaseToken}) = _$UserModelImpl;
+      final String? firebaseToken,
+      final String? telegramChatId}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -303,6 +331,8 @@ abstract class _UserModel implements UserModel {
   String? get password;
   @override
   String? get firebaseToken;
+  @override
+  String? get telegramChatId;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.

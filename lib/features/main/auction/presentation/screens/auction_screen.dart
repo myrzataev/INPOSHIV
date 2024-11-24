@@ -6,16 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_bloc/get_auctions_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_auctions_bloc/manufacturer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
-import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
 import 'package:inposhiv/features/main/home/data/mocked_data.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/main_screen.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
@@ -23,6 +23,7 @@ import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dar
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:inposhiv/services/showdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuctionScreen extends StatefulWidget {
@@ -78,10 +79,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
   ];
   @override
   void initState() {
-    BlocProvider.of<GetAuctionsBloc>(context)
-        .add(const GetAuctionsEvent.getAuctions());
     isCustomer = preferences.getBool("isCustomer");
-    (isCustomer ?? false) ? callBloc() : print("object");
+    (isCustomer ?? false) ? getCustomerAuctions() : getManufacturerAuctions();
     null;
     _isExpandedList = List.filled(MockedCardData.cardsList.length, false);
     _currentIndexes = List.filled(MockedCardData.cardsList.length, 0);
@@ -94,10 +93,16 @@ class _AuctionScreenState extends State<AuctionScreen> {
     super.dispose();
   }
 
-  void callBloc() {
+  void getCustomerAuctions() {
     BlocProvider.of<CustomerAuctionsBloc>(context).add(
         CustomerAuctionsEvent.getCustomerAuctions(
             customerId: preferences.getString("customerId") ?? ""));
+  }
+
+  getManufacturerAuctions() {
+    BlocProvider.of<ManufacturerAuctionsBloc>(context).add(
+        ManufacturerAuctionsEvent.getManufacturerAuctions(
+            manufacturerId: preferences.getString("customerId") ?? ""));
   }
 
   @override
@@ -113,7 +118,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
               "chatUuid": model.chatUuid,
             });
           }, orElse: () {
-            callBloc();
+            getCustomerAuctions();
           });
         },
         child: Padding(
@@ -134,7 +139,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                             return state.maybeWhen(
                                 customerOrdersLoaded: (customerOrdersModel) {
                               return RefreshIndicator.adaptive(
-                                onRefresh: () async => callBloc(),
+                                onRefresh: () async => getCustomerAuctions(),
                                 child: ListView.separated(
                                   itemCount: customerOrdersModel.length,
                                   separatorBuilder: (context, index) =>
@@ -159,7 +164,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                           onTap: () {
                                             GoRouter.of(context).pushNamed(
                                                 "detailedViewScreen",
-                                                extra: currentItem);
+                                                extra: currentItem
+                                                    .auctonsUuid?.first);
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -548,17 +554,24 @@ class _AuctionScreenState extends State<AuctionScreen> {
                             BlocListener<AuctionBloc, AuctionState>(
                               listener: (context, state) {
                                 state.maybeWhen(
+                                    loading: () {
+                                      router.pop();
+                                      Showdialog.showLoaderDialog(context);
+                                    },
                                     makeBidSuccess: (model) {
-                                      GoRouter.of(context).pop();
+                                      router.pop();
                                       BlocProvider.of<GetAuctionsBloc>(context)
                                           .add(const GetAuctionsEvent
                                               .getAuctions());
                                       bidPriceController.clear();
                                     },
+                                    makeBidError: (errorText) {
+                                      router.pop();
+                                    },
                                     orElse: () {});
                               },
-                              child: BlocBuilder<GetAuctionsBloc,
-                                  GetAuctionsState>(
+                              child: BlocBuilder<ManufacturerAuctionsBloc,
+                                  ManufacturerAuctionsState>(
                                 builder: (context, state) {
                                   return state.maybeWhen(
                                       loading: () => const Center(
@@ -574,11 +587,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                             padding: EdgeInsets.only(top: 10.h),
                                             child: RefreshIndicator.adaptive(
                                               onRefresh: () async {
-                                                BlocProvider.of<
-                                                            GetAuctionsBloc>(
-                                                        context)
-                                                    .add(const GetAuctionsEvent
-                                                        .getAuctions());
+                                                getManufacturerAuctions();
                                               },
                                               child: ListView.separated(
                                                   itemBuilder:
@@ -591,21 +600,10 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                           selectedAuction =
                                                               item;
                                                         });
-                                                        _showAuctionDetail(
-                                                            context: context,
-                                                            auctionId: selectedAuction
-                                                                    ?.auctionUuid ??
-                                                                "",
-                                                            manufacturerId:
-                                                                preferences.getString(
-                                                                        "customerId") ??
-                                                                    "",
-                                                            bidPrice: double.tryParse(
-                                                                    bidPriceController
-                                                                        .text) ??
-                                                                0,
-                                                            currencyCode:
-                                                                "USD");
+                                                        router.pushNamed(
+                                                            "detailedViewScreenForManufacturer",
+                                                            extra: item
+                                                                .auctionUuid);
                                                       },
                                                       child: Container(
                                                         decoration: BoxDecoration(
@@ -671,7 +669,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                               .name ??
                                                                           "",
                                                                       style: AppFonts
-                                                                          .w700s16,
+                                                                          .w700s20.copyWith(color: AppColors.accentTextColor),
                                                                     ),
                                                                   ),
                                                                   Text(
@@ -685,33 +683,10 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                 ],
                                                               ),
                                                               Text(
-                                                                "${item.productsList?.first.priceRub?.toStringAsFixed(1)} руб за единицу, итого ${calculateService.calculateTotalPriceInRuble(ruble: item.productsList?.first.priceRub ?? 0, totalCount: item.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
+                                                                "${item.productsList?.first.priceRub?.toStringAsFixed(1)} руб за ед., итого ${calculateService.calculateTotalPriceInRuble(ruble: item.productsList?.first.priceRub ?? 0, totalCount: item.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
                                                                 style: AppFonts
                                                                     .w400s16,
                                                               ),
-                                                              TextButton(
-                                                                  onPressed:
-                                                                      () {
-                                                                    GoRouter.of(
-                                                                            context)
-                                                                        .pushNamed(
-                                                                      "searchScreen",
-                                                                      //     queryParameters: {
-                                                                      //   "orderId":
-                                                                      //       model[index]
-                                                                      //           .orderId
-                                                                      //           .toString()
-                                                                      // }
-                                                                    );
-                                                                  },
-                                                                  child: Text(
-                                                                    "Связаться",
-                                                                    style: AppFonts
-                                                                        .w400s16
-                                                                        .copyWith(
-                                                                            color:
-                                                                                AppColors.accentTextColor),
-                                                                  ))
                                                             ],
                                                           ),
                                                         ),
@@ -743,77 +718,6 @@ class _AuctionScreenState extends State<AuctionScreen> {
           ),
         ),
       )),
-    );
-  }
-
-  void _showAuctionDetail(
-      {required BuildContext context,
-      required String auctionId,
-      required String manufacturerId,
-      required double bidPrice,
-      required String currencyCode}) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(10.r)),
-      ),
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.3, // adjust the height as needed
-          minChildSize: 0.3,
-          maxChildSize: 0.5,
-          builder: (context, scrollController) {
-            return SingleChildScrollView(
-              controller: scrollController,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Сделайте вашу ставку",
-                      style: AppFonts.w700s18,
-                    ),
-                    Text(
-                      "Помните, вы можете сделать не более 3х ставок\nМинимальная ставка – 5.50\$",
-                      style: AppFonts.w700s16.copyWith(
-                          fontFamily: "SF Pro",
-                          color: AppColors.regularGreyColor),
-                    ),
-                    TextField(
-                      onChanged: (value) {
-                        // print(value);
-                        print(bidPriceController.text);
-                      },
-                      controller: bidPriceController,
-                      textAlign: TextAlign.center,
-                      style: AppFonts.w700s20
-                          .copyWith(color: AppColors.accentTextColor),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.h),
-                      child: CustomButton(
-                          text: "Отправить",
-                          onPressed: () {
-                            BlocProvider.of<AuctionBloc>(context).add(
-                                AuctionEvent.makeBid(
-                                    auctionId: auctionId,
-                                    manufacturerId: manufacturerId,
-                                    bidPrice: double.tryParse(
-                                            bidPriceController.text) ??
-                                        0,
-                                    currencyCode: currencyCode));
-                          }),
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
     );
   }
 }

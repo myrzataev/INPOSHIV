@@ -56,7 +56,7 @@ dependencies:
   pinput: ^5.0.0
   app_links: ^6.3.2
   # image_picker_plus: ^0.5.9
-  uni_links: ^0.5.1
+  # uni_links: ^0.5.1
   freezed_annotation: ^2.4.4
   json_annotation: ^4.9.0
   freezed: ^2.5.7
@@ -79,6 +79,7 @@ dependencies:
   hydrated_bloc: ^9.1.5
   path_provider: ^2.1.4
   flutter_easyloading: ^3.0.5
+  flutter_local_notifications: ^18.0.1
 
 dev_dependencies:
   flutter_test:

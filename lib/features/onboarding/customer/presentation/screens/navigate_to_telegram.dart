@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -45,10 +47,13 @@ class NavigateToTelegramScreen extends StatelessWidget {
                 child: InkWell(
                   borderRadius: BorderRadius.circular(20.r),
                   onTap: () {
-                    // print("object");
-                    // var url = Uri.parse("https://t.me/InposhivBot");
-                    // launchUrl(url);
-                    GoRouter.of(context).pushNamed("registration");
+                    // if (Platform.isAndroid) {
+                    //   var url = Uri.parse("https://t.me/InposhivBot");
+                    //   launchUrl(url);
+                    // } else {
+                      GoRouter.of(context).pushNamed("registration");
+                    // }
+
                     // GoRouter.of(context).pushNamed("chooseImageSource");
                   },
                   child: Container(

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/data/models/user_model.dart';
@@ -11,12 +12,14 @@ import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:inposhiv/services/showdialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class RegistrationScreen extends StatefulWidget {
   final String? phoneNumber;
-  const RegistrationScreen({super.key, this.phoneNumber});
+  final String? chatUuid;
+  const RegistrationScreen({super.key, this.phoneNumber, this.chatUuid});
 
   @override
   State<RegistrationScreen> createState() => _RegistrationScreenState();
@@ -323,12 +326,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   BlocListener<AuthBloc, AuthState>(
                       listener: (context, state) {
                         state.maybeWhen(
-                            loading: () => const Dialog(
-                                  child: Center(
-                                    child: CircularProgressIndicator.adaptive(),
-                                  ),
-                                ),
+                            loading: () => Showdialog.showLoaderDialog(context),
                             loaded: (entity) {
+                              router.pop();
                               preferences.setString(
                                   "userId", entity.userUuid ?? "");
                               preferences.setString(
@@ -343,6 +343,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   });
                             },
                             error: (error) {
+                              router.pop();
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(SnackBar(content: Text(error)));
                               GoRouter.of(context).pushNamed("authorization",
@@ -351,9 +352,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                   });
                             },
                             orElse: () {
-                               GoRouter.of(context).pushNamed("authorization", queryParameters: {
-                                "number": phoneController.text
-                              });
+                              GoRouter.of(context).pushNamed("authorization",
+                                  queryParameters: {
+                                    "number": phoneController.text
+                                  });
                             });
                       },
                       child: const SizedBox.shrink()),
@@ -382,8 +384,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         onPressed: () {
                           // GoRouter.of(context).pushNamed("authorization");
 
-                          _submitForm(isCustomer,
-                              preferences.getString("firebaseToken"));
+                          _submitForm(
+                              isCustomer,
+                              preferences.getString("firebaseToken"),
+                              widget.chatUuid);
                         }),
                   )
                 ],
@@ -395,7 +399,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void _submitForm(bool isCustomer, String? firebaseToken) {
+  void _submitForm(bool isCustomer, String? firebaseToken, String? chatId) {
     if (_formKey.currentState!.validate() && ischecked) {
       setState(() {
         isErrorVisible = false;
@@ -408,7 +412,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 email: emailController.text,
                 city: cityController.text,
                 companyName: companiesNameController.text,
-                password: passwordControler.text)));
+                password: passwordControler.text,
+                telegramChatId: chatId)));
       });
     } else {
       setState(() {

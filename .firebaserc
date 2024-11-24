@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "inposhiv-5690a"
-  }
+    "default": "inposhiv-5690a",
+    "production": "inposhiv-b0a31"
+  },
+  "targets": {},
+  "etags": {}
 }

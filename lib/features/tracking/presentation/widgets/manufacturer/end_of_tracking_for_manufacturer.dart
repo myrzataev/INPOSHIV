@@ -35,7 +35,7 @@ class EndOfTrackingForManufacturer extends StatelessWidget {
             Center(
               child: TextButton(
                   onPressed: () {
-                   GoRouter.of(context).pushNamed("main");
+                   context.goNamed("main");
                   },
                   child: Text(
                     "Перейти на главную",
@@ -47,9 +47,9 @@ class EndOfTrackingForManufacturer extends StatelessWidget {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),
               child: CustomButton(
-                text: "Создать новый заказ",
+                text: "Найти новые заказы",
                 onPressed: () {
-                   GoRouter.of(context).pushNamed("chooseImage");
+                  context.goNamed("auction");
                 },
                 sizedTemporary: true,
                 height: 50,

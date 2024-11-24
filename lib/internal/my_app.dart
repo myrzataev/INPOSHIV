@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:app_links/app_links.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -20,12 +22,14 @@ import 'package:inposhiv/features/main/auction/data/data_source/create_auction_d
 import 'package:inposhiv/features/main/auction/data/data_source/get_auction_members_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_auctions_list_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_customers_orders_ds.dart';
+import 'package:inposhiv/features/main/auction/data/data_source/get_detailed_auction_info_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_manufacturer_auctions_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/make_bid_ds.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/auction_repo_impl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_auction_members_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_auctions_list_repoimmpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_customer_orders_repoimpl.dart';
+import 'package:inposhiv/features/main/auction/data/repositories/get_detailed_auction_info_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_manufacturer_auctions_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/make_bid_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
@@ -33,6 +37,7 @@ import 'package:inposhiv/features/main/auction/presentation/blocs/create_auction
 import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auction_members_bloc/get_auction_members_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_bloc/get_auctions_bloc.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/get_detailed_auction_info_bloc/get_detailed_auction_info_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_auctions_bloc/manufacturer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/create_chatroom_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/get_chatroom_history_ds.dart';
@@ -105,45 +110,60 @@ import 'package:inposhiv/services/keyboard_unfocuser.dart';
 import 'package:inposhiv/services/messaging_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatefulWidget {
   final Uri? initialLink;
-  const MyApp({super.key, this.initialLink});
+  final RemoteMessage? remoteMessage;
+  const MyApp({super.key, this.initialLink, this.remoteMessage});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  StreamSubscription<Uri?>? _sub;
-  final messagingService = MessagingService();
+  late final AppLinks _appLinks;
+  StreamSubscription<String>? _linkSubscription;
+  final messagingService = MessagingService.instance;
 
   @override
   void initState() {
-    messagingService.init();
+    // messagingService.init();
     super.initState();
-    _handleIncomingLinks();
     // Handle initial link, if any
     if (widget.initialLink != null) {
       _navigateBasedOnLink(widget.initialLink!);
     }
+    if (widget.remoteMessage != null) {
+      _navigateBasedOnNotification(widget.remoteMessage!);
+    }
+    _initDeepLinks();
+  }
+
+  Future<void> _initDeepLinks() async {
+    _appLinks = AppLinks();
+    _linkSubscription = _appLinks.stringLinkStream.listen((url) {
+      if (url.isNotEmpty) {
+        final uri = Uri.parse(url);
+        _navigateBasedOnLink(uri);
+      }
+    });
   }
 
   @override
   void dispose() {
-    _sub?.cancel();
+    _linkSubscription?.cancel();
     super.dispose();
   }
 
-  void _handleIncomingLinks() async {
-    _sub = uriLinkStream.listen((Uri? link) {
-      if (link != null) {
-        _navigateBasedOnLink(link);
-      }
-    }, onError: (err) {});
-  }
+  // void _handleIncomingLinks() async {
+
+  //   // _sub = uriLinkStream.listen((Uri? link) {
+  //   //   if (link != null) {
+  //   //     _navigateBasedOnLink(link);
+  //   //   }
+  //   // }, onError: (err) {});
+  // }
 
   void _navigateBasedOnLink(Uri link) {
     final path = link.path;
@@ -155,6 +175,26 @@ class _MyAppState extends State<MyApp> {
           if (path.contains("registration")) {
             router.goNamed("registration", queryParameters: queryParameters);
           } else if (path.contains("main")) {
+            router.goNamed("main", queryParameters: {"isFromSearch": "false"});
+          } else {
+            router.go("/");
+          }
+        } catch (e) {
+          debugPrint(e.toString());
+        }
+      }
+    });
+  }
+
+  void _navigateBasedOnNotification(RemoteMessage message) {
+    final data = message.data;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        try {
+          if (data["click_action"] == "registration") {
+            router.goNamed("registration", queryParameters: data);
+          } else if (data["click_action"] == "main") {
             router.goNamed("main", queryParameters: {"isFromSearch": "false"});
           } else {
             router.go("/");
@@ -372,7 +412,14 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => GetOrderDetailsRepoImpl(
                 getOrderDetailDs:
-                    RepositoryProvider.of<GetOrderDetailDs>(context)))
+                    RepositoryProvider.of<GetOrderDetailDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetDetailedAuctionInfoDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetDetailedAuctionInfoRepoimpl(
+                getDetailedAuctionInfoDs:
+                    RepositoryProvider.of<GetDetailedAuctionInfoDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -502,7 +549,12 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
               create: (context) => GetOrderDetailsBloc(
                   getOrderDetailsRepoImpl:
-                      RepositoryProvider.of<GetOrderDetailsRepoImpl>(context)))
+                      RepositoryProvider.of<GetOrderDetailsRepoImpl>(context))),
+          BlocProvider(
+              create: (context) => GetDetailedAuctionInfoBloc(
+                  getDetailedAuctionInfoRepoimpl:
+                      RepositoryProvider.of<GetDetailedAuctionInfoRepoimpl>(
+                          context)))
         ],
         child: MultiProvider(
           providers: [

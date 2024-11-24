@@ -6,6 +6,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -16,6 +17,7 @@ import 'package:inposhiv/features/onboarding/customer/presentation/blocs/get_fab
 import 'package:inposhiv/features/survey/domain/entities/categories_entity.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/get_categories_bloc/get_categories_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/showdialog.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -59,13 +61,10 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
         listener: (context, state) {
           state.maybeWhen(
               loading: () {
-                EasyLoading.show(
-                  indicator: const CircularProgressIndicator.adaptive(),
-                  status: "loading",
-                  maskType: EasyLoadingMaskType.black,
-                );
+                Showdialog.showLoaderDialog(context);
               },
               loaded: (modelList) {
+                router.pop();
                 EasyLoading.dismiss();
 
                 GoRouter.of(context).pushReplacementNamed("main",
@@ -73,17 +72,24 @@ class _ChooseCategoryScreenState extends State<SearchScreen> {
                     extra: modelList);
               },
               error: (errorText) {
+                router.pop();
                 EasyLoading.dismiss();
               },
               orElse: () {});
         },
         child: BlocListener<GetCategoriesBloc, GetCategoriesState>(
           listener: (context, state) {
+            
             state.maybeWhen(
+              loading: () => Showdialog.showLoaderDialog(context),
                 loaded: (entity) {
+                  router.pop();
                   setState(() {
                     categories = entity;
                   });
+                },
+                error: (errorText) {
+                  router.pop();
                 },
                 orElse: () {});
           },

@@ -7,12 +7,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
+
+import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/tracking_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/confirm_tracking_stage_bloc/confirm_tracking_stage_bloc.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/end_of_tracking.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/feedback_dialog.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/part2stage6.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage2.dart';
@@ -31,14 +34,18 @@ import 'package:inposhiv/features/tracking/presentation/widgets/manufacturer/sta
 import 'package:inposhiv/features/tracking/presentation/widgets/manufacturer/stage6_for_manufacturer.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/manufacturer/stage7_for_manufacturer.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/manufacturer/stage8_for_manufacturer.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/manufacturer/stage9_for_manufacturer.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/date_time_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:inposhiv/services/showdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdersTrackingScreen extends StatefulWidget {
   final TrackingModel model;
-  const OrdersTrackingScreen({super.key, required this.model});
+  final String activeStage;
+  const OrdersTrackingScreen(
+      {super.key, required this.model, required this.activeStage});
 
   @override
   State<OrdersTrackingScreen> createState() => _OrdersTrackingScreenState();
@@ -52,16 +59,21 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
   final preferences = locator<SharedPreferences>();
   bool? isCustomer;
   int currentIndex = 0;
-  int activeStage = 0;
+  // int activeStage = 0;
   DateTimeService dateTimeService = DateTimeService();
   TrackingModel? trackingModel;
+  double? deadlineRating;
+  double? qualityRating;
+  double? reliableRating;
+  double? customerRating;
   @override
   void initState() {
     isCustomer = preferences.getBool("isCustomer");
     trackingModel = widget.model;
-    activeStage = widget.model.activeStageId ?? 0;
-    _pageController = PageController(initialPage: activeStage);
-    final widgetCount = (isCustomer ?? true) ? 2 : 8;
+    // activeStage = widget.model.activeStageId ?? 0;
+    _pageController =
+        PageController(initialPage: int.tryParse(widget.activeStage) ?? 0);
+    final widgetCount = (isCustomer ?? true) ? 3 : 8;
     controllers = List.generate(widgetCount, (_) => TextEditingController());
     super.initState();
   }
@@ -93,15 +105,34 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                   },
                   child: SvgPicture.asset(SvgImages.goback)),
             ),
-            Expanded(
-              child: PageView(
-                controller: _pageController,
-                onPageChanged: (index) {
-                  setState(() {
-                    currentIndex = index;
-                  });
-                },
-                children: widgets,
+            BlocListener<ConfirmTrackingStageBloc, ConfirmTrackingStageState>(
+              listener: (context, state) {
+                state.maybeWhen(
+                    loading: () => Showdialog.showLoaderDialog(context),
+                    loaded: (model) {
+                      router.pop();
+                      if (currentIndex > 0) {
+                        _pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      } else {}
+                    },
+                    error: (errorText) {
+                      router.pop();
+                    },
+                    orElse: () {});
+              },
+              child: Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      currentIndex = index;
+                    });
+                  },
+                  children: widgets,
+                ),
               ),
             )
             // Expanded(
@@ -223,12 +254,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             stageAccepted: false,
             comment: controllers[0].text,
           );
-          // if (currentIndex < 1) {
-          //   _pageController.nextPage(
-          //     duration: const Duration(milliseconds: 300),
-          //     curve: Curves.easeInOut,
-          //   );
-          // } else {}
         },
         attachDocument: () async {},
         onTapForCheck: () {
@@ -244,27 +269,13 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             allComents: trackingModel?.allComments,
             stage: "FABRIC_PURCHASE_AND_CUTTING"),
         currentIndexOfData: 10,
-        comment: "При раскройке получилось 520шт",
-        date: "16.04.2024",
         onTap: () {
           confirmTrackingStage(
             invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: trackingModel?.activeStageId?.toString() ?? "",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: 'hellloooo',
+            activeStage: "FABRIC_PURCHASE_AND_CUTTING",
+            stageAccepted: true,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
         },
       ),
       Stage3ForCustomer(
@@ -298,12 +309,9 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             activeStage: "QUALITY_CONTROL",
             stageAccepted: true,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+         
+
+
         },
       ),
       Stage5ForCustomer(
@@ -318,32 +326,42 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             activeStage: "READY_FOR_SHIPMENT",
             stageAccepted: true,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+         
         },
       ),
       Stage6ForCustomer(
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "SHIPPED"),
         currentIndexOfData: 50,
         onTap: () {
           confirmTrackingStage(
             invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: "FINAL_PAYMENT",
+            activeStage: "SHIPPED",
             stageAccepted: true,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+         
         },
       ),
       Stage7ForCustomer(
+        onFilePicked: (filePath, fileName) {
+          setState(() {
+            paymentCheck = filePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromCamera: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromGallery: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
         controller: controllers[1],
         allComments: filterComments(
             allComents: trackingModel?.allComments, stage: "FINAL_PAYMENT"),
@@ -360,37 +378,76 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             stageAccepted: false,
             comment: controllers[1].text,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+        
         },
       ),
-      Part2Stage6(
+      Stage8ForCustomer(
+        onFilePicked: (filePath, fileName) {
+          setState(() {
+            paymentCheck = filePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromCamera: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromGallery: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        controller: controllers[2],
+        currentIndexOfData: 55,
         onTap: () {
           confirmTrackingStage(
             invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: trackingModel?.orderId?.toString() ?? "",
             activeStage: "ORDER_RECEIVED",
+            allCheckFiles: [
+              NamedFile(
+                  file: File(paymentCheck ?? ""),
+                  name: paymentCheckFileName ?? "")
+            ],
             stageAccepted: false,
+            comment: controllers[1].text,
           );
         },
         allComments: filterComments(
             allComents: trackingModel?.allComments, stage: "ORDER_RECEIVED"),
       ),
-      Stage7part2(
+      Stage9Customer(
         onTap: () {
           confirmTrackingStage(
             invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: trackingModel?.orderId?.toString() ?? "",
             activeStage: "ORDER_CLOSED",
             stageAccepted: false,
-            comment: 'hellloooo',
           );
         },
         controller: TextEditingController(),
+        onDeadlineRating: (rating) => (setState(() {
+          deadlineRating = rating;
+        })),
+        onQualityRating: (rating) => (setState(() {
+          qualityRating = rating;
+        })),
+        onReliableRating: (rating) => (setState(() {
+          reliableRating = rating;
+        })),
+        onFeedBackButtonPressed: () => (showDialog(
+            context: context,
+            builder: (context) => CustomFeedbackDialog(
+                  button: CustomButton(
+                    text: "Отправить",
+                    onPressed: () {},
+                  ),
+                  title: "Напишите ваш отзыв о заказе",
+                  controller: TextEditingController(),
+                ))),
       ),
       const EndOfTracking()
     ];
@@ -403,17 +460,23 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             allComents: trackingModel?.allComments, stage: "PARTIAL_PAYMENT"),
         onTapForTextButton: () {},
         onTapForCheck: () {
-          final List<String> fullDocUrls = trackingModel?.allChecks
-                  ?.map((url) => "${UrlRoutes.baseUrl}${url.fileUrl}")
-                  .toList() ??
-              [];
-
-          GoRouter.of(context).pushNamed("seeDoc",
-              queryParameters: {
-                "path": paymentCheck,
-                "docUrl": fullDocUrls.first
-              },
-              extra: true);
+          // final List<String> fullDocUrls = trackingModel?.allChecks
+          //         ?.map((url) => "${UrlRoutes.baseUrl}${url.fileUrl}")
+          //         .toList() ??
+          //     [];
+          final List<String> urls = filterFileUrls(
+            allFiles: trackingModel?.allChecks,
+            stage: "PARTIAL_PAYMENT",
+            trackingModel: trackingModel,
+          );
+          print(urls);
+          // GoRouter.of(context).pushNamed("seeDoc",
+          //     queryParameters: {
+          //       "path": paymentCheck,
+          //       "docUrl": fullDocUrls.first
+          //     },
+          //     extra: true);
+          GoRouter.of(context).pushNamed("seeImage", extra: urls);
         },
         controller: controllers[0],
         onTap: () {
@@ -423,7 +486,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             activeStage: "PARTIAL_PAYMENT",
             allCheckFiles: null,
             stageAccepted: true,
-            comment: null,
           );
         },
       ),
@@ -469,12 +531,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             stageAccepted: false,
             comment: controllers[1].text,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+        
         },
       ),
       Stage3ForManufacturer(
@@ -514,12 +571,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             stageAccepted: false,
             comment: controllers[2].text,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
         },
       ),
       Stage4ForManufacturer(
@@ -556,14 +607,9 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                   name: paymentCheckFileName ?? "")
             ],
             stageAccepted: false,
-            comment: controllers[1].text,
+            comment: controllers[4].text,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+          
         },
       ),
       Stage5ForManufacturer(
@@ -625,15 +671,48 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
         },
       ),
       Stage6ForManufacturer(
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "SHIPPED"),
+        onFilePicked: (filePath, fileName) {
+          setState(() {
+            paymentCheck = filePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromCamera: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
+        onImagePickedFromGallery: (imagePath, fileName) {
+          setState(() {
+            paymentCheck = imagePath;
+            paymentCheckFileName = fileName;
+          });
+        },
         controller: controllers[6],
         currentIndexOfData: 50,
         onTap: () {
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: widget.model.orderId?.toString() ?? "",
+            activeStage: "SHIPPED",
+            allCheckFiles: [
+              NamedFile(
+                  file: File(paymentCheck ?? ""),
+                  name: paymentCheckFileName ?? "")
+            ],
+            stageAccepted: false,
+            comment: controllers[6].text,
+          );
+
+          // if (currentIndex < 1) {
+          //   _pageController.nextPage(
+          //     duration: const Duration(milliseconds: 300),
+          //     curve: Curves.easeInOut,
+          //   );
+          // } else {}
         },
       ),
       Stage7ForManufacturer(
@@ -652,29 +731,54 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
         },
         allComments: filterComments(
             allComents: trackingModel?.allComments, stage: "FINAL_PAYMENT"),
-        controller: controllers[7],
         onTap: () {
           confirmTrackingStage(
             invoiceUuid: trackingModel?.invoiceUuid ?? "",
             orderId: trackingModel?.orderId?.toString() ?? "",
-            activeStage: "FABRIC_PURCHASE_AND_CUTTING",
-            allCheckFiles: [
-              NamedFile(
-                  file: File(paymentCheck ?? ""),
-                  name: paymentCheckFileName ?? "")
-            ],
-            stageAccepted: false,
-            comment: controllers[1].text,
+            activeStage: "FINAL_PAYMENT",
+            stageAccepted: true,
           );
-          if (currentIndex < 1) {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut,
-            );
-          } else {}
+         
         },
       ),
-      Stage8ForManufacturer(currentIndexOfData: 70, onTap: () {}),
+      Stage8ForManufacturer(
+        currentIndexOfData: 70,
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "ORDER_RECEIVED",
+            stageAccepted: true,
+          );
+        },
+        onTapForAct: () {},
+        allComments: filterComments(
+            allComents: trackingModel?.allComments, stage: "ORDER_RECEIVED"),
+      ),
+      Stage9ForManufacturer(
+        currentIndexOfData: 70,
+        onTap: () {
+          confirmTrackingStage(
+            invoiceUuid: trackingModel?.invoiceUuid ?? "",
+            orderId: trackingModel?.orderId?.toString() ?? "",
+            activeStage: "ORDER_CLOSED",
+            stageAccepted: true,
+          );
+        },
+        onFeedBackButtonPressed: () => (showDialog(
+            context: context,
+            builder: (context) => CustomFeedbackDialog(
+                  button: CustomButton(
+                    text: "Отправить",
+                    onPressed: () {},
+                  ),
+                  title: "Оставьте отзыв о заказчике",
+                  controller: TextEditingController(),
+                ))),
+        onQualityRating: (rating) => (setState(() {
+          customerRating = rating;
+        })),
+      ),
       const EndOfTrackingForManufacturer()
     ];
   }
@@ -689,6 +793,36 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             })
         .toList();
     return filteredList;
+  }
+
+  List<String> filterFileUrls({
+    required List<AllC>? allFiles,
+    required String stage,
+    required TrackingModel? trackingModel,
+  }) {
+    // Normalize and filter file URLs
+    List<String> filteredUrls = allFiles!
+        .where((comment) => comment.orderStage == stage)
+        .map((element) {
+      final fileUrl = element.fileUrl ?? '';
+      // Ensure the base URL is prefixed
+      return fileUrl.startsWith("http")
+          ? fileUrl
+          : "${UrlRoutes.baseUrl}$fileUrl";
+    }).toList();
+
+    // Normalize and add fullDocUrls
+    final List<String> fullDocUrls = trackingModel?.allChecks?.map((url) {
+          final fileUrl = url.fileUrl ?? '';
+          // Ensure the base URL is prefixed
+          return fileUrl.startsWith("http")
+              ? fileUrl
+              : "${UrlRoutes.baseUrl}$fileUrl";
+        }).toList() ??
+        [];
+
+    // Combine both lists
+    return [...filteredUrls, ...fullDocUrls];
   }
 }
 

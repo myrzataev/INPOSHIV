@@ -8,27 +8,30 @@ class CustomButton extends StatelessWidget {
   final Function onPressed;
   final int? height;
   final bool sizedTemporary;
+  final bool isActive;
   const CustomButton(
       {super.key,
       required this.text,
       this.height,
       required this.onPressed,
-      this.sizedTemporary = false});
+      this.sizedTemporary = false,
+      this.isActive = true});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      
       borderRadius: BorderRadius.circular(sizedTemporary ? 10.r : 20.r),
       onTap: () {
-        onPressed();
+        isActive ? onPressed() : null;
       },
       child: Container(
         width: double.infinity,
         height: sizedTemporary ? height?.h : 60.h,
         decoration: BoxDecoration(
-            color: AppColors.buttonGreenColor,
-            borderRadius: BorderRadius.circular( sizedTemporary?10.r: 20.r)),
+            color: isActive
+                ? AppColors.buttonGreenColor
+                : AppColors.borderColorGrey,
+            borderRadius: BorderRadius.circular(sizedTemporary ? 10.r : 20.r)),
         child: Center(
           child: Text(
             text,

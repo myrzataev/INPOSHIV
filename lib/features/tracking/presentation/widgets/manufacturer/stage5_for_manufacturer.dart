@@ -4,6 +4,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 
 class Stage5ForManufacturer extends StatelessWidget {
@@ -96,24 +97,14 @@ class Stage5ForManufacturer extends StatelessWidget {
             CustomTrackingComment(
               controller: controller,
               onTap: () {
-                print("onTap is calling");
+         
                 onTap();
               },
               onFilePicked: onFilePicked,
               onImagePickedFromCamera: onImagePickedFromCamera,
               onImagePickedFromGallery: onImagePickedFromGallery,
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 10.h),
-              child: CustomButton(
-                text: "Подтвердить",
-                onPressed: () {
-                  onTap();
-                },
-                sizedTemporary: true,
-                height: 50,
-              ),
-            )
+           
           ],
         ),
       ),

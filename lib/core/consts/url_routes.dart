@@ -27,6 +27,5 @@ abstract class UrlRoutes {
   static const String searchManufacturer =
       "api/manufacturers/relevant-manufacturers";
   static const String manufacturerAuctions = "api/auctions/my";
-    static const String orderTracking = "api/order-tracking/order";
-
+  static const String orderTracking = "api/order-tracking/order";
 }

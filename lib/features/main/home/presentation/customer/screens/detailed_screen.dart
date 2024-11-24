@@ -37,11 +37,11 @@ class _MainScreenState extends State<DetailedScreen> {
   int selectedIndex = 0;
   int _carouselIndex = 0;
   bool isExpanded = false;
-  // Add a PageController for handling page transitions.
+  final ValueNotifier<int> selectedIndexNotifier = ValueNotifier<int>(0);
   late PageController _pageController;
   bool? isCustomer;
   final preferences = locator<SharedPreferences>();
-
+  List<String> tabs = ["Профиль", "История заказов", "Отзывы"];
   @override
   void initState() {
     isCustomer = preferences.getBool("isCustomer");
@@ -78,53 +78,33 @@ class _MainScreenState extends State<DetailedScreen> {
               (isCustomer ?? true)
                   ? Padding(
                       padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomChoiceWidget(
-                            isSelelected: selectedIndex == 0,
-                            text: "Профиль",
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = 0;
-                                _currentIndex = 0;
-                              });
-                              // Animate to the corresponding page in the PageView.
-                              _pageController.animateToPage(0,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut);
-                            },
-                          ),
-                          CustomChoiceWidget(
-                            isSelelected: selectedIndex == 1,
-                            text: "История заказов",
-                            onTap: () {
-                              setState(() {
-                                selectedIndex = 1;
-                                _currentIndex = 0;
-                              });
-                              _pageController.animateToPage(1,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut);
-                            },
-                          ),
-                          CustomChoiceWidget(
-                            isSelelected: selectedIndex == 2,
-                            text: "Отзывы",
-                            onTap: () {
-                              setState(() {
-                                if (selectedIndex != 2) {
-                                  selectedIndex = 2;
-                                  _currentIndex = 0;
-                                }
-                              });
-                              _pageController.animateToPage(2,
-                                  duration: const Duration(milliseconds: 200),
-                                  curve: Curves.easeInOut);
-                            },
-                          ),
-                        ],
+                      child: SizedBox(
+                        height: 55.h,
+                        child: ValueListenableBuilder(
+                          valueListenable: selectedIndexNotifier,
+                          builder: (context, selectedIndex, child) =>
+                              ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: tabs.length,
+                                  itemBuilder: (context, index) {
+                                    return CustomChoiceWidget(
+                                      isSelelected: selectedIndex == index,
+                                      text: tabs[index],
+                                      onTap: () {
+                                        if (selectedIndexNotifier.value !=
+                                            index) {
+                                          selectedIndexNotifier.value = index;
+                                          _pageController.animateToPage(
+                                            index,
+                                            duration: const Duration(
+                                                milliseconds: 200),
+                                            curve: Curves.easeInOut,
+                                          );
+                                        }
+                                      },
+                                    );
+                                  }),
+                        ),
                       ),
                     )
                   : const SizedBox.shrink(),
@@ -233,27 +213,21 @@ class _MainScreenState extends State<DetailedScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                CircleAvatar(
-                                                  backgroundColor: Colors.white,
-                                                  radius: 20.r,
-                                                  // ignore: deprecated_member_use
-                                                  child: SvgPicture.asset(
-                                                    SvgImages.chat,
-                                                    // ignore: deprecated_member_use
-                                                    color: AppColors
-                                                        .accentTextColor,
-                                                  ),
-                                                ),
                                               ],
                                             ),
                                           ),
                                           Positioned(
                                             bottom: 10.h,
                                             child: DotsIndicator(
-                                              dotsCount:
-                                                  fullPhotoUrls.isNotEmpty
-                                                      ? fullPhotoUrls.length
-                                                      : 1,
+                                              dotsCount: (fullPhotoUrls
+                                                          .isNotEmpty &&
+                                                      widget.model.photosUrls !=
+                                                          null &&
+                                                      (widget.model.photosUrls
+                                                              ?.isNotEmpty ??
+                                                          false))
+                                                  ? fullPhotoUrls.length
+                                                  : 1,
                                               position: _carouselIndex,
                                               decorator: DotsDecorator(
                                                   activeColor: Colors.white,
@@ -377,12 +351,18 @@ class _MainScreenState extends State<DetailedScreen> {
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15.r),
-                                                    child: CachedNetworkImage(
-                                                      fit: BoxFit.fill,
-                                                      width: double.infinity,
-                                                      imageUrl: fullPhotoUrls[
-                                                          caruselIndex],
-                                                    ),
+                                                    child: fullPhotoUrls
+                                                            .isNotEmpty
+                                                        ? CachedNetworkImage(
+                                                            fit: BoxFit.fill,
+                                                            width:
+                                                                double.infinity,
+                                                            imageUrl:
+                                                                fullPhotoUrls[
+                                                                    caruselIndex],
+                                                          )
+                                                        : Image.asset(
+                                                            Images.good1),
                                                   ),
                                                 ],
                                               );
@@ -391,8 +371,15 @@ class _MainScreenState extends State<DetailedScreen> {
                                           Positioned(
                                             bottom: 10.h,
                                             child: DotsIndicator(
-                                              dotsCount:
-                                                  fullPhotoUrls?.length ?? 1,
+                                              dotsCount: (fullPhotoUrls
+                                                          .isNotEmpty &&
+                                                      widget.model.photosUrls !=
+                                                          null &&
+                                                      (widget.model.photosUrls
+                                                              ?.isNotEmpty ??
+                                                          false))
+                                                  ? fullPhotoUrls.length
+                                                  : 1,
                                               position: _currentIndex,
                                               decorator: DotsDecorator(
                                                 activeColor: Colors.white,
@@ -561,7 +548,13 @@ class _MainScreenState extends State<DetailedScreen> {
                                   Positioned(
                                     bottom: 10.h,
                                     child: DotsIndicator(
-                                      dotsCount: fullPhotoUrls?.length ?? 1,
+                                      dotsCount: (fullPhotoUrls.isNotEmpty &&
+                                              widget.model.photosUrls != null &&
+                                              (widget.model.photosUrls
+                                                      ?.isNotEmpty ??
+                                                  false))
+                                          ? fullPhotoUrls.length
+                                          : 1,
                                       position: _currentIndex,
                                       // position: _currentIndex.toDouble(),
                                       decorator: DotsDecorator(
