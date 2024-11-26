@@ -92,12 +92,13 @@ class _OrdersScreenState extends State<OrdersScreen>
   getCustomerInvoices() {
     BlocProvider.of<GetManufacturerInvoicesBloc>(context).add(
         GetManufacturerInvoicesEvent.getManufacturerInvoices(
-            manufactureId: preferences.getString("customerId") ?? ""));
+            manufactureId: (isCustomer ?? true)
+                ? preferences.getString("customerId") ?? ""
+                : "manufacturer/${preferences.getString("customerId") ?? ""}"));
   }
 
   @override
   Widget build(BuildContext context) {
-    print("building");
     return Scaffold(
       drawer: const CustomDrawer(),
       body: SafeArea(
@@ -181,10 +182,14 @@ class _OrdersScreenState extends State<OrdersScreen>
                     child: PageView(
                       controller: _pageController,
                       onPageChanged: (value) {
-                        setState(() {
-                          selectedIndex = value;
-                          _currentIndex = 0;
-                        });
+                        if (selectedIndexNotifier.value != value) {
+                          selectedIndexNotifier.value = value;
+                          _pageController.animateToPage(
+                            value,
+                            duration: const Duration(milliseconds: 200),
+                            curve: Curves.easeInOut,
+                          );
+                        }
                       },
                       children: [
                         (isCustomer ?? true)
@@ -455,121 +460,122 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 ),
                               );
                             }),
-                        ListView.builder(
-                          itemCount: 1,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                GoRouter.of(context).pushNamed(
-                                    "detailedTrackingScreen",
-                                    queryParameters: {
-                                      "invoiceId":
-                                          "80003819-8464-4c27-ac5f-163af49822ff"
-                                      // model[index].invoiceUuid
-                                      // model[index].invoiceUuid
-                                    });
-                              },
-                              child: Container(
-                                height: 40.h,
-                                decoration: BoxDecoration(
-                                    color: AppColors.cardsColor,
-                                    borderRadius: BorderRadius.circular(15.r)),
-                                child: Center(
-                                  child: Text("Заказ № 1"),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        // BlocBuilder<GetManufacturerInvoicesBloc,
-                        //     GetManufacturerInvoicesState>(
-                        //   builder: (context, state) {
-                        //     return state.maybeWhen(
-                        //         loading: () => const Center(
-                        //               child:
-                        //                   CircularProgressIndicator.adaptive(),
-                        //             ),
-                        //         error: (errorText) => Center(
-                        //               child: Text(errorText),
-                        //             ),
-                        //         loaded: (model) {
-                        //           // if (model.isNotEmpty) {
-                        //           return RefreshIndicator.adaptive(
-                        //             onRefresh: () async =>
-                        //                 getCustomerInvoices(),
-                        //             child: ListView.separated(
-                        //                 itemCount: model.length,
-                        //                 separatorBuilder: (context, index) =>
-                        //                     SizedBox(
-                        //                       height: 10.h,
-                        //                     ),
-                        //                 itemBuilder: (context, index) {
-                        //                   return InkWell(
-                        //                     onTap: () => GoRouter.of(context)
-                        //                         .pushNamed(
-                        //                             "detailedTrackingScreen",
-                        //                             queryParameters: {
-                        //                           "invoiceId":
-                        //                               model[index].invoiceUuid
-                        //                           // model[index].invoiceUuid
-                        //                         }),
-                        //                     child: Container(
-                        //                       height: 40.h,
-                        //                       decoration: BoxDecoration(
-                        //                           color: AppColors.cardsColor,
-                        //                           borderRadius:
-                        //                               BorderRadius.circular(
-                        //                                   15.r)),
-                        //                       child: Center(
-                        //                         child: Text("Заказ № $index"),
-                        //                       ),
-                        //                     ),
-                        //                   );
-                        //                 }),
-                        //           );
-                        //           // } else {
-                        //           //   return const Center(
-                        //           //     child: Text("empty"),
-                        //           //   );
-                        //           // }
-                        //         },
-                        //         orElse: () {
-                        //           return RefreshIndicator.adaptive(
-                        //             onRefresh: () async =>
-                        //                 getCustomerInvoices(),
-                        //             child: ListView.separated(
-                        //                 itemCount: 3,
-                        //                 separatorBuilder: (context, index) =>
-                        //                     SizedBox(
-                        //                       height: 10.h,
-                        //                     ),
-                        //                 itemBuilder: (context, index) {
-                        //                   return InkWell(
-                        //                     onTap: () => GoRouter.of(context)
-                        //                         .pushNamed(
-                        //                             "detailedTrackingScreen",
-                        //                             queryParameters: {
-                        //                           "invoiceId": ""
-                        //                           // model[index].invoiceUuid
-                        //                           // model[index].invoiceUuid
-                        //                         }),
-                        //                     child: Container(
-                        //                       height: 40.h,
-                        //                       decoration: BoxDecoration(
-                        //                           color: AppColors.cardsColor,
-                        //                           borderRadius:
-                        //                               BorderRadius.circular(
-                        //                                   15.r)),
-                        //                       child: Center(
-                        //                         child: Text("Заказ № $index"),
-                        //                       ),
-                        //                     ),
-                        //                   );
-                        //                 }),
-                        //           );
-                        //         });
+                        // ListView.builder(
+                        //   itemCount: 1,
+                        //   itemBuilder: (context, index) {
+                        //     return InkWell(
+                        //       onTap: () {
+                        //         GoRouter.of(context).pushNamed(
+                        //             "detailedTrackingScreen",
+                        //             queryParameters: {
+                        //               "invoiceId":
+                        //                   "80003819-8464-4c27-ac5f-163af49822ff"
+                        //               // model[index].invoiceUuid
+                        //               // model[index].invoiceUuid
+                        //             });
+                        //       },
+                        //       child: Container(
+                        //         height: 40.h,
+                        //         decoration: BoxDecoration(
+                        //             color: AppColors.cardsColor,
+                        //             borderRadius: BorderRadius.circular(15.r)),
+                        //         child: Center(
+                        //           child: Text("Заказ № 1"),
+                        //         ),
+                        //       ),
+                        //     );
                         //   },
-                        // )
+                        // ),
+                        BlocBuilder<GetManufacturerInvoicesBloc,
+                            GetManufacturerInvoicesState>(
+                          builder: (context, state) {
+                            return state.maybeWhen(
+                                loading: () => const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    ),
+                                error: (errorText) => Center(
+                                      child: Text(errorText),
+                                    ),
+                                loaded: (model) {
+                                  if (model.isNotEmpty) {
+                                    return RefreshIndicator.adaptive(
+                                      onRefresh: () async =>
+                                          getCustomerInvoices(),
+                                      child: ListView.separated(
+                                          itemCount: model.length,
+                                          separatorBuilder: (context, index) =>
+                                              SizedBox(
+                                                height: 10.h,
+                                              ),
+                                          itemBuilder: (context, index) {
+                                            return InkWell(
+                                              onTap: () => GoRouter.of(context)
+                                                  .pushNamed(
+                                                      "detailedTrackingScreen",
+                                                      queryParameters: {
+                                                    "invoiceId":
+                                                        model[index].invoiceUuid
+                                                    // model[index].invoiceUuid
+                                                  }),
+                                              child: Container(
+                                                height: 40.h,
+                                                decoration: BoxDecoration(
+                                                    color: AppColors.cardsColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            15.r)),
+                                                child: Center(
+                                                  child: Text("Заказ № $index"),
+                                                ),
+                                              ),
+                                            );
+                                          }),
+                                    );
+                                  } else {
+                                    return const Center(
+                                      child: Text("Пусто"),
+                                    );
+                                  }
+                                },
+                                orElse: () {
+                                  return RefreshIndicator.adaptive(
+                                    onRefresh: () async =>
+                                        getCustomerInvoices(),
+                                    child: ListView.separated(
+                                        itemCount: 1,
+                                        separatorBuilder: (context, index) =>
+                                            SizedBox(
+                                              height: 10.h,
+                                            ),
+                                        itemBuilder: (context, index) {
+                                          return InkWell(
+                                            onTap: () => GoRouter.of(context)
+                                                .pushNamed(
+                                                    "detailedTrackingScreen",
+                                                    queryParameters: {
+                                                  "invoiceId":
+                                                      "61cb51d6-1573-4fc9-85a1-1de7d47f0e40"
+                                                  // model[index].invoiceUuid
+                                                  // model[index].invoiceUuid
+                                                }),
+                                            child: Container(
+                                              height: 40.h,
+                                              decoration: BoxDecoration(
+                                                  color: AppColors.cardsColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          15.r)),
+                                              child: Center(
+                                                child: Text("Заказ № $index"),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                  );
+                                });
+                          },
+                        )
                       ],
                     ),
                   ))

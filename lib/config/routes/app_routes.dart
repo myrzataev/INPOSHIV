@@ -539,6 +539,7 @@ final GoRouter router = GoRouter(
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return ChatScreen(
+                      
                         autoMessage:
                             state.uri.queryParameters["autoMessage"] ?? "",
                         orderId: state.uri.queryParameters["orderId"] ?? "",
@@ -573,7 +574,8 @@ final GoRouter router = GoRouter(
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return OrderDetailScreen(
-                        orderId: state.uri.queryParameters["orderId"] ?? "",
+                     orderId: state.extra as String,
+                        // orderId: state.uri.queryParameters["orderId"] ?? "",
                       );
                     },
                   ),

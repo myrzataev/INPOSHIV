@@ -33,6 +33,7 @@ class CustomOrderDetailRow extends StatelessWidget {
               ),
               Expanded(
                 child: TextField(
+                  textAlign: TextAlign.end,
                   decoration: const InputDecoration(
                       focusedBorder: UnderlineInputBorder(
                           borderSide:

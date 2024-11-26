@@ -1,7 +1,8 @@
 abstract class UrlRoutes {
-  static const String baseUrl = 
-  // "https://24redirect.ru";
-  "http://192.168.31.209:8080";
+  static const String baseUrl =
+      // "https://24redirect.ru";
+      "http://192.168.31.141:8080";
+  static const String deleteAccount = "api/auth/account";
   static const String auth = "api/register";
   static const String login = "api/auth/login";
   static const String refresh = "api/auth/refresh";
@@ -28,4 +29,5 @@ abstract class UrlRoutes {
       "api/manufacturers/relevant-manufacturers";
   static const String manufacturerAuctions = "api/auctions/my";
   static const String orderTracking = "api/order-tracking/order";
+  static const String reviewToManufacturer = "/api/reviews/to-manufacturer";
 }

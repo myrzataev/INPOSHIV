@@ -11,6 +11,7 @@ import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/tracking_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/confirm_tracking_stage_bloc/confirm_tracking_stage_bloc.dart';
@@ -111,15 +112,24 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                     loading: () => Showdialog.showLoaderDialog(context),
                     loaded: (model) {
                       router.pop();
-                      if (currentIndex > 0) {
-                        _pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeInOut,
-                        );
-                      } else {}
+                      router.goNamed("detailedTrackingScreen",
+                          queryParameters: {"invoiceId": model.invoiceUuid});
+                      // if (currentIndex > 0) {
+                      //   _pageController.nextPage(
+                      //     duration: const Duration(milliseconds: 300),
+                      //     curve: Curves.easeInOut,
+                      //   );
+                      // } else {}
                     },
                     error: (errorText) {
                       router.pop();
+                      showDialog(
+                          context: context,
+                          builder: (context) => CustomDialog(
+                              title: "Не удалось",
+                              description: "Ну удалось",
+                              button: CustomButton(
+                                  text: "Понятно", onPressed: () {})));
                     },
                     orElse: () {});
               },
@@ -309,9 +319,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             activeStage: "QUALITY_CONTROL",
             stageAccepted: true,
           );
-         
-
-
         },
       ),
       Stage5ForCustomer(
@@ -326,7 +333,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             activeStage: "READY_FOR_SHIPMENT",
             stageAccepted: true,
           );
-         
         },
       ),
       Stage6ForCustomer(
@@ -340,7 +346,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             activeStage: "SHIPPED",
             stageAccepted: true,
           );
-         
         },
       ),
       Stage7ForCustomer(
@@ -378,7 +383,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             stageAccepted: false,
             comment: controllers[1].text,
           );
-        
         },
       ),
       Stage8ForCustomer(
@@ -531,7 +535,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             stageAccepted: false,
             comment: controllers[1].text,
           );
-        
         },
       ),
       Stage3ForManufacturer(
@@ -606,10 +609,9 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                   file: File(paymentCheck ?? ""),
                   name: paymentCheckFileName ?? "")
             ],
-            stageAccepted: false,
+            stageAccepted: true,
             comment: controllers[4].text,
           );
-          
         },
       ),
       Stage5ForManufacturer(
@@ -738,7 +740,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             activeStage: "FINAL_PAYMENT",
             stageAccepted: true,
           );
-         
         },
       ),
       Stage8ForManufacturer(

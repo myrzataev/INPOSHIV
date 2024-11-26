@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:inposhiv/features/auth/data/models/user_model.dart';
 import 'package:inposhiv/features/main/home/data/models/profile_model.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_user_info_repoimpl.dart';
 
@@ -11,7 +10,9 @@ part 'user_bloc.freezed.dart';
 class UserBloc extends Bloc<UserEvent, UserState> {
   GetUserInfoRepoimpl repoimpl;
   UserBloc({required this.repoimpl}) : super(const _Initial()) {
-    on<_GetUserInfo>((event, emit) {});
+    on<_GetUserInfo>((event, emit)async {
+    await getUserInfo(event: event, emit: emit);
+    });
   }
   Future<void> getUserInfo(
       {required UserEvent event, required Emitter<UserState> emit}) async {

@@ -6,7 +6,7 @@ class GetManufacturerInvoicesDs {
   final Dio dio;
   GetManufacturerInvoicesDs({required this.dio});
   Future<List<InvoiceModel>> getManufacturerInvoices(
-      {required String manufacturerId}) async {
+      {required String manufacturerId, }) async {
     final Response response =
         await dio.get("${UrlRoutes.sendInvoice}/$manufacturerId");
     final List responseList = response.data;

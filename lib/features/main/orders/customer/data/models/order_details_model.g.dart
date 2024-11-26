@@ -25,6 +25,7 @@ _$OrderDetailsModelImpl _$$OrderDetailsModelImplFromJson(
           : DateTime.parse(json['deadline'] as String),
       discount: (json['discount'] as num?)?.toInt(),
       deliveryPoint: json['deliveryPoint'] as String?,
+      manufacturerUuid: json['manufacturerUuid'] as String?,
       technicalDocumentUrls: (json['technicalDocumentUrls'] as List<dynamic>?)
           ?.map((e) => e as String?)
           .toList(),
@@ -46,6 +47,7 @@ Map<String, dynamic> _$$OrderDetailsModelImplToJson(
       'deadline': instance.deadline?.toIso8601String(),
       'discount': instance.discount,
       'deliveryPoint': instance.deliveryPoint,
+      'manufacturerUuid': instance.manufacturerUuid,
       'technicalDocumentUrls': instance.technicalDocumentUrls,
       'lekalaDocumentUrls': instance.lekalaDocumentUrls,
     };

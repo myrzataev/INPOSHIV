@@ -53,7 +53,7 @@ class _CustomProfileTextFieldState extends State<CustomProfileTextField> {
           style: AppFonts.w400s16,
         ),
         TextFormField(
-          
+         
             controller: widget.controller,
             keyboardType: widget.textInputType,
             textAlign: widget.textAlign,

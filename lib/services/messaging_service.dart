@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -9,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 @pragma("vm:entry-point")
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  await setupServiceLocator();
+
   if (kDebugMode) {}
   await MessagingService.instance.setUpFlutterNotification();
   await MessagingService.instance.showNotification(message);
@@ -26,6 +30,7 @@ class MessagingService {
     FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
     await _requestPermission();
     await _setupMessageHandlers();
+    await setUpFlutterNotification();
     String? token = await messaging.getToken();
     preferences.setString("firebaseToken", token ?? "");
     if (kDebugMode) {
@@ -81,7 +86,70 @@ class MessagingService {
           iOS: initializationSettingsDarwin);
       await _localNotification.initialize(
         initializationSettings,
-        onDidReceiveNotificationResponse: (details) {},
+        onDidReceiveNotificationResponse: (NotificationResponse details) {
+          print("onDidReceiveNotificationResponse method is calling");
+          print("notification response ${details.payload}");
+          print("notification response ${details.notificationResponseType}");
+          print("notification response ${details.id}");
+          if (details.payload != null) {
+            String payload = details.payload!;
+
+            // Ensure the payload is in a valid JSON format by adding quotes around the keys and string values
+            payload = payload.replaceAllMapped(RegExp(r'(\w+):'),
+                (match) => '"${match.group(1)}":'); // Wrap keys with quotes
+
+            // Add double quotes around values that are UUIDs or other string-like values
+            payload = payload.replaceAllMapped(
+                RegExp(r'(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})'),
+                (match) => '"${match.group(1)}"');
+            payload = payload.replaceAllMapped(
+                RegExp(r': (\w+)'),
+                (match) =>
+                    ': "${match.group(1)}"'); // Add quotes around values that are not already quoted
+
+            try {
+              // Decode the modified payload string
+              Map<String, dynamic> payloadData = jsonDecode(payload);
+              print("click action is ${payloadData['click_action']}");
+              // Check the value of click_action and navigate accordingly
+              switch (payloadData['click_action']) {
+                case 'CLICK_AUCTION':
+                  router.go("/auction/detailedViewScreen",
+                      extra: payloadData["auctionUuid"]);
+                  break;
+                case 'INVOICE_SENT':
+                  // Handle INVOICE_SENT case
+                  break;
+                case 'SEND_AGREEMENT':
+                  // Handle SEND_AGREEMENT case
+                  break;
+                case "STAGE_CHANGED":
+                  router.goNamed("detailedTrackingScreen", queryParameters: {
+                    "invoiceId": payloadData["invoiceUuid"]
+                  });
+                case "TRACKING_STAGE_ACCEPTED":
+                  router.goNamed("detailedTrackingScreen", queryParameters: {
+                    "invoiceId": payloadData["invoiceUuid"]
+                  });
+                case 'ORDER_DETAILS_FULLED':
+                  // Handle ORDER_DETAILS_FULLED case
+                  break;
+                case 'SEND_PAY_DETAILS':
+                  // Handle SEND_PAY_DETAILS case
+                  break;
+
+                default:
+                  // Handle unknown click_action or fallback case
+                  print("Unknown click_action");
+              }
+            } catch (e) {
+              // Handle JSON decoding errors
+              print("Error parsing payload: $e");
+            }
+          } else {
+            print("Payload is null");
+          }
+        },
       );
       _isFlutterLocalNotificationInitialized = true;
     }
@@ -95,7 +163,7 @@ class MessagingService {
           remoteNotification.hashCode,
           remoteNotification.title,
           remoteNotification.body,
-          NotificationDetails(
+          const NotificationDetails(
               android: AndroidNotificationDetails(
                   "high_importance_channel", "High Importance Notifications",
                   channelDescription:
@@ -125,6 +193,17 @@ class MessagingService {
   }
 
   void _handleBackgroundMessage(RemoteMessage message) {
-    if (message.data["type"] == "chat") {}
+    print("_handleBackgroundMessage method is calling and message is $message");
+
+    if (message.data["click_action"] == "CLICK_AUCTION") {
+      router.go("/auction/detailedViewScreen",
+          extra: message.data["auctionUuid"]);
+    } else if (message.data["click_action"] == "STAGE_CHANGED") {
+      router.goNamed("detailedTrackingScreen",
+          queryParameters: {"invoiceId": message.data["invoiceUuid"]});
+    } else if (message.data["click_action"] == "TRACKING_STAGE_ACCEPTED") {
+      router.go("/auction/detailedViewScreen",
+          extra: message.data["auctionUuid"]);
+    }
   }
 }

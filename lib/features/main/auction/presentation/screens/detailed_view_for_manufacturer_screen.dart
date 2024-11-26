@@ -110,19 +110,45 @@ class _DetailedViewForManufacturerScreenState
                                       ? filterAuctionProccess(
                                           auctionProcesses:
                                               model.auctionProcesses ?? [],
-                                          id: auctionid ?? 0)
+                                          id: auctionid ?? 0,
+                                        )
                                       : null;
-                              showDialog(
+
+                              if (auctionProcess != null &&
+                                  auctionProcess.isNotEmpty) {
+                                final lastBidCount =
+                                    auctionProcess.last.bidCount ?? 0;
+                                final remainingClicks = 3 - lastBidCount;
+                                showDialog(
                                   context: context,
                                   builder: (context) => CustomDialog(
-                                      title: "Ставка сделана!",
-                                      description:
-                                          "Благодарим за участие в аукционе! У вас осталось ${3 - ((auctionProcess != null) ? (auctionProcess.last.bidCount ?? 0) : 3)} клика. Заказчик свяжется с вами в случае выбора Вас.",
-                                      button: CustomButton(
-                                          text: "Понятно",
-                                          onPressed: () {
-                                            router.pop();
-                                          })));
+                                    title: "Ставка сделана!",
+                                    description:
+                                        "Благодарим за участие в аукционе! У вас осталось $remainingClicks клика. Заказчик свяжется с вами в случае выбора Вас.",
+                                    button: CustomButton(
+                                      text: "Понятно",
+                                      onPressed: () {
+                                        router.pop();
+                                      },
+                                    ),
+                                  ),
+                                );
+                              } else {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => CustomDialog(
+                                    title: "Ставка сделана!",
+                                    description:
+                                        "Благодарим за участие в аукционе! У вас осталось 3 клика. Заказчик свяжется с вами в случае выбора Вас.",
+                                    button: CustomButton(
+                                      text: "Понятно",
+                                      onPressed: () {
+                                        router.pop();
+                                      },
+                                    ),
+                                  ),
+                                );
+                              }
                             },
                             makeBidError: (errorText) {
                               router.pop();
@@ -134,7 +160,6 @@ class _DetailedViewForManufacturerScreenState
                     BlocConsumer<GetDetailedAuctionInfoBloc,
                         GetDetailedAuctionInfoState>(
                       listener: (context, state) {
-                       
                         state.maybeWhen(
                             loaded: (auctionModel) => setState(() {
                                   auctionUid = auctionModel.auctionUuid;
@@ -276,7 +301,8 @@ class _DetailedViewForManufacturerScreenState
                                                   padding: EdgeInsets.all(10.h),
                                                   child: Column(
                                                     crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
+                                                        CrossAxisAlignment
+                                                            .start,
                                                     children: [
                                                       Row(
                                                         children: [
@@ -296,11 +322,11 @@ class _DetailedViewForManufacturerScreenState
                                                                           .circular(60
                                                                               .r),
                                                                   border: Border.all(
-                                                                      width: 1.w,
-                                                                      color: AuctionScreen
-                                                                          .statusColor(
-                                                                              status:
-                                                                                  1))),
+                                                                      width:
+                                                                          1.w,
+                                                                      color: AuctionScreen.statusColor(
+                                                                          status:
+                                                                              1))),
                                                               child: Padding(
                                                                 padding:
                                                                     EdgeInsets
@@ -312,10 +338,9 @@ class _DetailedViewForManufacturerScreenState
                                                                           status:
                                                                               1),
                                                                   style: AppFonts.w400s16.copyWith(
-                                                                      color: AuctionScreen
-                                                                          .statusColor(
-                                                                              status:
-                                                                                  1),
+                                                                      color: AuctionScreen.statusColor(
+                                                                          status:
+                                                                              1),
                                                                       fontFamily:
                                                                           "SF Pro"),
                                                                 ),
@@ -325,8 +350,8 @@ class _DetailedViewForManufacturerScreenState
                                                         ],
                                                       ),
                                                       Padding(
-                                                        padding:
-                                                            EdgeInsets.symmetric(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
                                                                 vertical: 10.h),
                                                         child: Row(
                                                           children: [

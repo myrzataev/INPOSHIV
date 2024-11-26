@@ -20,9 +20,6 @@ CustomerOrdersModel _$CustomerOrdersModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CustomerOrdersModel {
-  int? get categoryId => throw _privateConstructorUsedError;
-  int? get fabricId => throw _privateConstructorUsedError;
-  String? get description => throw _privateConstructorUsedError;
   int? get orderId => throw _privateConstructorUsedError;
   int? get orderStatus => throw _privateConstructorUsedError;
   List<Product>? get products => throw _privateConstructorUsedError;
@@ -49,10 +46,7 @@ abstract class $CustomerOrdersModelCopyWith<$Res> {
       _$CustomerOrdersModelCopyWithImpl<$Res, CustomerOrdersModel>;
   @useResult
   $Res call(
-      {int? categoryId,
-      int? fabricId,
-      String? description,
-      int? orderId,
+      {int? orderId,
       int? orderStatus,
       List<Product>? products,
       String? customerName,
@@ -76,9 +70,6 @@ class _$CustomerOrdersModelCopyWithImpl<$Res, $Val extends CustomerOrdersModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? categoryId = freezed,
-    Object? fabricId = freezed,
-    Object? description = freezed,
     Object? orderId = freezed,
     Object? orderStatus = freezed,
     Object? products = freezed,
@@ -88,18 +79,6 @@ class _$CustomerOrdersModelCopyWithImpl<$Res, $Val extends CustomerOrdersModel>
     Object? auctionProcessDtoList = freezed,
   }) {
     return _then(_value.copyWith(
-      categoryId: freezed == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      fabricId: freezed == fabricId
-          ? _value.fabricId
-          : fabricId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
@@ -141,10 +120,7 @@ abstract class _$$CustomerOrdersModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int? categoryId,
-      int? fabricId,
-      String? description,
-      int? orderId,
+      {int? orderId,
       int? orderStatus,
       List<Product>? products,
       String? customerName,
@@ -166,9 +142,6 @@ class __$$CustomerOrdersModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? categoryId = freezed,
-    Object? fabricId = freezed,
-    Object? description = freezed,
     Object? orderId = freezed,
     Object? orderStatus = freezed,
     Object? products = freezed,
@@ -178,18 +151,6 @@ class __$$CustomerOrdersModelImplCopyWithImpl<$Res>
     Object? auctionProcessDtoList = freezed,
   }) {
     return _then(_$CustomerOrdersModelImpl(
-      categoryId: freezed == categoryId
-          ? _value.categoryId
-          : categoryId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      fabricId: freezed == fabricId
-          ? _value.fabricId
-          : fabricId // ignore: cast_nullable_to_non_nullable
-              as int?,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
       orderId: freezed == orderId
           ? _value.orderId
           : orderId // ignore: cast_nullable_to_non_nullable
@@ -226,10 +187,7 @@ class __$$CustomerOrdersModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
   const _$CustomerOrdersModelImpl(
-      {this.categoryId,
-      this.fabricId,
-      this.description,
-      this.orderId,
+      {this.orderId,
       this.orderStatus,
       final List<Product>? products,
       this.customerName,
@@ -243,12 +201,6 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
   factory _$CustomerOrdersModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CustomerOrdersModelImplFromJson(json);
 
-  @override
-  final int? categoryId;
-  @override
-  final int? fabricId;
-  @override
-  final String? description;
   @override
   final int? orderId;
   @override
@@ -290,7 +242,7 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
 
   @override
   String toString() {
-    return 'CustomerOrdersModel(categoryId: $categoryId, fabricId: $fabricId, description: $description, orderId: $orderId, orderStatus: $orderStatus, products: $products, customerName: $customerName, createdAt: $createdAt, auctonsUuid: $auctonsUuid, auctionProcessDtoList: $auctionProcessDtoList)';
+    return 'CustomerOrdersModel(orderId: $orderId, orderStatus: $orderStatus, products: $products, customerName: $customerName, createdAt: $createdAt, auctonsUuid: $auctonsUuid, auctionProcessDtoList: $auctionProcessDtoList)';
   }
 
   @override
@@ -298,12 +250,6 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CustomerOrdersModelImpl &&
-            (identical(other.categoryId, categoryId) ||
-                other.categoryId == categoryId) &&
-            (identical(other.fabricId, fabricId) ||
-                other.fabricId == fabricId) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
             (identical(other.orderStatus, orderStatus) ||
                 other.orderStatus == orderStatus) &&
@@ -322,9 +268,6 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      categoryId,
-      fabricId,
-      description,
       orderId,
       orderStatus,
       const DeepCollectionEquality().hash(_products),
@@ -352,10 +295,7 @@ class _$CustomerOrdersModelImpl implements _CustomerOrdersModel {
 
 abstract class _CustomerOrdersModel implements CustomerOrdersModel {
   const factory _CustomerOrdersModel(
-          {final int? categoryId,
-          final int? fabricId,
-          final String? description,
-          final int? orderId,
+          {final int? orderId,
           final int? orderStatus,
           final List<Product>? products,
           final String? customerName,
@@ -367,12 +307,6 @@ abstract class _CustomerOrdersModel implements CustomerOrdersModel {
   factory _CustomerOrdersModel.fromJson(Map<String, dynamic> json) =
       _$CustomerOrdersModelImpl.fromJson;
 
-  @override
-  int? get categoryId;
-  @override
-  int? get fabricId;
-  @override
-  String? get description;
   @override
   int? get orderId;
   @override
@@ -651,7 +585,7 @@ mixin _$Product {
   int? get quantity => throw _privateConstructorUsedError;
   Map<String, int>? get sizeQuantities => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
-  double? get priceUsd => throw _privateConstructorUsedError;
+  int? get priceUsd => throw _privateConstructorUsedError;
   double? get priceRub => throw _privateConstructorUsedError;
   List<String>? get photos => throw _privateConstructorUsedError;
 
@@ -676,7 +610,7 @@ abstract class $ProductCopyWith<$Res> {
       int? quantity,
       Map<String, int>? sizeQuantities,
       String? description,
-      double? priceUsd,
+      int? priceUsd,
       double? priceRub,
       List<String>? photos});
 }
@@ -734,7 +668,7 @@ class _$ProductCopyWithImpl<$Res, $Val extends Product>
       priceUsd: freezed == priceUsd
           ? _value.priceUsd
           : priceUsd // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as int?,
       priceRub: freezed == priceRub
           ? _value.priceRub
           : priceRub // ignore: cast_nullable_to_non_nullable
@@ -761,7 +695,7 @@ abstract class _$$ProductImplCopyWith<$Res> implements $ProductCopyWith<$Res> {
       int? quantity,
       Map<String, int>? sizeQuantities,
       String? description,
-      double? priceUsd,
+      int? priceUsd,
       double? priceRub,
       List<String>? photos});
 }
@@ -817,7 +751,7 @@ class __$$ProductImplCopyWithImpl<$Res>
       priceUsd: freezed == priceUsd
           ? _value.priceUsd
           : priceUsd // ignore: cast_nullable_to_non_nullable
-              as double?,
+              as int?,
       priceRub: freezed == priceRub
           ? _value.priceRub
           : priceRub // ignore: cast_nullable_to_non_nullable
@@ -870,7 +804,7 @@ class _$ProductImpl implements _Product {
   @override
   final String? description;
   @override
-  final double? priceUsd;
+  final int? priceUsd;
   @override
   final double? priceRub;
   final List<String>? _photos;
@@ -949,7 +883,7 @@ abstract class _Product implements Product {
       final int? quantity,
       final Map<String, int>? sizeQuantities,
       final String? description,
-      final double? priceUsd,
+      final int? priceUsd,
       final double? priceRub,
       final List<String>? photos}) = _$ProductImpl;
 
@@ -968,7 +902,7 @@ abstract class _Product implements Product {
   @override
   String? get description;
   @override
-  double? get priceUsd;
+  int? get priceUsd;
   @override
   double? get priceRub;
   @override

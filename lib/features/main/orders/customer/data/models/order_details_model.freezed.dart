@@ -30,6 +30,7 @@ mixin _$OrderDetailsModel {
   DateTime? get deadline => throw _privateConstructorUsedError;
   int? get discount => throw _privateConstructorUsedError;
   String? get deliveryPoint => throw _privateConstructorUsedError;
+  String? get manufacturerUuid => throw _privateConstructorUsedError;
   List<String?>? get technicalDocumentUrls =>
       throw _privateConstructorUsedError;
   List<String?>? get lekalaDocumentUrls => throw _privateConstructorUsedError;
@@ -61,6 +62,7 @@ abstract class $OrderDetailsModelCopyWith<$Res> {
       DateTime? deadline,
       int? discount,
       String? deliveryPoint,
+      String? manufacturerUuid,
       List<String?>? technicalDocumentUrls,
       List<String?>? lekalaDocumentUrls});
 }
@@ -90,6 +92,7 @@ class _$OrderDetailsModelCopyWithImpl<$Res, $Val extends OrderDetailsModel>
     Object? deadline = freezed,
     Object? discount = freezed,
     Object? deliveryPoint = freezed,
+    Object? manufacturerUuid = freezed,
     Object? technicalDocumentUrls = freezed,
     Object? lekalaDocumentUrls = freezed,
   }) {
@@ -134,6 +137,10 @@ class _$OrderDetailsModelCopyWithImpl<$Res, $Val extends OrderDetailsModel>
           ? _value.deliveryPoint
           : deliveryPoint // ignore: cast_nullable_to_non_nullable
               as String?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       technicalDocumentUrls: freezed == technicalDocumentUrls
           ? _value.technicalDocumentUrls
           : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
@@ -165,6 +172,7 @@ abstract class _$$OrderDetailsModelImplCopyWith<$Res>
       DateTime? deadline,
       int? discount,
       String? deliveryPoint,
+      String? manufacturerUuid,
       List<String?>? technicalDocumentUrls,
       List<String?>? lekalaDocumentUrls});
 }
@@ -192,6 +200,7 @@ class __$$OrderDetailsModelImplCopyWithImpl<$Res>
     Object? deadline = freezed,
     Object? discount = freezed,
     Object? deliveryPoint = freezed,
+    Object? manufacturerUuid = freezed,
     Object? technicalDocumentUrls = freezed,
     Object? lekalaDocumentUrls = freezed,
   }) {
@@ -236,6 +245,10 @@ class __$$OrderDetailsModelImplCopyWithImpl<$Res>
           ? _value.deliveryPoint
           : deliveryPoint // ignore: cast_nullable_to_non_nullable
               as String?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       technicalDocumentUrls: freezed == technicalDocumentUrls
           ? _value._technicalDocumentUrls
           : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
@@ -262,6 +275,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
       this.deadline,
       this.discount,
       this.deliveryPoint,
+      this.manufacturerUuid,
       final List<String?>? technicalDocumentUrls,
       final List<String?>? lekalaDocumentUrls})
       : _technicalDocuments = technicalDocuments,
@@ -309,6 +323,8 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
   final int? discount;
   @override
   final String? deliveryPoint;
+  @override
+  final String? manufacturerUuid;
   final List<String?>? _technicalDocumentUrls;
   @override
   List<String?>? get technicalDocumentUrls {
@@ -333,7 +349,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
 
   @override
   String toString() {
-    return 'OrderDetailsModel(orderId: $orderId, productName: $productName, material: $material, color: $color, quantity: $quantity, technicalDocuments: $technicalDocuments, lekalaDocuments: $lekalaDocuments, deadline: $deadline, discount: $discount, deliveryPoint: $deliveryPoint, technicalDocumentUrls: $technicalDocumentUrls, lekalaDocumentUrls: $lekalaDocumentUrls)';
+    return 'OrderDetailsModel(orderId: $orderId, productName: $productName, material: $material, color: $color, quantity: $quantity, technicalDocuments: $technicalDocuments, lekalaDocuments: $lekalaDocuments, deadline: $deadline, discount: $discount, deliveryPoint: $deliveryPoint, manufacturerUuid: $manufacturerUuid, technicalDocumentUrls: $technicalDocumentUrls, lekalaDocumentUrls: $lekalaDocumentUrls)';
   }
 
   @override
@@ -359,6 +375,8 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
                 other.discount == discount) &&
             (identical(other.deliveryPoint, deliveryPoint) ||
                 other.deliveryPoint == deliveryPoint) &&
+            (identical(other.manufacturerUuid, manufacturerUuid) ||
+                other.manufacturerUuid == manufacturerUuid) &&
             const DeepCollectionEquality()
                 .equals(other._technicalDocumentUrls, _technicalDocumentUrls) &&
             const DeepCollectionEquality()
@@ -379,6 +397,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
       deadline,
       discount,
       deliveryPoint,
+      manufacturerUuid,
       const DeepCollectionEquality().hash(_technicalDocumentUrls),
       const DeepCollectionEquality().hash(_lekalaDocumentUrls));
 
@@ -411,6 +430,7 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
       final DateTime? deadline,
       final int? discount,
       final String? deliveryPoint,
+      final String? manufacturerUuid,
       final List<String?>? technicalDocumentUrls,
       final List<String?>? lekalaDocumentUrls}) = _$OrderDetailsModelImpl;
 
@@ -437,6 +457,8 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
   int? get discount;
   @override
   String? get deliveryPoint;
+  @override
+  String? get manufacturerUuid;
   @override
   List<String?>? get technicalDocumentUrls;
   @override

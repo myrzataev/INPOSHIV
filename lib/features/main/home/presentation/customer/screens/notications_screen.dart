@@ -74,27 +74,30 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                               return Expanded(
                                   child: Padding(
                                 padding: EdgeInsets.only(top: 30.h),
-                                child: ListView.separated(
-                                    itemBuilder: (context, index) {
-                                      return NotificationCard(
-                                        title: "Счет на оплату",
-                                        onTap: () {
-                                          context.go(
-                                              "/orders/invoiceScreenForCustomer",
-                                              extra: model[index]);
-                                        },
-                                        description: "Подтвердите",
-                                      );
-                                    },
-                                    separatorBuilder: (index, context) {
-                                      return SizedBox(
-                                        height: 7.h,
-                                      );
-                                    },
-                                    itemCount: model.length),
+                                child: RefreshIndicator.adaptive(
+                                  onRefresh: () => getCustomerInvoices(),
+                                  child: ListView.separated(
+                                      itemBuilder: (context, index) {
+                                        return NotificationCard(
+                                          title: "Счет на оплату",
+                                          onTap: () {
+                                            context.go(
+                                                "/orders/invoiceScreenForCustomer",
+                                                extra: model[index]);
+                                          },
+                                          description: "Подтвердите",
+                                        );
+                                      },
+                                      separatorBuilder: (index, context) {
+                                        return SizedBox(
+                                          height: 7.h,
+                                        );
+                                      },
+                                      itemCount: model.length),
+                                ),
                               ));
                             } else {
-                               return Expanded(
+                              return Expanded(
                                   child: Padding(
                                 padding: EdgeInsets.only(top: 30.h),
                                 child: ListView.separated(
@@ -102,9 +105,10 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                                       return NotificationCard(
                                         title: "Счет на оплату",
                                         onTap: () {
-                                          context.go(
-                                              "/orders/invoiceScreenForCustomer",
-                                              extra: model[index]);
+                                          print(preferences.getString("userId"));
+                                          // context.go(
+                                          //     "/orders/invoiceScreenForCustomer",
+                                          //     extra: model[index]);
                                         },
                                         description: "Подтвердите",
                                       );
@@ -127,9 +131,10 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                                     return NotificationCard(
                                       title: "Счет на оплату",
                                       onTap: () {
-                                        context.go("/orders/invoiceScreenForCustomer",
-                                            // extra: model[index]
-                                            );
+                                        context.go(
+                                          "/orders/invoiceScreenForCustomer",
+                                          // extra: model[index]
+                                        );
                                       },
                                       description: "Подтвердите",
                                     );

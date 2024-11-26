@@ -141,10 +141,25 @@ class _ChatTabState extends State<ChatTab> {
                         ),
                     chatRoomsLoaded: (model) {
                       if (model.isEmpty) {
-                        return Center(
-                          child: Text(
-                            "Начните переписываться",
-                            style: AppFonts.w700s16,
+                        return RefreshIndicator.adaptive(
+                          color: AppColors.accentTextColor,
+                          onRefresh: () async {
+                            callBloc();
+                          },
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(Icons.chat_bubble_outline,
+                                    size: 64, color: Colors.grey),
+                                SizedBox(height: 16),
+                                Text(
+                                  "Начните переписываться",
+                                  style: AppFonts.w700s16,
+                                )
+                              ],
+                            ),
                           ),
                         );
                       } else {
@@ -190,9 +205,11 @@ class _ChatTabState extends State<ChatTab> {
                 GoRouter.of(context).pushNamed(
                   "chatScreen",
                   queryParameters: {
-                    "receipentUuid": currentItem.recipientUuid,
+                    "receipentUuid": (isCustomer ?? true)
+                        ? currentItem.recipientUuid
+                        : currentItem.senderUuid,
                     "chatUuid": currentItem.chatUuid,
-                    "orderId": currentItem.orderId.toString()
+                    "orderId": currentItem.orderId.toString(),
                   },
                 );
               },

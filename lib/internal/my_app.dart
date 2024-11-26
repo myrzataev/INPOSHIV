@@ -51,12 +51,15 @@ import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bl
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
+import 'package:inposhiv/features/main/home/data/data_source/delete_account_ds.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_manufacturers_ds.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_user_info_ds.dart';
+import 'package:inposhiv/features/main/home/data/repositories/delete_account_repoimpl.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_manufacturers_repoimpl.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_user_info_repoimpl.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/delete_account_bloc/delete_account_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/confirm_tracking_stage_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/order_tracking_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/search_order_ds.dart';
@@ -419,7 +422,14 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => GetDetailedAuctionInfoRepoimpl(
                 getDetailedAuctionInfoDs:
-                    RepositoryProvider.of<GetDetailedAuctionInfoDs>(context)))
+                    RepositoryProvider.of<GetDetailedAuctionInfoDs>(context))),
+        RepositoryProvider(
+            create: (context) => DeleteAccountDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => DeleteAccountRepoimpl(
+                deleteAccountDs:
+                    RepositoryProvider.of<DeleteAccountDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -554,7 +564,11 @@ class _MyAppState extends State<MyApp> {
               create: (context) => GetDetailedAuctionInfoBloc(
                   getDetailedAuctionInfoRepoimpl:
                       RepositoryProvider.of<GetDetailedAuctionInfoRepoimpl>(
-                          context)))
+                          context))),
+          BlocProvider(
+              create: (context) => DeleteAccountBloc(
+                  deleteAccountRepoimpl:
+                      RepositoryProvider.of<DeleteAccountRepoimpl>(context)))
         ],
         child: MultiProvider(
           providers: [

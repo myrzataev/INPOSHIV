@@ -15,22 +15,62 @@ String manufacturersProfileModelToJson(List<ManufacturersProfileModel> data) => 
 @freezed
 class ManufacturersProfileModel with _$ManufacturersProfileModel {
     const factory ManufacturersProfileModel({
-        dynamic id,
-        dynamic userId,
-        dynamic userUuid,
+        int? id,
+        int? userId,
+        String? userUuid,
         String? manufacturerUuid,
-        dynamic username,
-        dynamic legalStatus,
+        String? username,
+        String? legalStatus,
         String? trustLevel,
         String? companyName,
-        dynamic city,
-        dynamic monthProductsVolume,
-        dynamic companyDescription,
+        String? city,
+        int? monthProductsVolume,
+        String? companyDescription,
         int? rating,
-        dynamic clothingCategoriesList,
-        dynamic manufacturerPrioritiesList,
-        List<dynamic>? photosUrls,
+        List<ClothingCategoriesList>? clothingCategoriesList,
+        List<ClothingCategoriesList>? manufacturerPrioritiesList,
+        List<OrderHistory>? orderHistory,
+        List<Review>? reviews,
+        List<String>? photosUrls,
     }) = _ManufacturersProfileModel;
 
     factory ManufacturersProfileModel.fromJson(Map<String, dynamic> json) => _$ManufacturersProfileModelFromJson(json);
+}
+
+@freezed
+class ClothingCategoriesList with _$ClothingCategoriesList {
+    const factory ClothingCategoriesList({
+        int? id,
+        String? slug,
+        String? name,
+        List<ClothingCategoriesList>? subcategories,
+    }) = _ClothingCategoriesList;
+
+    factory ClothingCategoriesList.fromJson(Map<String, dynamic> json) => _$ClothingCategoriesListFromJson(json);
+}
+
+@freezed
+class OrderHistory with _$OrderHistory {
+    const factory OrderHistory({
+        int? orderId,
+        DateTime? createdAt,
+        String? status,
+        String? orderName,
+    }) = _OrderHistory;
+
+    factory OrderHistory.fromJson(Map<String, dynamic> json) => _$OrderHistoryFromJson(json);
+}
+
+@freezed
+class Review with _$Review {
+    const factory Review({
+        String? customerUuid,
+        String? manufacturerUuid,
+        String? reviewText,
+        DateTime? createdAt,
+        int? rating,
+        String? customerName,
+    }) = _Review;
+
+    factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
 }

@@ -110,299 +110,281 @@ class _MainScreenState extends State<DetailedScreen> {
                   : const SizedBox.shrink(),
 
               // Use PageView for smooth horizontal scrolling between tabs.
-              (isCustomer ?? true)
-                  ? Expanded(
-                      child: PageView(
-                        controller: _pageController,
-                        onPageChanged: (index) {
-                          setState(() {
-                            selectedIndex = index;
-                            _currentIndex = 0;
-                          });
-                        },
-                        children: [
-                          // Tab 1: Profile content
-                          SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: Padding(
-                              padding: EdgeInsets.only(bottom: 10.h),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20.r)),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Stack(
+              // (isCustomer ?? true)
+              Expanded(
+                child: PageView(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      selectedIndex = index;
+                      _currentIndex = 0;
+                    });
+                  },
+                  children: [
+                    // Tab 1: Profile content
+                    SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Padding(
+                        padding: EdgeInsets.only(bottom: 10.h),
+                        child: Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.r)),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Stack(alignment: Alignment.center, children: [
+                                CarouselSlider.builder(
+                                  carouselController: _carouselSliderController,
+                                  itemCount: fullPhotoUrls.length,
+                                  options: CarouselOptions(
+                                    autoPlay: false,
+                                    enlargeCenterPage: true,
+                                    viewportFraction: 1,
+                                    aspectRatio: 16 / 7,
+                                    height: 300.h,
+                                    onPageChanged: (indexCarousel, reason) {
+                                      setState(() {
+                                        _carouselIndex = indexCarousel;
+                                      });
+                                    },
+                                  ),
+                                  itemBuilder:
+                                      (context, caruselIndex, realIndex) {
+                                    return Stack(children: [
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          child: fullPhotoUrls.isNotEmpty
+                                              ? CachedNetworkImage(
+                                                  progressIndicatorBuilder:
+                                                      (context, url,
+                                                              progress) =>
+                                                          const Center(
+                                                            child:
+                                                                CircularProgressIndicator
+                                                                    .adaptive(),
+                                                          ),
+                                                  fit: BoxFit.contain,
+                                                  // height: 350.h,
+                                                  width: double.infinity,
+                                                  imageUrl: fullPhotoUrls[
+                                                      caruselIndex])
+                                              : Image.asset(Images.good1)),
+                                    ]);
+                                  },
+                                ),
+                                Positioned(
+                                  top: 10.h,
+                                  left: 10.w,
+                                  right: 10.w,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
                                         alignment: Alignment.center,
-                                        children: [
-                                          CarouselSlider.builder(
-                                            carouselController:
-                                                _carouselSliderController,
-                                            itemCount: fullPhotoUrls.length,
-                                            options: CarouselOptions(
-                                              autoPlay: false,
-                                              enlargeCenterPage: true,
-                                              viewportFraction: 1,
-                                              aspectRatio: 16 / 7,
-                                              height: 300.h,
-                                              onPageChanged:
-                                                  (indexCarousel, reason) {
-                                                setState(() {
-                                                  _carouselIndex =
-                                                      indexCarousel;
-                                                });
-                                              },
-                                            ),
-                                            itemBuilder: (context, caruselIndex,
-                                                realIndex) {
-                                              return Stack(children: [
-                                                ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15.r),
-                                                    child: fullPhotoUrls
-                                                            .isNotEmpty
-                                                        ? CachedNetworkImage(
-                                                            progressIndicatorBuilder:
-                                                                (context, url,
-                                                                        progress) =>
-                                                                    const Center(
-                                                                      child: CircularProgressIndicator
-                                                                          .adaptive(),
-                                                                    ),
-                                                            fit: BoxFit.contain,
-                                                            // height: 350.h,
-                                                            width:
-                                                                double.infinity,
-                                                            imageUrl:
-                                                                fullPhotoUrls[
-                                                                    caruselIndex])
-                                                        : Image.asset(
-                                                            Images.good1)),
-                                              ]);
-                                            },
-                                          ),
-                                          Positioned(
-                                            top: 10.h,
-                                            left: 10.w,
-                                            right: 10.w,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Container(
-                                                  alignment: Alignment.center,
-                                                  height: 36.h,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              60.r)),
-                                                  child: Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 14.w),
-                                                    child: Text(
-                                                      widget.model.trustLevel ??
-                                                          "",
-                                                      style: AppFonts.w400s16
-                                                          .copyWith(
-                                                              color: AppColors
-                                                                  .accentTextColor),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                          Positioned(
-                                            bottom: 10.h,
-                                            child: DotsIndicator(
-                                              dotsCount: (fullPhotoUrls
-                                                          .isNotEmpty &&
-                                                      widget.model.photosUrls !=
-                                                          null &&
-                                                      (widget.model.photosUrls
-                                                              ?.isNotEmpty ??
-                                                          false))
-                                                  ? fullPhotoUrls.length
-                                                  : 1,
-                                              position: _carouselIndex,
-                                              decorator: DotsDecorator(
-                                                  activeColor: Colors.white,
-                                                  size: Size(10.w, 10.h)),
-                                            ),
-                                          )
-                                        ]),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.h),
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            widget.model.companyName ?? "",
-                                            style: AppFonts.w700s20.copyWith(
+                                        height: 36.h,
+                                        decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius:
+                                                BorderRadius.circular(60.r)),
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 14.w),
+                                          child: Text(
+                                            widget.model.trustLevel ?? "",
+                                            style: AppFonts.w400s16.copyWith(
                                                 color:
                                                     AppColors.accentTextColor),
                                           ),
-                                          const Spacer(),
-                                          Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 5.w),
-                                            child: SvgPicture.asset(
-                                              SvgImages.star,
-                                              height: 16.h,
-                                              width: 16.w,
-                                            ),
-                                          ),
-                                          Text(
-                                            widget.model.rating.toString(),
-                                            style: AppFonts.w700s16,
-                                          )
-                                        ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 10.h,
+                                  child: DotsIndicator(
+                                    dotsCount: (fullPhotoUrls.isNotEmpty &&
+                                            widget.model.photosUrls != null &&
+                                            (widget.model.photosUrls
+                                                    ?.isNotEmpty ??
+                                                false))
+                                        ? fullPhotoUrls.length
+                                        : 1,
+                                    position: _carouselIndex,
+                                    decorator: DotsDecorator(
+                                        activeColor: Colors.white,
+                                        size: Size(10.w, 10.h)),
+                                  ),
+                                )
+                              ]),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.model.companyName ?? "",
+                                      style: AppFonts.w700s20.copyWith(
+                                          color: AppColors.accentTextColor),
+                                    ),
+                                    const Spacer(),
+                                    Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child: SvgPicture.asset(
+                                        SvgImages.star,
+                                        height: 16.h,
+                                        width: 16.w,
                                       ),
                                     ),
                                     Text(
-                                      widget.model.companyDescription ?? "",
-                                      style: AppFonts.w400s16,
-                                    ),
-                                    Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.h),
-                                      child: Text(
-                                        "Выполнено в Inposhiv ${40} заказов.",
-                                        style: AppFonts.w400s16.copyWith(
-                                            color: AppColors.accentTextColor),
-                                      ),
+                                      widget.model.rating.toString(),
+                                      style: AppFonts.w700s16,
                                     )
                                   ],
                                 ),
                               ),
-                            ),
-                          ),
-                          // Tab 2: Order history content
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
                               Text(
-                                "Выполнено в Inposhiv ${40} заказов.",
-                                style: AppFonts.w400s16.copyWith(
-                                    color: AppColors.accentTextColor,
-                                    fontFamily: "SF Pro"),
+                                widget.model.companyDescription ?? "",
+                                style: AppFonts.w400s16,
                               ),
-                              Expanded(
-                                child: ListView.separated(
-                                    itemCount: historyList.length ?? 1,
-                                    separatorBuilder: (context, index) {
-                                      return const Divider();
-                                    },
-                                    itemBuilder: (context, index) {
-                                      final MockedHistoryModel currentItem =
-                                          historyList[index];
-                                      return Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10.h, horizontal: 10.w),
-                                        child: CustomHistoryCard(
-                                          nameOfGood: currentItem.nameOfGood,
-                                          status: currentItem.statusOfDeal,
-                                          quantity: currentItem.quantity,
-                                          startDate: "22.06.2024",
-                                          endDate: "16.07.2024",
-                                          index: index,
-                                        ),
-                                      );
-                                    }),
-                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(vertical: 10.h),
+                                child: Text(
+                                  "Выполнено в Inposhiv ${widget.model.orderHistory?.length ?? 0} заказов.",
+                                  style: AppFonts.w400s16.copyWith(
+                                      color: AppColors.accentTextColor),
+                                ),
+                              )
                             ],
                           ),
-                          // Tab 3: Reviews content
-                          CustomScrollView(
-                            slivers: [
-                              SliverToBoxAdapter(
-                                child: Column(
-                                  children: [
-                                    Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          CarouselSlider.builder(
-                                            carouselController:
-                                                _carouselSliderController,
-                                            itemCount:
-                                                fullPhotoUrls?.length ?? 1,
-                                            options: CarouselOptions(
-                                              autoPlay: false,
-                                              enlargeCenterPage: true,
-                                              viewportFraction: 1,
-                                              aspectRatio: 16 / 7,
-                                              height: 300.h,
-                                              onPageChanged:
-                                                  (indexCarousel, reason) {
-                                                setState(() {
-                                                  _currentIndex = indexCarousel;
-                                                });
-                                              },
-                                            ),
-                                            itemBuilder: (context, caruselIndex,
-                                                realIndex) {
-                                              return Stack(
-                                                children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15.r),
-                                                    child: fullPhotoUrls
-                                                            .isNotEmpty
-                                                        ? CachedNetworkImage(
-                                                            fit: BoxFit.fill,
-                                                            width:
-                                                                double.infinity,
-                                                            imageUrl:
-                                                                fullPhotoUrls[
-                                                                    caruselIndex],
-                                                          )
-                                                        : Image.asset(
-                                                            Images.good1),
-                                                  ),
-                                                ],
-                                              );
-                                            },
-                                          ),
-                                          Positioned(
-                                            bottom: 10.h,
-                                            child: DotsIndicator(
-                                              dotsCount: (fullPhotoUrls
-                                                          .isNotEmpty &&
-                                                      widget.model.photosUrls !=
-                                                          null &&
-                                                      (widget.model.photosUrls
-                                                              ?.isNotEmpty ??
-                                                          false))
-                                                  ? fullPhotoUrls.length
-                                                  : 1,
-                                              position: _currentIndex,
-                                              decorator: DotsDecorator(
-                                                activeColor: Colors.white,
-                                                size: Size(10.w, 10.h),
-                                              ),
-                                            ),
-                                          )
-                                        ]),
-                                    // Remove Expanded and replace with Flexible
-                                    Padding(
-                                      padding: EdgeInsets.only(top: 10.h),
-                                      child: ListView.builder(
+                        ),
+                      ),
+                    ),
+                    // Tab 2: Order history content
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Выполнено в Inposhiv ${widget.model.orderHistory?.length ?? 0} заказов.",
+                          style: AppFonts.w400s16.copyWith(
+                              color: AppColors.accentTextColor,
+                              fontFamily: "SF Pro"),
+                        ),
+                        Expanded(
+                          child: (widget.model.orderHistory?.isNotEmpty ??
+                                  false)
+                              ? ListView.separated(
+                                  itemCount:
+                                      widget.model.orderHistory?.length ?? 0,
+                                  separatorBuilder: (context, index) {
+                                    return const Divider();
+                                  },
+                                  itemBuilder: (context, index) {
+                                    final currentItem =
+                                        widget.model.orderHistory?[index];
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 10.h, horizontal: 10.w),
+                                      child: CustomHistoryCard(
+                                        nameOfGood:
+                                            currentItem?.orderName ?? "",
+                                        status: currentItem?.status ?? "",
+                                        quantity: 40,
+                                        startDate:
+                                            currentItem?.createdAt.toString() ??
+                                                "",
+                                        endDate: "16.07.2024",
+                                        index: index,
+                                      ),
+                                    );
+                                  })
+                              : Center(
+                                  child: Text(
+                                    "Пусто",
+                                    style: AppFonts.w700s18,
+                                  ),
+                                ),
+                        ),
+                      ],
+                    ),
+                    // Tab 3: Reviews content
+                    CustomScrollView(
+                      slivers: [
+                        SliverToBoxAdapter(
+                          child: Column(
+                            children: [
+                              Stack(alignment: Alignment.center, children: [
+                                CarouselSlider.builder(
+                                  carouselController: _carouselSliderController,
+                                  itemCount: fullPhotoUrls?.length ?? 1,
+                                  options: CarouselOptions(
+                                    autoPlay: false,
+                                    enlargeCenterPage: true,
+                                    viewportFraction: 1,
+                                    aspectRatio: 16 / 7,
+                                    height: 300.h,
+                                    onPageChanged: (indexCarousel, reason) {
+                                      setState(() {
+                                        _currentIndex = indexCarousel;
+                                      });
+                                    },
+                                  ),
+                                  itemBuilder:
+                                      (context, caruselIndex, realIndex) {
+                                    return Stack(
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(15.r),
+                                          child: fullPhotoUrls.isNotEmpty
+                                              ? CachedNetworkImage(
+                                                  fit: BoxFit.fill,
+                                                  width: double.infinity,
+                                                  imageUrl: fullPhotoUrls[
+                                                      caruselIndex],
+                                                )
+                                              : Image.asset(Images.good1),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                                Positioned(
+                                  bottom: 10.h,
+                                  child: DotsIndicator(
+                                    dotsCount: (fullPhotoUrls.isNotEmpty &&
+                                            widget.model.photosUrls != null &&
+                                            (widget.model.photosUrls
+                                                    ?.isNotEmpty ??
+                                                false))
+                                        ? fullPhotoUrls.length
+                                        : 1,
+                                    position: _currentIndex,
+                                    decorator: DotsDecorator(
+                                      activeColor: Colors.white,
+                                      size: Size(10.w, 10.h),
+                                    ),
+                                  ),
+                                )
+                              ]),
+                              // Remove Expanded and replace with Flexible
+                              Padding(
+                                padding: EdgeInsets.only(top: 10.h),
+                                child: (widget.model.reviews?.isNotEmpty ??
+                                        false)
+                                    ? ListView.builder(
                                         padding: EdgeInsets.zero,
                                         shrinkWrap:
                                             true, // Allows ListView to wrap its content
                                         physics:
                                             const NeverScrollableScrollPhysics(), // Disable its own scroll
                                         itemCount:
-                                            mockedFeedbackData.length ?? 1,
+                                            widget.model.reviews?.length ?? 0,
                                         itemBuilder: (context, index) {
-                                          final FeedbackMockedModel
-                                              currentItem =
-                                              mockedFeedbackData[index];
+                                          final currentItem =
+                                              widget.model.reviews?[index];
                                           return Padding(
                                             padding:
                                                 EdgeInsets.only(bottom: 10.h),
@@ -413,8 +395,9 @@ class _MainScreenState extends State<DetailedScreen> {
                                                 Row(
                                                   children: [
                                                     Text(
-                                                      currentItem.feedBacks[0]
-                                                          .userName,
+                                                      currentItem
+                                                              ?.customerUuid ??
+                                                          "",
                                                       style: AppFonts.w700s20
                                                           .copyWith(
                                                               color: AppColors
@@ -432,9 +415,9 @@ class _MainScreenState extends State<DetailedScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      currentItem.feedBacks
-                                                          .first.rating
-                                                          .toString(),
+                                                      currentItem?.rating
+                                                              .toString() ??
+                                                          "5.0",
                                                       style: AppFonts.w700s16,
                                                     ),
                                                   ],
@@ -443,8 +426,8 @@ class _MainScreenState extends State<DetailedScreen> {
                                                   padding: EdgeInsets.only(
                                                       bottom: 10.h),
                                                   child: Text(
-                                                    currentItem
-                                                        .feedBacks[0].feedBack,
+                                                    currentItem?.reviewText ??
+                                                        "",
                                                     style: AppFonts.w400s16
                                                         .copyWith(
                                                             fontFamily:
@@ -455,245 +438,252 @@ class _MainScreenState extends State<DetailedScreen> {
                                             ),
                                           );
                                         },
+                                      )
+                                    : Center(
+                                        child: Text(
+                                          "Пусто",
+                                          style: AppFonts.w700s18,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
                               ),
                             ],
-                          )
-                        ],
-                      ),
-                    )
-                  : Padding(
-                      padding: EdgeInsets.only(top: 10.h),
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Padding(
-                          padding: EdgeInsets.only(bottom: 10.h),
-                          child: Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.r)),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Stack(alignment: Alignment.center, children: [
-                                  CarouselSlider.builder(
-                                    carouselController:
-                                        _carouselSliderController,
-                                    itemCount: fullPhotoUrls?.length ?? 1,
-                                    options: CarouselOptions(
-                                      autoPlay: false,
-                                      enlargeCenterPage: true,
-                                      viewportFraction: 1,
-                                      aspectRatio: 16 / 7,
-                                      height: 300.h,
-                                      onPageChanged: (indexCarousel, reason) {
-                                        setState(() {
-                                          _currentIndex = indexCarousel;
-                                        });
-                                      },
-                                    ),
-                                    itemBuilder:
-                                        (context, caruselIndex, realIndex) {
-                                      return Stack(children: [
-                                        ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(15.r),
-                                            child: Image.asset(
-                                                fit: BoxFit.fill,
-                                                width: double.infinity,
-                                                widget.model.photosUrls?[
-                                                    caruselIndex])),
-                                      ]);
-                                    },
-                                  ),
-                                  Positioned(
-                                    top: 10.h,
-                                    left: 10.w,
-                                    right: 10.w,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.center,
-                                          height: 36.h,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(60.r)),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 14.w),
-                                            child: Text(
-                                              "Очень надежный",
-                                              style: AppFonts.w400s16.copyWith(
-                                                  color: AppColors
-                                                      .accentTextColor),
-                                            ),
-                                          ),
-                                        ),
-                                        CircleAvatar(
-                                          backgroundColor: Colors.white,
-                                          radius: 20.r,
-                                          child: SvgPicture.asset(
-                                            SvgImages.chat,
-                                            color: AppColors.accentTextColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Positioned(
-                                    bottom: 10.h,
-                                    child: DotsIndicator(
-                                      dotsCount: (fullPhotoUrls.isNotEmpty &&
-                                              widget.model.photosUrls != null &&
-                                              (widget.model.photosUrls
-                                                      ?.isNotEmpty ??
-                                                  false))
-                                          ? fullPhotoUrls.length
-                                          : 1,
-                                      position: _currentIndex,
-                                      // position: _currentIndex.toDouble(),
-                                      decorator: DotsDecorator(
-                                          activeColor: Colors.white,
-                                          size: Size(10.w, 10.h)),
-                                    ),
-                                  )
-                                ]),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                                  child: Row(
-                                    children: [
-                                      Text(
-                                        widget.model.companyName ?? "",
-                                        style: AppFonts.w700s20.copyWith(
-                                            color: AppColors.accentTextColor),
-                                      ),
-                                      const Spacer(),
-                                      (isCustomer ?? true)
-                                          ? Text(
-                                              "825 штук",
-                                              style: AppFonts.w400s16.copyWith(
-                                                  color: AppColors
-                                                      .accentTextColor),
-                                            )
-                                          : Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 5.w),
-                                              child: SvgPicture.asset(
-                                                SvgImages.star,
-                                                height: 16.h,
-                                                width: 16.w,
-                                              ),
-                                            ),
-                                      (isCustomer ?? true)
-                                          ? const SizedBox.shrink()
-                                          : Text(
-                                              "${widget.model.rating}",
-                                              style: AppFonts.w700s16,
-                                            )
-                                    ],
-                                  ),
-                                ),
-                                Text(
-                                  (isCustomer ?? true)
-                                      ? "600 руб за единицу, итого 348 000 руб"
-                                      : widget.model.companyDescription,
-                                  style: AppFonts.w400s16,
-                                ),
-                                (isCustomer ?? true)
-                                    ? Column(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                isExpanded = !isExpanded;
-                                              });
-                                            },
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisSize: MainAxisSize.max,
-                                              children: [
-                                                Text(
-                                                  "Размерный ряд",
-                                                  style: AppFonts.w400s16
-                                                      .copyWith(
-                                                          color: AppColors
-                                                              .accentTextColor),
-                                                ),
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: 6.w),
-                                                  child: RotatedBox(
-                                                    quarterTurns:
-                                                        isExpanded ? 2 : 0,
-                                                    child: SvgPicture.asset(
-                                                        SvgImages.bottom),
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          AnimatedSize(
-                                            duration: const Duration(
-                                                milliseconds: 300),
-                                            curve: Curves.fastOutSlowIn,
-                                            child: isExpanded
-                                                ? GridView.builder(
-                                                    shrinkWrap: true,
-                                                    gridDelegate:
-                                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                                            mainAxisSpacing: 0,
-                                                            mainAxisExtent:
-                                                                30.h,
-                                                            crossAxisCount: 2),
-                                                    itemCount:
-                                                        sizesVm.length ?? 1,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Text(
-                                                        "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
-                                                        style: AppFonts.w400s16
-                                                            .copyWith(
-                                                                color: AppColors
-                                                                    .accentTextColor),
-                                                      );
-                                                    })
-                                                : const SizedBox.shrink(),
-                                          ),
-                                        ],
-                                      )
-                                    : Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10.h),
-                                        child: Text(
-                                          "Выполнено в Inposhiv ${50} заказов.",
-                                          style: AppFonts.w400s16.copyWith(
-                                              color: AppColors.accentTextColor),
-                                        ),
-                                      )
-                              ],
-                            ),
                           ),
                         ),
-                      ),
-                    ),
+                      ],
+                    )
+                  ],
+                ),
+              )
+              // : Padding(
+              //     padding: EdgeInsets.only(top: 10.h),
+              //     child: SingleChildScrollView(
+              //       scrollDirection: Axis.vertical,
+              //       child: Padding(
+              //         padding: EdgeInsets.only(bottom: 10.h),
+              //         child: Container(
+              //           decoration: BoxDecoration(
+              //               borderRadius: BorderRadius.circular(20.r)),
+              //           child: Column(
+              //             crossAxisAlignment: CrossAxisAlignment.start,
+              //             children: [
+              //               Stack(alignment: Alignment.center, children: [
+              //                 CarouselSlider.builder(
+              //                   carouselController:
+              //                       _carouselSliderController,
+              //                   itemCount: fullPhotoUrls?.length ?? 1,
+              //                   options: CarouselOptions(
+              //                     autoPlay: false,
+              //                     enlargeCenterPage: true,
+              //                     viewportFraction: 1,
+              //                     aspectRatio: 16 / 7,
+              //                     height: 300.h,
+              //                     onPageChanged: (indexCarousel, reason) {
+              //                       setState(() {
+              //                         _currentIndex = indexCarousel;
+              //                       });
+              //                     },
+              //                   ),
+              //                   itemBuilder:
+              //                       (context, caruselIndex, realIndex) {
+              //                     return Stack(children: [
+              //                       ClipRRect(
+              //                           borderRadius:
+              //                               BorderRadius.circular(15.r),
+              //                           child: Image.asset(
+              //                               fit: BoxFit.fill,
+              //                               width: double.infinity,
+              //                               widget.model.photosUrls?[
+              //                                       caruselIndex] ??
+              //                                   "")),
+              //                     ]);
+              //                   },
+              //                 ),
+              //                 Positioned(
+              //                   top: 10.h,
+              //                   left: 10.w,
+              //                   right: 10.w,
+              //                   child: Row(
+              //                     mainAxisAlignment:
+              //                         MainAxisAlignment.spaceBetween,
+              //                     children: [
+              //                       Container(
+              //                         alignment: Alignment.center,
+              //                         height: 36.h,
+              //                         decoration: BoxDecoration(
+              //                             color: Colors.white,
+              //                             borderRadius:
+              //                                 BorderRadius.circular(60.r)),
+              //                         child: Padding(
+              //                           padding: EdgeInsets.symmetric(
+              //                               horizontal: 14.w),
+              //                           child: Text(
+              //                             "Очень надежный",
+              //                             style: AppFonts.w400s16.copyWith(
+              //                                 color: AppColors
+              //                                     .accentTextColor),
+              //                           ),
+              //                         ),
+              //                       ),
+              //                       CircleAvatar(
+              //                         backgroundColor: Colors.white,
+              //                         radius: 20.r,
+              //                         child: SvgPicture.asset(
+              //                           SvgImages.chat,
+              //                           color: AppColors.accentTextColor,
+              //                         ),
+              //                       ),
+              //                     ],
+              //                   ),
+              //                 ),
+              //                 Positioned(
+              //                   bottom: 10.h,
+              //                   child: DotsIndicator(
+              //                     dotsCount: (fullPhotoUrls.isNotEmpty &&
+              //                             widget.model.photosUrls != null &&
+              //                             (widget.model.photosUrls
+              //                                     ?.isNotEmpty ??
+              //                                 false))
+              //                         ? fullPhotoUrls.length
+              //                         : 1,
+              //                     position: _currentIndex,
+              //                     // position: _currentIndex.toDouble(),
+              //                     decorator: DotsDecorator(
+              //                         activeColor: Colors.white,
+              //                         size: Size(10.w, 10.h)),
+              //                   ),
+              //                 )
+              //               ]),
+              //               Padding(
+              //                 padding: EdgeInsets.symmetric(vertical: 10.h),
+              //                 child: Row(
+              //                   children: [
+              //                     Text(
+              //                       widget.model.companyName ?? "",
+              //                       style: AppFonts.w700s20.copyWith(
+              //                           color: AppColors.accentTextColor),
+              //                     ),
+              //                     const Spacer(),
+              //                     (isCustomer ?? true)
+              //                         ? Text(
+              //                             "825 штук",
+              //                             style: AppFonts.w400s16.copyWith(
+              //                                 color: AppColors
+              //                                     .accentTextColor),
+              //                           )
+              //                         : Padding(
+              //                             padding: EdgeInsets.symmetric(
+              //                                 horizontal: 5.w),
+              //                             child: SvgPicture.asset(
+              //                               SvgImages.star,
+              //                               height: 16.h,
+              //                               width: 16.w,
+              //                             ),
+              //                           ),
+              //                     (isCustomer ?? true)
+              //                         ? const SizedBox.shrink()
+              //                         : Text(
+              //                             "${widget.model.rating}",
+              //                             style: AppFonts.w700s16,
+              //                           )
+              //                   ],
+              //                 ),
+              //               ),
+              //               Text(
+              //                 (isCustomer ?? true)
+              //                     ? "600 руб за единицу, итого 348 000 руб"
+              //                     : widget.model.companyDescription ?? "",
+              //                 style: AppFonts.w400s16,
+              //               ),
+              //               (isCustomer ?? true)
+              //                   ? Column(
+              //                       children: [
+              //                         InkWell(
+              //                           onTap: () {
+              //                             setState(() {
+              //                               isExpanded = !isExpanded;
+              //                             });
+              //                           },
+              //                           child: Row(
+              //                             crossAxisAlignment:
+              //                                 CrossAxisAlignment.center,
+              //                             mainAxisSize: MainAxisSize.max,
+              //                             children: [
+              //                               Text(
+              //                                 "Размерный ряд",
+              //                                 style: AppFonts.w400s16
+              //                                     .copyWith(
+              //                                         color: AppColors
+              //                                             .accentTextColor),
+              //                               ),
+              //                               Padding(
+              //                                 padding: EdgeInsets.only(
+              //                                     left: 6.w),
+              //                                 child: RotatedBox(
+              //                                   quarterTurns:
+              //                                       isExpanded ? 2 : 0,
+              //                                   child: SvgPicture.asset(
+              //                                       SvgImages.bottom),
+              //                                 ),
+              //                               )
+              //                             ],
+              //                           ),
+              //                         ),
+              //                         AnimatedSize(
+              //                           duration: const Duration(
+              //                               milliseconds: 300),
+              //                           curve: Curves.fastOutSlowIn,
+              //                           child: isExpanded
+              //                               ? GridView.builder(
+              //                                   shrinkWrap: true,
+              //                                   gridDelegate:
+              //                                       SliverGridDelegateWithFixedCrossAxisCount(
+              //                                           mainAxisSpacing: 0,
+              //                                           mainAxisExtent:
+              //                                               30.h,
+              //                                           crossAxisCount: 2),
+              //                                   itemCount:
+              //                                       sizesVm.length ?? 1,
+              //                                   itemBuilder:
+              //                                       (context, index) {
+              //                                     return Text(
+              //                                       "${sizesVm[index].usSize} (${sizesVm[index].ruSize}) – ${sizesVm[index].quantity}шт",
+              //                                       style: AppFonts.w400s16
+              //                                           .copyWith(
+              //                                               color: AppColors
+              //                                                   .accentTextColor),
+              //                                     );
+              //                                   })
+              //                               : const SizedBox.shrink(),
+              //                         ),
+              //                       ],
+              //                     )
+              //                   : Padding(
+              //                       padding: EdgeInsets.symmetric(
+              //                           vertical: 10.h),
+              //                       child: Text(
+              //                         "Выполнено в Inposhiv ${50} заказов.",
+              //                         style: AppFonts.w400s16.copyWith(
+              //                             color: AppColors.accentTextColor),
+              //                       ),
+              //                     )
+              //             ],
+              //           ),
+              //         ),
+              //       ),
+              //     ),
+              //   ),
             ],
           ),
         )),
-        Positioned(
-            bottom: 20.h,
-            left: 20.w,
-            right: 20.w,
-            child: CustomButton(
-                text: isCustomer == 0
-                    ? "Участвовать"
-                    : "Связаться с производителем",
-                onPressed: () {}))
+        // Positioned(
+        //     bottom: 20.h,
+        //     left: 20.w,
+        //     right: 20.w,
+        //     child: CustomButton(
+        //         text: isCustomer == 0
+        //             ? "Участвовать"
+        //             : "Связаться с производителем",
+        //         onPressed: () {}))
       ]),
     );
   }

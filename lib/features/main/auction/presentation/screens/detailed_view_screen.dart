@@ -94,13 +94,14 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                       child: Text(errorText),
                     ),
                     loaded: (auctionModel) {
-                      return BlocListener<ChatsBloc, ChatsState>(
+                      return BlocListener<CreateChatRoomBloc,
+                          CreateChatRoomState>(
                         listener: (context, state) {
                           state.maybeWhen(
-                              createChatRoomSuccess: (createChatModel) {
+                              createdChatRoomSuccess: (createChatModel) {
                                 GoRouter.of(context)
                                     .pushNamed("chatScreen", queryParameters: {
-                                  "orderId": "1",
+                                  "orderId": createChatModel.orderId.toString(),
                                   "receipentUuid":
                                       createChatModel.recipientUuid,
                                   "chatUuid": createChatModel.chatUuid
@@ -433,7 +434,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                                       "userId"),
                                                           "recipientUuid":
                                                               currentItem
-                                                                  .manufacturerUserUuid,
+                                                                  .manufacturerUuid,
                                                           "orderId":
                                                               auctionModel
                                                                   ?.orderId

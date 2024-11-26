@@ -4,9 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_detail_row.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
@@ -14,10 +16,14 @@ import 'package:inposhiv/features/main/orders/customer/data/models/order_details
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/date_picker.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:provider/provider.dart';
 
 class OrderDetailScreen extends StatefulWidget {
   final String orderId;
-  const OrderDetailScreen({super.key, required this.orderId});
+  const OrderDetailScreen({
+    super.key,
+    required this.orderId,
+  });
 
   @override
   State<OrderDetailScreen> createState() => _OrderDetailScreenState();
@@ -72,8 +78,11 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     builder: (context) => CustomDialog(
                         title: "Что-то пошло не так",
                         description: "Попробуйте снова",
-                        button:
-                            CustomButton(text: "Понятно", onPressed: () {}))),
+                        button: CustomButton(
+                            text: "Понятно",
+                            onPressed: () {
+                              router.pop();
+                            }))),
                 orElse: () {});
           },
           child: Column(
@@ -211,27 +220,31 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                     BlocProvider.of<OrdersBloc>(context)
                         .add(OrdersEvent.sendOrderDetails(
                             orderDetails: OrderDetailsModel(
-                              orderId: 2,
+                              orderId: int.tryParse(widget.orderId),
                               // int.tryParse(widget.orderId),
                               productName: orderNameController.text,
                               material: 0,
                               color: colorController.text,
-                              quantity: 100,
+                              quantity: 150,
                               deliveryPoint: addressController.text,
                               discount: int.tryParse(discountController.text),
+                              manufacturerUuid: Provider.of<ChatProvider>(
+                                      context,
+                                      listen: false)
+                                  .receipentId,
                               deadline:
                                   DateTime.tryParse(expirationController.text),
-                              technicalDocumentUrls: filesForDoc
-                                  ?.map((element) => element.path ?? "")
-                                  .toList(),
+                              // technicalDocumentUrlsz: filesForDoc
+                              //     ?.map((element) => element.path ?? "")
+                              //     .toList(),
                               technicalDocuments: filesForDoc
                                   ?.map((element) => element.path ?? "")
                                   .toList(),
-                              lekalaDocumentUrls: filesForLecala
+                              lekalaDocuments: filesForLecala
                                   ?.map((element) => element.path ?? "")
                                   .toList(),
                             ).toJson(),
-                            orderId: "2"));
+                            orderId: widget.orderId));
                   })
             ],
           ),

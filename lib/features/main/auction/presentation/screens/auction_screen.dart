@@ -239,7 +239,8 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                               MainAxisAlignment
                                                                   .spaceBetween,
                                                           children: [
-                                                            const SizedBox(),
+                                                            const SizedBox
+                                                                .shrink(),
                                                             Container(
                                                               alignment:
                                                                   Alignment
@@ -258,7 +259,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                         horizontal:
                                                                             14.w),
                                                                 child: Text(
-                                                                  "${currentItem.auctionProcessDtoList?.length ?? 0} откликов",
+                                                                  "${currentItem.auctionProcessDtoList?.length ?? 90} откликов",
                                                                   style: AppFonts
                                                                       .w400s16
                                                                       .copyWith(
@@ -555,7 +556,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                               listener: (context, state) {
                                 state.maybeWhen(
                                     loading: () {
-                                      router.pop();
+                                      // router.pop();
                                       Showdialog.showLoaderDialog(context);
                                     },
                                     makeBidSuccess: (model) {
@@ -669,7 +670,9 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                               .name ??
                                                                           "",
                                                                       style: AppFonts
-                                                                          .w700s20.copyWith(color: AppColors.accentTextColor),
+                                                                          .w700s20
+                                                                          .copyWith(
+                                                                              color: AppColors.accentTextColor),
                                                                     ),
                                                                   ),
                                                                   Text(

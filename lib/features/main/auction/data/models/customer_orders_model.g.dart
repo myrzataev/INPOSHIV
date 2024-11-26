@@ -9,9 +9,6 @@ part of 'customer_orders_model.dart';
 _$CustomerOrdersModelImpl _$$CustomerOrdersModelImplFromJson(
         Map<String, dynamic> json) =>
     _$CustomerOrdersModelImpl(
-      categoryId: (json['categoryId'] as num?)?.toInt(),
-      fabricId: (json['fabricId'] as num?)?.toInt(),
-      description: json['description'] as String?,
       orderId: (json['orderId'] as num?)?.toInt(),
       orderStatus: (json['orderStatus'] as num?)?.toInt(),
       products: (json['products'] as List<dynamic>?)
@@ -33,9 +30,6 @@ _$CustomerOrdersModelImpl _$$CustomerOrdersModelImplFromJson(
 Map<String, dynamic> _$$CustomerOrdersModelImplToJson(
         _$CustomerOrdersModelImpl instance) =>
     <String, dynamic>{
-      'categoryId': instance.categoryId,
-      'fabricId': instance.fabricId,
-      'description': instance.description,
       'orderId': instance.orderId,
       'orderStatus': instance.orderStatus,
       'products': instance.products,
@@ -77,7 +71,7 @@ _$ProductImpl _$$ProductImplFromJson(Map<String, dynamic> json) =>
         (k, e) => MapEntry(k, (e as num).toInt()),
       ),
       description: json['description'] as String?,
-      priceUsd: (json['priceUsd'] as num?)?.toDouble(),
+      priceUsd: (json['priceUsd'] as num?)?.toInt(),
       priceRub: (json['priceRub'] as num?)?.toDouble(),
       photos:
           (json['photos'] as List<dynamic>?)?.map((e) => e as String).toList(),
