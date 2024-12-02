@@ -25,9 +25,13 @@ mixin _$OrderDetailsModel {
   int? get material => throw _privateConstructorUsedError;
   String? get color => throw _privateConstructorUsedError;
   int? get quantity => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
   List<String?>? get technicalDocuments => throw _privateConstructorUsedError;
+  @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
   List<String?>? get lekalaDocuments => throw _privateConstructorUsedError;
-  DateTime? get deadline => throw _privateConstructorUsedError;
+  List<String?>? get agreements => throw _privateConstructorUsedError;
+  String? get deadlineStart => throw _privateConstructorUsedError;
+  String? get deadlineEnd => throw _privateConstructorUsedError;
   int? get discount => throw _privateConstructorUsedError;
   String? get deliveryPoint => throw _privateConstructorUsedError;
   String? get manufacturerUuid => throw _privateConstructorUsedError;
@@ -57,9 +61,13 @@ abstract class $OrderDetailsModelCopyWith<$Res> {
       int? material,
       String? color,
       int? quantity,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       List<String?>? technicalDocuments,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       List<String?>? lekalaDocuments,
-      DateTime? deadline,
+      List<String?>? agreements,
+      String? deadlineStart,
+      String? deadlineEnd,
       int? discount,
       String? deliveryPoint,
       String? manufacturerUuid,
@@ -89,7 +97,9 @@ class _$OrderDetailsModelCopyWithImpl<$Res, $Val extends OrderDetailsModel>
     Object? quantity = freezed,
     Object? technicalDocuments = freezed,
     Object? lekalaDocuments = freezed,
-    Object? deadline = freezed,
+    Object? agreements = freezed,
+    Object? deadlineStart = freezed,
+    Object? deadlineEnd = freezed,
     Object? discount = freezed,
     Object? deliveryPoint = freezed,
     Object? manufacturerUuid = freezed,
@@ -125,10 +135,18 @@ class _$OrderDetailsModelCopyWithImpl<$Res, $Val extends OrderDetailsModel>
           ? _value.lekalaDocuments
           : lekalaDocuments // ignore: cast_nullable_to_non_nullable
               as List<String?>?,
-      deadline: freezed == deadline
-          ? _value.deadline
-          : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      agreements: freezed == agreements
+          ? _value.agreements
+          : agreements // ignore: cast_nullable_to_non_nullable
+              as List<String?>?,
+      deadlineStart: freezed == deadlineStart
+          ? _value.deadlineStart
+          : deadlineStart // ignore: cast_nullable_to_non_nullable
+              as String?,
+      deadlineEnd: freezed == deadlineEnd
+          ? _value.deadlineEnd
+          : deadlineEnd // ignore: cast_nullable_to_non_nullable
+              as String?,
       discount: freezed == discount
           ? _value.discount
           : discount // ignore: cast_nullable_to_non_nullable
@@ -167,9 +185,13 @@ abstract class _$$OrderDetailsModelImplCopyWith<$Res>
       int? material,
       String? color,
       int? quantity,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       List<String?>? technicalDocuments,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       List<String?>? lekalaDocuments,
-      DateTime? deadline,
+      List<String?>? agreements,
+      String? deadlineStart,
+      String? deadlineEnd,
       int? discount,
       String? deliveryPoint,
       String? manufacturerUuid,
@@ -197,7 +219,9 @@ class __$$OrderDetailsModelImplCopyWithImpl<$Res>
     Object? quantity = freezed,
     Object? technicalDocuments = freezed,
     Object? lekalaDocuments = freezed,
-    Object? deadline = freezed,
+    Object? agreements = freezed,
+    Object? deadlineStart = freezed,
+    Object? deadlineEnd = freezed,
     Object? discount = freezed,
     Object? deliveryPoint = freezed,
     Object? manufacturerUuid = freezed,
@@ -233,10 +257,18 @@ class __$$OrderDetailsModelImplCopyWithImpl<$Res>
           ? _value._lekalaDocuments
           : lekalaDocuments // ignore: cast_nullable_to_non_nullable
               as List<String?>?,
-      deadline: freezed == deadline
-          ? _value.deadline
-          : deadline // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
+      agreements: freezed == agreements
+          ? _value._agreements
+          : agreements // ignore: cast_nullable_to_non_nullable
+              as List<String?>?,
+      deadlineStart: freezed == deadlineStart
+          ? _value.deadlineStart
+          : deadlineStart // ignore: cast_nullable_to_non_nullable
+              as String?,
+      deadlineEnd: freezed == deadlineEnd
+          ? _value.deadlineEnd
+          : deadlineEnd // ignore: cast_nullable_to_non_nullable
+              as String?,
       discount: freezed == discount
           ? _value.discount
           : discount // ignore: cast_nullable_to_non_nullable
@@ -270,9 +302,13 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
       this.material,
       this.color,
       this.quantity,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       final List<String?>? technicalDocuments,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       final List<String?>? lekalaDocuments,
-      this.deadline,
+      final List<String?>? agreements,
+      this.deadlineStart,
+      this.deadlineEnd,
       this.discount,
       this.deliveryPoint,
       this.manufacturerUuid,
@@ -280,6 +316,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
       final List<String?>? lekalaDocumentUrls})
       : _technicalDocuments = technicalDocuments,
         _lekalaDocuments = lekalaDocuments,
+        _agreements = agreements,
         _technicalDocumentUrls = technicalDocumentUrls,
         _lekalaDocumentUrls = lekalaDocumentUrls;
 
@@ -298,6 +335,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
   final int? quantity;
   final List<String?>? _technicalDocuments;
   @override
+  @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
   List<String?>? get technicalDocuments {
     final value = _technicalDocuments;
     if (value == null) return null;
@@ -309,6 +347,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
 
   final List<String?>? _lekalaDocuments;
   @override
+  @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
   List<String?>? get lekalaDocuments {
     final value = _lekalaDocuments;
     if (value == null) return null;
@@ -317,8 +356,20 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String?>? _agreements;
   @override
-  final DateTime? deadline;
+  List<String?>? get agreements {
+    final value = _agreements;
+    if (value == null) return null;
+    if (_agreements is EqualUnmodifiableListView) return _agreements;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  @override
+  final String? deadlineStart;
+  @override
+  final String? deadlineEnd;
   @override
   final int? discount;
   @override
@@ -349,7 +400,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
 
   @override
   String toString() {
-    return 'OrderDetailsModel(orderId: $orderId, productName: $productName, material: $material, color: $color, quantity: $quantity, technicalDocuments: $technicalDocuments, lekalaDocuments: $lekalaDocuments, deadline: $deadline, discount: $discount, deliveryPoint: $deliveryPoint, manufacturerUuid: $manufacturerUuid, technicalDocumentUrls: $technicalDocumentUrls, lekalaDocumentUrls: $lekalaDocumentUrls)';
+    return 'OrderDetailsModel(orderId: $orderId, productName: $productName, material: $material, color: $color, quantity: $quantity, technicalDocuments: $technicalDocuments, lekalaDocuments: $lekalaDocuments, agreements: $agreements, deadlineStart: $deadlineStart, deadlineEnd: $deadlineEnd, discount: $discount, deliveryPoint: $deliveryPoint, manufacturerUuid: $manufacturerUuid, technicalDocumentUrls: $technicalDocumentUrls, lekalaDocumentUrls: $lekalaDocumentUrls)';
   }
 
   @override
@@ -369,8 +420,12 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
                 .equals(other._technicalDocuments, _technicalDocuments) &&
             const DeepCollectionEquality()
                 .equals(other._lekalaDocuments, _lekalaDocuments) &&
-            (identical(other.deadline, deadline) ||
-                other.deadline == deadline) &&
+            const DeepCollectionEquality()
+                .equals(other._agreements, _agreements) &&
+            (identical(other.deadlineStart, deadlineStart) ||
+                other.deadlineStart == deadlineStart) &&
+            (identical(other.deadlineEnd, deadlineEnd) ||
+                other.deadlineEnd == deadlineEnd) &&
             (identical(other.discount, discount) ||
                 other.discount == discount) &&
             (identical(other.deliveryPoint, deliveryPoint) ||
@@ -394,7 +449,9 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
       quantity,
       const DeepCollectionEquality().hash(_technicalDocuments),
       const DeepCollectionEquality().hash(_lekalaDocuments),
-      deadline,
+      const DeepCollectionEquality().hash(_agreements),
+      deadlineStart,
+      deadlineEnd,
       discount,
       deliveryPoint,
       manufacturerUuid,
@@ -425,9 +482,13 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
       final int? material,
       final String? color,
       final int? quantity,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       final List<String?>? technicalDocuments,
+      @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
       final List<String?>? lekalaDocuments,
-      final DateTime? deadline,
+      final List<String?>? agreements,
+      final String? deadlineStart,
+      final String? deadlineEnd,
       final int? discount,
       final String? deliveryPoint,
       final String? manufacturerUuid,
@@ -448,11 +509,17 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
   @override
   int? get quantity;
   @override
+  @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
   List<String?>? get technicalDocuments;
   @override
+  @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
   List<String?>? get lekalaDocuments;
   @override
-  DateTime? get deadline;
+  List<String?>? get agreements;
+  @override
+  String? get deadlineStart;
+  @override
+  String? get deadlineEnd;
   @override
   int? get discount;
   @override

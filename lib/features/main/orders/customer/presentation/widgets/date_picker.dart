@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
@@ -6,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class DateRangePickerExample extends StatefulWidget {
   final TextEditingController controller;
+
   const DateRangePickerExample({super.key, required this.controller});
 
   @override
@@ -13,6 +13,8 @@ class DateRangePickerExample extends StatefulWidget {
 }
 
 class _DateRangePickerExampleState extends State<DateRangePickerExample> {
+  String? startDateIso;
+  String? endDateIso;
 
   Future<void> pickDateRange() async {
     final DateTimeRange? result = await showDateRangePicker(
@@ -28,11 +30,15 @@ class _DateRangePickerExampleState extends State<DateRangePickerExample> {
 
     if (result != null) {
       setState(() {
-        // Format the dates to 'dd.MM.yyyy'
-        final String formattedStart =
-            DateFormat('dd.MM.yyyy').format(result.start);
+        // Store the dates in ISO 8601 format (yyyy-MM-dd)
+        startDateIso = result.start.toIso8601String().split('T')[0]; // Format to yyyy-MM-dd
+        endDateIso = result.end.toIso8601String().split('T')[0]; // Format to yyyy-MM-dd
+
+        // Format the dates to 'dd.MM.yyyy' for display
+        final String formattedStart = DateFormat('dd.MM.yyyy').format(result.start);
         final String formattedEnd = DateFormat('dd.MM.yyyy').format(result.end);
 
+        // Set the formatted date range to the controller for display
         widget.controller.text = "$formattedStart – $formattedEnd";
       });
     }
@@ -42,7 +48,6 @@ class _DateRangePickerExampleState extends State<DateRangePickerExample> {
   Widget build(BuildContext context) {
     return Expanded(
       child: TextField(
-        
         readOnly: true,
         onTap: pickDateRange,
         controller: widget.controller,

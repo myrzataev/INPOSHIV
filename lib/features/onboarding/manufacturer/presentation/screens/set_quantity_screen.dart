@@ -254,7 +254,7 @@ class _ChooseCategoryScreenState extends State<SetQuantityScreen> {
                   child: CustomButton(
                       text: "Дальше",
                       onPressed: () {
-                        if (totalQuantity < 49) {
+                        if (totalQuantity < 100) {
                           showDialog(
                               context: context,
                               builder: (context) => Dialog(

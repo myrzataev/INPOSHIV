@@ -4,6 +4,8 @@ import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_types.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/data/models/user_model.dart';
@@ -186,7 +188,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                       ?.phoneMaskWithoutCountryCode,
                                   hintStyle: AppFonts.w700s20
                                       .copyWith(color: Color(0xffA0A0A0)),
-                                  border: UnderlineInputBorder(
+                                  border: const UnderlineInputBorder(
                                     borderSide: BorderSide(width: 1),
                                   ),
                                 ),
@@ -212,6 +214,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return "Это поле является обязательным";
+                          } else if (!value.endsWith("@gmail.com")
+                              // !value.endsWith("@mail.com") ||
+                              // !value.endsWith("@icloud.com"
+                              ) {
+                            return "Введите правильную почту";
                           }
                           return null;
                         },
@@ -350,25 +357,29 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                                 entity.customerOrManufacturerUuid ?? "");
                             preferences.setBool(
                                 "isCustomer", entity.role == "CUSTOMER");
-                            GoRouter.of(context).pushNamed("authorization",
-                                queryParameters: {
-                                  "number": phoneController.text
-                                });
+                            router.pushNamed("authorization", queryParameters: {
+                              "number": phoneController.text
+                            });
                           },
                           error: (error) {
                             router.pop();
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(content: Text(error)));
-                            GoRouter.of(context).pushNamed("authorization",
-                                queryParameters: {
-                                  "number": phoneController.text
-                                });
+                            final String errorMessage = error.userMessage;
+                            Showdialog.showErrorDialog(
+                              context: context,
+                              title: "Ошибка",
+                              message: errorMessage,
+                              onClose: () => router.pop(),
+                            );
+                            // setState(() {
+                            //   isErrorVisible =
+                            //       true; // Показываем сообщение о необходимости согласия
+                            // });
                           },
                           orElse: () {
-                            GoRouter.of(context).pushNamed("authorization",
-                                queryParameters: {
-                                  "number": phoneController.text
-                                });
+                            // GoRouter.of(context).pushNamed("authorization",
+                            //     queryParameters: {
+                            //       "number": phoneController.text
+                            //     });
                           });
                     },
                     child: const SizedBox.shrink()),

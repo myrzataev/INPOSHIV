@@ -10,4 +10,10 @@ class SendInvoiceRepoimpl implements SendInvoiceRepo {
       {required Map<String, dynamic> invoice, required String orderId}) async {
     return sendInvoiceDs.sendInvoice(invoice: invoice, orderId: orderId);
   }
+
+  @override
+  Future<InvoiceModel> changeInvoice(
+      {required Map<String, dynamic> invoice, required String orderId}) {
+    return sendInvoiceDs.changeInvoice(invoice: invoice, orderId: orderId);
+  }
 }

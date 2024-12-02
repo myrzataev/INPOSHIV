@@ -1,7 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
-import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_manufacturer_invoices_repoimpl.dart';
+import 'package:inposhiv/features/main/orders/customer/data/models/order_details_response_model.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_order_details_repoimpl.dart';
 
 part 'get_order_details_event.dart';
@@ -20,7 +22,7 @@ class GetOrderDetailsBloc
             orderId: event.orderId);
         emit(GetOrderDetailsState.loaded(model: result));
       } catch (e) {
-        emit(GetOrderDetailsState.error(errorText: e.toString()));
+        emit(GetOrderDetailsState.error(error: handleException(e)));
       }
     });
   }

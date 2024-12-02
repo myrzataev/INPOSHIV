@@ -4,9 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
+import 'package:inposhiv/core/widgets/loading_state.dart';
+import 'package:inposhiv/core/widgets/my_orders_loading_card.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/auction/data/mocked_aution_data.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
@@ -14,6 +18,7 @@ import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_a
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_choise_widget.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/customers_completed_orders_bloc/customers_completed_orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_card.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_widget.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
@@ -72,8 +77,10 @@ class _OrdersScreenState extends State<OrdersScreen>
     if (isCustomer ?? true) {
       callBlocForCustomer();
       getCustomerInvoices();
+      getCustomersCompletedOrders();
     } else {
       callBlocForManufacturer();
+      getManufacturerInvoices();
     }
   }
 
@@ -89,12 +96,22 @@ class _OrdersScreenState extends State<OrdersScreen>
             customerId: preferences.getString("customerId") ?? ""));
   }
 
+  getCustomersCompletedOrders() {
+    BlocProvider.of<CustomersCompletedOrdersBloc>(context).add(
+        CustomersCompletedOrdersEvent.started(
+            customerUid: preferences.getString("customerId") ?? ""));
+  }
+
   getCustomerInvoices() {
-    BlocProvider.of<GetManufacturerInvoicesBloc>(context).add(
+    BlocProvider.of<GetInvoicesBloc>(context).add(
+        GetManufacturerInvoicesEvent.getCustomerInvoices(
+            customerUuid: preferences.getString("customerId") ?? ""));
+  }
+
+  getManufacturerInvoices() {
+    BlocProvider.of<GetInvoicesBloc>(context).add(
         GetManufacturerInvoicesEvent.getManufacturerInvoices(
-            manufactureId: (isCustomer ?? true)
-                ? preferences.getString("customerId") ?? ""
-                : "manufacturer/${preferences.getString("customerId") ?? ""}"));
+            manufactureId: preferences.getString("customerId") ?? ""));
   }
 
   @override
@@ -272,9 +289,18 @@ class _OrdersScreenState extends State<OrdersScreen>
                                               }),
                                         );
                                       },
-                                      loading: () => const Center(
-                                            child: CircularProgressIndicator
-                                                .adaptive(),
+                                      loading: () => Expanded(
+                                            child: ListView.separated(
+                                                itemBuilder: (context, index) {
+                                                  return MyOrdersLoadingCard();
+                                                },
+                                                separatorBuilder:
+                                                    (context, index) {
+                                                  return SizedBox(
+                                                    height: 7.h,
+                                                  );
+                                                },
+                                                itemCount: 7),
                                           ),
                                       orElse: () => const SizedBox.shrink());
                                 },
@@ -283,83 +309,94 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 ManufacturerAuctionsState>(
                                 builder: (context, state) {
                                   return state.maybeWhen(
-                                      loading: () => const Center(
-                                            child: CircularProgressIndicator
-                                                .adaptive(),
-                                          ),
-                                      error: (errorText) => Center(
-                                            child: Text(errorText),
+                                      loading: () =>
+                                          const CustomMainLoadingListview(),
+                                      error: (errorText) => Expanded(
+                                            child: CustomErrorWidget(
+                                                description:
+                                                    errorText.userMessage,
+                                                onRefresh: () {
+                                                  callBlocForManufacturer();
+                                                }),
                                           ),
                                       loaded: (model) {
                                         if (model.isNotEmpty) {
-                                          return ListView.builder(
-                                            scrollDirection: Axis.vertical,
-                                            itemCount: model.length,
-                                            itemBuilder: (context, index) {
-                                              final currentIndex = model[index];
-                                              final List<
-                                                  String> fullPhotoUrls = model[
-                                                          index]
-                                                      .productsList
-                                                      ?.first
-                                                      .photos
-                                                      ?.map((url) =>
-                                                          "${UrlRoutes.baseUrl}$url")
-                                                      .toList() ??
-                                                  [];
-                                              return Padding(
-                                                padding: EdgeInsets.only(
-                                                    bottom: 10.h),
-                                                child: CustomOrderCard(
-                                                  images: fullPhotoUrls,
-                                                  onPageChanged: (carouselIndex,
-                                                      reason) {},
-                                                  reliableStatus: "",
-                                                  name: currentIndex
-                                                          .productsList
-                                                          ?.first
-                                                          .name ??
-                                                      "",
-                                                  quantity: currentIndex
-                                                          .productsList
-                                                          ?.first
-                                                          .quantity
-                                                          ?.toInt() ??
-                                                      0,
-                                                  retailPriceInRuble:
-                                                      currentIndex.productsList
-                                                              ?.first.priceRub
-                                                              ?.toInt() ??
-                                                          0,
-                                                  totalPriceInRuble: calculateService
-                                                      .calculateTotalPriceInRuble(
-                                                          ruble: currentIndex
-                                                                  .productsList
-                                                                  ?.first
-                                                                  .priceRub ??
-                                                              0,
-                                                          totalCount: currentIndex
-                                                                  .productsList
-                                                                  ?.first
-                                                                  .quantity
-                                                                  ?.toInt() ??
-                                                              0)
-                                                      .toInt(),
-                                                  currentIndex: _currentIndex,
-                                                  gridwiewLength: currentIndex
-                                                          .productsList
-                                                          ?.first
-                                                          .sizeQuantities
-                                                          ?.length ??
-                                                      0,
-                                                  sizeQuantities: currentIndex
-                                                          .productsList
-                                                          ?.first
-                                                          .sizeQuantities ??
-                                                      {},
-                                                ),
-                                              );
-                                            },
+                                          return RefreshIndicator.adaptive(
+                                            onRefresh: () async =>
+                                                callBlocForManufacturer(),
+                                            child: ListView.builder(
+                                              scrollDirection: Axis.vertical,
+                                              itemCount: model.length,
+                                              itemBuilder: (context, index) {
+                                                final currentIndex =
+                                                    model[index];
+                                                final List<
+                                                    String> fullPhotoUrls = model[
+                                                            index]
+                                                        .productsList
+                                                        ?.first
+                                                        .photos
+                                                        ?.map((url) =>
+                                                            "${UrlRoutes.baseUrl}$url")
+                                                        .toList() ??
+                                                    [];
+                                                return Padding(
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 10.h),
+                                                  child: CustomOrderCard(
+                                                    images: fullPhotoUrls,
+                                                    onPageChanged:
+                                                        (carouselIndex,
+                                                            reason) {},
+                                                    reliableStatus: "",
+                                                    name: currentIndex
+                                                            .productsList
+                                                            ?.first
+                                                            .name ??
+                                                        "",
+                                                    quantity: currentIndex
+                                                            .productsList
+                                                            ?.first
+                                                            .quantity
+                                                            ?.toInt() ??
+                                                        0,
+                                                    retailPriceInRuble:
+                                                        currentIndex
+                                                                .productsList
+                                                                ?.first
+                                                                .priceRub
+                                                                ?.toInt() ??
+                                                            0,
+                                                    totalPriceInRuble: calculateService
+                                                        .calculateTotalPriceInRuble(
+                                                            ruble: currentIndex
+                                                                    .productsList
+                                                                    ?.first
+                                                                    .priceRub ??
+                                                                0,
+                                                            totalCount: currentIndex
+                                                                    .productsList
+                                                                    ?.first
+                                                                    .quantity
+                                                                    ?.toInt() ??
+                                                                0)
+                                                        .toInt(),
+                                                    currentIndex: _currentIndex,
+                                                    gridwiewLength: currentIndex
+                                                            .productsList
+                                                            ?.first
+                                                            .sizeQuantities
+                                                            ?.length ??
+                                                        0,
+                                                    sizeQuantities: currentIndex
+                                                            .productsList
+                                                            ?.first
+                                                            .sizeQuantities ??
+                                                        {},
+                                                  ),
+                                                );
+                                              },
+                                            ),
                                           );
                                         } else {
                                           return Center(
@@ -393,24 +430,48 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       });
                                 },
                               ),
-                        ListView.separated(
-                            separatorBuilder: (context, index) {
-                              return SizedBox(
-                                height: 10.h,
-                              );
-                            },
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              final item = data[index];
-                              return CustomCompletedOrdersCard(
-                                location: item.location,
-                                trustRating: item.trustStatuses,
-                                rating: 4.96,
-                                retailPrice: item.retailPrice,
-                                retailPriceInRuble: 580,
-                                quantityInApp: item.quantityOfOrders,
-                              );
-                            }),
+                        BlocBuilder<CustomersCompletedOrdersBloc,
+                            CustomersCompletedOrdersState>(
+                          builder: (context, state) {
+                            return state.maybeWhen(
+                                loading: () => const Center(
+                                      child:
+                                          CircularProgressIndicator.adaptive(),
+                                    ),
+                                loaded: (model) {
+                                  if (model.isNotEmpty) {
+                                    return ListView.separated(
+                                        separatorBuilder: (context, index) {
+                                          return SizedBox(
+                                            height: 10.h,
+                                          );
+                                        },
+                                        itemCount: model.length,
+                                        itemBuilder: (context, index) {
+                                          final currentItem = model[index];
+                                          return CustomCompletedOrdersCard(
+                                            location:
+                                                currentItem.customerName ?? "",
+                                            trustRating: 5,
+                                            rating: 4.96,
+                                            retailPrice: 4,
+                                            retailPriceInRuble: 580,
+                                            quantityInApp: 30,
+                                          );
+                                        });
+                                  } else {
+                                    return Text("Пусто");
+                                  }
+                                },
+                                error: (error) => CustomErrorWidget(
+                                    description: error.userMessage,
+                                    onRefresh: () =>
+                                        getCustomersCompletedOrders()),
+                                orElse: () {
+                                  return const SizedBox.shrink();
+                                });
+                          },
+                        ),
                         ListView.separated(
                             separatorBuilder: (context, index) {
                               return SizedBox(
@@ -486,7 +547,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                         //     );
                         //   },
                         // ),
-                        BlocBuilder<GetManufacturerInvoicesBloc,
+                        BlocBuilder<GetInvoicesBloc,
                             GetManufacturerInvoicesState>(
                           builder: (context, state) {
                             return state.maybeWhen(
@@ -494,8 +555,12 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       child:
                                           CircularProgressIndicator.adaptive(),
                                     ),
-                                error: (errorText) => Center(
-                                      child: Text(errorText),
+                                error: (error) => Expanded(
+                                      child: CustomErrorWidget(
+                                          description: error.userMessage,
+                                          onRefresh: () {
+                                            getCustomerInvoices();
+                                          }),
                                     ),
                                 loaded: (model) {
                                   if (model.isNotEmpty) {
@@ -533,46 +598,24 @@ class _OrdersScreenState extends State<OrdersScreen>
                                           }),
                                     );
                                   } else {
-                                    return const Center(
-                                      child: Text("Пусто"),
+                                    return Column(
+                                      children: [
+                                        const Center(
+                                          child: Text("Пусто"),
+                                        ),
+                                        TextButton(
+                                            onPressed: () {
+                                              (isCustomer ?? true)
+                                                  ? getCustomerInvoices()
+                                                  : getManufacturerInvoices();
+                                            },
+                                            child: Text("Обновить"))
+                                      ],
                                     );
                                   }
                                 },
                                 orElse: () {
-                                  return RefreshIndicator.adaptive(
-                                    onRefresh: () async =>
-                                        getCustomerInvoices(),
-                                    child: ListView.separated(
-                                        itemCount: 1,
-                                        separatorBuilder: (context, index) =>
-                                            SizedBox(
-                                              height: 10.h,
-                                            ),
-                                        itemBuilder: (context, index) {
-                                          return InkWell(
-                                            onTap: () => GoRouter.of(context)
-                                                .pushNamed(
-                                                    "detailedTrackingScreen",
-                                                    queryParameters: {
-                                                  "invoiceId":
-                                                      "61cb51d6-1573-4fc9-85a1-1de7d47f0e40"
-                                                  // model[index].invoiceUuid
-                                                  // model[index].invoiceUuid
-                                                }),
-                                            child: Container(
-                                              height: 40.h,
-                                              decoration: BoxDecoration(
-                                                  color: AppColors.cardsColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          15.r)),
-                                              child: Center(
-                                                child: Text("Заказ № $index"),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                  );
+                                  return const SizedBox();
                                 });
                           },
                         )
@@ -606,7 +649,11 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     openedDetailedView ? false : true;
                               });
                             })
-                        : CustomButton(text: "Создать заказ", onPressed: () {}))
+                        : CustomButton(
+                            text: "Создать заказ",
+                            onPressed: () {
+                              router.pushNamed("chooseImageSource");
+                            }))
                     : const SizedBox.shrink())
           ]),
         ),

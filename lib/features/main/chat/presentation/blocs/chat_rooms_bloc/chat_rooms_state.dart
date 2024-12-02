@@ -6,5 +6,5 @@ class ChatRoomsState with _$ChatRoomsState {
   const factory ChatRoomsState.loading() = _Loading;
   const factory ChatRoomsState.chatRoomsLoaded(
       {required List<CreateChatRoomModel> model}) = _ChatRoomsLoaded;
-  const factory ChatRoomsState.chatRoomsError({required String errorText}) = _ChatRoomsError;
+  const factory ChatRoomsState.chatRoomsError({required AppError error}) = _ChatRoomsError;
 }

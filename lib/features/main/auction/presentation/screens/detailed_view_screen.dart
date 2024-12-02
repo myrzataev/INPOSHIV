@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auction_members_bloc/get_auction_members_bloc.dart';
@@ -14,11 +15,13 @@ import 'package:inposhiv/features/main/auction/presentation/blocs/get_detailed_a
 import 'package:inposhiv/features/main/auction/presentation/screens/auction_screen.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
+import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailedViewScreen extends StatefulWidget {
@@ -90,8 +93,12 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                     loading: () => const Center(
                       child: CircularProgressIndicator.adaptive(),
                     ),
-                    error: (errorText) => Center(
-                      child: Text(errorText),
+                    error: (errorText) => Expanded(
+                      child: CustomErrorWidget(
+                          description: errorText.userMessage,
+                          onRefresh: () {
+                            getAuctionDetails();
+                          }),
                     ),
                     loaded: (auctionModel) {
                       return BlocListener<CreateChatRoomBloc,
@@ -99,6 +106,11 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                         listener: (context, state) {
                           state.maybeWhen(
                               createdChatRoomSuccess: (createChatModel) {
+                                Provider.of<ChatProvider>(context,
+                                        listen: false)
+                                    .updateReceipentId(createChatModel
+                                            .customerOrManufacturerUuid ??
+                                        "");
                                 GoRouter.of(context)
                                     .pushNamed("chatScreen", queryParameters: {
                                   "orderId": createChatModel.orderId.toString(),
@@ -264,7 +276,13 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                       loading: () => const Center(
                             child: CircularProgressIndicator.adaptive(),
                           ),
-                      auctionMembersError: (errorText) => Text(errorText),
+                      auctionMembersError: (error) => Expanded(
+                            child: CustomErrorWidget(
+                                description: error.userMessage,
+                                onRefresh: () {
+                                  callBloc();
+                                }),
+                          ),
                       auctionMembersLoaded: (auctionMembersModel) {
                         if (auctionMembersModel.isEmpty) {
                           return const Center(
@@ -434,10 +452,13 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                                       "userId"),
                                                           "recipientUuid":
                                                               currentItem
-                                                                  .manufacturerUuid,
+                                                                  .manufacturerUserUuid,
                                                           "orderId":
                                                               auctionModel
-                                                                  ?.orderId
+                                                                  ?.orderId,
+                                                          "customerOrManufacturerUuid":
+                                                              currentItem
+                                                                  .manufacturerUuid
                                                         }));
                                                   },
                                                   color: AppColors
@@ -472,13 +493,14 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                         }
                       },
                       orElse: () {
-                        return InkWell(
-                          onTap: () => print(state),
-                          child: Container(
-                            color: Colors.red,
-                            child: Text("Or else"),
-                          ),
-                        );
+                        return const SizedBox();
+                        // return InkWell(
+                        //   onTap: () => print(state),
+                        //   child: Container(
+                        //     color: Colors.red,
+                        //     child: Text("Or else"),
+                        //   ),
+                        // );
                       });
                 },
               ))

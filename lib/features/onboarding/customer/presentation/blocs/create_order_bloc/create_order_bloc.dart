@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/onboarding/customer/data/models/currency_convert_model.dart';
 import 'package:inposhiv/features/onboarding/customer/data/models/order_model.dart';
 import 'package:inposhiv/features/onboarding/customer/data/models/size_model.dart';
@@ -13,13 +15,10 @@ part 'create_order_state.dart';
 part 'create_order_bloc.freezed.dart';
 
 class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
-
   final CreateOrderRepoImpl createOrderRepoImpl;
   final GetSizesRepoimpl getSizesRepoimpl;
   CreateOrderBloc(
-      {
-      required this.getSizesRepoimpl,
-      required this.createOrderRepoImpl})
+      {required this.getSizesRepoimpl, required this.createOrderRepoImpl})
       : super(const _Initial()) {
     on<_GetSizes>((event, emit) async {
       await getSizes(event: event, emit: emit);
@@ -37,7 +36,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       final result = await getSizesRepoimpl.getSizes();
       emit(CreateOrderState.sizesLoaded(model: result));
     } catch (e) {
-      emit(CreateOrderState.sizesError(errorText: e.toString()));
+      final error = handleException(e);
+      emit(CreateOrderState.sizesError(error: error));
     }
   }
 
@@ -61,8 +61,8 @@ class CreateOrderBloc extends Bloc<CreateOrderEvent, CreateOrderState> {
       // Handle success (you might want to emit a success state here)
       emit(CreateOrderState.createOrderLoaded(model: result));
     } catch (e) {
-      // Handle error
-      emit(CreateOrderState.createOrderError(errorText: e.toString()));
+      final error = handleException(e);
+      emit(CreateOrderState.createOrderError(error: error));
     }
   }
 }

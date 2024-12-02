@@ -16,6 +16,8 @@ import 'package:inposhiv/features/main/orders/customer/data/models/order_details
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/date_picker.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/showdialog.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OrderDetailScreen extends StatefulWidget {
@@ -62,27 +64,36 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
         child: BlocListener<OrdersBloc, OrdersState>(
           listener: (context, state) {
             state.maybeWhen(
-                orderDetailsSended: (model) => showDialog(
-                    context: context,
-                    builder: (context) => CustomDialog(
-                        title:
-                            "Мы отправили эти данные производителю для подтверждения",
-                        description: "Мы уведомим вас, когда он это сделает",
-                        button: CustomButton(
-                            text: "Понятно",
-                            onPressed: () {
-                              GoRouter.of(context).pop();
-                            }))),
-                orderDetailsError: (errorText) => showDialog(
-                    context: context,
-                    builder: (context) => CustomDialog(
-                        title: "Что-то пошло не так",
-                        description: "Попробуйте снова",
-                        button: CustomButton(
-                            text: "Понятно",
-                            onPressed: () {
-                              router.pop();
-                            }))),
+                loading: () => Showdialog.showLoaderDialog(context),
+                orderDetailsSended: (model) async {
+                  router.pop();
+
+                  await showDialog(
+                      context: context,
+                      builder: (context) => CustomDialog(
+                          title:
+                              "Мы отправили эти данные производителю для подтверждения",
+                          description: "Мы уведомим вас, когда он это сделает",
+                          button: CustomButton(
+                              text: "Понятно",
+                              onPressed: () {
+                                GoRouter.of(context).pop();
+                              })));
+                  router.goNamed("chat");
+                },
+                orderDetailsError: (errorText) {
+                  router.pop();
+                  showDialog(
+                      context: context,
+                      builder: (context) => CustomDialog(
+                          title: "Что-то пошло не так",
+                          description: "Попробуйте снова",
+                          button: CustomButton(
+                              text: "Понятно",
+                              onPressed: () {
+                                router.pop();
+                              })));
+                },
                 orElse: () {});
           },
           child: Column(
@@ -191,61 +202,112 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           _pickFiles(2);
                         },
                       ),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       router.pushNamed("invoiceScreenForCustomer",
+                      //           queryParameters: {"orderId": "1"});
+                      //     },
+                      //     child: Text("data"))
                     ],
                   ),
                 ),
               ),
-              CustomButton(
-                  text: "Подтвердите правильность данных",
-                  onPressed: () {
-                    // context.goNamed("auction");
-                    // Future.delayed(const Duration(milliseconds: 200), () {
-                    //   showDialog(
-                    //     // ignore: use_build_context_synchronously
-                    //     context: context,
-                    //     builder: (context) => CustomDialog(
-                    //       title:
-                    //           "Мы отправили эти данные производителю для подтверждения",
-                    //       description: "Мы уведомим вас, когда он это сделает",
-                    //       button: CustomButton(
-                    //         text: "Понятно",
-                    //         onPressed: () {
-                    //         GoRouter.of(context).pushNamed("invoiceScreen");
-                    //          // Close the dialog
-                    //         },
-                    //       ),
-                    //     ),
-                    //   );
-                    // });
-                    BlocProvider.of<OrdersBloc>(context)
-                        .add(OrdersEvent.sendOrderDetails(
-                            orderDetails: OrderDetailsModel(
-                              orderId: int.tryParse(widget.orderId),
-                              // int.tryParse(widget.orderId),
-                              productName: orderNameController.text,
-                              material: 0,
-                              color: colorController.text,
-                              quantity: 150,
-                              deliveryPoint: addressController.text,
-                              discount: int.tryParse(discountController.text),
-                              manufacturerUuid: Provider.of<ChatProvider>(
-                                      context,
-                                      listen: false)
-                                  .receipentId,
-                              deadline:
-                                  DateTime.tryParse(expirationController.text),
-                              // technicalDocumentUrlsz: filesForDoc
-                              //     ?.map((element) => element.path ?? "")
-                              //     .toList(),
-                              technicalDocuments: filesForDoc
-                                  ?.map((element) => element.path ?? "")
-                                  .toList(),
-                              lekalaDocuments: filesForLecala
-                                  ?.map((element) => element.path ?? "")
-                                  .toList(),
-                            ).toJson(),
-                            orderId: widget.orderId));
-                  })
+              Padding(
+                padding: EdgeInsets.only(bottom: 10.h),
+                child: CustomButton(
+                    text: "Подтвердите правильность данных",
+                    onPressed: () {
+                      if ((filesForDoc?.isEmpty ?? true)) {
+                        showDialog(
+                            context: context,
+                            builder: (context) => CustomDialog(
+                                title: "title",
+                                description: "description",
+                                button: CustomButton(
+                                    text: "Понятно",
+                                    onPressed: () {
+                                      router.pop();
+                                    })));
+                      } else {
+                        String expirationText = expirationController
+                            .text; // The value from the controller
+                        List<String> dates = expirationText.split(' – ');
+                        String? firstDate;
+                        String? secondDate;
+                        try {
+                          if (dates.length == 2) {
+                            firstDate = dates[0].trim(); // "27.11.2024"
+                            secondDate = dates[1].trim(); // "04.12.2024"
+                            print('First date: $firstDate');
+                            print('Second date: $secondDate');
+                          } else {
+                            print('Invalid format');
+                          }
+                        } catch (e) {
+                          debugPrint(e.toString());
+                        }
+                        DateTime? startDateTime;
+                        DateTime? endDateTime;
+                        String? startDateIso;
+                        String? endDateIso;
+                        if (firstDate != null && secondDate != null) {
+                          // Parse the date from the string, then set the time to 00:00:00
+                          startDateTime = DateFormat('dd.MM.yyyy')
+                              .parse(firstDate)
+                              .toLocal()
+                              .copyWith(
+                                  hour: 0,
+                                  minute: 0,
+                                  second: 0,
+                                  millisecond: 0);
+                          endDateTime = DateFormat('dd.MM.yyyy')
+                              .parse(secondDate)
+                              .toLocal()
+                              .copyWith(
+                                  hour: 0,
+                                  minute: 0,
+                                  second: 0,
+                                  millisecond: 0);
+
+                          // Convert to ISO 8601 string format
+                          startDateIso = startDateTime.toIso8601String();
+                          endDateIso = endDateTime.toIso8601String();
+                        }
+                        BlocProvider.of<OrdersBloc>(context)
+                            .add(OrdersEvent.sendOrderDetails(
+                                orderDetails: OrderDetailsModel(
+                                  orderId: int.tryParse(widget.orderId),
+                                  // int.tryParse(widget.orderId),
+                                  productName: orderNameController.text,
+                                  // material: 0,
+                                  color: colorController.text,
+                                  // quantity: 150,
+                                  deliveryPoint: addressController.text,
+                                  discount:
+                                      int.tryParse(discountController.text),
+                                  manufacturerUuid: Provider.of<ChatProvider>(
+                                          context,
+                                          listen: false)
+                                      .receipentId,
+                                  deadlineStart: startDateIso,
+                                  deadlineEnd: endDateIso,
+                                  // technicalDocumentUrlsz: filesForDoc
+                                  //     ?.map((element) => element.path ?? "")
+                                  //     .toList(),
+                                  agreements: filesForDoc
+                                      ?.map((element) => element.path ?? "")
+                                      .toList(),
+                                  technicalDocuments: filesForTech
+                                      ?.map((element) => element.path ?? "")
+                                      .toList(),
+                                  lekalaDocuments: filesForLecala
+                                      ?.map((element) => element.path ?? "")
+                                      .toList(),
+                                ).toJson(),
+                                orderId: widget.orderId));
+                      }
+                    }),
+              )
             ],
           ),
         ),
@@ -254,7 +316,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
   }
 
   Future<void> _pickFiles(int id) async {
-    final result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    final result = await FilePicker.platform.pickFiles(allowMultiple: false);
     if (result == null) {
       print("not selected");
     } else {
@@ -345,6 +407,7 @@ class CustomAttachDocument extends StatelessWidget {
                           return InkWell(
                             onTap: () {
                               GoRouter.of(context).pushNamed("seeDoc",
+                                  extra: false,
                                   queryParameters: {
                                     "path": files?[index].path
                                   });
@@ -356,7 +419,7 @@ class CustomAttachDocument extends StatelessWidget {
                                   color: AppColors.accentTextColor,
                                 ),
                                 Text(
-                                  files?[index].name ?? "",
+                                  "Файл-${index + 1}" "",
                                   style: AppFonts.w400s16.copyWith(
                                       color: AppColors.accentTextColor),
                                 )

@@ -5,4 +5,7 @@ class GetManufacturerInvoicesEvent with _$GetManufacturerInvoicesEvent {
   const factory GetManufacturerInvoicesEvent.getManufacturerInvoices({
     required String manufactureId,
   }) = _GetManufacturerInvoices;
+  const factory GetManufacturerInvoicesEvent.getCustomerInvoices({
+    required String customerUuid,
+  }) = _GetCustomerInvoices;
 }

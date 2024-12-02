@@ -462,7 +462,7 @@ mixin _$GetCategoriesState {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -475,7 +475,7 @@ mixin _$GetCategoriesState {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -488,7 +488,7 @@ mixin _$GetCategoriesState {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
@@ -609,7 +609,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -625,7 +625,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -641,7 +641,7 @@ class _$InitialImpl implements _Initial {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
@@ -761,7 +761,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -777,7 +777,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -793,7 +793,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
@@ -947,7 +947,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -963,7 +963,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -979,7 +979,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
@@ -1145,7 +1145,7 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -1161,7 +1161,7 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -1177,7 +1177,7 @@ class _$SpecificCategoryLoadedImpl implements _SpecificCategoryLoaded {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
@@ -1337,7 +1337,7 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -1353,7 +1353,7 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -1369,7 +1369,7 @@ class _$SpecificCategoryErrorImpl implements _SpecificCategoryError {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
@@ -1458,7 +1458,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
           _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
       __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -1474,13 +1474,13 @@ class __$$ErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$ErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -1488,14 +1488,14 @@ class __$$ErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ErrorImpl implements _Error {
-  const _$ErrorImpl({required this.errorText});
+  const _$ErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'GetCategoriesState.error(errorText: $errorText)';
+    return 'GetCategoriesState.error(error: $error)';
   }
 
   @override
@@ -1503,12 +1503,11 @@ class _$ErrorImpl implements _Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of GetCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -1526,12 +1525,12 @@ class _$ErrorImpl implements _Error {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
   }) {
-    return error(errorText);
+    return error(this.error);
   }
 
   @override
@@ -1542,12 +1541,12 @@ class _$ErrorImpl implements _Error {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
   }) {
-    return error?.call(errorText);
+    return error?.call(this.error);
   }
 
   @override
@@ -1558,14 +1557,14 @@ class _$ErrorImpl implements _Error {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(errorText);
+      return error(this.error);
     }
     return orElse();
   }
@@ -1629,9 +1628,9 @@ class _$ErrorImpl implements _Error {
 }
 
 abstract class _Error implements GetCategoriesState {
-  const factory _Error({required final String errorText}) = _$ErrorImpl;
+  const factory _Error({required final AppError error}) = _$ErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of GetCategoriesState
   /// with the given fields replaced by the non-null parameter values.
@@ -1725,7 +1724,7 @@ class _$GetProductCategoriesLoadedImpl implements _GetProductCategoriesLoaded {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -1741,7 +1740,7 @@ class _$GetProductCategoriesLoadedImpl implements _GetProductCategoriesLoaded {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -1757,7 +1756,7 @@ class _$GetProductCategoriesLoadedImpl implements _GetProductCategoriesLoaded {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,
@@ -1891,7 +1890,7 @@ class _$GetProductCategoriesErrorImpl implements _GetProductCategoriesError {
     required TResult Function(List<CategoriesEntity> entity) loaded,
     required TResult Function(List<Subcategory?> entity) specificCategoryLoaded,
     required TResult Function(String errorText) errorSpecificCategory,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
     required TResult Function(List<ProductCategoriesModel> model)
         getProductCategoriesLoaded,
     required TResult Function() getProductCategoriesError,
@@ -1907,7 +1906,7 @@ class _$GetProductCategoriesErrorImpl implements _GetProductCategoriesError {
     TResult? Function(List<CategoriesEntity> entity)? loaded,
     TResult? Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult? Function(String errorText)? errorSpecificCategory,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
     TResult? Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult? Function()? getProductCategoriesError,
@@ -1923,7 +1922,7 @@ class _$GetProductCategoriesErrorImpl implements _GetProductCategoriesError {
     TResult Function(List<CategoriesEntity> entity)? loaded,
     TResult Function(List<Subcategory?> entity)? specificCategoryLoaded,
     TResult Function(String errorText)? errorSpecificCategory,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     TResult Function(List<ProductCategoriesModel> model)?
         getProductCategoriesLoaded,
     TResult Function()? getProductCategoriesError,

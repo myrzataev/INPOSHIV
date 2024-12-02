@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -8,12 +9,14 @@ import 'package:inposhiv/features/main/orders/customer/presentation/screens/orde
 class Stage6ForCustomer extends StatelessWidget {
   final Function onTap;
   final List<Map<String, String?>> allComments;
+  final List<String?>? allDocumentsOfStage;
 
   const Stage6ForCustomer({
     super.key,
     required this.currentIndexOfData,
     required this.onTap,
     required this.allComments,
+    this.allDocumentsOfStage,
   });
 
   final int currentIndexOfData;
@@ -66,6 +69,31 @@ class Stage6ForCustomer extends StatelessWidget {
               "Чтобы осмотреть его, оценить и написать в случае каких-то спорных моментов. ",
               style: AppFonts.w400s16,
             ),
+            allDocumentsOfStage != null
+                ? SizedBox(
+                    height: 70.h,
+                    child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final currentItem = allDocumentsOfStage?[index];
+                          return InkWell(
+                            onTap: () {
+                              router.pushNamed("seeDoc",
+                                  queryParameters: {"docUrl": currentItem},
+                                  extra: true);
+                            },
+                            child: const Icon(Icons.file_present,
+                                size: 60, color: AppColors.accentTextColor),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            width: 5.w,
+                          );
+                        },
+                        itemCount: allDocumentsOfStage?.length ?? 0),
+                  )
+                : const SizedBox.shrink(),
             Expanded(
                 child: ListView.separated(
                     itemBuilder: (context, index) {

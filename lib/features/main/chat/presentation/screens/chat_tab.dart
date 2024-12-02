@@ -8,6 +8,8 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
+import 'package:inposhiv/core/widgets/loading_card.dart';
 import 'package:inposhiv/features/main/chat/data/models/chat_rooms_model.dart';
 import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
@@ -19,6 +21,7 @@ import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
 
 class ChatTab extends StatefulWidget {
@@ -127,17 +130,52 @@ class _ChatTabState extends State<ChatTab> {
               builder: (context, state) {
                 if (_cachedModel.isNotEmpty) {
                   return _buildChatRoomsList(_cachedModel, () {
-                    BlocProvider.of<ChatRoomsBloc>(context).add(
-                        ChatRoomsEvent.getChatRoomsList(
-                            userUuid: preferences.getString("userId") ?? ""));
+                    callBloc();
                   });
                 }
                 return state.maybeWhen(
-                    loading: () => const Center(
-                          child: CircularProgressIndicator.adaptive(),
-                        ),
-                    chatRoomsError: (errorText) => Center(
-                          child: Text(errorText),
+                    loading: () => Expanded(
+                        child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              return Shimmer.fromColors(
+                                baseColor:
+                                    const Color.fromARGB(255, 213, 211, 211),
+                                highlightColor:
+                                    const Color.fromARGB(255, 168, 165, 165),
+                                child: Row(
+                                  children: [
+                                    CircleAvatar(
+                                      radius: 25.r,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w),
+                                      child: Container(
+                                        height: 50.h,
+                                        width: 280.w,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              5.r), // Static radius
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return SizedBox(
+                                height: 7.h,
+                              );
+                            },
+                            itemCount: 15)),
+                    chatRoomsError: (error) => Expanded(
+                          child: CustomErrorWidget(
+                              description: error.userMessage,
+                              onRefresh: () {
+                                callBloc();
+                              }),
                         ),
                     chatRoomsLoaded: (model) {
                       if (model.isEmpty) {
@@ -164,10 +202,7 @@ class _ChatTabState extends State<ChatTab> {
                         );
                       } else {
                         return _buildChatRoomsList(model, () {
-                          BlocProvider.of<ChatRoomsBloc>(context).add(
-                              ChatRoomsEvent.getChatRoomsList(
-                                  userUuid:
-                                      preferences.getString("userId") ?? ""));
+                          callBloc();
                         });
                       }
                     },
@@ -201,7 +236,8 @@ class _ChatTabState extends State<ChatTab> {
                 Provider.of<ChatProvider>(context, listen: false)
                     .updateChatRoomId(currentItem.chatUuid ?? "");
                 Provider.of<ChatProvider>(context, listen: false)
-                    .updateReceipentId(currentItem.recipientUuid ?? "");
+                    .updateReceipentId(
+                        currentItem.customerOrManufacturerUuid ?? "");
                 GoRouter.of(context).pushNamed(
                   "chatScreen",
                   queryParameters: {

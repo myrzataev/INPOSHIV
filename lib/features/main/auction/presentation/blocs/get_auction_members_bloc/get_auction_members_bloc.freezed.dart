@@ -242,7 +242,7 @@ mixin _$GetAuctionMembersState {
     required TResult Function() loading,
     required TResult Function(List<AuctionMembersModel> auctionMembersModel)
         auctionMembersLoaded,
-    required TResult Function(String errorText) auctionMembersError,
+    required TResult Function(AppError error) auctionMembersError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -251,7 +251,7 @@ mixin _$GetAuctionMembersState {
     TResult? Function()? loading,
     TResult? Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult? Function(String errorText)? auctionMembersError,
+    TResult? Function(AppError error)? auctionMembersError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -260,7 +260,7 @@ mixin _$GetAuctionMembersState {
     TResult Function()? loading,
     TResult Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult Function(String errorText)? auctionMembersError,
+    TResult Function(AppError error)? auctionMembersError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -358,7 +358,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() loading,
     required TResult Function(List<AuctionMembersModel> auctionMembersModel)
         auctionMembersLoaded,
-    required TResult Function(String errorText) auctionMembersError,
+    required TResult Function(AppError error) auctionMembersError,
   }) {
     return initial();
   }
@@ -370,7 +370,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? loading,
     TResult? Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult? Function(String errorText)? auctionMembersError,
+    TResult? Function(AppError error)? auctionMembersError,
   }) {
     return initial?.call();
   }
@@ -382,7 +382,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? loading,
     TResult Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult Function(String errorText)? auctionMembersError,
+    TResult Function(AppError error)? auctionMembersError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -478,7 +478,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() loading,
     required TResult Function(List<AuctionMembersModel> auctionMembersModel)
         auctionMembersLoaded,
-    required TResult Function(String errorText) auctionMembersError,
+    required TResult Function(AppError error) auctionMembersError,
   }) {
     return loading();
   }
@@ -490,7 +490,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? loading,
     TResult? Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult? Function(String errorText)? auctionMembersError,
+    TResult? Function(AppError error)? auctionMembersError,
   }) {
     return loading?.call();
   }
@@ -502,7 +502,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? loading,
     TResult Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult Function(String errorText)? auctionMembersError,
+    TResult Function(AppError error)? auctionMembersError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -638,7 +638,7 @@ class _$AuctionMembersLoadedImpl implements _AuctionMembersLoaded {
     required TResult Function() loading,
     required TResult Function(List<AuctionMembersModel> auctionMembersModel)
         auctionMembersLoaded,
-    required TResult Function(String errorText) auctionMembersError,
+    required TResult Function(AppError error) auctionMembersError,
   }) {
     return auctionMembersLoaded(auctionMembersModel);
   }
@@ -650,7 +650,7 @@ class _$AuctionMembersLoadedImpl implements _AuctionMembersLoaded {
     TResult? Function()? loading,
     TResult? Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult? Function(String errorText)? auctionMembersError,
+    TResult? Function(AppError error)? auctionMembersError,
   }) {
     return auctionMembersLoaded?.call(auctionMembersModel);
   }
@@ -662,7 +662,7 @@ class _$AuctionMembersLoadedImpl implements _AuctionMembersLoaded {
     TResult Function()? loading,
     TResult Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult Function(String errorText)? auctionMembersError,
+    TResult Function(AppError error)? auctionMembersError,
     required TResult orElse(),
   }) {
     if (auctionMembersLoaded != null) {
@@ -729,7 +729,7 @@ abstract class _$$AuctionMembersErrorImplCopyWith<$Res> {
           $Res Function(_$AuctionMembersErrorImpl) then) =
       __$$AuctionMembersErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -746,13 +746,13 @@ class __$$AuctionMembersErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$AuctionMembersErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -760,14 +760,14 @@ class __$$AuctionMembersErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$AuctionMembersErrorImpl implements _AuctionMembersError {
-  const _$AuctionMembersErrorImpl({required this.errorText});
+  const _$AuctionMembersErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'GetAuctionMembersState.auctionMembersError(errorText: $errorText)';
+    return 'GetAuctionMembersState.auctionMembersError(error: $error)';
   }
 
   @override
@@ -775,12 +775,11 @@ class _$AuctionMembersErrorImpl implements _AuctionMembersError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$AuctionMembersErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of GetAuctionMembersState
   /// with the given fields replaced by the non-null parameter values.
@@ -798,9 +797,9 @@ class _$AuctionMembersErrorImpl implements _AuctionMembersError {
     required TResult Function() loading,
     required TResult Function(List<AuctionMembersModel> auctionMembersModel)
         auctionMembersLoaded,
-    required TResult Function(String errorText) auctionMembersError,
+    required TResult Function(AppError error) auctionMembersError,
   }) {
-    return auctionMembersError(errorText);
+    return auctionMembersError(error);
   }
 
   @override
@@ -810,9 +809,9 @@ class _$AuctionMembersErrorImpl implements _AuctionMembersError {
     TResult? Function()? loading,
     TResult? Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult? Function(String errorText)? auctionMembersError,
+    TResult? Function(AppError error)? auctionMembersError,
   }) {
-    return auctionMembersError?.call(errorText);
+    return auctionMembersError?.call(error);
   }
 
   @override
@@ -822,11 +821,11 @@ class _$AuctionMembersErrorImpl implements _AuctionMembersError {
     TResult Function()? loading,
     TResult Function(List<AuctionMembersModel> auctionMembersModel)?
         auctionMembersLoaded,
-    TResult Function(String errorText)? auctionMembersError,
+    TResult Function(AppError error)? auctionMembersError,
     required TResult orElse(),
   }) {
     if (auctionMembersError != null) {
-      return auctionMembersError(errorText);
+      return auctionMembersError(error);
     }
     return orElse();
   }
@@ -870,10 +869,10 @@ class _$AuctionMembersErrorImpl implements _AuctionMembersError {
 }
 
 abstract class _AuctionMembersError implements GetAuctionMembersState {
-  const factory _AuctionMembersError({required final String errorText}) =
+  const factory _AuctionMembersError({required final AppError error}) =
       _$AuctionMembersErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of GetAuctionMembersState
   /// with the given fields replaced by the non-null parameter values.

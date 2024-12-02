@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/auth/data/models/user_model.dart';
 import 'package:inposhiv/features/auth/data/repositories/auth_repo.dart';
 import 'package:inposhiv/features/auth/domain/entities/user_entity.dart';
@@ -18,7 +20,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final result = await repoImpl.auth(userModel: event.model);
         emit(AuthState.loaded(entity: result));
       } catch (e) {
-        emit(AuthState.error(error: e.toString()));
+        final error = handleException(e);
+        emit(AuthState.error(error: error));
       }
     });
   }

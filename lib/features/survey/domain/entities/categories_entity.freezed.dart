@@ -14,12 +14,19 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
+CategoriesEntity _$CategoriesEntityFromJson(Map<String, dynamic> json) {
+  return _CategoriesEntity.fromJson(json);
+}
+
 /// @nodoc
 mixin _$CategoriesEntity {
   String? get slug => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
   List<Subcategory>? get subcategories => throw _privateConstructorUsedError;
+
+  /// Serializes this CategoriesEntity to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of CategoriesEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -131,11 +138,14 @@ class __$$CategoriesEntityImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$CategoriesEntityImpl implements _CategoriesEntity {
   const _$CategoriesEntityImpl(
       {this.slug, this.name, this.id, final List<Subcategory>? subcategories})
       : _subcategories = subcategories;
+
+  factory _$CategoriesEntityImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CategoriesEntityImplFromJson(json);
 
   @override
   final String? slug;
@@ -170,6 +180,7 @@ class _$CategoriesEntityImpl implements _CategoriesEntity {
                 .equals(other._subcategories, _subcategories));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, slug, name, id,
       const DeepCollectionEquality().hash(_subcategories));
@@ -182,6 +193,13 @@ class _$CategoriesEntityImpl implements _CategoriesEntity {
   _$$CategoriesEntityImplCopyWith<_$CategoriesEntityImpl> get copyWith =>
       __$$CategoriesEntityImplCopyWithImpl<_$CategoriesEntityImpl>(
           this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CategoriesEntityImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _CategoriesEntity implements CategoriesEntity {
@@ -190,6 +208,9 @@ abstract class _CategoriesEntity implements CategoriesEntity {
       final String? name,
       final int? id,
       final List<Subcategory>? subcategories}) = _$CategoriesEntityImpl;
+
+  factory _CategoriesEntity.fromJson(Map<String, dynamic> json) =
+      _$CategoriesEntityImpl.fromJson;
 
   @override
   String? get slug;
@@ -208,11 +229,18 @@ abstract class _CategoriesEntity implements CategoriesEntity {
       throw _privateConstructorUsedError;
 }
 
+Subcategory _$SubcategoryFromJson(Map<String, dynamic> json) {
+  return _Subcategory.fromJson(json);
+}
+
 /// @nodoc
 mixin _$Subcategory {
   String? get slug => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
+
+  /// Serializes this Subcategory to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
 
   /// Create a copy of Subcategory
   /// with the given fields replaced by the non-null parameter values.
@@ -312,9 +340,12 @@ class __$$SubcategoryImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-
+@JsonSerializable()
 class _$SubcategoryImpl implements _Subcategory {
   const _$SubcategoryImpl({this.slug, this.name, this.id});
+
+  factory _$SubcategoryImpl.fromJson(Map<String, dynamic> json) =>
+      _$$SubcategoryImplFromJson(json);
 
   @override
   final String? slug;
@@ -338,6 +369,7 @@ class _$SubcategoryImpl implements _Subcategory {
             (identical(other.id, id) || other.id == id));
   }
 
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, slug, name, id);
 
@@ -348,6 +380,13 @@ class _$SubcategoryImpl implements _Subcategory {
   @pragma('vm:prefer-inline')
   _$$SubcategoryImplCopyWith<_$SubcategoryImpl> get copyWith =>
       __$$SubcategoryImplCopyWithImpl<_$SubcategoryImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$SubcategoryImplToJson(
+      this,
+    );
+  }
 }
 
 abstract class _Subcategory implements Subcategory {
@@ -355,6 +394,9 @@ abstract class _Subcategory implements Subcategory {
       {final String? slug,
       final String? name,
       final int? id}) = _$SubcategoryImpl;
+
+  factory _Subcategory.fromJson(Map<String, dynamic> json) =
+      _$SubcategoryImpl.fromJson;
 
   @override
   String? get slug;

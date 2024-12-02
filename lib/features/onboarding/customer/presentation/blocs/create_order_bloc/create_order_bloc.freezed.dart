@@ -344,9 +344,9 @@ mixin _$CreateOrderState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SizeModel> model) sizesLoaded,
-    required TResult Function(String errorText) sizesError,
+    required TResult Function(AppError error) sizesError,
     required TResult Function(OrderModel model) createOrderLoaded,
-    required TResult Function(String errorText) createOrderError,
+    required TResult Function(AppError error) createOrderError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -354,9 +354,9 @@ mixin _$CreateOrderState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SizeModel> model)? sizesLoaded,
-    TResult? Function(String errorText)? sizesError,
+    TResult? Function(AppError error)? sizesError,
     TResult? Function(OrderModel model)? createOrderLoaded,
-    TResult? Function(String errorText)? createOrderError,
+    TResult? Function(AppError error)? createOrderError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -364,9 +364,9 @@ mixin _$CreateOrderState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SizeModel> model)? sizesLoaded,
-    TResult Function(String errorText)? sizesError,
+    TResult Function(AppError error)? sizesError,
     TResult Function(OrderModel model)? createOrderLoaded,
-    TResult Function(String errorText)? createOrderError,
+    TResult Function(AppError error)? createOrderError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -468,9 +468,9 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SizeModel> model) sizesLoaded,
-    required TResult Function(String errorText) sizesError,
+    required TResult Function(AppError error) sizesError,
     required TResult Function(OrderModel model) createOrderLoaded,
-    required TResult Function(String errorText) createOrderError,
+    required TResult Function(AppError error) createOrderError,
   }) {
     return initial();
   }
@@ -481,9 +481,9 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SizeModel> model)? sizesLoaded,
-    TResult? Function(String errorText)? sizesError,
+    TResult? Function(AppError error)? sizesError,
     TResult? Function(OrderModel model)? createOrderLoaded,
-    TResult? Function(String errorText)? createOrderError,
+    TResult? Function(AppError error)? createOrderError,
   }) {
     return initial?.call();
   }
@@ -494,9 +494,9 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SizeModel> model)? sizesLoaded,
-    TResult Function(String errorText)? sizesError,
+    TResult Function(AppError error)? sizesError,
     TResult Function(OrderModel model)? createOrderLoaded,
-    TResult Function(String errorText)? createOrderError,
+    TResult Function(AppError error)? createOrderError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -597,9 +597,9 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SizeModel> model) sizesLoaded,
-    required TResult Function(String errorText) sizesError,
+    required TResult Function(AppError error) sizesError,
     required TResult Function(OrderModel model) createOrderLoaded,
-    required TResult Function(String errorText) createOrderError,
+    required TResult Function(AppError error) createOrderError,
   }) {
     return loading();
   }
@@ -610,9 +610,9 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SizeModel> model)? sizesLoaded,
-    TResult? Function(String errorText)? sizesError,
+    TResult? Function(AppError error)? sizesError,
     TResult? Function(OrderModel model)? createOrderLoaded,
-    TResult? Function(String errorText)? createOrderError,
+    TResult? Function(AppError error)? createOrderError,
   }) {
     return loading?.call();
   }
@@ -623,9 +623,9 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SizeModel> model)? sizesLoaded,
-    TResult Function(String errorText)? sizesError,
+    TResult Function(AppError error)? sizesError,
     TResult Function(OrderModel model)? createOrderLoaded,
-    TResult Function(String errorText)? createOrderError,
+    TResult Function(AppError error)? createOrderError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -760,9 +760,9 @@ class _$SizesLoadedImpl implements _SizesLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SizeModel> model) sizesLoaded,
-    required TResult Function(String errorText) sizesError,
+    required TResult Function(AppError error) sizesError,
     required TResult Function(OrderModel model) createOrderLoaded,
-    required TResult Function(String errorText) createOrderError,
+    required TResult Function(AppError error) createOrderError,
   }) {
     return sizesLoaded(model);
   }
@@ -773,9 +773,9 @@ class _$SizesLoadedImpl implements _SizesLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SizeModel> model)? sizesLoaded,
-    TResult? Function(String errorText)? sizesError,
+    TResult? Function(AppError error)? sizesError,
     TResult? Function(OrderModel model)? createOrderLoaded,
-    TResult? Function(String errorText)? createOrderError,
+    TResult? Function(AppError error)? createOrderError,
   }) {
     return sizesLoaded?.call(model);
   }
@@ -786,9 +786,9 @@ class _$SizesLoadedImpl implements _SizesLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SizeModel> model)? sizesLoaded,
-    TResult Function(String errorText)? sizesError,
+    TResult Function(AppError error)? sizesError,
     TResult Function(OrderModel model)? createOrderLoaded,
-    TResult Function(String errorText)? createOrderError,
+    TResult Function(AppError error)? createOrderError,
     required TResult orElse(),
   }) {
     if (sizesLoaded != null) {
@@ -860,7 +860,7 @@ abstract class _$$SizesErrorImplCopyWith<$Res> {
           _$SizesErrorImpl value, $Res Function(_$SizesErrorImpl) then) =
       __$$SizesErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -876,13 +876,13 @@ class __$$SizesErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$SizesErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -890,14 +890,14 @@ class __$$SizesErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$SizesErrorImpl implements _SizesError {
-  const _$SizesErrorImpl({required this.errorText});
+  const _$SizesErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'CreateOrderState.sizesError(errorText: $errorText)';
+    return 'CreateOrderState.sizesError(error: $error)';
   }
 
   @override
@@ -905,12 +905,11 @@ class _$SizesErrorImpl implements _SizesError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SizesErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of CreateOrderState
   /// with the given fields replaced by the non-null parameter values.
@@ -926,11 +925,11 @@ class _$SizesErrorImpl implements _SizesError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SizeModel> model) sizesLoaded,
-    required TResult Function(String errorText) sizesError,
+    required TResult Function(AppError error) sizesError,
     required TResult Function(OrderModel model) createOrderLoaded,
-    required TResult Function(String errorText) createOrderError,
+    required TResult Function(AppError error) createOrderError,
   }) {
-    return sizesError(errorText);
+    return sizesError(error);
   }
 
   @override
@@ -939,11 +938,11 @@ class _$SizesErrorImpl implements _SizesError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SizeModel> model)? sizesLoaded,
-    TResult? Function(String errorText)? sizesError,
+    TResult? Function(AppError error)? sizesError,
     TResult? Function(OrderModel model)? createOrderLoaded,
-    TResult? Function(String errorText)? createOrderError,
+    TResult? Function(AppError error)? createOrderError,
   }) {
-    return sizesError?.call(errorText);
+    return sizesError?.call(error);
   }
 
   @override
@@ -952,13 +951,13 @@ class _$SizesErrorImpl implements _SizesError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SizeModel> model)? sizesLoaded,
-    TResult Function(String errorText)? sizesError,
+    TResult Function(AppError error)? sizesError,
     TResult Function(OrderModel model)? createOrderLoaded,
-    TResult Function(String errorText)? createOrderError,
+    TResult Function(AppError error)? createOrderError,
     required TResult orElse(),
   }) {
     if (sizesError != null) {
-      return sizesError(errorText);
+      return sizesError(error);
     }
     return orElse();
   }
@@ -1008,10 +1007,9 @@ class _$SizesErrorImpl implements _SizesError {
 }
 
 abstract class _SizesError implements CreateOrderState {
-  const factory _SizesError({required final String errorText}) =
-      _$SizesErrorImpl;
+  const factory _SizesError({required final AppError error}) = _$SizesErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of CreateOrderState
   /// with the given fields replaced by the non-null parameter values.
@@ -1104,9 +1102,9 @@ class _$CreateOrderLoadedImpl implements _CreateOrderLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SizeModel> model) sizesLoaded,
-    required TResult Function(String errorText) sizesError,
+    required TResult Function(AppError error) sizesError,
     required TResult Function(OrderModel model) createOrderLoaded,
-    required TResult Function(String errorText) createOrderError,
+    required TResult Function(AppError error) createOrderError,
   }) {
     return createOrderLoaded(model);
   }
@@ -1117,9 +1115,9 @@ class _$CreateOrderLoadedImpl implements _CreateOrderLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SizeModel> model)? sizesLoaded,
-    TResult? Function(String errorText)? sizesError,
+    TResult? Function(AppError error)? sizesError,
     TResult? Function(OrderModel model)? createOrderLoaded,
-    TResult? Function(String errorText)? createOrderError,
+    TResult? Function(AppError error)? createOrderError,
   }) {
     return createOrderLoaded?.call(model);
   }
@@ -1130,9 +1128,9 @@ class _$CreateOrderLoadedImpl implements _CreateOrderLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SizeModel> model)? sizesLoaded,
-    TResult Function(String errorText)? sizesError,
+    TResult Function(AppError error)? sizesError,
     TResult Function(OrderModel model)? createOrderLoaded,
-    TResult Function(String errorText)? createOrderError,
+    TResult Function(AppError error)? createOrderError,
     required TResult orElse(),
   }) {
     if (createOrderLoaded != null) {
@@ -1204,7 +1202,7 @@ abstract class _$$CreateOrderErrorImplCopyWith<$Res> {
           $Res Function(_$CreateOrderErrorImpl) then) =
       __$$CreateOrderErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -1220,13 +1218,13 @@ class __$$CreateOrderErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$CreateOrderErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -1234,14 +1232,14 @@ class __$$CreateOrderErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$CreateOrderErrorImpl implements _CreateOrderError {
-  const _$CreateOrderErrorImpl({required this.errorText});
+  const _$CreateOrderErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'CreateOrderState.createOrderError(errorText: $errorText)';
+    return 'CreateOrderState.createOrderError(error: $error)';
   }
 
   @override
@@ -1249,12 +1247,11 @@ class _$CreateOrderErrorImpl implements _CreateOrderError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CreateOrderErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of CreateOrderState
   /// with the given fields replaced by the non-null parameter values.
@@ -1271,11 +1268,11 @@ class _$CreateOrderErrorImpl implements _CreateOrderError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<SizeModel> model) sizesLoaded,
-    required TResult Function(String errorText) sizesError,
+    required TResult Function(AppError error) sizesError,
     required TResult Function(OrderModel model) createOrderLoaded,
-    required TResult Function(String errorText) createOrderError,
+    required TResult Function(AppError error) createOrderError,
   }) {
-    return createOrderError(errorText);
+    return createOrderError(error);
   }
 
   @override
@@ -1284,11 +1281,11 @@ class _$CreateOrderErrorImpl implements _CreateOrderError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<SizeModel> model)? sizesLoaded,
-    TResult? Function(String errorText)? sizesError,
+    TResult? Function(AppError error)? sizesError,
     TResult? Function(OrderModel model)? createOrderLoaded,
-    TResult? Function(String errorText)? createOrderError,
+    TResult? Function(AppError error)? createOrderError,
   }) {
-    return createOrderError?.call(errorText);
+    return createOrderError?.call(error);
   }
 
   @override
@@ -1297,13 +1294,13 @@ class _$CreateOrderErrorImpl implements _CreateOrderError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<SizeModel> model)? sizesLoaded,
-    TResult Function(String errorText)? sizesError,
+    TResult Function(AppError error)? sizesError,
     TResult Function(OrderModel model)? createOrderLoaded,
-    TResult Function(String errorText)? createOrderError,
+    TResult Function(AppError error)? createOrderError,
     required TResult orElse(),
   }) {
     if (createOrderError != null) {
-      return createOrderError(errorText);
+      return createOrderError(error);
     }
     return orElse();
   }
@@ -1353,10 +1350,10 @@ class _$CreateOrderErrorImpl implements _CreateOrderError {
 }
 
 abstract class _CreateOrderError implements CreateOrderState {
-  const factory _CreateOrderError({required final String errorText}) =
+  const factory _CreateOrderError({required final AppError error}) =
       _$CreateOrderErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of CreateOrderState
   /// with the given fields replaced by the non-null parameter values.

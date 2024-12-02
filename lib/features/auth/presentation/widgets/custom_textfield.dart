@@ -7,27 +7,35 @@ class CustomTextForm extends StatelessWidget {
   final String hintText;
   final TextInputType? keyboardType;
   final TextAlign? textAlign;
-  const CustomTextForm(
-      {super.key,
-      required this.hintText,
-      required this.controller,
-      this.textAlign,
-      this.keyboardType});
+  final String? Function(String? value)? validator;
+
+  const CustomTextForm({
+    super.key,
+    required this.hintText,
+    required this.controller,
+    this.textAlign,
+    this.validator,
+    this.keyboardType,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      
+    return TextFormField(
       controller: controller,
-      keyboardType: (keyboardType == null) ? TextInputType.text : keyboardType,
-      textAlign: textAlign != null? textAlign!: TextAlign.center,
+      keyboardType: keyboardType ?? TextInputType.text,
+      textAlign: textAlign ?? TextAlign.center,
       style: AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
       decoration: InputDecoration(
-          focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(width: 1, color: Color(0xffA0A0A0))),
-          hintText: hintText,
-          hintStyle: AppFonts.w700s20.copyWith(color: const Color(0xffA0A0A0)),
-          border: const UnderlineInputBorder(borderSide: BorderSide(width: 1))),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(width: 1, color: Color(0xffA0A0A0)),
+        ),
+        hintText: hintText,
+        hintStyle: AppFonts.w700s20.copyWith(color: const Color(0xffA0A0A0)),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(width: 1),
+        ),
+      ),
+      validator: validator,
     );
   }
 }

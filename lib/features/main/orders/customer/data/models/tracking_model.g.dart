@@ -15,6 +15,8 @@ _$TrackingModelImpl _$$TrackingModelImplFromJson(Map<String, dynamic> json) =>
       activeStage: json['activeStage'],
       activeStageId: (json['activeStageId'] as num?)?.toInt(),
       activeStageDescription: json['activeStageDescription'] as String?,
+      manufacturerUuid: json['manufacturerUuid'] as String?,
+      customerUuid: json['customerUuid'] as String?,
       allChecks: (json['allChecks'] as List<dynamic>?)
           ?.map((e) => AllC.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -32,6 +34,8 @@ Map<String, dynamic> _$$TrackingModelImplToJson(_$TrackingModelImpl instance) =>
       'activeStage': instance.activeStage,
       'activeStageId': instance.activeStageId,
       'activeStageDescription': instance.activeStageDescription,
+      'manufacturerUuid': instance.manufacturerUuid,
+      'customerUuid': instance.customerUuid,
       'allChecks': instance.allChecks,
       'allComments': instance.allComments,
     };

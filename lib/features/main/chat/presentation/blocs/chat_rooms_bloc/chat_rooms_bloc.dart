@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/main/chat/data/models/chat_rooms_model.dart';
 import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/get_chats_repoimpl.dart';
@@ -19,7 +21,7 @@ class ChatRoomsBloc extends Bloc<ChatRoomsEvent, ChatRoomsState> {
             await getChatRoomsRepoimpl.getChats(userUuid: event.userUuid);
         emit(ChatRoomsState.chatRoomsLoaded(model: result));
       } catch (e) {
-        emit(ChatRoomsState.chatRoomsError(errorText: e.toString()));
+        emit(ChatRoomsState.chatRoomsError(error: handleException(e)));
       }
     });
   }

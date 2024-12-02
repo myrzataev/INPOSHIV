@@ -10,6 +10,9 @@ import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
+import 'package:inposhiv/core/widgets/loading_card.dart';
+import 'package:inposhiv/core/widgets/loading_state.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
@@ -134,11 +137,20 @@ class _MainScreenState extends State<MainScreen> {
                       GetManufacturersProfileState>(
                       builder: (context, state) {
                         return state.maybeWhen(
+                          loading: () {
+                            return const Expanded(
+                                child: CustomMainLoadingListview());
+                          },
                           orElse: () {
                             return const SizedBox.shrink();
                           },
-                          error: (errorText) => Center(
-                            child: Text(errorText),
+                          error: (errorText) => Expanded(
+                            child: CustomErrorWidget(
+                              description: errorText.userMessage,
+                              onRefresh: () {
+                                getManufacturers();
+                              },
+                            ),
                           ),
                           loaded: (model) {
                             return Expanded(
@@ -219,11 +231,11 @@ class _MainScreenState extends State<MainScreen> {
                                                                             .isNotEmpty
                                                                         ? CachedNetworkImage(
                                                                             progressIndicatorBuilder: (context, url, progress) =>
-                                                                                const Center(
-                                                                                  child: CircularProgressIndicator.adaptive(),
+                                                                                Center(
+                                                                                  child: LoadingCard(height: 300.h, radius: 0),
                                                                                 ),
                                                                             fit: BoxFit
-                                                                                .contain,
+                                                                                .cover,
                                                                             // height: 350.h,
                                                                             width: double
                                                                                 .infinity,
@@ -269,19 +281,6 @@ class _MainScreenState extends State<MainScreen> {
                                                                           color:
                                                                               Colors.white),
                                                                 ),
-                                                              ),
-                                                            ),
-                                                            CircleAvatar(
-                                                              backgroundColor:
-                                                                  Colors.white,
-                                                              radius: 20.r,
-                                                              // ignore: deprecated_member_use
-                                                              child: SvgPicture
-                                                                  .asset(
-                                                                SvgImages.chat,
-                                                                // ignore: deprecated_member_use
-                                                                color: AppColors
-                                                                    .accentTextColor,
                                                               ),
                                                             ),
                                                           ],
@@ -375,7 +374,10 @@ class _MainScreenState extends State<MainScreen> {
                   //////////// для производителя
                   : BlocBuilder<GetAuctionsBloc, GetAuctionsState>(
                       builder: (context, state) {
-                        return state.maybeWhen(loaded: (model) {
+                        return state.maybeWhen(loading: () {
+                          return const Expanded(
+                              child: CustomMainLoadingListview());
+                        }, loaded: (model) {
                           if (model.isNotEmpty) {
                             return Expanded(
                                 child: Padding(
@@ -452,6 +454,12 @@ class _MainScreenState extends State<MainScreen> {
                                                                         BorderRadius.circular(
                                                                             15.r),
                                                                     child: CachedNetworkImage(
+                                                                        progressIndicatorBuilder: (context, url, progress) {
+                                                                          return Center(
+                                                                            child:
+                                                                                LoadingCard(height: 300.h, radius: 0),
+                                                                          );
+                                                                        },
                                                                         fit: BoxFit.cover,
                                                                         // height: 350.h,
                                                                         width: double.infinity,
@@ -652,15 +660,29 @@ class _MainScreenState extends State<MainScreen> {
                               ),
                             ));
                           } else {
-                            return const Center(
-                              child: Text("Пусто"),
+                            return RefreshIndicator.adaptive(
+                              onRefresh: ()async => (),
+                              child: SingleChildScrollView(
+                                child: const Center(
+                                  child: Text("Пусто"),
+                                ),
+                              ),
                             );
                           }
+                        }, error: (error) {
+                          return Expanded(
+                            child: CustomErrorWidget(
+                              description: error.userMessage,
+                              onRefresh: () {
+                                getAuctionsList();
+                              },
+                            ),
+                          );
                         }, orElse: () {
                           return const SizedBox.shrink();
                         });
                       },
-                    )
+                    ),
             ],
           ),
           Positioned(

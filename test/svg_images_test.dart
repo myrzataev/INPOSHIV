@@ -32,6 +32,7 @@ void main() {
     expect(File(SvgImages.rating).existsSync(), isTrue);
     expect(File(SvgImages.search).existsSync(), isTrue);
     expect(File(SvgImages.send).existsSync(), isTrue);
+    expect(File(SvgImages.sign).existsSync(), isTrue);
     expect(File(SvgImages.star).existsSync(), isTrue);
     expect(File(SvgImages.switchjusticon).existsSync(), isTrue);
     expect(File(SvgImages.system).existsSync(), isTrue);

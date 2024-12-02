@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/shared/delete_account_bloc/delete_account_bloc.dart';
@@ -51,7 +52,6 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   }
 
   void callBloc() {
-    print("call cloc is triggering");
     BlocProvider.of<UserBloc>(context).add(
         UserEvent.getUserInfo(userId: preferences.getString("userId") ?? ""));
   }
@@ -112,6 +112,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         loading: () => const Center(
                               child: CircularProgressIndicator.adaptive(),
                             ),
+                        userInfoError: (error) {
+                          return Expanded(
+                            child: CustomErrorWidget(
+                                description: error.userMessage,
+                                onRefresh: () {
+                                  callBloc();
+                                }),
+                          );
+                        },
                         userInfoLoaded: (model) {
                           return Column(
                             children: [

@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/tracking_model.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/order_tracking_repoimpl.dart';
 
@@ -18,7 +20,7 @@ class OrderTrackingBloc extends Bloc<OrderTrackingEvent, OrderTrackingState> {
             invoiceId: event.invoiceId);
         emit(OrderTrackingState.loaded(model: result));
       } catch (e) {
-        emit(OrderTrackingState.error(errorText: e.toString()));
+        emit(OrderTrackingState.error(error: handleException(e)));
       }
     });
   }

@@ -8,7 +8,7 @@ class GetManufacturerInvoicesDs {
   Future<List<InvoiceModel>> getManufacturerInvoices(
       {required String manufacturerId, }) async {
     final Response response =
-        await dio.get("${UrlRoutes.sendInvoice}/$manufacturerId");
+        await dio.get("${UrlRoutes.sendInvoice}/manufacturer/$manufacturerId");
     final List responseList = response.data;
     return responseList
         .map((element) => InvoiceModel.fromJson(element))

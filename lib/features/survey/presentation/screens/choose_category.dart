@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
@@ -193,129 +195,155 @@ class _ChooseSpecializationScreenState
                 orElse: () {});
           },
           builder: (context, state) {
-            return Padding(
-              padding: EdgeInsets.only(
-                left: 20.w,
-                right: 20.w,
-              ),
-              child: SingleChildScrollView(
-                controller: scrollController,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                      minWidth: MediaQuery.of(context).size.width,
-                      minHeight: MediaQuery.of(context).size.height),
-                  child: IntrinsicHeight(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomSearchWidget(
-                            onTap: () {
-                              GoRouter.of(context).pop();
-                            },
-                            child: SvgPicture.asset(SvgImages.goback)),
-                        const Spacer(),
-                        Padding(
-                          padding: EdgeInsets.only(bottom: 20.h),
-                          child: Text(
-                            isCustomer
-                                ? "Выберите категорию"
-                                : "Какие модели вы шьете чаще всего?",
-                            style: AppFonts.w700s36.copyWith(
-                                height: 0.8, fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        Wrap(
-                          spacing: 5.w,
-                          runSpacing: 5.h,
-                          children: selectedCategories
-                              .map((element) => Chip(
-                                    backgroundColor: Colors.white,
-                                    label: Text(
-                                      element?.name ?? "",
-                                      style: AppFonts.w400s16.copyWith(
-                                          color: AppColors.accentTextColor),
-                                    ),
-                                    deleteIconColor: AppColors.accentTextColor,
-                                    onDeleted: () {
-                                      setState(() {
-                                        selectedCategories.remove(element);
-                                      });
-                                    },
-                                    deleteIcon: Icon(
-                                      Icons.close,
-                                      size: 20.h,
-                                      color: AppColors.accentTextColor,
-                                    ),
-                                  ))
-                              .toList(),
-                        ),
-                        // ElevatedButton(
-                        //     onPressed: () {
-                        //       print(Provider.of<CategoriesProvider>(context,
-                        //               listen: false)
-                        //           .selectedCategoryId);
-                        //     },
-                        //     child: Text("data")),
-                        Padding(
-                          padding: EdgeInsets.only(top: 30.h),
-                          child: SizedBox(
-                              width: 177.w,
-                              child: Builder(
-                                builder: (context) => CustomChooseRoleWidget(
-                                  text: "Выбрать категории",
+            return state.maybeWhen(
+                loaded: (entity) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                      left: 20.w,
+                      right: 20.w,
+                    ),
+                    child: SingleChildScrollView(
+                      controller: scrollController,
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                            minWidth: MediaQuery.of(context).size.width,
+                            minHeight: MediaQuery.of(context).size.height),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CustomSearchWidget(
                                   onTap: () {
-                                    Scaffold.of(context).openDrawer();
+                                    GoRouter.of(context).pop();
                                   },
-                                  isChoosed: true,
-                                ),
-                              )),
-                        ),
-                        const Spacer(),
-                        Padding(
-                            padding: EdgeInsets.only(bottom: 20.h, top: 20.h),
-                            child: InkWell(
-                              borderRadius: BorderRadius.circular(20.r),
-                              onTap: () {
-                                selectedCategories.isEmpty
-                                    ? null
-                                    : Provider.of<CategoriesProvider>(context,
-                                            listen: false)
-                                        .updateValues(
-                                            id: __selectedGenderId ?? 0,
-                                            valueForSlug:
-                                                _selectedGenderSlug ?? "",
-                                            valueForSubcategoriesList:
-                                                selectedCategories,
-                                            categoryName:
-                                                _selectedGenderName ?? "");
-
-                                GoRouter.of(context)
-                                    .pushNamed("specifyMonthlySalesScreen");
-                              },
-                              child: Container(
-                                width: double.infinity,
-                                height: 60.h,
-                                decoration: BoxDecoration(
-                                    color: selectedCategories.isEmpty
-                                        ? AppColors.containersGrey
-                                        : AppColors.buttonGreenColor,
-                                    borderRadius: BorderRadius.circular(20.r)),
-                                child: Center(
-                                  child: Text(
-                                    "Дальше",
-                                    style: AppFonts.w400s16.copyWith(
-                                        color: AppColors.accentTextColor),
-                                  ),
+                                  child: SvgPicture.asset(SvgImages.goback)),
+                              const Spacer(),
+                              Padding(
+                                padding: EdgeInsets.only(bottom: 20.h),
+                                child: Text(
+                                  isCustomer
+                                      ? "Выберите категорию"
+                                      : "Какие модели вы шьете чаще всего?",
+                                  style: AppFonts.w700s36.copyWith(
+                                      height: 0.8, fontWeight: FontWeight.bold),
                                 ),
                               ),
-                            )),
-                      ],
+                              Wrap(
+                                spacing: 5.w,
+                                runSpacing: 5.h,
+                                children: selectedCategories
+                                    .map((element) => Chip(
+                                          backgroundColor: Colors.white,
+                                          label: Text(
+                                            element?.name ?? "",
+                                            style: AppFonts.w400s16.copyWith(
+                                                color:
+                                                    AppColors.accentTextColor),
+                                          ),
+                                          deleteIconColor:
+                                              AppColors.accentTextColor,
+                                          onDeleted: () {
+                                            setState(() {
+                                              selectedCategories
+                                                  .remove(element);
+                                            });
+                                          },
+                                          deleteIcon: Icon(
+                                            Icons.close,
+                                            size: 20.h,
+                                            color: AppColors.accentTextColor,
+                                          ),
+                                        ))
+                                    .toList(),
+                              ),
+                              // ElevatedButton(
+                              //     onPressed: () {
+                              //       print(Provider.of<CategoriesProvider>(context,
+                              //               listen: false)
+                              //           .selectedCategoryId);
+                              //     },
+                              //     child: Text("data")),
+                              Padding(
+                                padding: EdgeInsets.only(top: 30.h),
+                                child: SizedBox(
+                                    width: 177.w,
+                                    child: Builder(
+                                      builder: (context) =>
+                                          CustomChooseRoleWidget(
+                                        text: "Выбрать категории",
+                                        onTap: () {
+                                          Scaffold.of(context).openDrawer();
+                                        },
+                                        isChoosed: true,
+                                      ),
+                                    )),
+                              ),
+                              const Spacer(),
+                              Padding(
+                                  padding:
+                                      EdgeInsets.only(bottom: 20.h, top: 20.h),
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(20.r),
+                                    onTap: (selectedCategories.isEmpty &&
+                                            (_selectedGenderSlug?.isEmpty ??
+                                                false))
+                                        ? null
+                                        : () {
+                                            Provider.of<CategoriesProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .updateValues(
+                                                    id: __selectedGenderId ?? 0,
+                                                    valueForSlug:
+                                                        _selectedGenderSlug ??
+                                                            "",
+                                                    valueForSubcategoriesList:
+                                                        selectedCategories,
+                                                    categoryName:
+                                                        _selectedGenderName ??
+                                                            "");
+                                            router.pushNamed(
+                                                "specifyMonthlySalesScreen");
+                                          },
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 60.h,
+                                      decoration: BoxDecoration(
+                                          color: selectedCategories.isEmpty
+                                              ? AppColors.containersGrey
+                                              : AppColors.buttonGreenColor,
+                                          borderRadius:
+                                              BorderRadius.circular(20.r)),
+                                      child: Center(
+                                        child: Text(
+                                          "Дальше",
+                                          style: AppFonts.w400s16.copyWith(
+                                              color: AppColors.accentTextColor),
+                                        ),
+                                      ),
+                                    ),
+                                  )),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-              ),
-            );
+                  );
+                },
+                loading: () => const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                error: (error) => Expanded(
+                      child: CustomErrorWidget(
+                          description: error.userMessage,
+                          onRefresh: () {
+                            callBlocEvent();
+                          }),
+                    ),
+                orElse: () {
+                  return const SizedBox.shrink();
+                });
           },
         ),
       ),

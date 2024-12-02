@@ -9,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/network/dio_settings.dart';
 import 'package:inposhiv/core/platform/platform_provider.dart';
+import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/features/auth/data/data_sources/auth_ds.dart';
 import 'package:inposhiv/features/auth/data/data_sources/login_ds.dart';
 import 'package:inposhiv/features/auth/data/repositories/auth_repo.dart';
@@ -53,27 +54,39 @@ import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/home/data/data_source/delete_account_ds.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_manufacturers_ds.dart';
+import 'package:inposhiv/features/main/home/data/data_source/get_notification_history_ds.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_user_info_ds.dart';
 import 'package:inposhiv/features/main/home/data/repositories/delete_account_repoimpl.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_manufacturers_repoimpl.dart';
+import 'package:inposhiv/features/main/home/data/repositories/get_notification_history_repoimpl.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_user_info_repoimpl.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/shared/delete_account_bloc/delete_account_bloc.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/notification_history_bloc/notification_history_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/confirm_tracking_stage_ds.dart';
+import 'package:inposhiv/features/main/orders/customer/data/data_source/get_customer_invoices_ds.dart';
+import 'package:inposhiv/features/main/orders/customer/data/data_source/get_customers_completed_orders_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/order_tracking_ds.dart';
+import 'package:inposhiv/features/main/orders/customer/data/data_source/review_for_manufacturer_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/search_order_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/send_invoice_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/data_source/send_order_details_ds.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/confirm_tracking_stage_repoimpl.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/get_customer_invoices_repoimp.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/get_customers_completed_orders_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/order_tracking_repoimpl.dart';
+import 'package:inposhiv/features/main/orders/customer/data/repositories/review_for_manufacturer_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/search_order_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_invoice_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_order_details_repo_impl.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/confirm_tracking_stage_bloc/confirm_tracking_stage_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/customers_completed_orders_bloc/customers_completed_orders_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/get_invoice_details_bloc/get_invoice_details_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/order_tracking_bloc/order_tracking_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/search_order_bloc/search_order_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/send_feed_back_bloc/send_feed_back_bloc_bloc.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_manufacturer_invoices_ds.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_order_detail_ds.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_manufacturer_invoices_repoimpl.dart';
@@ -105,6 +118,7 @@ import 'package:inposhiv/features/survey/data/repositories/send_customer_survey_
 import 'package:inposhiv/features/survey/data/repositories/send_manufacturer_survey_repoimpl.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/get_categories_bloc/get_categories_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/get_job_priorities_bloc/get_job_priorities_bloc.dart';
+import 'package:inposhiv/features/survey/presentation/blocs/get_sub_categories_bloc/get_sub_categories_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/send_customer_survey_data_bloc/send_customer_survey_data_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/send_manufacturers_survey_bloc/send_manufacturers_survey_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/providers/categories_provider.dart';
@@ -392,10 +406,6 @@ class _MyAppState extends State<MyApp> {
             create: (context) => GetManufacturerInvoicesDs(
                 dio: RepositoryProvider.of<DioSettings>(context).dio)),
         RepositoryProvider(
-            create: (context) => GetManufacturerInvoicesRepoimpl(
-                getManufacturerInvoicesDs:
-                    RepositoryProvider.of<GetManufacturerInvoicesDs>(context))),
-        RepositoryProvider(
             create: (context) => OrderTrackingDs(
                 dio: RepositoryProvider.of<DioSettings>(context).dio)),
         RepositoryProvider(
@@ -429,7 +439,42 @@ class _MyAppState extends State<MyApp> {
         RepositoryProvider(
             create: (context) => DeleteAccountRepoimpl(
                 deleteAccountDs:
-                    RepositoryProvider.of<DeleteAccountDs>(context)))
+                    RepositoryProvider.of<DeleteAccountDs>(context))),
+        RepositoryProvider(
+            create: (context) => ReviewForManufacturerDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetCustomerInvoicesDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => ReviewForManufacturerRepoimpl(
+                reviewForManufacturerDs:
+                    RepositoryProvider.of<ReviewForManufacturerDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetCustomerInvoicesRepoimpl(
+                getCustomerInvoicesDs:
+                    RepositoryProvider.of<GetCustomerInvoicesDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetManufacturerInvoicesRepoimpl(
+                getCustomerInvoicesDs:
+                    RepositoryProvider.of<GetCustomerInvoicesDs>(context),
+                getManufacturerInvoicesDs:
+                    RepositoryProvider.of<GetManufacturerInvoicesDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetNotificationHistoryDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetNotificationHistoryRepoimpl(
+                getNotificationHistoryDs:
+                    RepositoryProvider.of<GetNotificationHistoryDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetCustomersCompletedOrdersDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetCustomersCompletedOrdersRepoimpl(
+                getCustomersCompletedOrdersDs:
+                    RepositoryProvider.of<GetCustomersCompletedOrdersDs>(
+                        context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -543,7 +588,7 @@ class _MyAppState extends State<MyApp> {
                       RepositoryProvider.of<GetManufacturerAuctionsRepoimpl>(
                           context))),
           BlocProvider(
-              create: (context) => GetManufacturerInvoicesBloc(
+              create: (context) => GetInvoicesBloc(
                   getManufacturerInvoicesRepoimpl:
                       RepositoryProvider.of<GetManufacturerInvoicesRepoimpl>(
                           context))),
@@ -568,7 +613,30 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
               create: (context) => DeleteAccountBloc(
                   deleteAccountRepoimpl:
-                      RepositoryProvider.of<DeleteAccountRepoimpl>(context)))
+                      RepositoryProvider.of<DeleteAccountRepoimpl>(context))),
+          BlocProvider(
+              create: (context) => SendFeedBackBlocBloc(
+                  reviewForManufacturerRepoimpl:
+                      RepositoryProvider.of<ReviewForManufacturerRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => GetSubCategoriesBloc(
+                  getCategoriesDs:
+                      RepositoryProvider.of<GetCategoriesDs>(context))),
+          BlocProvider(
+              create: (context) => GetInvoiceDetailsBloc(
+                  getCustomerInvoicesRepoimpl:
+                      RepositoryProvider.of<GetCustomerInvoicesRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => NotificationHistoryBloc(
+                  getNotificationHistoryRepoimpl:
+                      RepositoryProvider.of<GetNotificationHistoryRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => CustomersCompletedOrdersBloc(
+                  getCustomersCompletedOrdersRepoimpl: RepositoryProvider.of<
+                      GetCustomersCompletedOrdersRepoimpl>(context)))
         ],
         child: MultiProvider(
           providers: [
@@ -589,7 +657,12 @@ class _MyAppState extends State<MyApp> {
               minTextAdapt: true,
               splitScreenMode: true,
               child: MaterialApp.router(
-                theme: ThemeData(scaffoldBackgroundColor: Colors.white),
+                theme: ThemeData(
+                    scaffoldBackgroundColor: Colors.white,
+                    progressIndicatorTheme: const ProgressIndicatorThemeData(
+                        linearTrackColor: Colors.white,
+                        circularTrackColor: Colors.white,
+                        color: AppColors.accentTextColor)),
                 debugShowCheckedModeBanner: false,
                 routerConfig: router,
                 supportedLocales: const [

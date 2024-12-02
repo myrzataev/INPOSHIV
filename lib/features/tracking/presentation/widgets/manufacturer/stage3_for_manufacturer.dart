@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
-import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 
 class Stage3ForManufacturer extends StatelessWidget {
   final Function onTap;
@@ -67,31 +67,29 @@ class Stage3ForManufacturer extends StatelessWidget {
                 ),
               ),
             ),
-            (allFiles != null && (allFiles?.isNotEmpty??true) )
-                ? Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.h),
-                    child: SizedBox(
-                      height: 65.h,
-                      child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return IconButton(
-                                onPressed: () {
-                                  GoRouter.of(context).pushNamed("seeDoc",
-                                      queryParameters: {
-                                        "path": allComments[index],
-                                      },
-                                      extra: false);
-                                },
-                                icon: const Icon(Icons.file_present));
-                          },
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              width: 5.w,
-                            );
-                          },
-                          itemCount: allFiles?.length ?? 0),
-                    ),
+            allFiles != null
+                ? SizedBox(
+                    height: 70.h,
+                    child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          final currentItem = allFiles?[index];
+                          return InkWell(
+                            onTap: () {
+                              router.pushNamed("seeDoc",
+                                  queryParameters: {"docUrl": currentItem},
+                                  extra: true);
+                            },
+                            child: const Icon(Icons.file_present,
+                                size: 60, color: AppColors.accentTextColor),
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return SizedBox(
+                            width: 5.w,
+                          );
+                        },
+                        itemCount: allFiles?.length ?? 0),
                   )
                 : const SizedBox.shrink(),
             Text(
@@ -132,7 +130,6 @@ class Stage3ForManufacturer extends StatelessWidget {
               onImagePickedFromCamera: onImagePickedFromCamera,
               onImagePickedFromGallery: onImagePickedFromGallery,
             ),
-            
           ],
         ),
       ),

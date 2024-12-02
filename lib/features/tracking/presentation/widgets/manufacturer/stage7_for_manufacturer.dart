@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -15,6 +16,8 @@ class Stage7ForManufacturer extends StatelessWidget {
       onImagePickedFromGallery;
   final void Function(String imagePath, String fileName)?
       onImagePickedFromCamera;
+  final List<String?>? allDocumentsOfStage;
+
   const Stage7ForManufacturer({
     super.key,
     required this.onTap,
@@ -23,6 +26,7 @@ class Stage7ForManufacturer extends StatelessWidget {
     this.onImagePickedFromGallery,
     this.onImagePickedFromCamera,
     required this.onTapForCheck,
+    this.allDocumentsOfStage,
   });
 
   @override
@@ -65,6 +69,35 @@ class Stage7ForManufacturer extends StatelessWidget {
                       "Комментарии от заказчика",
                       style: AppFonts.w400s14,
                     ),
+                    allDocumentsOfStage != null
+                        ? SizedBox(
+                            height: 70.h,
+                            child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  final currentItem =
+                                      allDocumentsOfStage?[index];
+                                  return InkWell(
+                                    onTap: () {
+                                      router.pushNamed("seeDoc",
+                                          queryParameters: {
+                                            "docUrl": currentItem
+                                          },
+                                          extra: true);
+                                    },
+                                    child: const Icon(Icons.file_present,
+                                        size: 60,
+                                        color: AppColors.accentTextColor),
+                                  );
+                                },
+                                separatorBuilder: (context, index) {
+                                  return SizedBox(
+                                    width: 5.w,
+                                  );
+                                },
+                                itemCount: allDocumentsOfStage?.length ?? 0),
+                          )
+                        : const SizedBox.shrink(),
                     SizedBox(
                         height: 200.h,
                         child: ListView.separated(

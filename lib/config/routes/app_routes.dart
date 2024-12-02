@@ -80,6 +80,7 @@ final GoRouter router = GoRouter(
     //  "/surveyStartScreen",
     // "/profileReady",
     // "/setQuantityWithoutSizeScreen",
+    // "/chooseCategory",
     routes: [
       GoRoute(
         path: "/",
@@ -539,7 +540,6 @@ final GoRouter router = GoRouter(
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return ChatScreen(
-                      
                         autoMessage:
                             state.uri.queryParameters["autoMessage"] ?? "",
                         orderId: state.uri.queryParameters["orderId"] ?? "",
@@ -574,7 +574,7 @@ final GoRouter router = GoRouter(
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return OrderDetailScreen(
-                     orderId: state.extra as String,
+                        orderId: state.extra as String,
                         // orderId: state.uri.queryParameters["orderId"] ?? "",
                       );
                     },
@@ -594,7 +594,10 @@ final GoRouter router = GoRouter(
                     name: "invoiceScreen",
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
+                      final String? chatUuid =
+                          state.uri.queryParameters["chatUuid"];
                       return InvoiceScreen(
+                        chatUuid: chatUuid ?? "",
                         orderId: state.uri.queryParameters["orderId"] ?? "",
                       );
                     },
@@ -604,8 +607,12 @@ final GoRouter router = GoRouter(
                     name: "invoiceScreenForCustomer",
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
+                      final String orderId =
+                          state.uri.queryParameters["orderId"] ?? "";
+                      InvoiceModel? invoiceModel = state.extra as InvoiceModel?;
                       return InvoiceScreenForCustomer(
-                        model: state.extra as InvoiceModel,
+                        model: invoiceModel,
+                        orderId: orderId,
                       );
                     },
                   ),
@@ -631,14 +638,17 @@ final GoRouter router = GoRouter(
                     },
                   ),
                   GoRoute(
-                    path: "orderTracking/:activeStage",
+                    path: "orderTracking",
                     name: "orderTracking",
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
+                      final TrackingModel? model =
+                          state.extra as TrackingModel?;
                       return OrdersTrackingScreen(
-                          model: state.extra as TrackingModel,
+                          invoiceUuid: state.pathParameters["invoiceUid"] ?? "",
+                          model: model,
                           activeStage:
-                              state.pathParameters["activeStage"] ?? "");
+                              state.uri.queryParameters["activeStage"] ?? "");
                     },
                   ),
                   GoRoute(

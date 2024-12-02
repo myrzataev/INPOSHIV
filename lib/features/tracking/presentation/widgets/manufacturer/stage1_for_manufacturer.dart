@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
@@ -13,12 +14,13 @@ class Stage1ForManufacturer extends StatelessWidget {
   final Function onTapForCheck;
   final Function onTapForTextButton;
   final List<Map<String, String?>> allComments;
+  final List<String?>? allDocumentsOfStage;
 
   const Stage1ForManufacturer({
     super.key,
     required this.onTap,
     required this.controller,
-
+    this.allDocumentsOfStage,
     required this.onTapForCheck,
     required this.onTapForTextButton,
     required this.allComments,
@@ -47,7 +49,7 @@ class Stage1ForManufacturer extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  onTapForCheck() ;
+                  onTapForCheck();
                 },
                 child: Text(
                   "Чек об оплате",
@@ -57,7 +59,36 @@ class Stage1ForManufacturer extends StatelessWidget {
                   ),
                 ),
               ),
-              Text("Комментарии от заказчика", style: AppFonts.w400s14),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.h),
+                child:
+                    Text("Комментарии от заказчика", style: AppFonts.w400s14),
+              ),
+              allDocumentsOfStage != null
+                  ? SizedBox(
+                      height: 70.h,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final currentItem = allDocumentsOfStage?[index];
+                            return InkWell(
+                              onTap: () {
+                                router.pushNamed("seeDoc",
+                                    queryParameters: {"docUrl": currentItem},
+                                    extra: true);
+                              },
+                              child: const Icon(Icons.file_present,
+                                  size: 60, color: AppColors.accentTextColor),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              width: 5.w,
+                            );
+                          },
+                          itemCount: allDocumentsOfStage?.length ?? 0),
+                    )
+                  : const SizedBox.shrink(),
               Expanded(
                   child: ListView.separated(
                       itemBuilder: (context, index) {

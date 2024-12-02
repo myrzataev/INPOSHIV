@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_detailed_auction_info_repoimpl.dart';
 
@@ -19,7 +21,7 @@ class GetDetailedAuctionInfoBloc
             .getDetailedAuctionInfo(auctionUuid: event.auctionUuid);
         emit(GetDetailedAuctionInfoState.loaded(auctionModel: result));
       } catch (e) {
-        emit(GetDetailedAuctionInfoState.error(errorText: e.toString()));
+        emit(GetDetailedAuctionInfoState.error(error: handleException(e)));
       }
     });
   }

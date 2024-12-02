@@ -7,5 +7,5 @@ class GetManufacturersProfileState with _$GetManufacturersProfileState {
   const factory GetManufacturersProfileState.loaded(
       {required List<ManufacturersProfileModel> model}) = _Loaded;
   const factory GetManufacturersProfileState.error(
-      {required String errorText}) = _Error;
+      {required AppError errorText}) = _Error;
 }

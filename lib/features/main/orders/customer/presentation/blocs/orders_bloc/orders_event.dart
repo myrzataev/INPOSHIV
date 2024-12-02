@@ -8,4 +8,7 @@ class OrdersEvent with _$OrdersEvent {
   const factory OrdersEvent.sendInvoice(
       {required Map<String, dynamic> invoice,
       required String orderId}) = SendInvoice;
+  const factory OrdersEvent.changeInvoice(
+      {required Map<String, dynamic> invoice,
+      required String orderId}) = _ChangeInvoice;
 }

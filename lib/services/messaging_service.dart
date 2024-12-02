@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -27,14 +28,21 @@ class MessagingService {
   final _localNotification = FlutterLocalNotificationsPlugin();
   bool _isFlutterLocalNotificationInitialized = false;
   Future<void> initialize() async {
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    await _requestPermission();
-    await _setupMessageHandlers();
-    await setUpFlutterNotification();
-    String? token = await messaging.getToken();
-    preferences.setString("firebaseToken", token ?? "");
-    if (kDebugMode) {
-      print('Registration Token=$token');
+    if (Platform.isAndroid) {
+      FirebaseMessaging.onBackgroundMessage(
+          _firebaseMessagingBackgroundHandler);
+      await _requestPermission();
+      await _setupMessageHandlers();
+      await setUpFlutterNotification();
+      String? token = await messaging.getToken();
+      preferences.setString("firebaseToken", token ?? "");
+      if (kDebugMode) {
+        print('Registration Token=$token');
+      } else {
+        if (kDebugMode) {
+          print('Firebase Messaging отключен для iOS');
+        }
+      }
     }
   }
 
@@ -91,56 +99,85 @@ class MessagingService {
           print("notification response ${details.payload}");
           print("notification response ${details.notificationResponseType}");
           print("notification response ${details.id}");
+
           if (details.payload != null) {
             String payload = details.payload!;
 
-            // Ensure the payload is in a valid JSON format by adding quotes around the keys and string values
-            payload = payload.replaceAllMapped(RegExp(r'(\w+):'),
-                (match) => '"${match.group(1)}":'); // Wrap keys with quotes
+            // Quote keys
+            payload = payload.replaceAllMapped(
+                RegExp(r'(\w+):'), (match) => '"${match.group(1)}":');
 
-            // Add double quotes around values that are UUIDs or other string-like values
+            // Quote values that are not already quoted (handles cases like INVOICE_SENT)
             payload = payload.replaceAllMapped(
-                RegExp(r'(\w{8}-\w{4}-\w{4}-\w{4}-\w{12})'),
+                RegExp(r':\s*([a-zA-Z0-9_]+)(,|\s*})'),
+                (match) => ': "${match.group(1)}"${match.group(2)}');
+
+            // Quote UUIDs separated by hyphens
+            payload = payload.replaceAllMapped(
+                RegExp(
+                    r'([0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12})-([0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12})'),
+                (match) => '"${match.group(1)}-${match.group(2)}"');
+
+            // Quote single UUIDs
+            payload = payload.replaceAllMapped(
+                RegExp(
+                    r'(?<!")([0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12})(?!")'),
                 (match) => '"${match.group(1)}"');
-            payload = payload.replaceAllMapped(
-                RegExp(r': (\w+)'),
-                (match) =>
-                    ': "${match.group(1)}"'); // Add quotes around values that are not already quoted
 
             try {
-              // Decode the modified payload string
+              // Parse the modified JSON string
               Map<String, dynamic> payloadData = jsonDecode(payload);
               print("click action is ${payloadData['click_action']}");
-              // Check the value of click_action and navigate accordingly
+
+              // Navigate based on click_action
               switch (payloadData['click_action']) {
                 case 'CLICK_AUCTION':
                   router.go("/auction/detailedViewScreen",
                       extra: payloadData["auctionUuid"]);
                   break;
                 case 'INVOICE_SENT':
-                  // Handle INVOICE_SENT case
+                  router.goNamed("invoiceScreenForCustomer",
+                      queryParameters: {"orderId": payloadData["orderId"]});
                   break;
                 case 'SEND_AGREEMENT':
-                  // Handle SEND_AGREEMENT case
+                  // Handle SEND_AGREEMENT
                   break;
+                // case "STAGE_CHANGED":
+                //   router.goNamed("detailedTrackingScreen", queryParameters: {
+                //     "invoiceId": payloadData["invoiceUuid"]
+                //   });
+                //   break;
                 case "STAGE_CHANGED":
-                  router.goNamed("detailedTrackingScreen", queryParameters: {
-                    "invoiceId": payloadData["invoiceUuid"]
+                  print("///////${payloadData["invoiceUuid"]}");
+                  router.goNamed("orderTracking", queryParameters: {
+                    "invoiceUid": payloadData["invoiceUuid"]
                   });
+                  break;
+
                 case "TRACKING_STAGE_ACCEPTED":
-                  router.goNamed("detailedTrackingScreen", queryParameters: {
-                    "invoiceId": payloadData["invoiceUuid"]
-                  });
+                  // router.goNamed("detailedTrackingScreen", queryParameters: {
+                  //   "invoiceId": payloadData["invoiceUuid"]
+                  // });
+                  router.goNamed(
+                    "orderTracking",
+                    pathParameters: {
+                      "activeStage": payloadData["invoiceUuid"] ?? "",
+                    },
+                  );
+                  break;
                 case 'ORDER_DETAILS_FULLED':
-                  // Handle ORDER_DETAILS_FULLED case
+                  router.go("/orders/orderDetailsForManufacturer",
+                      extra: payloadData["orderUuid"]);
                   break;
                 case 'SEND_PAY_DETAILS':
-                  // Handle SEND_PAY_DETAILS case
+                  router.go("orderDetailsForManufacturer",
+                      extra: payloadData["orderUuid"]);
+                  print("SEND_PAY_DETAILS is catching");
                   break;
 
                 default:
-                  // Handle unknown click_action or fallback case
                   print("Unknown click_action");
+                  break;
               }
             } catch (e) {
               // Handle JSON decoding errors
@@ -204,6 +241,12 @@ class MessagingService {
     } else if (message.data["click_action"] == "TRACKING_STAGE_ACCEPTED") {
       router.go("/auction/detailedViewScreen",
           extra: message.data["auctionUuid"]);
+    } else if (message.data["click_action"] == "ORDER_DETAILS_FULLED") {
+      router.go("orderDetailsForManufacturer",
+          extra: message.data["orderUuid"]);
+    } else if (message.data["INVOICE_SENT"]) {
+      router.goNamed("invoiceScreenForCustomer",
+          queryParameters: {"orderId": message.data["orderId"]});
     }
   }
 }

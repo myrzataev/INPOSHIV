@@ -9,7 +9,7 @@ class SendOrderDetailsRepoImpl implements SendOrderDetailsRepo {
   Future<OrderDetailsModel> sendOrderDetails(
       {required Map<String, dynamic> orderDetails,
       required String orderId}) async {
-    print(orderDetails);
+
     return await dataSource.sendOrderDetails(
         orderDetails: orderDetails, orderId: orderId, );
   }

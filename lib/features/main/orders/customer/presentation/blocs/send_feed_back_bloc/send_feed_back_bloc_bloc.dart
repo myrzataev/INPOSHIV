@@ -12,21 +12,41 @@ class SendFeedBackBlocBloc
   SendFeedBackBlocBloc({required this.reviewForManufacturerRepoimpl})
       : super(const _Initial()) {
     on<SendFeedBackBlocEvent>((event, emit) async {
-      await event.map(
-          sendFeedBackToManufacturer: (value) {
-            try {} catch (e) {}
-          },
-          sendFeedBackToCustomer: (value) {});
+      await event.map(sendFeedBackToManufacturer: (value) async {
+        await sendFeedForManufacture(event: value, emit: emit);
+      }, sendFeedBackToCustomer: (value) async {
+        await sendFeedBackForCustomer(emit: emit, event: value);
+      });
     });
   }
 
-  Future<void> sendFeedBackToCustomer(
+  Future<void> sendFeedForManufacture(
       {required _SendFeedBackToManufacturer event,
       required Emitter<SendFeedBackBlocState> emit}) async {
-        try {
-          // emit(Se)
-        } catch (e) {
-          
-        }
-      }
+    try {
+      emit(const SendFeedBackBlocState.loading());
+      await reviewForManufacturerRepoimpl.reviewForManufacturer(
+          manufacturerUuid: event.manufacturerUuid,
+          customerUuid: event.customerUuid,
+          body: event.body);
+      emit(const SendFeedBackBlocState.loaded());
+    } catch (e) {
+      emit(const SendFeedBackBlocState.error());
+    }
+  }
+
+  Future<void> sendFeedBackForCustomer(
+      {required _SendFeedBackToCustomer event,
+      required Emitter<SendFeedBackBlocState> emit}) async {
+    try {
+      emit(const SendFeedBackBlocState.loading());
+      await reviewForManufacturerRepoimpl.reviewForManufacturer(
+          manufacturerUuid: event.manufacturerUuid,
+          customerUuid: event.customerUuid,
+          body: event.body);
+      emit(const SendFeedBackBlocState.loaded());
+    } catch (e) {
+      emit(const SendFeedBackBlocState.error());
+    }
+  }
 }

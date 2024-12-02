@@ -24,6 +24,7 @@ _$CreateChatRoomModelImpl _$$CreateChatRoomModelImplFromJson(
       lastMessageDate: json['lastMessageDate'] == null
           ? null
           : DateTime.parse(json['lastMessageDate'] as String),
+      customerOrManufacturerUuid: json['customerOrManufacturerUuid'] as String?,
     );
 
 Map<String, dynamic> _$$CreateChatRoomModelImplToJson(
@@ -40,4 +41,5 @@ Map<String, dynamic> _$$CreateChatRoomModelImplToJson(
       'lastMessageSenderUuid': instance.lastMessageSenderUuid,
       'orderId': instance.orderId,
       'lastMessageDate': instance.lastMessageDate?.toIso8601String(),
+      'customerOrManufacturerUuid': instance.customerOrManufacturerUuid,
     };

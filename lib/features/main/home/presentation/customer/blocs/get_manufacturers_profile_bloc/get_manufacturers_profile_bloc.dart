@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_manufacturers_repoimpl.dart';
 
@@ -18,7 +20,7 @@ class GetManufacturersProfileBloc
         final result = await getManufacturersRepoimpl.getManufacturers();
         emit(GetManufacturersProfileState.loaded(model: result));
       } catch (e) {
-        emit(GetManufacturersProfileState.error(errorText: e.toString()));
+        emit(GetManufacturersProfileState.error(errorText: handleException(e)));
       }
     });
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -13,6 +14,8 @@ class Stage9Customer extends StatelessWidget {
   final Function(double rating) onQualityRating;
   final Function(double rating) onReliableRating;
   final Function onFeedBackButtonPressed;
+  final List<String?>? allDocumentsOfStage;
+
   const Stage9Customer({
     super.key,
     required this.onTap,
@@ -21,6 +24,7 @@ class Stage9Customer extends StatelessWidget {
     required this.onQualityRating,
     required this.onReliableRating,
     required this.onFeedBackButtonPressed,
+    this.allDocumentsOfStage,
   });
 
   @override
@@ -62,6 +66,31 @@ class Stage9Customer extends StatelessWidget {
                 "Подтвердите и оцените качество заказа",
                 style: AppFonts.w700s18,
               ),
+              allDocumentsOfStage != null
+                  ? SizedBox(
+                      height: 70.h,
+                      child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final currentItem = allDocumentsOfStage?[index];
+                            return InkWell(
+                              onTap: () {
+                                router.pushNamed("seeDoc",
+                                    queryParameters: {"docUrl": currentItem},
+                                    extra: true);
+                              },
+                              child: const Icon(Icons.file_present,
+                                  size: 60, color: AppColors.accentTextColor),
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return SizedBox(
+                              width: 5.w,
+                            );
+                          },
+                          itemCount: allDocumentsOfStage?.length ?? 0),
+                    )
+                  : const SizedBox.shrink(),
               Text(
                 "Насколько вы бы оценили сроки выполнения заказа?",
                 style:

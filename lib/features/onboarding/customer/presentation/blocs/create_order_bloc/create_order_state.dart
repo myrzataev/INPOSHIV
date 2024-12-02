@@ -10,10 +10,10 @@ class CreateOrderState with _$CreateOrderState {
   //     _GetCurrencyError;
   const factory CreateOrderState.sizesLoaded({required List<SizeModel> model}) =
       _SizesLoaded;
-  const factory CreateOrderState.sizesError({required String errorText}) =
+  const factory CreateOrderState.sizesError({required AppError error}) =
       _SizesError;
   const factory CreateOrderState.createOrderLoaded({required OrderModel model}
       ) = _CreateOrderLoaded;
-  const factory CreateOrderState.createOrderError({required String errorText}) =
+  const factory CreateOrderState.createOrderError({required AppError error}) =
       _CreateOrderError;
 }

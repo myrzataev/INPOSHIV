@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
@@ -47,7 +48,9 @@ class EndOfSurveyScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 113.h),
                 child: isCustomer
                     ? TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          router.goNamed("main");
+                        },
                         child: Text(
                           "Пропустить",
                           style: AppFonts.w400s16

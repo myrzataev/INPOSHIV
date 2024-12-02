@@ -26,6 +26,7 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
   OverlayEntry? _overlayEntry;
   bool _isDropdownOpen = false;
   String? category;
+  bool errorVisible = false;
 
   @override
   void dispose() {
@@ -130,7 +131,9 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
                     children: [
                       Text(
                         _selectedValue?.name ?? "Выберите вид ткани",
-                        style: TextStyle(fontSize: 16.sp),
+                        style: TextStyle(
+                            fontSize: 16.sp,
+                            color: errorVisible ? Colors.red : Colors.black),
                       ),
                       _isDropdownOpen
                           ? RotatedBox(
@@ -150,9 +153,16 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
                       if (_isDropdownOpen) {
                         _closeDropdown();
                       }
-                      Provider.of<OrderProvider>(context, listen: false)
-                          .updateFabricId(id: _selectedValue?.id ?? 0);
-                      GoRouter.of(context).pushNamed("setQuantityWithoutSizeScreen");
+                      if (_selectedValue == null) {
+                        setState(() {
+                          errorVisible = true;
+                        });
+                      } else {
+                        Provider.of<OrderProvider>(context, listen: false)
+                            .updateFabricId(id: _selectedValue?.id ?? 0);
+                        GoRouter.of(context)
+                            .pushNamed("setQuantityWithoutSizeScreen");
+                      }
                     }),
               )
             ],
@@ -216,6 +226,7 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
                       onTap: () {
                         setState(() {
                           _selectedValue = item;
+                          errorVisible = false;
                           _closeDropdown();
                         });
                       },

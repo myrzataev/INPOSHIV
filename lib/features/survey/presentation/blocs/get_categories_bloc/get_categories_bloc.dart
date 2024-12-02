@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/survey/data/models/product_category_model.dart';
 import 'package:inposhiv/features/survey/data/repositories/get_categories_repo_impl.dart';
 import 'package:inposhiv/features/survey/domain/entities/categories_entity.dart';
@@ -18,7 +20,7 @@ class GetCategoriesBloc extends Bloc<GetCategoriesEvent, GetCategoriesState> {
           final result = await repoImpl.getCategories();
           emit(GetCategoriesState.loaded(entity: result));
         } catch (e) {
-          emit(GetCategoriesState.error(errorText: e.toString()));
+          emit(GetCategoriesState.error(error: handleException(e)));
         }
       }, getSpecificCategory: (e) async {
         emit(const GetCategoriesState.loading());
@@ -29,14 +31,11 @@ class GetCategoriesBloc extends Bloc<GetCategoriesEvent, GetCategoriesState> {
           emit(GetCategoriesState.errorSpecificCategory(
               errorText: error.toString()));
         }
-      }, getProductCategory: (_GetProductCategory value) { 
+      }, getProductCategory: (_GetProductCategory value) {
         try {
           emit(const GetCategoriesState.loading());
-          
-        } catch (e) {
-          
-        }
-       });
+        } catch (e) {}
+      });
     });
   }
 }

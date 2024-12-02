@@ -3,17 +3,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.dart';
+import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_withouttextfield.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
-import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
-import 'package:inposhiv/features/main/orders/customer/data/models/order_details_model.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_order_details_bloc/get_order_details_bloc.dart';
-import 'package:inposhiv/features/main/orders/manufacturer/presentation/widgets/choose_payment.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
@@ -33,14 +34,15 @@ class _OrderDetailsScreenForManufacturer
     extends State<OrderDetailsScreenForManufacturer> {
   final preferences = locator<SharedPreferences>();
   double? currency;
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
+  CreateChatRoomModel? currentChatRoom;
   getOrderDetails() {
     BlocProvider.of<GetOrderDetailsBloc>(context)
         .add(GetOrderDetailsEvent.getOrderDetails(orderId: widget.orderId));
+  }
+
+  void getUserChatRooms() {
+    BlocProvider.of<ChatRoomsBloc>(context).add(ChatRoomsEvent.getChatRoomsList(
+        userUuid: preferences.getString("userId") ?? ""));
   }
 
   @override
@@ -48,121 +50,211 @@ class _OrderDetailsScreenForManufacturer
     BlocProvider.of<CurrentCurrencyBloc>(context)
         .add(const CurrentCurrencyEvent.getCurrentCurrencyEvent());
     getOrderDetails();
+    getUserChatRooms();
     super.initState();
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: BlocBuilder<GetOrderDetailsBloc, GetOrderDetailsState>(
-          builder: (context, state) {
-            return state.maybeWhen(
-                loading: () => const Center(
-                      child: CircularProgressIndicator.adaptive(),
-                    ),
-                error: (errorText) => Center(
-                      child: Text(errorText),
-                    ),
-                loaded: (model) {
-                  return Column(
-                    children: [
-                      BlocListener<CurrentCurrencyBloc, CurrentCurrencyState>(
-                        listener: (context, state) {
-                          state.maybeWhen(
-                              currencyLoaded: (model) => setState(() {
-                                    currency = model.rate;
-                                  }),
-                              orElse: () {});
-                        },
-                        child: Expanded(
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                CustomSearchWidget(
-                                    onTap: () {
-                                      GoRouter.of(context).pop();
-                                    },
-                                    child: SvgPicture.asset(SvgImages.goback)),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(vertical: 20.h),
-                                  child: Text(
-                                    "Данные заказа",
-                                    style: AppFonts.w700s20.copyWith(
-                                        color: AppColors.accentTextColor),
+    return BlocListener<ChatRoomsBloc, ChatRoomsState>(
+      listener: (context, state) {
+        state.maybeWhen(
+          chatRoomsLoaded: (model) {
+            final filteredChatRoom = model.firstWhere(
+              (element) => element.orderId.toString() == widget.orderId,
+            );
+            setState(() {
+              currentChatRoom = filteredChatRoom;
+            });
+            print("Filtered Chat Room: $currentChatRoom");
+          },
+          orElse: () {},
+        );
+      },
+      child: Scaffold(
+        body: SafeArea(
+            child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: BlocBuilder<GetOrderDetailsBloc, GetOrderDetailsState>(
+            builder: (context, state) {
+              return state.maybeWhen(
+                  loading: () => const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                  error: (error) => Expanded(
+                        child: CustomErrorWidget(
+                            description: error.userMessage,
+                            onRefresh: () {
+                             getOrderDetails();
+                            }),
+                      ),
+                  loaded: (model) {
+                    return Column(
+                      children: [
+                        BlocListener<CurrentCurrencyBloc, CurrentCurrencyState>(
+                          listener: (context, state) {
+                            state.maybeWhen(
+                                currencyLoaded: (model) => setState(() {
+                                      currency = model.rate;
+                                    }),
+                                orElse: () {});
+                          },
+                          child: Expanded(
+                            child: SingleChildScrollView(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomSearchWidget(
+                                      onTap: () {
+                                        GoRouter.of(context).pop();
+                                      },
+                                      child:
+                                          SvgPicture.asset(SvgImages.goback)),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 20.h),
+                                    child: Text(
+                                      "Данные заказа",
+                                      style: AppFonts.w700s20.copyWith(
+                                          color: AppColors.accentTextColor),
+                                    ),
                                   ),
-                                ),
-                                CustomOrderRowWithoutTextfield(
-                                  title: "Наименование товара",
-                                  value: "${model.productName}",
-                                ),
-                                CustomOrderRowWithoutTextfield(
-                                  title: "Материал",
-                                  value: "${model.material}",
-                                ),
-                                CustomOrderRowWithoutTextfield(
-                                  title: "Цвет ткани",
-                                  value: "${model.color}",
-                                ),
-                                CustomOrderRowWithoutTextfield(
-                                    title: "Сроки",
-                                    value: "${model.deadline}",
-                                    additionalValue: ""
-                                    // "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
-                                    ),
-                                CustomOrderRowWithoutTextfield(
-                                  title: "Пункт доставки",
-                                  value: "${model.deliveryPoint}",
-                                ),
-                                CustomOrderRowWithoutTextfield(
-                                  title: "Договор",
-                                  value: "+${model.lekalaDocuments?.first}",
-                                ),
-                                CustomOrderRowWithoutTextfield(
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Наименование товара",
+                                    value: "${model.productName}",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Материал",
+                                    value: "${model.material}",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Цвет ткани",
+                                    value: "${model.color}",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                      title: "Начало",
+                                      value:
+                                          "${model.deadlineStart?.substring(0, 10)}",
+                                      additionalValue: ""
+                                      // "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
+                                      ),
+                                  CustomOrderRowWithoutTextfield(
+                                      title: "Конец",
+                                      value:
+                                          "${model.deadlineEnd?.substring(0, 10)}",
+                                      additionalValue: ""
+                                      // "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
+                                      ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Пункт доставки",
+                                    value: "${model.deliveryPoint}",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
                                     title: "Тех. задание",
-                                    value:
-                                        "${model.technicalDocumentUrls?.first}",
-                                    additionalValue: ""
+                                    isClickable: true,
+                                    url: model.technicalDocumentUrls
+                                                ?.isNotEmpty ==
+                                            true
+                                        ? "${UrlRoutes.baseUrl}${model.technicalDocumentUrls?.first}"
+                                        : null,
+                                    value: ((model.technicalDocumentUrls
+                                                    ?.isNotEmpty ??
+                                                false) &&
+                                            model.technicalDocumentUrls !=
+                                                null &&
+                                            model.technicalDocumentUrls?[0] !=
+                                                "null")
+                                        ? "Файл"
+                                        : null,
+                                    isFromBackend: true,
+
                                     // "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
-                                    ),
-                              ],
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Лекала",
+                                    isClickable: true,
+                                    url: model.lekalaDocumentUrls?.isNotEmpty ==
+                                            true
+                                        ? "${UrlRoutes.baseUrl}${model.lekalaDocumentUrls?[0]}"
+                                        : null,
+                                    value: ((model.lekalaDocumentUrls
+                                                    ?.isNotEmpty ??
+                                                false) &&
+                                            model.lekalaDocumentUrls != null &&
+                                            model.lekalaDocumentUrls?[0] !=
+                                                "null")
+                                        ? "Файл"
+                                        : null,
+                                    isFromBackend: true,
+
+                                    // "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Договор",
+                                    isClickable: true,
+                                    isFromBackend: true,
+                                    url: model.agreementUrls?.isNotEmpty == true
+                                        ? "${UrlRoutes.baseUrl}${model.agreementUrls?[0]}"
+                                        : null,
+                                    value: ((model.agreementUrls?.isNotEmpty ??
+                                                false) &&
+                                            model.agreementUrls != null &&
+                                            model.agreementUrls?[0] != null)
+                                        ? "Файл"
+                                        : null,
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Column(
-                        children: [
-                          TextButton(
-                              onPressed: () {
-                                GoRouter.of(context).pushNamed("chatScreen");
-                              },
-                              child: Text(
-                                "Задать вопросы",
-                                style: AppFonts.w400s16
-                                    .copyWith(color: AppColors.accentTextColor),
-                              )),
-                          CustomButton(
-                              text: "Подтвердите и оформите счет на оплату",
-                              onPressed: () {
-                                GoRouter.of(context).pushNamed("invoiceScreen",
-                                    queryParameters: {
-                                      "orderId": widget.orderId
-                                    });
-                              }),
-                        ],
-                      )
-                    ],
-                  );
-                },
-                orElse: () {
-                  return const SizedBox.shrink();
-                });
-          },
-        ),
-      )),
+                        Column(
+                          children: [
+                            TextButton(
+                                onPressed: () {
+                                  router.pop();
+                                },
+                                child: Text(
+                                  "Задать вопросы",
+                                  style: AppFonts.w400s16.copyWith(
+                                      color: AppColors.accentTextColor),
+                                )),
+                            CustomButton(
+                                text: "Подтвердите и оформите счет на оплату",
+                                onPressed: () {
+                                  // final chatRoomid =
+                                  //     Provider.of<ChatProvider>(context)
+                                  //         .chatRoomId;
+                                  GoRouter.of(context).pushNamed(
+                                      "invoiceScreen",
+                                      queryParameters: {
+                                        "orderId": widget.orderId,
+                                        "chatUuid":
+                                            currentChatRoom?.chatUuid.toString()
+                                      });
+                                }),
+                            // TextButton(
+                            //     onPressed: () {
+                            //   print(currentChatRoom);
+                            // },
+                            // child: Text("data"))
+                          ],
+                        )
+                      ],
+                    );
+                  },
+                  orElse: () {
+                    return const SizedBox.shrink();
+                  });
+            },
+          ),
+        )),
+      ),
     );
   }
 

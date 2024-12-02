@@ -240,7 +240,7 @@ mixin _$ChatRoomsState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
-    required TResult Function(String errorText) chatRoomsError,
+    required TResult Function(AppError error) chatRoomsError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -248,7 +248,7 @@ mixin _$ChatRoomsState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult? Function(String errorText)? chatRoomsError,
+    TResult? Function(AppError error)? chatRoomsError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -256,7 +256,7 @@ mixin _$ChatRoomsState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult Function(String errorText)? chatRoomsError,
+    TResult Function(AppError error)? chatRoomsError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -352,7 +352,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
-    required TResult Function(String errorText) chatRoomsError,
+    required TResult Function(AppError error) chatRoomsError,
   }) {
     return initial();
   }
@@ -363,7 +363,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult? Function(String errorText)? chatRoomsError,
+    TResult? Function(AppError error)? chatRoomsError,
   }) {
     return initial?.call();
   }
@@ -374,7 +374,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult Function(String errorText)? chatRoomsError,
+    TResult Function(AppError error)? chatRoomsError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -469,7 +469,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
-    required TResult Function(String errorText) chatRoomsError,
+    required TResult Function(AppError error) chatRoomsError,
   }) {
     return loading();
   }
@@ -480,7 +480,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult? Function(String errorText)? chatRoomsError,
+    TResult? Function(AppError error)? chatRoomsError,
   }) {
     return loading?.call();
   }
@@ -491,7 +491,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult Function(String errorText)? chatRoomsError,
+    TResult Function(AppError error)? chatRoomsError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -621,7 +621,7 @@ class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
-    required TResult Function(String errorText) chatRoomsError,
+    required TResult Function(AppError error) chatRoomsError,
   }) {
     return chatRoomsLoaded(model);
   }
@@ -632,7 +632,7 @@ class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult? Function(String errorText)? chatRoomsError,
+    TResult? Function(AppError error)? chatRoomsError,
   }) {
     return chatRoomsLoaded?.call(model);
   }
@@ -643,7 +643,7 @@ class _$ChatRoomsLoadedImpl implements _ChatRoomsLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult Function(String errorText)? chatRoomsError,
+    TResult Function(AppError error)? chatRoomsError,
     required TResult orElse(),
   }) {
     if (chatRoomsLoaded != null) {
@@ -709,7 +709,7 @@ abstract class _$$ChatRoomsErrorImplCopyWith<$Res> {
           $Res Function(_$ChatRoomsErrorImpl) then) =
       __$$ChatRoomsErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -725,13 +725,13 @@ class __$$ChatRoomsErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$ChatRoomsErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -739,14 +739,14 @@ class __$$ChatRoomsErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ChatRoomsErrorImpl implements _ChatRoomsError {
-  const _$ChatRoomsErrorImpl({required this.errorText});
+  const _$ChatRoomsErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'ChatRoomsState.chatRoomsError(errorText: $errorText)';
+    return 'ChatRoomsState.chatRoomsError(error: $error)';
   }
 
   @override
@@ -754,12 +754,11 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ChatRoomsErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of ChatRoomsState
   /// with the given fields replaced by the non-null parameter values.
@@ -776,9 +775,9 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<CreateChatRoomModel> model) chatRoomsLoaded,
-    required TResult Function(String errorText) chatRoomsError,
+    required TResult Function(AppError error) chatRoomsError,
   }) {
-    return chatRoomsError(errorText);
+    return chatRoomsError(error);
   }
 
   @override
@@ -787,9 +786,9 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult? Function(String errorText)? chatRoomsError,
+    TResult? Function(AppError error)? chatRoomsError,
   }) {
-    return chatRoomsError?.call(errorText);
+    return chatRoomsError?.call(error);
   }
 
   @override
@@ -798,11 +797,11 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<CreateChatRoomModel> model)? chatRoomsLoaded,
-    TResult Function(String errorText)? chatRoomsError,
+    TResult Function(AppError error)? chatRoomsError,
     required TResult orElse(),
   }) {
     if (chatRoomsError != null) {
-      return chatRoomsError(errorText);
+      return chatRoomsError(error);
     }
     return orElse();
   }
@@ -846,10 +845,10 @@ class _$ChatRoomsErrorImpl implements _ChatRoomsError {
 }
 
 abstract class _ChatRoomsError implements ChatRoomsState {
-  const factory _ChatRoomsError({required final String errorText}) =
+  const factory _ChatRoomsError({required final AppError error}) =
       _$ChatRoomsErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of ChatRoomsState
   /// with the given fields replaced by the non-null parameter values.

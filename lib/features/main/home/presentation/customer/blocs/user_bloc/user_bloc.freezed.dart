@@ -237,7 +237,7 @@ mixin _$UserState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ProfileModel model) userInfoLoaded,
-    required TResult Function(String errorText) userInfoError,
+    required TResult Function(AppError error) userInfoError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -245,7 +245,7 @@ mixin _$UserState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProfileModel model)? userInfoLoaded,
-    TResult? Function(String errorText)? userInfoError,
+    TResult? Function(AppError error)? userInfoError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -253,7 +253,7 @@ mixin _$UserState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProfileModel model)? userInfoLoaded,
-    TResult Function(String errorText)? userInfoError,
+    TResult Function(AppError error)? userInfoError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -348,7 +348,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ProfileModel model) userInfoLoaded,
-    required TResult Function(String errorText) userInfoError,
+    required TResult Function(AppError error) userInfoError,
   }) {
     return initial();
   }
@@ -359,7 +359,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProfileModel model)? userInfoLoaded,
-    TResult? Function(String errorText)? userInfoError,
+    TResult? Function(AppError error)? userInfoError,
   }) {
     return initial?.call();
   }
@@ -370,7 +370,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProfileModel model)? userInfoLoaded,
-    TResult Function(String errorText)? userInfoError,
+    TResult Function(AppError error)? userInfoError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -465,7 +465,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ProfileModel model) userInfoLoaded,
-    required TResult Function(String errorText) userInfoError,
+    required TResult Function(AppError error) userInfoError,
   }) {
     return loading();
   }
@@ -476,7 +476,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProfileModel model)? userInfoLoaded,
-    TResult? Function(String errorText)? userInfoError,
+    TResult? Function(AppError error)? userInfoError,
   }) {
     return loading?.call();
   }
@@ -487,7 +487,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProfileModel model)? userInfoLoaded,
-    TResult Function(String errorText)? userInfoError,
+    TResult Function(AppError error)? userInfoError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -622,7 +622,7 @@ class _$UserInfoLoadedImpl implements _UserInfoLoaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ProfileModel model) userInfoLoaded,
-    required TResult Function(String errorText) userInfoError,
+    required TResult Function(AppError error) userInfoError,
   }) {
     return userInfoLoaded(model);
   }
@@ -633,7 +633,7 @@ class _$UserInfoLoadedImpl implements _UserInfoLoaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProfileModel model)? userInfoLoaded,
-    TResult? Function(String errorText)? userInfoError,
+    TResult? Function(AppError error)? userInfoError,
   }) {
     return userInfoLoaded?.call(model);
   }
@@ -644,7 +644,7 @@ class _$UserInfoLoadedImpl implements _UserInfoLoaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProfileModel model)? userInfoLoaded,
-    TResult Function(String errorText)? userInfoError,
+    TResult Function(AppError error)? userInfoError,
     required TResult orElse(),
   }) {
     if (userInfoLoaded != null) {
@@ -710,7 +710,7 @@ abstract class _$$UserInfoErrorImplCopyWith<$Res> {
           _$UserInfoErrorImpl value, $Res Function(_$UserInfoErrorImpl) then) =
       __$$UserInfoErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -726,13 +726,13 @@ class __$$UserInfoErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$UserInfoErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -740,14 +740,14 @@ class __$$UserInfoErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$UserInfoErrorImpl implements _UserInfoError {
-  const _$UserInfoErrorImpl({required this.errorText});
+  const _$UserInfoErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'UserState.userInfoError(errorText: $errorText)';
+    return 'UserState.userInfoError(error: $error)';
   }
 
   @override
@@ -755,12 +755,11 @@ class _$UserInfoErrorImpl implements _UserInfoError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$UserInfoErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of UserState
   /// with the given fields replaced by the non-null parameter values.
@@ -776,9 +775,9 @@ class _$UserInfoErrorImpl implements _UserInfoError {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(ProfileModel model) userInfoLoaded,
-    required TResult Function(String errorText) userInfoError,
+    required TResult Function(AppError error) userInfoError,
   }) {
-    return userInfoError(errorText);
+    return userInfoError(error);
   }
 
   @override
@@ -787,9 +786,9 @@ class _$UserInfoErrorImpl implements _UserInfoError {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(ProfileModel model)? userInfoLoaded,
-    TResult? Function(String errorText)? userInfoError,
+    TResult? Function(AppError error)? userInfoError,
   }) {
-    return userInfoError?.call(errorText);
+    return userInfoError?.call(error);
   }
 
   @override
@@ -798,11 +797,11 @@ class _$UserInfoErrorImpl implements _UserInfoError {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(ProfileModel model)? userInfoLoaded,
-    TResult Function(String errorText)? userInfoError,
+    TResult Function(AppError error)? userInfoError,
     required TResult orElse(),
   }) {
     if (userInfoError != null) {
-      return userInfoError(errorText);
+      return userInfoError(error);
     }
     return orElse();
   }
@@ -846,10 +845,10 @@ class _$UserInfoErrorImpl implements _UserInfoError {
 }
 
 abstract class _UserInfoError implements UserState {
-  const factory _UserInfoError({required final String errorText}) =
+  const factory _UserInfoError({required final AppError error}) =
       _$UserInfoErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of UserState
   /// with the given fields replaced by the non-null parameter values.

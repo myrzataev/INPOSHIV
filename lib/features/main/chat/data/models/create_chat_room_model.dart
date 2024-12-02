@@ -8,9 +8,9 @@ import 'dart:convert';
 part 'create_chat_room_model.freezed.dart';
 part 'create_chat_room_model.g.dart';
 
-CreateChatRoomModel createChatRoomModelFromJson(String str) => CreateChatRoomModel.fromJson(json.decode(str));
+List<CreateChatRoomModel> createChatRoomModelFromJson(String str) => List<CreateChatRoomModel>.from(json.decode(str).map((x) => CreateChatRoomModel.fromJson(x)));
 
-String createChatRoomModelToJson(CreateChatRoomModel data) => json.encode(data.toJson());
+String createChatRoomModelToJson(List<CreateChatRoomModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 @freezed
 class CreateChatRoomModel with _$CreateChatRoomModel {
@@ -26,6 +26,7 @@ class CreateChatRoomModel with _$CreateChatRoomModel {
         String? lastMessageSenderUuid,
         int? orderId,
         DateTime? lastMessageDate,
+        String? customerOrManufacturerUuid,
     }) = _CreateChatRoomModel;
 
     factory CreateChatRoomModel.fromJson(Map<String, dynamic> json) => _$CreateChatRoomModelFromJson(json);

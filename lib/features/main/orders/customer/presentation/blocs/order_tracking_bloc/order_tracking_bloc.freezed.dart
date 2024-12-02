@@ -239,7 +239,7 @@ mixin _$OrderTrackingState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(TrackingModel model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -247,7 +247,7 @@ mixin _$OrderTrackingState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(TrackingModel model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -255,7 +255,7 @@ mixin _$OrderTrackingState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(TrackingModel model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -351,7 +351,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(TrackingModel model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
   }) {
     return initial();
   }
@@ -362,7 +362,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(TrackingModel model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
   }) {
     return initial?.call();
   }
@@ -373,7 +373,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(TrackingModel model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -468,7 +468,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(TrackingModel model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
   }) {
     return loading();
   }
@@ -479,7 +479,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(TrackingModel model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
   }) {
     return loading?.call();
   }
@@ -490,7 +490,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(TrackingModel model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -624,7 +624,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(TrackingModel model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
   }) {
     return loaded(model);
   }
@@ -635,7 +635,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(TrackingModel model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
   }) {
     return loaded?.call(model);
   }
@@ -646,7 +646,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(TrackingModel model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -711,7 +711,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
           _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
       __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -727,13 +727,13 @@ class __$$ErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$ErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -741,14 +741,14 @@ class __$$ErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$ErrorImpl implements _Error {
-  const _$ErrorImpl({required this.errorText});
+  const _$ErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'OrderTrackingState.error(errorText: $errorText)';
+    return 'OrderTrackingState.error(error: $error)';
   }
 
   @override
@@ -756,12 +756,11 @@ class _$ErrorImpl implements _Error {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of OrderTrackingState
   /// with the given fields replaced by the non-null parameter values.
@@ -777,9 +776,9 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(TrackingModel model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError error) error,
   }) {
-    return error(errorText);
+    return error(this.error);
   }
 
   @override
@@ -788,9 +787,9 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(TrackingModel model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError error)? error,
   }) {
-    return error?.call(errorText);
+    return error?.call(this.error);
   }
 
   @override
@@ -799,11 +798,11 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(TrackingModel model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
-      return error(errorText);
+      return error(this.error);
     }
     return orElse();
   }
@@ -847,9 +846,9 @@ class _$ErrorImpl implements _Error {
 }
 
 abstract class _Error implements OrderTrackingState {
-  const factory _Error({required final String errorText}) = _$ErrorImpl;
+  const factory _Error({required final AppError error}) = _$ErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of OrderTrackingState
   /// with the given fields replaced by the non-null parameter values.

@@ -6,6 +6,6 @@ class UserState with _$UserState {
   const factory UserState.loading() = _Loading;
   const factory UserState.userInfoLoaded({required ProfileModel model}) =
       _UserInfoLoaded;
-  const factory UserState.userInfoError({required String errorText}) =
+  const factory UserState.userInfoError({required AppError error}) =
       _UserInfoError;
 }

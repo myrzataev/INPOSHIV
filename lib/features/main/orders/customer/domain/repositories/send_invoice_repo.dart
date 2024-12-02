@@ -3,4 +3,6 @@ import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model
 abstract class SendInvoiceRepo {
   Future<InvoiceModel> sendInvoice(
       {required Map<String, dynamic> invoice, required String orderId});
+        Future<InvoiceModel> changeInvoice(
+      {required Map<String, dynamic> invoice, required String orderId});
 }

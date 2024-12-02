@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_textfield.dart';
 import 'package:inposhiv/features/survey/data/models/customer_survey_model.dart';
@@ -12,13 +12,12 @@ import 'package:inposhiv/features/survey/data/models/job_priorities_model.dart'
     as jobPrioritiesModel;
 import 'package:inposhiv/features/survey/data/models/customer_survey_model.dart'
     as customer_survey_response_model;
-import 'package:inposhiv/features/survey/data/models/manufacturer_survey_model.dart'
-    as manufacturer_survey_response_model;
 import 'package:inposhiv/features/survey/presentation/blocs/get_job_priorities_bloc/get_job_priorities_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/send_customer_survey_data_bloc/send_customer_survey_data_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/providers/categories_provider.dart';
 import 'package:inposhiv/features/survey/presentation/providers/priorities_provider.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:inposhiv/services/showdialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -60,10 +59,8 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final role = Provider.of<RoleProvider>(context).role;
+    bool isCustomer = preferences.getBool("isCustomer") ?? true;
 
-    bool isCustomer = role == 1;
-    print("/////////$isCustomer $role");
     setState(() {
       isCustomerForEvent = isCustomer;
     });
@@ -165,9 +162,12 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
                             (isCustomer ? listDataForCreator : listData).length,
                       );
                     },
-                    error: (errorText) => Center(
-                          child: Text(errorText),
-                        ),
+                    error: (error) => Expanded(
+                        child: CustomErrorWidget(
+                            description: error.userMessage,
+                            onRefresh: () {
+                              callBlocEvent();
+                            })),
                     orElse: () {
                       return const Text("Unexpected Error");
                     });
@@ -193,69 +193,84 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
               padding: EdgeInsets.only(bottom: 20.h, top: 37.h),
               child: CustomButton(
                 text: "Дальше",
-                onPressed: () {
-                  isCustomer
-                      ? BlocProvider.of<SendCustomerSurveyDataBloc>(context)
-                          .add(SendCustomerSurveyDataEvent.senData(
-                              userId: preferences.getString("customerId") ?? "",
-                              customerSurveyData: CustomerSurveyModel(
-                                      clothingCategoriesList: [
-                                    ClothingCategoriesList(
-                                        name: Provider.of<CategoriesProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .selectedCategoryName ??
+                onPressed: selectedValues.isNotEmpty
+                    ? () {
+                        isCustomer
+                            ? BlocProvider.of<SendCustomerSurveyDataBloc>(
+                                    context)
+                                .add(SendCustomerSurveyDataEvent.senData(
+                                    userId:
+                                        preferences.getString("customerId") ??
                                             "",
-                                        slug: Provider.of<CategoriesProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .selectedSlug ??
-                                            "",
-                                        subcategories: Provider.of<
-                                                        CategoriesProvider>(
-                                                    context,
-                                                    listen: false)
-                                                .subcategoriesList
-                                                ?.map((element) =>
-                                                    customer_survey_response_model
-                                                        .ClothingCategoriesList(
-                                                      name: Provider.of<
-                                                                      CategoriesProvider>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .selectedCategoryName ??
-                                                          "",
-                                                      slug: Provider.of<
-                                                                      CategoriesProvider>(
-                                                                  context,
-                                                                  listen: false)
-                                                              .selectedSlug ??
-                                                          "",
-                                                    ))
-                                                .toList() ??
-                                            [])
-                                  ],
-                                      monthSalesVolume: int.tryParse(
-                                              widget.monthSalesVolume) ??
-                                          0,
-                                      customerPrioritiesList: selectedValues
-                                          .map(
-                                              (model) => ClothingCategoriesList(
-                                                    id: model.id,
-                                                    slug: model.slug ?? "",
-                                                    name: model.name ?? "",
-                                                  ))
-                                          .toList())
-                                  .toJson()))
-                      : Provider.of<PrioritiesProvider>(context, listen: false)
-                          .updateManufacturerPriorities(
-                              newValue: selectedValues);
-                  Provider.of<PrioritiesProvider>(context, listen: false)
-                      .updateMonthProductsVolume(
-                          newValue: widget.monthSalesVolume);
-                  GoRouter.of(context).pushNamed("endOfSurveyScreen");
-                  // GoRouter.of(context).pushNamed("endOfSurveyScreen");
-                },
+                                    customerSurveyData: CustomerSurveyModel(
+                                            clothingCategoriesList: [
+                                          ClothingCategoriesList(
+                                              name: Provider.of<CategoriesProvider>(
+                                                          context,
+                                                          listen: false)
+                                                      .selectedCategoryName ??
+                                                  "",
+                                              slug:
+                                                  Provider.of<CategoriesProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .selectedSlug ??
+                                                      "",
+                                              subcategories:
+                                                  Provider.of<CategoriesProvider>(
+                                                              context,
+                                                              listen: false)
+                                                          .subcategoriesList
+                                                          ?.map(
+                                                              (element) =>
+                                                                  customer_survey_response_model
+                                                                      .ClothingCategoriesList(
+                                                                    name: Provider.of<CategoriesProvider>(context,
+                                                                                listen: false)
+                                                                            .selectedCategoryName ??
+                                                                        "",
+                                                                    slug: Provider.of<CategoriesProvider>(context,
+                                                                                listen: false)
+                                                                            .selectedSlug ??
+                                                                        "",
+                                                                  ))
+                                                          .toList() ??
+                                                      [])
+                                        ],
+                                            monthSalesVolume: int.tryParse(
+                                                    widget.monthSalesVolume) ??
+                                                0,
+                                            customerPrioritiesList:
+                                                selectedValues
+                                                    .map((model) =>
+                                                        ClothingCategoriesList(
+                                                          id: model.id,
+                                                          slug:
+                                                              model.slug ?? "",
+                                                          name:
+                                                              model.name ?? "",
+                                                        ))
+                                                    .toList())
+                                        .toJson()))
+                            : Provider.of<PrioritiesProvider>(context,
+                                    listen: false)
+                                .updateManufacturerPriorities(
+                                    newValue: selectedValues);
+                        Provider.of<PrioritiesProvider>(context, listen: false)
+                            .updateMonthProductsVolume(
+                                newValue: widget.monthSalesVolume);
+                        GoRouter.of(context).pushNamed("endOfSurveyScreen");
+                        // GoRouter.of(context).pushNamed("endOfSurveyScreen");
+                      }
+                    : () {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.white,
+                            content: Text(
+                              "Выберите вариант",
+                              style: AppFonts.w400s14
+                                  .copyWith(color: AppColors.accentTextColor),
+                            )));
+                      },
               ),
             ),
           ],

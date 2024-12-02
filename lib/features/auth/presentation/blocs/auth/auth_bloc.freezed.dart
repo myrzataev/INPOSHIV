@@ -249,7 +249,7 @@ mixin _$AuthState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(UserEntity entity) loaded,
-    required TResult Function(String error) error,
+    required TResult Function(AppError error) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -257,7 +257,7 @@ mixin _$AuthState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(UserEntity entity)? loaded,
-    TResult? Function(String error)? error,
+    TResult? Function(AppError error)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -265,7 +265,7 @@ mixin _$AuthState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(UserEntity entity)? loaded,
-    TResult Function(String error)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -360,7 +360,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(UserEntity entity) loaded,
-    required TResult Function(String error) error,
+    required TResult Function(AppError error) error,
   }) {
     return initial();
   }
@@ -371,7 +371,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(UserEntity entity)? loaded,
-    TResult? Function(String error)? error,
+    TResult? Function(AppError error)? error,
   }) {
     return initial?.call();
   }
@@ -382,7 +382,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(UserEntity entity)? loaded,
-    TResult Function(String error)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -477,7 +477,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(UserEntity entity) loaded,
-    required TResult Function(String error) error,
+    required TResult Function(AppError error) error,
   }) {
     return loading();
   }
@@ -488,7 +488,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(UserEntity entity)? loaded,
-    TResult? Function(String error)? error,
+    TResult? Function(AppError error)? error,
   }) {
     return loading?.call();
   }
@@ -499,7 +499,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(UserEntity entity)? loaded,
-    TResult Function(String error)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -633,7 +633,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(UserEntity entity) loaded,
-    required TResult Function(String error) error,
+    required TResult Function(AppError error) error,
   }) {
     return loaded(entity);
   }
@@ -644,7 +644,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(UserEntity entity)? loaded,
-    TResult? Function(String error)? error,
+    TResult? Function(AppError error)? error,
   }) {
     return loaded?.call(entity);
   }
@@ -655,7 +655,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(UserEntity entity)? loaded,
-    TResult Function(String error)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -720,7 +720,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
           _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
       __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String error});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -742,7 +742,7 @@ class __$$ErrorImplCopyWithImpl<$Res>
       error: null == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
-              as String,
+              as AppError,
     ));
   }
 }
@@ -753,7 +753,7 @@ class _$ErrorImpl implements _Error {
   const _$ErrorImpl({required this.error});
 
   @override
-  final String error;
+  final AppError error;
 
   @override
   String toString() {
@@ -785,7 +785,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(UserEntity entity) loaded,
-    required TResult Function(String error) error,
+    required TResult Function(AppError error) error,
   }) {
     return error(this.error);
   }
@@ -796,7 +796,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(UserEntity entity)? loaded,
-    TResult? Function(String error)? error,
+    TResult? Function(AppError error)? error,
   }) {
     return error?.call(this.error);
   }
@@ -807,7 +807,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(UserEntity entity)? loaded,
-    TResult Function(String error)? error,
+    TResult Function(AppError error)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -855,9 +855,9 @@ class _$ErrorImpl implements _Error {
 }
 
 abstract class _Error implements AuthState {
-  const factory _Error({required final String error}) = _$ErrorImpl;
+  const factory _Error({required final AppError error}) = _$ErrorImpl;
 
-  String get error;
+  AppError get error;
 
   /// Create a copy of AuthState
   /// with the given fields replaced by the non-null parameter values.

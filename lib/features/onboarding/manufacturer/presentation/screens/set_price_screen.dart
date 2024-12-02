@@ -39,6 +39,7 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
   double currentCurrency = 0;
   final TextEditingController controller = TextEditingController();
   final preferences = locator<SharedPreferences>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -155,18 +156,24 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
             listener: (context, state) {
               state.maybeWhen(
                   loading: () => Showdialog.showLoaderDialog(context),
-                  createOrderError: (errorText) {
+                  createOrderError: (error) {
                     GoRouter.of(context).pop();
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(SnackBar(content: Text(errorText)));
+                    Showdialog.showErrorDialog(
+                        context: context,
+                        title: "Ошибка",
+                        message: error.userMessage);
                   },
                   createOrderLoaded: (model) {
-                    GoRouter.of(context).pop();
-                    GoRouter.of(context)
-                        .pushNamed("orderReady", queryParameters: {
-                      "orderId": model.orderId.toString(),
-                      "retaiPrice": retailPriceInRuble.toString(),
-                      "totalPrice": totalSumRuble.toString()
+                    Future.delayed(const Duration(milliseconds: 50), () {
+                      GoRouter.of(context).pop();
+                      GoRouter.of(context).pushNamed(
+                        "orderReady",
+                        queryParameters: {
+                          "orderId": model.orderId.toString(),
+                          "retailPrice": retailPriceInRuble.toString(),
+                          "totalPrice": totalSumRuble.toString(),
+                        },
+                      );
                     });
                   },
                   orElse: () {});
@@ -225,42 +232,51 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                       style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                     ),
                   ),
-                  TextField(
-                    onChanged: (value) {
-                      _onTextChanged(value);
-                      _calculateRetailQuantityInRuble(value);
-                      _calculateTotalQuantityInRuble(value);
-                    },
-                    controller: controller,
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.start,
-                    style: AppFonts.w700s20.copyWith(
-                      color: AppColors.accentTextColor,
-                    ),
-                    decoration: InputDecoration(
-                      floatingLabelBehavior: FloatingLabelBehavior.always,
-                      label: const Row(
-                        children: [
-                          Text("Цена за единицу"),
-                          Spacer(),
-                          Text("Итого"),
-                        ],
+                  Form(
+                    key: _formKey,
+                    child: TextFormField(
+                      onChanged: (value) {
+                        _onTextChanged(value);
+                        _calculateRetailQuantityInRuble(value);
+                        _calculateTotalQuantityInRuble(value);
+                      },
+                      controller: controller,
+                      keyboardType: TextInputType.number,
+                      textAlign: TextAlign.start,
+                      style: AppFonts.w700s20.copyWith(
+                        color: AppColors.accentTextColor,
                       ),
-                      suffixText: "$totalDollarSum \$",
-                      labelStyle: AppFonts.w400s16,
-                      focusedBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color(0xffA0A0A0),
+                      decoration: InputDecoration(
+                        floatingLabelBehavior: FloatingLabelBehavior.always,
+                        label: const Row(
+                          children: [
+                            Text("Цена за единицу"),
+                            Spacer(),
+                            Text("Итого"),
+                          ],
+                        ),
+                        suffixText: "$totalDollarSum \$",
+                        labelStyle: AppFonts.w400s16,
+                        focusedBorder: const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            width: 1,
+                            color: Color(0xffA0A0A0),
+                          ),
+                        ),
+                        hintText: "0 \$",
+                        hintStyle: AppFonts.w700s20.copyWith(
+                          color: const Color(0xffA0A0A0),
+                        ),
+                        border: const UnderlineInputBorder(
+                          borderSide: BorderSide(width: 1),
                         ),
                       ),
-                      hintText: "0 \$",
-                      hintStyle: AppFonts.w700s20.copyWith(
-                        color: const Color(0xffA0A0A0),
-                      ),
-                      border: const UnderlineInputBorder(
-                        borderSide: BorderSide(width: 1),
-                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Укажите стоимость";
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   Padding(
@@ -285,69 +301,71 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                     child: CustomButton(
                       text: "Дальше",
                       onPressed: () async {
-                        Provider.of<OrderProvider>(context, listen: false)
-                            .updatePrice(
-                                priceInRuble: retailPriceInRuble.toInt(),
-                                priceInUsd: int.tryParse(controller.text));
-                        final List<MultipartFile> photos =
-                            await Future.wait(images!.map((image) async {
-                          return MultipartFile.fromFile(image.path,
-                              filename: image.name);
-                        }));
-
-                        // Create the "technicalDocuments" field conditionally
-                        List<MultipartFile>? technicalDocuments;
-                        if (files != null && files.isNotEmpty) {
-                          technicalDocuments =
-                              await Future.wait(files.map((file) async {
-                            return MultipartFile.fromFile(file.path ?? "",
-                                filename: file.name);
+                        if (_formKey.currentState!.validate()) {
+                          Provider.of<OrderProvider>(context, listen: false)
+                              .updatePrice(
+                                  priceInRuble: retailPriceInRuble.toInt(),
+                                  priceInUsd: int.tryParse(controller.text));
+                          final List<MultipartFile> photos =
+                              await Future.wait(images!.map((image) async {
+                            return MultipartFile.fromFile(image.path,
+                                filename: image.name);
                           }));
-                        }
 
-                        // Build the formDataMap
-                        final formDataMap = {
-                          "categoryId": vm.categoryId,
-                          "fabricId": vm.fabricId,
-                          "priceUsd": int.tryParse(controller.text),
-                          "priceRub": retailPriceInRuble,
-                          "productName": vm.productName,
-                          "quantity": totalCount,
-                          "description": vm.description,
-                          if (sizesVm.length > 1)
-                            "sizeQuantitiesJson": jsonEncode({
-                              "1": sizesVm[0].quantity,
-                              "2": sizesVm[1].quantity,
-                              "3": sizesVm[2].quantity,
-                              "4": sizesVm[3].quantity,
-                              "5": sizesVm[4].quantity,
-                              "6": sizesVm[5].quantity,
-                            }),
-                          "photos": photos,
-                          if (technicalDocuments != null)
-                            "technicalDocuments": technicalDocuments,
-                        };
+                          // Create the "technicalDocuments" field conditionally
+                          List<MultipartFile>? technicalDocuments;
+                          if (files != null && files.isNotEmpty) {
+                            technicalDocuments =
+                                await Future.wait(files.map((file) async {
+                              return MultipartFile.fromFile(file.path ?? "",
+                                  filename: file.name);
+                            }));
+                          }
 
-                        // Convert to FormData
-                        final formData = FormData.fromMap(formDataMap);
+                          // Build the formDataMap
+                          final formDataMap = {
+                            "categoryId": vm.categoryId,
+                            "fabricId": vm.fabricId,
+                            "priceUsd": int.tryParse(controller.text),
+                            "priceRub": retailPriceInRuble,
+                            "productName": vm.productName,
+                            "quantity": totalCount,
+                            "description": vm.description,
+                            if (sizesVm.length > 1)
+                              "sizeQuantitiesJson": jsonEncode({
+                                "1": sizesVm[0].quantity,
+                                "2": sizesVm[1].quantity,
+                                "3": sizesVm[2].quantity,
+                                "4": sizesVm[3].quantity,
+                                "5": sizesVm[4].quantity,
+                                "6": sizesVm[5].quantity,
+                              }),
+                            "photos": photos,
+                            if (technicalDocuments != null)
+                              "technicalDocuments": technicalDocuments,
+                          };
 
-                        // Debugging output
-                        formData.fields.forEach((field) {
-                          print('Key: ${field.key}, Value: ${field.value}');
-                        });
-                        formData.files.forEach((file) {
-                          print(
-                              'File Key: ${file.key}, File Name: ${file.value.filename}');
-                        });
+                          // Convert to FormData
+                          final formData = FormData.fromMap(formDataMap);
 
-                        // Sending formData with Dio
-                        // ignore: use_build_context_synchronously
-                        BlocProvider.of<CreateOrderBloc>(context).add(
-                          CreateOrderEvent.createOrder(
-                            formData,
-                            preferences.getString("customerId") ?? "",
-                          ),
-                        );
+                          // Debugging output
+                          formData.fields.forEach((field) {
+                            print('Key: ${field.key}, Value: ${field.value}');
+                          });
+                          formData.files.forEach((file) {
+                            print(
+                                'File Key: ${file.key}, File Name: ${file.value.filename}');
+                          });
+
+                          // Sending formData with Dio
+                          // ignore: use_build_context_synchronously
+                          BlocProvider.of<CreateOrderBloc>(context).add(
+                            CreateOrderEvent.createOrder(
+                              formData,
+                              preferences.getString("customerId") ?? "",
+                            ),
+                          );
+                        } else {}
                       },
                     ),
                   ),

@@ -8,6 +8,8 @@ import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainAppBar extends StatelessWidget {
   const MainAppBar({
@@ -16,6 +18,7 @@ class MainAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final prefs = locator<SharedPreferences>();
     return Row(
       children: [
         CustomSearchWidget(
@@ -39,14 +42,15 @@ class MainAppBar extends StatelessWidget {
           padding: EdgeInsets.only(right: 6.w),
           child: CustomSearchWidget(
             onTap: () {
-              GoRouter.of(context).pushNamed("searchScreen");
+              // GoRouter.of(context).pushNamed("searchScreen");
+              print(prefs.getString("userId"));
             },
             child: SvgPicture.asset(SvgImages.search),
           ),
         ),
         CustomSearchWidget(
           onTap: () {
-           GoRouter.of(context).pushNamed("notifications");
+            GoRouter.of(context).pushNamed("notifications");
           },
           child: const Icon(
             Icons.notifications_outlined,

@@ -57,17 +57,17 @@ class CustomFeedbackDialog extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  FilePickerButton(
-                    onFilePicked: (filePath, name) {
-                      onFilePicked!(filePath, name);
-                    },
-                    onImagePickedFromGallery: (imagePath, name) {
-                      onImagePickedFromGallery!(imagePath, name);
-                    },
-                    onImagePickedFromCamera: (imagePath, name) {
-                      onImagePickedFromCamera!(imagePath, name);
-                    },
-                  ),
+                  // FilePickerButton(
+                  //   onFilePicked: (filePath, name) {
+                  //     onFilePicked!(filePath, name);
+                  //   },
+                  //   onImagePickedFromGallery: (imagePath, name) {
+                  //     onImagePickedFromGallery!(imagePath, name);
+                  //   },
+                  //   onImagePickedFromCamera: (imagePath, name) {
+                  //     onImagePickedFromCamera!(imagePath, name);
+                  //   },
+                  // ),
                   Expanded(
                     child: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 5.w),

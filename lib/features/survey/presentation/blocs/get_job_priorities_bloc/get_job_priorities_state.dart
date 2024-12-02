@@ -5,6 +5,6 @@ class GetJobPrioritiesState with _$GetJobPrioritiesState {
   const factory GetJobPrioritiesState.initial() = _Initial;
     const factory GetJobPrioritiesState.loading() = _Loading;
   const factory GetJobPrioritiesState.loaded({required List<JobPrioritiesModel> model}) = _Loaded;
-  const factory GetJobPrioritiesState.error({required String errorText}) = _Error;
+  const factory GetJobPrioritiesState.error({required AppError error}) = _Error;
 
 }

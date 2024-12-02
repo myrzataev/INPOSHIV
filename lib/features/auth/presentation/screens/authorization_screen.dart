@@ -3,15 +3,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/core/error/error_types.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/utils/logger.dart';
 import 'package:inposhiv/features/auth/presentation/blocs/login/login_bloc.dart';
-import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:inposhiv/services/showdialog.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthorizationScreen extends StatefulWidget {
@@ -28,6 +28,9 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
   bool rememberMe = false;
   final _formKey = GlobalKey<FormState>();
   final preferences = locator<SharedPreferences>();
+  String? phoneError;
+  String? passwordError;
+
   @override
   void dispose() {
     emailController.dispose();
@@ -44,8 +47,6 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final int role = Provider.of<RoleProvider>(context, listen: true).role;
-
     return Scaffold(
       body: SafeArea(
           child: Padding(
@@ -66,12 +67,10 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 ),
                 CustomProfileTextField(
                     validator: (value) {
-                      (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Это поле является обязательным";
-                        }
-                        return null;
-                      };
+                      if (value == null || value.isEmpty) {
+                        return "Это поле является обязательным";
+                      }
+                      return phoneError;
                     },
                     textAlign: TextAlign.start,
                     controller: emailController,
@@ -85,12 +84,10 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                   padding: EdgeInsets.only(top: 20.h),
                   child: CustomProfileTextField(
                       validator: (value) {
-                        (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Это поле является обязательным";
-                          }
-                          return null;
-                        };
+                        if (value == null || value.isEmpty) {
+                          return "Это поле является обязательным";
+                        }
+                        return passwordError;
                       },
                       textAlign: TextAlign.start,
                       controller: passwordController,
@@ -101,33 +98,48 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                       obscureText: true,
                       suffixIcon: const Icon(Icons.visibility_outlined)),
                 ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Checkbox(
-                        value: rememberMe,
-                        activeColor: AppColors.buttonGreenColor,
-                        onChanged: (value) {
-                          setState(() {
-                            rememberMe = value ?? false;
-                          });
-                        }),
-                    Expanded(
-                      child: Text(
-                        "Запомнить меня",
-                        style: AppFonts.w400s16
-                            .copyWith(color: AppColors.accentTextColor),
-                      ),
-                    )
-                  ],
-                ),
                 BlocListener<LoginBloc, LoginState>(
                   listener: (context, state) {
                     state.maybeWhen(
                         loading: () => Showdialog.showLoaderDialog(context),
-                        error: (errorText) {
+                        error: (error) {
+                          Logger.debug(error.type.toString());
                           router.pop();
-                          
+
+                          if (error.type == ErrorType.authorization) {
+                            // setState(() {
+                              // if (error.userMessage.contains("пароль")) {
+                              //   passwordError = error.userMessage;
+                              // } else if (error.userMessage
+                              //     .contains("номер телефона")) {
+                              //   phoneError = error.userMessage;
+                              // } else {
+                                Showdialog.showErrorDialog(
+                                    context: context,
+                                    title: "Ошибка авторизации",
+                                    message: error.userMessage);
+                              
+                            // });
+                          } else if (error.type == ErrorType.validation) {
+                            // setState(() {
+                              // if (error.userMessage.contains("пароль")) {
+                              //   passwordError = error.userMessage;
+                              // } else if (error.userMessage
+                              //     .contains("номер телефона")) {
+                              //   phoneError = error.userMessage;
+                              // } else {
+                                Showdialog.showErrorDialog(
+                                    context: context,
+                                    title: "Ошибка валидации",
+                                    message: error.userMessage);
+                              // }
+                            // });
+                          } else {
+                            Showdialog.showErrorDialog(
+                                context: context,
+                                title: "Ошибка",
+                                message: error.userMessage);
+                          }
                         },
                         loaded: (entity) {
                           router.pop();
@@ -163,9 +175,17 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                 CustomButton(
                     text: "Войти",
                     onPressed: () {
-                      BlocProvider.of<LoginBloc>(context).add(LoginEvent.login(
-                          phoneNumber: emailController.text.replaceAll(" ", ""),
-                          password: passwordController.text));
+                      setState(() {
+                        phoneError = null;
+                        passwordError = null;
+                      });
+                      if (_formKey.currentState!.validate()) {
+                        BlocProvider.of<LoginBloc>(context).add(
+                            LoginEvent.login(
+                                phoneNumber:
+                                    emailController.text.replaceAll(" ", ""),
+                                password: passwordController.text));
+                      }
                     })
               ],
             ),

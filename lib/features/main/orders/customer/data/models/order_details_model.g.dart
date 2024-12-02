@@ -20,9 +20,11 @@ _$OrderDetailsModelImpl _$$OrderDetailsModelImplFromJson(
       lekalaDocuments: (json['lekalaDocuments'] as List<dynamic>?)
           ?.map((e) => e as String?)
           .toList(),
-      deadline: json['deadline'] == null
-          ? null
-          : DateTime.parse(json['deadline'] as String),
+      agreements: (json['agreements'] as List<dynamic>?)
+          ?.map((e) => e as String?)
+          .toList(),
+      deadlineStart: json['deadlineStart'] as String?,
+      deadlineEnd: json['deadlineEnd'] as String?,
       discount: (json['discount'] as num?)?.toInt(),
       deliveryPoint: json['deliveryPoint'] as String?,
       manufacturerUuid: json['manufacturerUuid'] as String?,
@@ -35,19 +37,32 @@ _$OrderDetailsModelImpl _$$OrderDetailsModelImplFromJson(
     );
 
 Map<String, dynamic> _$$OrderDetailsModelImplToJson(
-        _$OrderDetailsModelImpl instance) =>
-    <String, dynamic>{
-      'orderId': instance.orderId,
-      'productName': instance.productName,
-      'material': instance.material,
-      'color': instance.color,
-      'quantity': instance.quantity,
-      'technicalDocuments': instance.technicalDocuments,
-      'lekalaDocuments': instance.lekalaDocuments,
-      'deadline': instance.deadline?.toIso8601String(),
-      'discount': instance.discount,
-      'deliveryPoint': instance.deliveryPoint,
-      'manufacturerUuid': instance.manufacturerUuid,
-      'technicalDocumentUrls': instance.technicalDocumentUrls,
-      'lekalaDocumentUrls': instance.lekalaDocumentUrls,
-    };
+    _$OrderDetailsModelImpl instance) {
+  final val = <String, dynamic>{
+    'orderId': instance.orderId,
+    'productName': instance.productName,
+    'material': instance.material,
+    'color': instance.color,
+    'quantity': instance.quantity,
+  };
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull(
+      'technicalDocuments', _nullableListToJson(instance.technicalDocuments));
+  writeNotNull(
+      'lekalaDocuments', _nullableListToJson(instance.lekalaDocuments));
+  val['agreements'] = instance.agreements;
+  val['deadlineStart'] = instance.deadlineStart;
+  val['deadlineEnd'] = instance.deadlineEnd;
+  val['discount'] = instance.discount;
+  val['deliveryPoint'] = instance.deliveryPoint;
+  val['manufacturerUuid'] = instance.manufacturerUuid;
+  val['technicalDocumentUrls'] = instance.technicalDocumentUrls;
+  val['lekalaDocumentUrls'] = instance.lekalaDocumentUrls;
+  return val;
+}

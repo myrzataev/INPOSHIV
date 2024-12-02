@@ -85,14 +85,6 @@ class _CustomProfileTextFieldState extends State<CustomProfileTextField> {
                     borderSide: BorderSide(width: 1))),
             validator: (value) => widget.validator(value)
 
-            // widget.hasValidator
-            // (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return "Это поле является обязательным";
-            //     }
-            //     return null;
-            //   }
-            //     : null,
             ),
       ],
     );

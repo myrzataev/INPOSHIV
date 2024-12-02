@@ -466,12 +466,12 @@ class ChatScreen extends StatefulWidget {
   final String autoMessage;
 
   const ChatScreen({
-    Key? key,
+    super.key,
     required this.chatUuid,
     required this.receipentUuid,
     required this.orderId,
     required this.autoMessage,
-  }) : super(key: key);
+  });
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -512,7 +512,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void sendAutoMessageWithDelay() {
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 2), () {
       if (isConnected && widget.autoMessage.isNotEmpty) {
         sendMessage(
           ChatMessage(
@@ -636,17 +636,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             ),
           ),
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 10.w),
-            child: CustomSearchWidget(
-              onTap: () {
-                print(widget.orderId);
-              },
-              child: SvgPicture.asset(SvgImages.search),
-            ),
-          ),
-        ],
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.only(right: 10.w),
+        //     child: CustomSearchWidget(
+        //       onTap: () {
+        //         print(widget.orderId);
+        //       },
+        //       child: SvgPicture.asset(SvgImages.search),
+        //     ),
+        //   ),
+        // ],
       ),
       body: BlocListener<ChatsBloc, ChatsState>(
         listener: (context, state) {
@@ -676,7 +676,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
             sendMessage(message);
           },
           inputOptions: InputOptions(),
-          messageOptions: MessageOptions(),
+          messageOptions: MessageOptions(containerColor: AppColors.cardsColor),
         ),
       ),
     );

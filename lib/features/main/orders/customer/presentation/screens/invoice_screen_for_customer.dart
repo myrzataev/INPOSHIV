@@ -5,12 +5,16 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.dart';
+import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_withouttextfield.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/get_invoice_details_bloc/get_invoice_details_bloc.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/widgets/choose_payment.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
@@ -19,8 +23,10 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoiceScreenForCustomer extends StatefulWidget {
-  final InvoiceModel model;
-  const InvoiceScreenForCustomer({super.key, required this.model});
+  final InvoiceModel? model;
+  final String? orderId;
+  const InvoiceScreenForCustomer(
+      {super.key, required this.model, this.orderId});
 
   @override
   State<InvoiceScreenForCustomer> createState() => _InvoiceScreenForCustomer();
@@ -29,6 +35,8 @@ class InvoiceScreenForCustomer extends StatefulWidget {
 class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
   final preferences = locator<SharedPreferences>();
   double? currency;
+  CreateChatRoomModel? currentChatRoom;
+
   @override
   void dispose() {
     super.dispose();
@@ -36,9 +44,27 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
 
   @override
   void initState() {
+    getCurrency();
+    getUserChatRooms();
+    if (widget.model == null && widget.orderId != null) {
+      getInvoiceDetails();
+    }
+    super.initState();
+  }
+
+  getCurrency() {
     BlocProvider.of<CurrentCurrencyBloc>(context)
         .add(const CurrentCurrencyEvent.getCurrentCurrencyEvent());
-    super.initState();
+  }
+
+  getInvoiceDetails() {
+    BlocProvider.of<GetInvoiceDetailsBloc>(context)
+        .add(GetInvoiceDetailsEvent.started(orderId: widget.orderId ?? ""));
+  }
+
+  void getUserChatRooms() {
+    BlocProvider.of<ChatRoomsBloc>(context).add(ChatRoomsEvent.getChatRoomsList(
+        userUuid: preferences.getString("userId") ?? ""));
   }
 
   @override
@@ -47,111 +73,180 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
             Provider.of<ChatProvider>(context, listen: false).chatRoomId ??
                 "") ??
         false;
-    return Scaffold(
-      body: SafeArea(
-          child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w),
-        child: Column(
-          children: [
-            BlocListener<CurrentCurrencyBloc, CurrentCurrencyState>(
-              listener: (context, state) {
-                state.maybeWhen(
-                    currencyLoaded: (model) => setState(() {
-                          currency = model.rate;
-                        }),
-                    orElse: () {});
-              },
-              child: Expanded(
-                child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      CustomSearchWidget(
-                          onTap: () {
-                            GoRouter.of(context).pop();
-                          },
-                          child: SvgPicture.asset(SvgImages.goback)),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 20.h),
-                        child: Text(
-                          "Счет на оплату",
-                          style: AppFonts.w700s20
-                              .copyWith(color: AppColors.accentTextColor),
-                        ),
-                      ),
-                      CustomOrderRowWithoutTextfield(
-                        title:
-                            "Примерное количество товара\nТочное кол-во будет указано после раскроя ткани",
-                        value: "${widget.model.preliminaryQuantity} шт",
-                      ),
-                      CustomOrderRowWithoutTextfield(
-                        title: "Цена за ед. товара",
-                        value: "${widget.model.pricePerUnit}\$",
-                      ),
-                      CustomOrderRowWithoutTextfield(
-                        title: "Итоговая примерная сумма",
-                        value: "${widget.model.preliminaryAmount}",
-                        additionalValue:
-                            "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
-                      ),
-                      CustomOrderRowWithoutTextfield(
-                        title: "Цена за разработку лекал",
-                        value: "+${widget.model.lekalaCost}",
-                      ),
-                      CustomOrderRowWithoutTextfield(
-                        title: "Образец",
-                        value: "+${widget.model.sampleCost}",
-                      ),
-                      CustomOrderRowWithoutTextfield(
-                        title: "Доставка",
-                        value: "+${widget.model.deliveryCost}",
-                      ),
-                      CustomOrderRowWithoutTextfield(
-                        title: "Итоговая примерная сумма + доп. расходы",
-                        value: "${widget.model.totalAmount}\$",
-                        additionalValue:
-                            "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
-                      ),
-                    ],
+    return BlocListener<ChatRoomsBloc, ChatRoomsState>(
+      listener: (context, state) {
+        state.maybeWhen(
+            chatRoomsLoaded: (model) {
+              final filteredChatRoom = model.firstWhere(
+                (element) => element.orderId.toString() == widget.orderId,
+              );
+              setState(() {
+                currentChatRoom = filteredChatRoom;
+              });
+              // print("Filtered Chat Room: $currentChatRoom");
+            },
+            orElse: () {});
+      },
+      child: Scaffold(
+        body: SafeArea(
+            child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w),
+          child: Column(
+            children: [
+              // ElevatedButton(
+              //     onPressed: () {
+              //       // getUserChatRooms();
+              //       print(currentChatRoom?.chatUuid);
+              //     },
+              //     child: Text("data")),
+              BlocListener<CurrentCurrencyBloc, CurrentCurrencyState>(
+                listener: (context, state) {
+                  state.maybeWhen(
+                      currencyLoaded: (model) => setState(() {
+                            currency = model.rate;
+                          }),
+                      orElse: () {});
+                },
+                child: Expanded(
+                  child: SingleChildScrollView(
+                    child: BlocConsumer<GetInvoiceDetailsBloc,
+                        GetInvoiceDetailsState>(
+                      listener: (context, state) {
+                        // TODO: implement listener
+                      },
+                      builder: (context, state) {
+                        return state.maybeWhen(
+                            loading: () => const Center(
+                                  child: CircularProgressIndicator.adaptive(),
+                                ),
+                            error: (error) {
+                              return Expanded(
+                                child: CustomErrorWidget(
+                                    description: error.userMessage,
+                                    onRefresh: () {
+                                      getInvoiceDetails();
+                                    }),
+                              );
+                            },
+                            loaded: (model) {
+                              final invoiceModel = widget.model ?? model;
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  CustomSearchWidget(
+                                      onTap: () {
+                                        GoRouter.of(context).pop();
+                                      },
+                                      child:
+                                          SvgPicture.asset(SvgImages.goback)),
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(vertical: 20.h),
+                                    child: Text(
+                                      "Счет на оплату",
+                                      style: AppFonts.w700s20.copyWith(
+                                          color: AppColors.accentTextColor),
+                                    ),
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title:
+                                        "Примерное количество товара\nТочное кол-во будет указано после раскроя ткани",
+                                    value:
+                                        "${invoiceModel.preliminaryQuantity} шт",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Цена за ед. товара",
+                                    value: "${invoiceModel.pricePerUnit}\$",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Итоговая примерная сумма",
+                                    value: "${invoiceModel.preliminaryAmount}",
+                                    additionalValue:
+                                        "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: invoiceModel.totalAmount?.toDouble() ?? 0).toStringAsFixed(2)} руб",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Цена за разработку лекал",
+                                    value: "+${invoiceModel.lekalaCost}",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Образец",
+                                    value: "+${invoiceModel.sampleCost}",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title: "Доставка",
+                                    value: "+${invoiceModel.deliveryCost}",
+                                  ),
+                                  CustomOrderRowWithoutTextfield(
+                                    title:
+                                        "Итоговая примерная сумма + доп. расходы",
+                                    value: "${invoiceModel.totalAmount}\$",
+                                    additionalValue:
+                                        "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: invoiceModel.totalAmount?.toDouble() ?? 0).toStringAsFixed(2)} руб",
+                                  ),
+                                  BlocListener<ChatRoomsBloc, ChatRoomsState>(
+                                    listener: (context, state) {
+                                      state.maybeWhen(
+                                          chatRoomsLoaded: (model) {
+                                            final filteredChatRoom =
+                                                model.firstWhere((elemet) =>
+                                                    elemet.orderId.toString() ==
+                                                    widget.orderId);
+                                            setState(() {
+                                              currentChatRoom =
+                                                  filteredChatRoom;
+                                            });
+                                          },
+                                          orElse: () {});
+                                    },
+                                    child: const SizedBox.shrink(),
+                                  )
+                                ],
+                              );
+                            },
+                            orElse: () {
+                              return const SizedBox.shrink();
+                            });
+                      },
+                    ),
                   ),
                 ),
               ),
-            ),
-            Column(
-              children: [
-                TextButton(
-                    onPressed: () {
-                      GoRouter.of(context).pushNamed("chatScreen");
-                    },
-                    child: Text(
-                      "Задать вопросы",
-                      style: AppFonts.w400s16
-                          .copyWith(color: AppColors.accentTextColor),
-                    )),
-                alreadySended
-                    ? const SizedBox.shrink()
-                    : CustomButton(
-                        text: "Подтвердить и перейти к оплате",
-                        onPressed: () {
-                          _showAuctionDetail();
-                          // BlocProvider.of<OrdersBloc>(context)
-                          //     .add(OrdersEvent.sendInvoice(invoice: {
-                          //   "orderId": widget.orderId,
-                          //   "preliminaryQuantity": 1000,
-                          //   "pricePerUnit": retailPriceController.text,
-                          //   "preliminaryAmount": totalPriceWithoutAdditionalInRuble,
-                          //   "lekalaCost": exampleController.text,
-                          //   "sampleCost": priceForLecalaController.text,
-                          //   "deliveryCost": deliveryPriceController.text,
-                          //   "discount": discountController.text,
-                          //   "totalAmount": totalPriceWithAdditionalInRuble
-                          // }, orderId: widget.orderId));
-                        })
-              ],
-            )
-          ],
-        ),
-      )),
+              Column(
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        GoRouter.of(context).pushNamed("chatScreen");
+                      },
+                      child: Text(
+                        "Задать вопросы",
+                        style: AppFonts.w400s16
+                            .copyWith(color: AppColors.accentTextColor),
+                      )),
+                  alreadySended
+                      ? const SizedBox.shrink()
+                      : CustomButton(
+                          text: "Подтвердить и перейти к оплате",
+                          onPressed: () {
+                            _showAuctionDetail();
+                            // BlocProvider.of<OrdersBloc>(context)
+                            //     .add(OrdersEvent.sendInvoice(invoice: {
+                            //   "orderId": widget.orderId,
+                            //   "preliminaryQuantity": 1000,
+                            //   "pricePerUnit": retailPriceController.text,
+                            //   "preliminaryAmount": totalPriceWithoutAdditionalInRuble,
+                            //   "lekalaCost": exampleController.text,
+                            //   "sampleCost": priceForLecalaController.text,
+                            //   "deliveryCost": deliveryPriceController.text,
+                            //   "discount": discountController.text,
+                            //   "totalAmount": totalPriceWithAdditionalInRuble
+                            // }, orderId: widget.orderId));
+                          })
+                ],
+              )
+            ],
+          ),
+        )),
+      ),
     );
   }
 
@@ -241,18 +336,18 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
                                       onPressed: () {
                                         context.goNamed("chatScreen",
                                             queryParameters: {
-                                              "receipentUuid":
-                                                  // "8ba821e4-249e-4847-b86a-2af23097bb41",
-                                                  Provider.of<ChatProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .receipentId,
+                                              "receipentUuid": currentChatRoom
+                                                  ?.recipientUuid,
+                                              // Provider.of<ChatProvider>(
+                                              //         context,
+                                              //         listen: false)
+                                              //     .receipentId,
                                               "chatUuid":
-                                                  // "8ba821e4-249e-4847-b86a-2af23097bb41_b52bbbc4-cdfc-4c61-bfa3-36b5ea37029c",
-                                                  Provider.of<ChatProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .chatRoomId,
+                                                  currentChatRoom?.chatUuid,
+                                              // Provider.of<ChatProvider>(
+                                              //         context,
+                                              //         listen: false)
+                                              //     .chatRoomId,
                                               "autoMessage":
                                                   "Пришлите, пожалуйста, свои реквизиты"
                                             });

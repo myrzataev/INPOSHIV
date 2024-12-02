@@ -5,6 +5,6 @@ class ManufacturerAuctionsState with _$ManufacturerAuctionsState {
   const factory ManufacturerAuctionsState.initial() = _Initial;
     const factory ManufacturerAuctionsState.loading() = _Loading;
   const factory ManufacturerAuctionsState.loaded({required List<AuctionModel> model}) = _Loaded;
-  const factory ManufacturerAuctionsState.error({required String errorText}) = _Error;
+  const factory ManufacturerAuctionsState.error({required AppError errorText}) = _Error;
 
 }

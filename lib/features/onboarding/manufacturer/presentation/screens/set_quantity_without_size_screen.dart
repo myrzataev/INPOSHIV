@@ -25,6 +25,7 @@ class _SetQuantityWithoutSizeScreenState
     extends State<SetQuantityWithoutSizeScreen> {
   List<PlatformFile>? filesForTech;
   TextEditingController controller = TextEditingController();
+  GlobalKey<FormState> formState = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -100,33 +101,36 @@ class _SetQuantityWithoutSizeScreenState
                     ),
                     Padding(
                         padding: EdgeInsets.only(top: 20.h, bottom: 10.h),
-                        child: TextFormField(
-                          controller: controller,
-                          maxLines: 8,
-                          keyboardType: TextInputType.multiline,
-                          style: AppFonts.w400s16
-                              .copyWith(color: AppColors.accentTextColor),
-                          decoration: InputDecoration(
-                              hintText: "Добавьте комментарии к заказу",
-                              hintStyle: AppFonts.w400s16,
-                              enabledBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColors.borderColor)),
-                              disabledBorder: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColors.borderColor)),
-                              border: const OutlineInputBorder(
-                                  borderSide:
-                                      BorderSide(color: AppColors.borderColor)),
-                              focusedBorder: const OutlineInputBorder(
-                                  borderSide: BorderSide(
-                                      color: AppColors.borderColor))),
-                          // validator: (value) {
-                          //   if (value == null || value.isEmpty) {
-                          //     return "В описании должно быть не более";
-                          //   }
-                          //   return null;
-                          // },
+                        child: Form(
+                          key: formState,
+                          child: TextFormField(
+                            controller: controller,
+                            maxLines: 8,
+                            keyboardType: TextInputType.multiline,
+                            style: AppFonts.w400s16
+                                .copyWith(color: AppColors.accentTextColor),
+                            decoration: InputDecoration(
+                                hintText: "Добавьте комментарии к заказу",
+                                hintStyle: AppFonts.w400s16,
+                                enabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppColors.borderColor)),
+                                disabledBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppColors.borderColor)),
+                                border: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppColors.borderColor)),
+                                focusedBorder: const OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: AppColors.borderColor))),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Не может быть пустым";
+                              }
+                              return null;
+                            },
+                          ),
                         )),
                     InkWell(
                       onTap: _pickFiles,
@@ -178,7 +182,6 @@ class _SetQuantityWithoutSizeScreenState
                                               "seeDoc",
                                               extra: false,
                                               queryParameters: {
-                                                
                                                 "path":
                                                     filesForTech?[index].path
                                               });
@@ -208,91 +211,29 @@ class _SetQuantityWithoutSizeScreenState
             // const Spacer(),
             Column(
               children: [
-                TextButton(
-                    onPressed: () {
-                      Provider.of<SizeProvider>(context, listen: false)
-                          .setTotalQuantity(
-                        total: (int.tryParse(quantityController.text) ?? 0),
-                      );
-                      Provider.of<PhotoProvider>(context, listen: false)
-                          .addToFiles(files: filesForTech);
-                      Provider.of<OrderProvider>(context, listen: false)
-                          .updateDescription(newDescription: controller.text);
-                      GoRouter.of(context).pushNamed("setQuantityScreen");
-                    },
-                    child: Text(
-                      "Указать размеры одежды",
-                      style: AppFonts.w400s16
-                          .copyWith(color: AppColors.accentTextColor),
-                    )),
+                // TextButton(
+                //     onPressed: () {
+                //       if (formState.currentState!.validate()) {
+                //         Provider.of<SizeProvider>(context, listen: false)
+                //             .setTotalQuantity(
+                //           total: (int.tryParse(quantityController.text) ?? 0),
+                //         );
+                //         Provider.of<PhotoProvider>(context, listen: false)
+                //             .addToFiles(files: filesForTech);
+                //         Provider.of<OrderProvider>(context, listen: false)
+                //             .updateDescription(newDescription: controller.text);
+                //         GoRouter.of(context).pushNamed("setQuantityScreen");
+                //       } else {}
+                //     },
+                //     child: Text(
+                //       "Указать размеры одежды",
+                //       style: AppFonts.w400s16
+                //           .copyWith(color: AppColors.accentTextColor),
+                //     )),
                 CustomButton(
                     text: "Дальше",
                     onPressed: () {
-                      if ((int.tryParse(quantityController.text) ?? 0) < 49) {
-                        showDialog(
-                            context: context,
-                            builder: (context) => Dialog(
-                                  backgroundColor: AppColors.cardsColor,
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 20.w, vertical: 20.h),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            SvgPicture.asset(SvgImages.info),
-                                            IconButton(
-                                                onPressed: () {
-                                                  GoRouter.of(context).pop();
-                                                },
-                                                icon: SvgPicture.asset(
-                                                    SvgImages.close))
-                                          ],
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 10.h),
-                                          child: Text(
-                                            "Минимальное количество товара  100 ед",
-                                            style: AppFonts.w700s20.copyWith(
-                                                color:
-                                                    AppColors.accentTextColor),
-                                          ),
-                                        ),
-                                        InkWell(
-                                          borderRadius:
-                                              BorderRadius.circular(10.r),
-                                          onTap: () {
-                                            GoRouter.of(context).pop();
-                                          },
-                                          child: Ink(
-                                            height: 40.h,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                                color: Colors.transparent,
-                                                borderRadius:
-                                                    BorderRadius.circular(10.r),
-                                                border: Border.all(
-                                                    color: Colors.green)),
-                                            child: Center(
-                                              child: Text(
-                                                "Понятно",
-                                                style: AppFonts.w400s16
-                                                    .copyWith(
-                                                        color: AppColors
-                                                            .accentTextColor),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ));
-                      } else {
+                      if (formState.currentState!.validate()) {
                         Provider.of<SizeProvider>(context, listen: false)
                             .setTotalQuantity(
                           total: (int.tryParse(quantityController.text) ?? 0),
@@ -301,17 +242,92 @@ class _SetQuantityWithoutSizeScreenState
                             .addToFiles(files: filesForTech);
                         Provider.of<OrderProvider>(context, listen: false)
                             .updateDescription(newDescription: controller.text);
-                        Provider.of<PhotoProvider>(context, listen: false)
-                            .addToFiles(files: filesForTech);
-                        Provider.of<OrderProvider>(context, listen: false)
-                            .updateDescription(newDescription: controller.text);
-                        // GoRouter.of(context).pushNamed("setQuantityScreen");
+                        GoRouter.of(context).pushNamed("setQuantityScreen");
+                      } else {}
+                      // if ((int.tryParse(quantityController.text) ?? 0) < 49) {
+                      //   showDialog(
+                      //       context: context,
+                      //       builder: (context) => Dialog(
+                      //             backgroundColor: AppColors.cardsColor,
+                      //             child: Padding(
+                      //               padding: EdgeInsets.symmetric(
+                      //                   horizontal: 20.w, vertical: 20.h),
+                      //               child: Column(
+                      //                 mainAxisSize: MainAxisSize.min,
+                      //                 children: [
+                      //                   Row(
+                      //                     mainAxisAlignment:
+                      //                         MainAxisAlignment.spaceBetween,
+                      //                     children: [
+                      //                       SvgPicture.asset(SvgImages.info),
+                      //                       IconButton(
+                      //                           onPressed: () {
+                      //                             GoRouter.of(context).pop();
+                      //                           },
+                      //                           icon: SvgPicture.asset(
+                      //                               SvgImages.close))
+                      //                     ],
+                      //                   ),
+                      //                   Padding(
+                      //                     padding: EdgeInsets.symmetric(
+                      //                         vertical: 10.h),
+                      //                     child: Text(
+                      //                       "Минимальное количество товара  100 ед",
+                      //                       style: AppFonts.w700s20.copyWith(
+                      //                           color:
+                      //                               AppColors.accentTextColor),
+                      //                     ),
+                      //                   ),
+                      //                   InkWell(
+                      //                     borderRadius:
+                      //                         BorderRadius.circular(10.r),
+                      //                     onTap: () {
+                      //                       GoRouter.of(context).pop();
+                      //                     },
+                      //                     child: Ink(
+                      //                       height: 40.h,
+                      //                       width: double.infinity,
+                      //                       decoration: BoxDecoration(
+                      //                           color: Colors.transparent,
+                      //                           borderRadius:
+                      //                               BorderRadius.circular(10.r),
+                      //                           border: Border.all(
+                      //                               color: Colors.green)),
+                      //                       child: Center(
+                      //                         child: Text(
+                      //                           "Понятно",
+                      //                           style: AppFonts.w400s16
+                      //                               .copyWith(
+                      //                                   color: AppColors
+                      //                                       .accentTextColor),
+                      //                         ),
+                      //                       ),
+                      //                     ),
+                      //                   )
+                      //                 ],
+                      //               ),
+                      //             ),
+                      //           ));
+                      // } else {
+                      //   Provider.of<SizeProvider>(context, listen: false)
+                      //       .setTotalQuantity(
+                      //     total: (int.tryParse(quantityController.text) ?? 0),
+                      //   );
+                      //   Provider.of<PhotoProvider>(context, listen: false)
+                      //       .addToFiles(files: filesForTech);
+                      //   Provider.of<OrderProvider>(context, listen: false)
+                      //       .updateDescription(newDescription: controller.text);
+                      //   Provider.of<PhotoProvider>(context, listen: false)
+                      //       .addToFiles(files: filesForTech);
+                      //   Provider.of<OrderProvider>(context, listen: false)
+                      //       .updateDescription(newDescription: controller.text);
+                      //   // GoRouter.of(context).pushNamed("setQuantityScreen");
 
-                        GoRouter.of(context).pushNamed("setPriceScreen",
-                            queryParameters: {
-                              "quantity": quantityController.text
-                            });
-                      }
+                      //   GoRouter.of(context).pushNamed("setPriceScreen",
+                      //       queryParameters: {
+                      //         "quantity": quantityController.text
+                      //       });
+                      // }
                     }),
               ],
             )

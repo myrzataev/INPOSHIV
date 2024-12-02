@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/auth/data/repositories/loginrepo_impl.dart';
 import 'package:inposhiv/features/auth/domain/entities/login_entity.dart';
 
@@ -17,7 +19,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             phoneNumber: event.phoneNumber, password: event.password);
         emit(LoginState.loaded(entity: result));
       } catch (e) {
-        emit(LoginState.error(errorText: e.toString()));
+        final error = handleException(e);
+        emit(LoginState.error(errorText: error));
       }
     });
   }

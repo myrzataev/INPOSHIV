@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/order_tracking_bloc/order_tracking_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
@@ -84,63 +86,17 @@ class _DetailedTrackingScreenState extends State<DetailedTrackingScreen> {
                     builder: (context, state) {
                       return state.maybeWhen(
                         orElse: () {
-                          return Expanded(
-                              child: Padding(
-                            padding: EdgeInsets.only(bottom: 65.h, top: 20.h),
-                            child: IntrinsicHeight(
-                              child: Column(
-                                children: [
-                                  Text("Отслеживайте ваш заказ",
-                                      style: AppFonts.w700s36),
-                                  Expanded(
-                                    child: ListView.separated(
-                                      itemCount: mockData.length,
-                                      separatorBuilder: (context, index) =>
-                                          const Divider(
-                                              color: AppColors.borderColorGrey),
-                                      itemBuilder: (context, index) {
-                                        final currentItem = mockData[index];
-                                        return Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              vertical: 8.h, horizontal: 10.w),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                currentItem.steps,
-                                                style:
-                                                    AppFonts.w400s16.copyWith(
-                                                  color: currentItem.isDone
-                                                      ? AppColors
-                                                          .accentTextColor
-                                                      : AppColors
-                                                          .regularGreyColor,
-                                                ),
-                                              ),
-                                              SvgPicture.asset(
-                                                SvgImages.progress,
-                                                color: currentItem.isDone
-                                                    ? AppColors.accentTextColor
-                                                    : AppColors
-                                                        .regularGreyColor,
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ));
+                          return const SizedBox.expand();
                         },
                         loading: () => const Center(
                           child: CircularProgressIndicator.adaptive(),
                         ),
-                        error: (errorText) => Center(
-                          child: Text(errorText),
+                        error: (error) => Expanded(
+                          child: CustomErrorWidget(
+                              description: error.userMessage,
+                              onRefresh: () {
+                                orderTracking();
+                              }),
                         ),
                         loaded: (model) {
                           // return Text("test");
@@ -162,9 +118,9 @@ class _DetailedTrackingScreenState extends State<DetailedTrackingScreen> {
                                         return InkWell(
                                           onTap: () {
                                             currentItem.isDone
-                                                ? GoRouter.of(context)
+                                                ?router
                                                     .pushNamed("orderTracking",
-                                                        pathParameters: {
+                                                        queryParameters: {
                                                           'activeStage':
                                                               index.toString()
                                                         },

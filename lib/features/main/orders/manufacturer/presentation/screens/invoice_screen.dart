@@ -23,7 +23,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class InvoiceScreen extends StatefulWidget {
   final String orderId;
-  const InvoiceScreen({super.key, required this.orderId});
+  final String chatUuid;
+  const InvoiceScreen(
+      {super.key, required this.orderId, required this.chatUuid});
 
   @override
   State<InvoiceScreen> createState() => _InvoiceScreen();
@@ -93,6 +95,8 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                 loading: () => showLoaderDialog(context),
                 invoiceSended: (model) {
                   router.pop();
+                  preferences.setBool(
+                      "ivoice${model.orderId.toString()}", true);
                   showDialog(
                       context: context,
                       builder: (context) => CustomDialog(
@@ -107,6 +111,24 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                           ));
                 },
                 invoiceError: (errorText) {
+                  router.pop();
+                },
+                changeInvoiceSuccess: (model) {
+                  router.pop();
+                  showDialog(
+                      context: context,
+                      builder: (context) => CustomDialog(
+                            title: "Мы отправили на подтверждение",
+                            description:
+                                "Мы уведомим вас, когда заказчик подтвердит счет на оплату",
+                            button: CustomButton(
+                                text: "Закрыть",
+                                onPressed: () {
+                                  GoRouter.of(context).pop();
+                                }),
+                          ));
+                },
+                changeInvoiceError: (error) {
                   router.pop();
                 },
                 orElse: () {});
@@ -247,32 +269,48 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                     ),
                   ),
                 ),
-                // ElevatedButton(
-                //     onPressed: () {
-                //       preferences.remove(
-                //           Provider.of<ChatProvider>(context, listen: false)
-                //                   .chatRoomId ??
-                //               "");
-                //     },
-                //     child: Text("data")),
+                // Elevat
 
                 CustomButton(
                     text: "Подтвердить и перейти к оплате",
                     onPressed: () {
-                      BlocProvider.of<OrdersBloc>(context)
-                          .add(OrdersEvent.sendInvoice(invoice: {
-                        "manufacturerUuid": preferences.getString("customerId"),
-                        "orderId": 1,
-                        //  widget.orderId,
-                        "preliminaryQuantity": amountController.text,
-                        "pricePerUnit": retailPriceController.text,
-                        "preliminaryAmount": totalPriceWithoutAdditionalInRuble,
-                        "lekalaCost": exampleController.text,
-                        "sampleCost": priceForLecalaController.text,
-                        "deliveryCost": deliveryPriceController.text,
-                        "discount": discountController.text,
-                        "totalAmount": totalPriceWithAdditionalInRuble
-                      }, orderId: widget.orderId));
+                      (preferences.getBool(
+                                  "invoice${widget.orderId.toString()}") ??
+                              false)
+                          ? BlocProvider.of<OrdersBloc>(context)
+                              .add(OrdersEvent.changeInvoice(invoice: {
+                              "manufacturerUuid":
+                                  preferences.getString("customerId"),
+                              "orderId": widget.orderId,
+                              //  widget.orderId,
+                              "preliminaryQuantity": amountController.text,
+                              "pricePerUnit": retailPriceController.text,
+                              "preliminaryAmount":
+                                  totalPriceWithoutAdditionalInRuble,
+                              "lekalaCost": exampleController.text,
+                              "sampleCost": priceForLecalaController.text,
+                              "deliveryCost": deliveryPriceController.text,
+                              "discount": discountController.text,
+                              "totalAmount": totalPriceWithAdditionalInRuble,
+                              "chatUuid": widget.chatUuid
+                            }, orderId: widget.orderId))
+                          : BlocProvider.of<OrdersBloc>(context)
+                              .add(OrdersEvent.sendInvoice(invoice: {
+                              "manufacturerUuid":
+                                  preferences.getString("customerId"),
+                              "orderId": widget.orderId,
+                              //  widget.orderId,
+                              "preliminaryQuantity": amountController.text,
+                              "pricePerUnit": retailPriceController.text,
+                              "preliminaryAmount":
+                                  totalPriceWithoutAdditionalInRuble,
+                              "lekalaCost": exampleController.text,
+                              "sampleCost": priceForLecalaController.text,
+                              "deliveryCost": deliveryPriceController.text,
+                              "discount": discountController.text,
+                              "totalAmount": totalPriceWithAdditionalInRuble,
+                              "chatUuid": widget.chatUuid
+                            }, orderId: widget.orderId));
                     })
               ],
             ),

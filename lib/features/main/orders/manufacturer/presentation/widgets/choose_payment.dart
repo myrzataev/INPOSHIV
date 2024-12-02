@@ -52,17 +52,19 @@ class CustomChoosePaymentWidget extends StatelessWidget {
                       width: 20.w,
                     ),
                     SizedBox(
-                      width: 300.w,
-                      child: Text(
-                        text,
-                        maxLines: 3,
-                        overflow: TextOverflow.ellipsis,
-                        softWrap: true,
-                        
-                        style: AppFonts.w400s16.copyWith(
-                            color: isActive
-                                ? const Color(0xff101010)
-                                : AppColors.regularGreyColor),
+                      width: 290.w,
+                      child: Expanded(
+                        child: Text(
+                          text,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          softWrap: true,
+                          
+                          style: AppFonts.w400s16.copyWith(
+                              color: isActive
+                                  ? const Color(0xff101010)
+                                  : AppColors.regularGreyColor),
+                        ),
                       ),
                     ),
                   ],

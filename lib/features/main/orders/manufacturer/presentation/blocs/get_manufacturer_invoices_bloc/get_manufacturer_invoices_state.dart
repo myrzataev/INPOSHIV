@@ -7,5 +7,5 @@ class GetManufacturerInvoicesState with _$GetManufacturerInvoicesState {
   const factory GetManufacturerInvoicesState.loaded(
       {required List<InvoiceModel> model}) = _Loaded;
   const factory GetManufacturerInvoicesState.error(
-      {required String errorText}) = _Error;
+      {required AppError error}) = _Error;
 }

@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/main/home/data/models/profile_model.dart';
 import 'package:inposhiv/features/main/home/data/repositories/get_user_info_repoimpl.dart';
 
@@ -21,7 +23,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       final result = await repoimpl.getUserInf(userId: event.userId);
       emit(UserState.userInfoLoaded(model: result));
     } catch (e) {
-      emit(UserState.userInfoError(errorText: e.toString()));
+      emit(UserState.userInfoError(error: handleException(e)));
     }
   }
 }

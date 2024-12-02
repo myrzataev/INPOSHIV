@@ -27,6 +27,8 @@ mixin _$TrackingModel {
   dynamic get activeStage => throw _privateConstructorUsedError;
   int? get activeStageId => throw _privateConstructorUsedError;
   String? get activeStageDescription => throw _privateConstructorUsedError;
+  String? get manufacturerUuid => throw _privateConstructorUsedError;
+  String? get customerUuid => throw _privateConstructorUsedError;
   List<AllC>? get allChecks => throw _privateConstructorUsedError;
   List<AllC>? get allComments => throw _privateConstructorUsedError;
 
@@ -54,6 +56,8 @@ abstract class $TrackingModelCopyWith<$Res> {
       dynamic activeStage,
       int? activeStageId,
       String? activeStageDescription,
+      String? manufacturerUuid,
+      String? customerUuid,
       List<AllC>? allChecks,
       List<AllC>? allComments});
 }
@@ -80,6 +84,8 @@ class _$TrackingModelCopyWithImpl<$Res, $Val extends TrackingModel>
     Object? activeStage = freezed,
     Object? activeStageId = freezed,
     Object? activeStageDescription = freezed,
+    Object? manufacturerUuid = freezed,
+    Object? customerUuid = freezed,
     Object? allChecks = freezed,
     Object? allComments = freezed,
   }) {
@@ -112,6 +118,14 @@ class _$TrackingModelCopyWithImpl<$Res, $Val extends TrackingModel>
           ? _value.activeStageDescription
           : activeStageDescription // ignore: cast_nullable_to_non_nullable
               as String?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerUuid: freezed == customerUuid
+          ? _value.customerUuid
+          : customerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       allChecks: freezed == allChecks
           ? _value.allChecks
           : allChecks // ignore: cast_nullable_to_non_nullable
@@ -140,6 +154,8 @@ abstract class _$$TrackingModelImplCopyWith<$Res>
       dynamic activeStage,
       int? activeStageId,
       String? activeStageDescription,
+      String? manufacturerUuid,
+      String? customerUuid,
       List<AllC>? allChecks,
       List<AllC>? allComments});
 }
@@ -164,6 +180,8 @@ class __$$TrackingModelImplCopyWithImpl<$Res>
     Object? activeStage = freezed,
     Object? activeStageId = freezed,
     Object? activeStageDescription = freezed,
+    Object? manufacturerUuid = freezed,
+    Object? customerUuid = freezed,
     Object? allChecks = freezed,
     Object? allComments = freezed,
   }) {
@@ -196,6 +214,14 @@ class __$$TrackingModelImplCopyWithImpl<$Res>
           ? _value.activeStageDescription
           : activeStageDescription // ignore: cast_nullable_to_non_nullable
               as String?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      customerUuid: freezed == customerUuid
+          ? _value.customerUuid
+          : customerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
       allChecks: freezed == allChecks
           ? _value._allChecks
           : allChecks // ignore: cast_nullable_to_non_nullable
@@ -219,6 +245,8 @@ class _$TrackingModelImpl implements _TrackingModel {
       this.activeStage,
       this.activeStageId,
       this.activeStageDescription,
+      this.manufacturerUuid,
+      this.customerUuid,
       final List<AllC>? allChecks,
       final List<AllC>? allComments})
       : _allChecks = allChecks,
@@ -241,6 +269,10 @@ class _$TrackingModelImpl implements _TrackingModel {
   final int? activeStageId;
   @override
   final String? activeStageDescription;
+  @override
+  final String? manufacturerUuid;
+  @override
+  final String? customerUuid;
   final List<AllC>? _allChecks;
   @override
   List<AllC>? get allChecks {
@@ -263,7 +295,7 @@ class _$TrackingModelImpl implements _TrackingModel {
 
   @override
   String toString() {
-    return 'TrackingModel(id: $id, invoiceUuid: $invoiceUuid, orderId: $orderId, stageAccepted: $stageAccepted, activeStage: $activeStage, activeStageId: $activeStageId, activeStageDescription: $activeStageDescription, allChecks: $allChecks, allComments: $allComments)';
+    return 'TrackingModel(id: $id, invoiceUuid: $invoiceUuid, orderId: $orderId, stageAccepted: $stageAccepted, activeStage: $activeStage, activeStageId: $activeStageId, activeStageDescription: $activeStageDescription, manufacturerUuid: $manufacturerUuid, customerUuid: $customerUuid, allChecks: $allChecks, allComments: $allComments)';
   }
 
   @override
@@ -283,6 +315,10 @@ class _$TrackingModelImpl implements _TrackingModel {
                 other.activeStageId == activeStageId) &&
             (identical(other.activeStageDescription, activeStageDescription) ||
                 other.activeStageDescription == activeStageDescription) &&
+            (identical(other.manufacturerUuid, manufacturerUuid) ||
+                other.manufacturerUuid == manufacturerUuid) &&
+            (identical(other.customerUuid, customerUuid) ||
+                other.customerUuid == customerUuid) &&
             const DeepCollectionEquality()
                 .equals(other._allChecks, _allChecks) &&
             const DeepCollectionEquality()
@@ -300,6 +336,8 @@ class _$TrackingModelImpl implements _TrackingModel {
       const DeepCollectionEquality().hash(activeStage),
       activeStageId,
       activeStageDescription,
+      manufacturerUuid,
+      customerUuid,
       const DeepCollectionEquality().hash(_allChecks),
       const DeepCollectionEquality().hash(_allComments));
 
@@ -328,6 +366,8 @@ abstract class _TrackingModel implements TrackingModel {
       final dynamic activeStage,
       final int? activeStageId,
       final String? activeStageDescription,
+      final String? manufacturerUuid,
+      final String? customerUuid,
       final List<AllC>? allChecks,
       final List<AllC>? allComments}) = _$TrackingModelImpl;
 
@@ -348,6 +388,10 @@ abstract class _TrackingModel implements TrackingModel {
   int? get activeStageId;
   @override
   String? get activeStageDescription;
+  @override
+  String? get manufacturerUuid;
+  @override
+  String? get customerUuid;
   @override
   List<AllC>? get allChecks;
   @override

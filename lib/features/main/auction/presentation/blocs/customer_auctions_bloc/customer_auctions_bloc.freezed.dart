@@ -242,7 +242,7 @@ mixin _$CustomerAuctionsState {
     required TResult Function() loading,
     required TResult Function(List<CustomerOrdersModel> customerOrdersModel)
         customerOrdersLoaded,
-    required TResult Function(String errorText) customerOrdersError,
+    required TResult Function(AppError error) customerOrdersError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -251,7 +251,7 @@ mixin _$CustomerAuctionsState {
     TResult? Function()? loading,
     TResult? Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult? Function(String errorText)? customerOrdersError,
+    TResult? Function(AppError error)? customerOrdersError,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -260,7 +260,7 @@ mixin _$CustomerAuctionsState {
     TResult Function()? loading,
     TResult Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult Function(String errorText)? customerOrdersError,
+    TResult Function(AppError error)? customerOrdersError,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -358,7 +358,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() loading,
     required TResult Function(List<CustomerOrdersModel> customerOrdersModel)
         customerOrdersLoaded,
-    required TResult Function(String errorText) customerOrdersError,
+    required TResult Function(AppError error) customerOrdersError,
   }) {
     return initial();
   }
@@ -370,7 +370,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? loading,
     TResult? Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult? Function(String errorText)? customerOrdersError,
+    TResult? Function(AppError error)? customerOrdersError,
   }) {
     return initial?.call();
   }
@@ -382,7 +382,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? loading,
     TResult Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult Function(String errorText)? customerOrdersError,
+    TResult Function(AppError error)? customerOrdersError,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -478,7 +478,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() loading,
     required TResult Function(List<CustomerOrdersModel> customerOrdersModel)
         customerOrdersLoaded,
-    required TResult Function(String errorText) customerOrdersError,
+    required TResult Function(AppError error) customerOrdersError,
   }) {
     return loading();
   }
@@ -490,7 +490,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? loading,
     TResult? Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult? Function(String errorText)? customerOrdersError,
+    TResult? Function(AppError error)? customerOrdersError,
   }) {
     return loading?.call();
   }
@@ -502,7 +502,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? loading,
     TResult Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult Function(String errorText)? customerOrdersError,
+    TResult Function(AppError error)? customerOrdersError,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -638,7 +638,7 @@ class _$CustomerOrdersLoadedImpl implements _CustomerOrdersLoaded {
     required TResult Function() loading,
     required TResult Function(List<CustomerOrdersModel> customerOrdersModel)
         customerOrdersLoaded,
-    required TResult Function(String errorText) customerOrdersError,
+    required TResult Function(AppError error) customerOrdersError,
   }) {
     return customerOrdersLoaded(customerOrdersModel);
   }
@@ -650,7 +650,7 @@ class _$CustomerOrdersLoadedImpl implements _CustomerOrdersLoaded {
     TResult? Function()? loading,
     TResult? Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult? Function(String errorText)? customerOrdersError,
+    TResult? Function(AppError error)? customerOrdersError,
   }) {
     return customerOrdersLoaded?.call(customerOrdersModel);
   }
@@ -662,7 +662,7 @@ class _$CustomerOrdersLoadedImpl implements _CustomerOrdersLoaded {
     TResult Function()? loading,
     TResult Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult Function(String errorText)? customerOrdersError,
+    TResult Function(AppError error)? customerOrdersError,
     required TResult orElse(),
   }) {
     if (customerOrdersLoaded != null) {
@@ -729,7 +729,7 @@ abstract class _$$CustomerOrdersErrorImplCopyWith<$Res> {
           $Res Function(_$CustomerOrdersErrorImpl) then) =
       __$$CustomerOrdersErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError error});
 }
 
 /// @nodoc
@@ -745,13 +745,13 @@ class __$$CustomerOrdersErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? errorText = null,
+    Object? error = null,
   }) {
     return _then(_$CustomerOrdersErrorImpl(
-      errorText: null == errorText
-          ? _value.errorText
-          : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+      error: null == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as AppError,
     ));
   }
 }
@@ -759,14 +759,14 @@ class __$$CustomerOrdersErrorImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$CustomerOrdersErrorImpl implements _CustomerOrdersError {
-  const _$CustomerOrdersErrorImpl({required this.errorText});
+  const _$CustomerOrdersErrorImpl({required this.error});
 
   @override
-  final String errorText;
+  final AppError error;
 
   @override
   String toString() {
-    return 'CustomerAuctionsState.customerOrdersError(errorText: $errorText)';
+    return 'CustomerAuctionsState.customerOrdersError(error: $error)';
   }
 
   @override
@@ -774,12 +774,11 @@ class _$CustomerOrdersErrorImpl implements _CustomerOrdersError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CustomerOrdersErrorImpl &&
-            (identical(other.errorText, errorText) ||
-                other.errorText == errorText));
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, errorText);
+  int get hashCode => Object.hash(runtimeType, error);
 
   /// Create a copy of CustomerAuctionsState
   /// with the given fields replaced by the non-null parameter values.
@@ -797,9 +796,9 @@ class _$CustomerOrdersErrorImpl implements _CustomerOrdersError {
     required TResult Function() loading,
     required TResult Function(List<CustomerOrdersModel> customerOrdersModel)
         customerOrdersLoaded,
-    required TResult Function(String errorText) customerOrdersError,
+    required TResult Function(AppError error) customerOrdersError,
   }) {
-    return customerOrdersError(errorText);
+    return customerOrdersError(error);
   }
 
   @override
@@ -809,9 +808,9 @@ class _$CustomerOrdersErrorImpl implements _CustomerOrdersError {
     TResult? Function()? loading,
     TResult? Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult? Function(String errorText)? customerOrdersError,
+    TResult? Function(AppError error)? customerOrdersError,
   }) {
-    return customerOrdersError?.call(errorText);
+    return customerOrdersError?.call(error);
   }
 
   @override
@@ -821,11 +820,11 @@ class _$CustomerOrdersErrorImpl implements _CustomerOrdersError {
     TResult Function()? loading,
     TResult Function(List<CustomerOrdersModel> customerOrdersModel)?
         customerOrdersLoaded,
-    TResult Function(String errorText)? customerOrdersError,
+    TResult Function(AppError error)? customerOrdersError,
     required TResult orElse(),
   }) {
     if (customerOrdersError != null) {
-      return customerOrdersError(errorText);
+      return customerOrdersError(error);
     }
     return orElse();
   }
@@ -869,10 +868,10 @@ class _$CustomerOrdersErrorImpl implements _CustomerOrdersError {
 }
 
 abstract class _CustomerOrdersError implements CustomerAuctionsState {
-  const factory _CustomerOrdersError({required final String errorText}) =
+  const factory _CustomerOrdersError({required final AppError error}) =
       _$CustomerOrdersErrorImpl;
 
-  String get errorText;
+  AppError get error;
 
   /// Create a copy of CustomerAuctionsState
   /// with the given fields replaced by the non-null parameter values.

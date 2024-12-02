@@ -11,4 +11,11 @@ class SendInvoiceDs {
         await dio.post("${UrlRoutes.sendInvoice}/$orderId", data: invoice);
     return InvoiceModel.fromJson(response.data);
   }
+
+  Future<InvoiceModel> changeInvoice(
+      {required Map<String, dynamic> invoice, required String orderId}) async {
+    final Response response =
+        await dio.put("${UrlRoutes.sendInvoice}/$orderId", data: invoice);
+    return InvoiceModel.fromJson(response.data);
+  }
 }

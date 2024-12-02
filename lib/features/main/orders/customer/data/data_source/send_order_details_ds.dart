@@ -36,7 +36,16 @@ class SendOrderDetailsDs {
         ),
       );
     }
-
+    if (formDataMap['agreements'] != null) {
+      formDataMap['agreements'] = await Future.wait(
+        (formDataMap['agreements'] as List<String?>).map(
+          (filePath) async => filePath != null
+              ? await MultipartFile.fromFile(filePath,
+                  filename: filePath.split('/').last)
+              : null,
+        ),
+      );
+    }
     // Prepare FormData
     // Prepare FormData
     final formData = FormData.fromMap(formDataMap);

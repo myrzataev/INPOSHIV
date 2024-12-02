@@ -31,6 +31,7 @@ mixin _$CreateChatRoomModel {
   String? get lastMessageSenderUuid => throw _privateConstructorUsedError;
   int? get orderId => throw _privateConstructorUsedError;
   DateTime? get lastMessageDate => throw _privateConstructorUsedError;
+  String? get customerOrManufacturerUuid => throw _privateConstructorUsedError;
 
   /// Serializes this CreateChatRoomModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59,7 +60,8 @@ abstract class $CreateChatRoomModelCopyWith<$Res> {
       String? lastMessageContent,
       String? lastMessageSenderUuid,
       int? orderId,
-      DateTime? lastMessageDate});
+      DateTime? lastMessageDate,
+      String? customerOrManufacturerUuid});
 }
 
 /// @nodoc
@@ -88,6 +90,7 @@ class _$CreateChatRoomModelCopyWithImpl<$Res, $Val extends CreateChatRoomModel>
     Object? lastMessageSenderUuid = freezed,
     Object? orderId = freezed,
     Object? lastMessageDate = freezed,
+    Object? customerOrManufacturerUuid = freezed,
   }) {
     return _then(_value.copyWith(
       chatUuid: freezed == chatUuid
@@ -134,6 +137,10 @@ class _$CreateChatRoomModelCopyWithImpl<$Res, $Val extends CreateChatRoomModel>
           ? _value.lastMessageDate
           : lastMessageDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      customerOrManufacturerUuid: freezed == customerOrManufacturerUuid
+          ? _value.customerOrManufacturerUuid
+          : customerOrManufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -157,7 +164,8 @@ abstract class _$$CreateChatRoomModelImplCopyWith<$Res>
       String? lastMessageContent,
       String? lastMessageSenderUuid,
       int? orderId,
-      DateTime? lastMessageDate});
+      DateTime? lastMessageDate,
+      String? customerOrManufacturerUuid});
 }
 
 /// @nodoc
@@ -184,6 +192,7 @@ class __$$CreateChatRoomModelImplCopyWithImpl<$Res>
     Object? lastMessageSenderUuid = freezed,
     Object? orderId = freezed,
     Object? lastMessageDate = freezed,
+    Object? customerOrManufacturerUuid = freezed,
   }) {
     return _then(_$CreateChatRoomModelImpl(
       chatUuid: freezed == chatUuid
@@ -230,6 +239,10 @@ class __$$CreateChatRoomModelImplCopyWithImpl<$Res>
           ? _value.lastMessageDate
           : lastMessageDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      customerOrManufacturerUuid: freezed == customerOrManufacturerUuid
+          ? _value.customerOrManufacturerUuid
+          : customerOrManufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -248,7 +261,8 @@ class _$CreateChatRoomModelImpl implements _CreateChatRoomModel {
       this.lastMessageContent,
       this.lastMessageSenderUuid,
       this.orderId,
-      this.lastMessageDate});
+      this.lastMessageDate,
+      this.customerOrManufacturerUuid});
 
   factory _$CreateChatRoomModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CreateChatRoomModelImplFromJson(json);
@@ -275,10 +289,12 @@ class _$CreateChatRoomModelImpl implements _CreateChatRoomModel {
   final int? orderId;
   @override
   final DateTime? lastMessageDate;
+  @override
+  final String? customerOrManufacturerUuid;
 
   @override
   String toString() {
-    return 'CreateChatRoomModel(chatUuid: $chatUuid, senderUuid: $senderUuid, recipientUuid: $recipientUuid, createdAt: $createdAt, senderName: $senderName, recipientName: $recipientName, lastMessageUuid: $lastMessageUuid, lastMessageContent: $lastMessageContent, lastMessageSenderUuid: $lastMessageSenderUuid, orderId: $orderId, lastMessageDate: $lastMessageDate)';
+    return 'CreateChatRoomModel(chatUuid: $chatUuid, senderUuid: $senderUuid, recipientUuid: $recipientUuid, createdAt: $createdAt, senderName: $senderName, recipientName: $recipientName, lastMessageUuid: $lastMessageUuid, lastMessageContent: $lastMessageContent, lastMessageSenderUuid: $lastMessageSenderUuid, orderId: $orderId, lastMessageDate: $lastMessageDate, customerOrManufacturerUuid: $customerOrManufacturerUuid)';
   }
 
   @override
@@ -306,7 +322,11 @@ class _$CreateChatRoomModelImpl implements _CreateChatRoomModel {
                 other.lastMessageSenderUuid == lastMessageSenderUuid) &&
             (identical(other.orderId, orderId) || other.orderId == orderId) &&
             (identical(other.lastMessageDate, lastMessageDate) ||
-                other.lastMessageDate == lastMessageDate));
+                other.lastMessageDate == lastMessageDate) &&
+            (identical(other.customerOrManufacturerUuid,
+                    customerOrManufacturerUuid) ||
+                other.customerOrManufacturerUuid ==
+                    customerOrManufacturerUuid));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -323,7 +343,8 @@ class _$CreateChatRoomModelImpl implements _CreateChatRoomModel {
       lastMessageContent,
       lastMessageSenderUuid,
       orderId,
-      lastMessageDate);
+      lastMessageDate,
+      customerOrManufacturerUuid);
 
   /// Create a copy of CreateChatRoomModel
   /// with the given fields replaced by the non-null parameter values.
@@ -354,7 +375,8 @@ abstract class _CreateChatRoomModel implements CreateChatRoomModel {
       final String? lastMessageContent,
       final String? lastMessageSenderUuid,
       final int? orderId,
-      final DateTime? lastMessageDate}) = _$CreateChatRoomModelImpl;
+      final DateTime? lastMessageDate,
+      final String? customerOrManufacturerUuid}) = _$CreateChatRoomModelImpl;
 
   factory _CreateChatRoomModel.fromJson(Map<String, dynamic> json) =
       _$CreateChatRoomModelImpl.fromJson;
@@ -381,6 +403,8 @@ abstract class _CreateChatRoomModel implements CreateChatRoomModel {
   int? get orderId;
   @override
   DateTime? get lastMessageDate;
+  @override
+  String? get customerOrManufacturerUuid;
 
   /// Create a copy of CreateChatRoomModel
   /// with the given fields replaced by the non-null parameter values.

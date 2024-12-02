@@ -180,7 +180,7 @@ mixin _$GetManufacturersProfileState {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ManufacturersProfileModel> model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError errorText) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -188,7 +188,7 @@ mixin _$GetManufacturersProfileState {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError errorText)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -196,7 +196,7 @@ mixin _$GetManufacturersProfileState {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError errorText)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -295,7 +295,7 @@ class _$InitialImpl implements _Initial {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ManufacturersProfileModel> model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError errorText) error,
   }) {
     return initial();
   }
@@ -306,7 +306,7 @@ class _$InitialImpl implements _Initial {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError errorText)? error,
   }) {
     return initial?.call();
   }
@@ -317,7 +317,7 @@ class _$InitialImpl implements _Initial {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError errorText)? error,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -412,7 +412,7 @@ class _$LoadingImpl implements _Loading {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ManufacturersProfileModel> model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError errorText) error,
   }) {
     return loading();
   }
@@ -423,7 +423,7 @@ class _$LoadingImpl implements _Loading {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError errorText)? error,
   }) {
     return loading?.call();
   }
@@ -434,7 +434,7 @@ class _$LoadingImpl implements _Loading {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError errorText)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -563,7 +563,7 @@ class _$LoadedImpl implements _Loaded {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ManufacturersProfileModel> model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError errorText) error,
   }) {
     return loaded(model);
   }
@@ -574,7 +574,7 @@ class _$LoadedImpl implements _Loaded {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError errorText)? error,
   }) {
     return loaded?.call(model);
   }
@@ -585,7 +585,7 @@ class _$LoadedImpl implements _Loaded {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError errorText)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -651,7 +651,7 @@ abstract class _$$ErrorImplCopyWith<$Res> {
           _$ErrorImpl value, $Res Function(_$ErrorImpl) then) =
       __$$ErrorImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({String errorText});
+  $Res call({AppError errorText});
 }
 
 /// @nodoc
@@ -673,7 +673,7 @@ class __$$ErrorImplCopyWithImpl<$Res>
       errorText: null == errorText
           ? _value.errorText
           : errorText // ignore: cast_nullable_to_non_nullable
-              as String,
+              as AppError,
     ));
   }
 }
@@ -684,7 +684,7 @@ class _$ErrorImpl implements _Error {
   const _$ErrorImpl({required this.errorText});
 
   @override
-  final String errorText;
+  final AppError errorText;
 
   @override
   String toString() {
@@ -717,7 +717,7 @@ class _$ErrorImpl implements _Error {
     required TResult Function() initial,
     required TResult Function() loading,
     required TResult Function(List<ManufacturersProfileModel> model) loaded,
-    required TResult Function(String errorText) error,
+    required TResult Function(AppError errorText) error,
   }) {
     return error(errorText);
   }
@@ -728,7 +728,7 @@ class _$ErrorImpl implements _Error {
     TResult? Function()? initial,
     TResult? Function()? loading,
     TResult? Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult? Function(String errorText)? error,
+    TResult? Function(AppError errorText)? error,
   }) {
     return error?.call(errorText);
   }
@@ -739,7 +739,7 @@ class _$ErrorImpl implements _Error {
     TResult Function()? initial,
     TResult Function()? loading,
     TResult Function(List<ManufacturersProfileModel> model)? loaded,
-    TResult Function(String errorText)? error,
+    TResult Function(AppError errorText)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -787,9 +787,9 @@ class _$ErrorImpl implements _Error {
 }
 
 abstract class _Error implements GetManufacturersProfileState {
-  const factory _Error({required final String errorText}) = _$ErrorImpl;
+  const factory _Error({required final AppError errorText}) = _$ErrorImpl;
 
-  String get errorText;
+  AppError get errorText;
 
   /// Create a copy of GetManufacturersProfileState
   /// with the given fields replaced by the non-null parameter values.

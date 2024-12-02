@@ -43,8 +43,10 @@ class GetCategoriesDs {
       {required String category}) async {
     final Response response =
         await dio.get("${UrlRoutes.getCategories}/$category");
-    final List<Subcategory?> responseList = await response.data;
-    return responseList.map((element) => element).toList();
+    final List responseList = await response.data;
+    return responseList
+        .map((element) => Subcategory.fromJson(element))
+        .toList();
   }
 
   Future<List<entity.Subcategory?>> convertSpecificCategoryModelToEntity(

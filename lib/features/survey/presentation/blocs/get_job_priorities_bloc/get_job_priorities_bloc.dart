@@ -1,5 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/survey/data/models/job_priorities_model.dart';
 import 'package:inposhiv/features/survey/data/repositories/get_job_prioritities_list_repoimpl.dart';
 
@@ -17,7 +19,7 @@ class GetJobPrioritiesBloc
         final result = await repoImpl.getJobPrioritiesList(isCustomer: event.isCustomer);
         emit(GetJobPrioritiesState.loaded(model: result));
       } catch (e) {
-        emit(GetJobPrioritiesState.error(errorText: e.toString()));
+        emit(GetJobPrioritiesState.error(error: handleException(e)));
       }
     });
   }

@@ -6,6 +6,6 @@ class GetAuctionMembersState with _$GetAuctionMembersState {
   const factory GetAuctionMembersState.loading() = _Loading;
   const factory GetAuctionMembersState.auctionMembersLoaded( {required List<AuctionMembersModel> auctionMembersModel}) =
       _AuctionMembersLoaded;
-  const factory GetAuctionMembersState.auctionMembersError({required String errorText}) =
+  const factory GetAuctionMembersState.auctionMembersError({required AppError error}) =
       _AuctionMembersError;
 }

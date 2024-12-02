@@ -3,12 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:inposhiv/core/utils/app_colors.dart';
-import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
+import 'package:inposhiv/features/main/home/data/models/notification_model.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/notification_history_bloc/notification_history_bloc.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/notification_card.dart';
 import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
-import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
-import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_order_details_bloc/get_order_details_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -23,18 +23,18 @@ class NoticationsScreen extends StatefulWidget {
 class _NoticationsScreen extends State<NoticationsScreen> {
   final preferences = locator<SharedPreferences>();
   bool? isCustomer;
-  getCustomerInvoices() {
-    BlocProvider.of<GetManufacturerInvoicesBloc>(context).add(
-        GetManufacturerInvoicesEvent.getManufacturerInvoices(
-            manufactureId: preferences.getString("customerId") ?? ""));
-  }
 
   @override
   void initState() {
     isCustomer = preferences.getBool("isCustomer");
-
-    getCustomerInvoices();
+    getNotifications();
     super.initState();
+  }
+
+  getNotifications() {
+    BlocProvider.of<NotificationHistoryBloc>(context).add(
+        NotificationHistoryEvent.started(
+            userUid: preferences.getString("userId") ?? ""));
   }
 
   @override
@@ -58,161 +58,101 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                     onTap: () {}, child: SvgPicture.asset(SvgImages.search))
               ],
             ),
-            (isCustomer ?? true)
-                ? BlocBuilder<GetManufacturerInvoicesBloc,
-                    GetManufacturerInvoicesState>(
-                    builder: (context, state) {
-                      return state.maybeWhen(
-                          loading: () => const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              ),
-                          error: (errorText) => Center(
-                                child: Text(errorText),
-                              ),
-                          loaded: (model) {
-                            if (model.isNotEmpty) {
-                              return Expanded(
-                                  child: Padding(
-                                padding: EdgeInsets.only(top: 30.h),
-                                child: RefreshIndicator.adaptive(
-                                  onRefresh: () => getCustomerInvoices(),
-                                  child: ListView.separated(
-                                      itemBuilder: (context, index) {
-                                        return NotificationCard(
-                                          title: "Счет на оплату",
-                                          onTap: () {
-                                            context.go(
-                                                "/orders/invoiceScreenForCustomer",
-                                                extra: model[index]);
-                                          },
-                                          description: "Подтвердите",
-                                        );
-                                      },
-                                      separatorBuilder: (index, context) {
-                                        return SizedBox(
-                                          height: 7.h,
-                                        );
-                                      },
-                                      itemCount: model.length),
-                                ),
-                              ));
-                            } else {
-                              return Expanded(
-                                  child: Padding(
-                                padding: EdgeInsets.only(top: 30.h),
-                                child: ListView.separated(
-                                    itemBuilder: (context, index) {
-                                      return NotificationCard(
-                                        title: "Счет на оплату",
-                                        onTap: () {
-                                          print(preferences.getString("userId"));
-                                          // context.go(
-                                          //     "/orders/invoiceScreenForCustomer",
-                                          //     extra: model[index]);
-                                        },
-                                        description: "Подтвердите",
-                                      );
-                                    },
-                                    separatorBuilder: (index, context) {
-                                      return SizedBox(
-                                        height: 7.h,
-                                      );
-                                    },
-                                    itemCount: 1),
-                              ));
-                            }
-                          },
-                          orElse: () {
-                            return Expanded(
-                                child: Padding(
-                              padding: EdgeInsets.only(top: 30.h),
-                              child: ListView.separated(
-                                  itemBuilder: (context, index) {
-                                    return NotificationCard(
-                                      title: "Счет на оплату",
-                                      onTap: () {
-                                        context.go(
-                                          "/orders/invoiceScreenForCustomer",
-                                          // extra: model[index]
-                                        );
-                                      },
-                                      description: "Подтвердите",
-                                    );
+            Expanded(
+                child: Padding(
+              padding: EdgeInsets.only(top: 30.h),
+              child: BlocBuilder<NotificationHistoryBloc,
+                  NotificationHistoryState>(
+                builder: (context, state) {
+                  return state.maybeWhen(
+                    loading: () => const Center(child: CircularProgressIndicator.adaptive(),),
+                      loaded: (model) {
+                        return RefreshIndicator.adaptive(
+                          onRefresh: () async {},
+                          child: ListView.separated(
+                              itemBuilder: (context, index) {
+                                final currentItem = model.history?[index];
+                                return NotificationCard(
+                                  title: currentItem?.title ?? "",
+                                  onTap: () {
+                                    clicAction(
+                                        clicAction:
+                                            currentItem?.clickAction ?? "",
+                                        historyModel:
+                                            currentItem ?? const History());
                                   },
-                                  separatorBuilder: (index, context) {
-                                    return SizedBox(
-                                      height: 7.h,
-                                    );
-                                  },
-                                  itemCount: 1),
-                            ));
-                          });
-                    },
-                  )
-                : BlocBuilder<GetOrderDetailsBloc, GetOrderDetailsState>(
-                    builder: (context, state) {
-                      return state.maybeWhen(
-                          loading: () => const Center(
-                                child: CircularProgressIndicator.adaptive(),
-                              ),
-                          error: (errorText) => Center(
-                                child: Text(errorText),
-                              ),
-                          loaded: (model) {
-                            return Expanded(
-                                child: Padding(
-                              padding: EdgeInsets.only(top: 30.h),
-                              child: ListView.separated(
-                                  itemBuilder: (context, index) {
-                                    return NotificationCard(
-                                      title: "Счет на оплату",
-                                      onTap: () {
-                                        print("object");
-                                        context.go(
-                                            "/orders/orderDetailsForManufacturer",
-                                            extra: model);
-                                      },
-                                      description: "Подтвердите",
-                                    );
-                                  },
-                                  separatorBuilder: (index, context) {
-                                    return SizedBox(
-                                      height: 7.h,
-                                    );
-                                  },
-                                  itemCount: 1),
-                            ));
-                          },
-                          orElse: () {
-                            return Expanded(
-                                child: Padding(
-                              padding: EdgeInsets.only(top: 30.h),
-                              child: ListView.separated(
-                                  itemBuilder: (context, index) {
-                                    return NotificationCard(
-                                      title: "Счет на оплату",
-                                      onTap: () {
-                                        context.go(
-                                          "/orders/orderDetailsForManufacturer",
-                                          // extra: model
-                                        );
-                                      },
-                                      description: "Подтвердите",
-                                    );
-                                  },
-                                  separatorBuilder: (index, context) {
-                                    return SizedBox(
-                                      height: 7.h,
-                                    );
-                                  },
-                                  itemCount: 1),
-                            ));
-                          });
-                    },
-                  )
+                                  description: currentItem?.body ?? "",
+                                );
+                              },
+                              separatorBuilder: (index, context) {
+                                return SizedBox(
+                                  height: 7.h,
+                                );
+                              },
+                              itemCount: model.history?.length ?? 0),
+                        );
+                      },
+                      error: (error) => Expanded(
+                              child: Expanded(
+                            child: CustomErrorWidget(
+                              description: error.userMessage,
+                              onRefresh: () {
+                                getNotifications();
+                              },
+                            ),
+                          )),
+                      orElse: () {
+                        return const SizedBox.shrink();
+                      });
+                },
+              ),
+            ))
           ],
         ),
       )),
     );
+  }
+
+  void clicAction({required String clicAction, required History historyModel}) {
+    switch (clicAction) {
+      case 'CLICK_AUCTION':
+        router.push("/auction/detailedViewScreen",
+            extra: historyModel.auctionUuid);
+        break;
+      case 'INVOICE_SENT':
+        router.pushNamed("invoiceScreenForCustomer",
+            queryParameters: {"orderId": historyModel.orderId.toString()});
+        break;
+      case 'SEND_AGREEMENT':
+        // Handle SEND_AGREEMENT
+        break;
+      case "STAGE_CHANGED":
+        router.pushNamed("detailedTrackingScreen",
+            queryParameters: {"invoiceId": historyModel.invoiceUuid});
+        break;
+      case "TRACKING_STAGE_ACCEPTED":
+        // router.goNamed("detailedTrackingScreen", queryParameters: {
+        //   "invoiceId": payloadData["invoiceUuid"]
+        // });
+        router.pushNamed(
+          "orderTracking",
+          pathParameters: {
+            "activeStage": historyModel.invoiceUuid ?? "",
+          },
+        );
+        break;
+      case 'ORDER_DETAILS_FULLED':
+        router.push("/orders/orderDetailsForManufacturer",
+            extra: historyModel.orderUuid);
+        break;
+      case 'SEND_PAY_DETAILS':
+        router.pushNamed("orderDetailsForManufacturer", extra: historyModel.orderUuid);
+        print("SEND_PAY_DETAILS is catching");
+        break;
+
+      default:
+        print("Unknown click_action");
+        break;
+    }
   }
 }

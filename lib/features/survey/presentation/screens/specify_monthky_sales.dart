@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -14,6 +15,7 @@ class SpecifyMonthlySalesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController controller = TextEditingController();
     final role = Provider.of<RoleProvider>(context).role;
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     bool isCustomer = role == 1;
     return Scaffold(
       body: Padding(
@@ -36,18 +38,30 @@ class SpecifyMonthlySalesScreen extends StatelessWidget {
             ),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
-                child:
-                    CustomTextForm(hintText: isCustomer? "8200\$" : "1200 шт", controller: controller)),
+                child: Form(
+                  key: _formKey,
+                  child: CustomTextForm(
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Это поле является обьязательным";
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      hintText: isCustomer ? "8200\$" : "1200 шт",
+                      controller: controller),
+                )),
             Padding(
               padding: EdgeInsets.only(bottom: 20.h, top: 113.h),
               child: CustomButton(
                 text: "Дальше",
                 onPressed: () {
-                  GoRouter.of(context).pushNamed("importantThingsListScreen",
-                      queryParameters: {
-                        "monthSalesVolume": controller.text,
-
-                      });
+                  if (_formKey.currentState!.validate()) {
+                    router.pushNamed("importantThingsListScreen",
+                        queryParameters: {
+                          "monthSalesVolume": controller.text,
+                        });
+                  } else {}
                 },
               ),
             ),

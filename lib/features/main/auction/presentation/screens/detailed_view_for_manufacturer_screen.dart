@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -8,6 +7,8 @@ import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/custom_error_widget.dart';
+import 'package:inposhiv/core/widgets/loading_card.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
@@ -105,6 +106,7 @@ class _DetailedViewForManufacturerScreenState
                             loading: () => Showdialog.showLoaderDialog(context),
                             makeBidSuccess: (model) {
                               router.pop();
+                              bidPriceController.clear();
                               List<AuctionProcess>? auctionProcess =
                                   (model.auctionProcesses?.isNotEmpty ?? false)
                                       ? filterAuctionProccess(
@@ -175,11 +177,17 @@ class _DetailedViewForManufacturerScreenState
                       },
                       builder: (context, state) {
                         return state.maybeWhen(
-                            loading: () => const Center(
-                                  child: CircularProgressIndicator.adaptive(),
-                                ),
-                            error: (errorText) {
-                              return Text(errorText);
+                            loading: () => Center(
+                                child:
+                                    LoadingCard(height: 135.h, radius: 10.r)),
+                            error: (error) {
+                              return Expanded(
+                                child: CustomErrorWidget(
+                                    description: error.userMessage,
+                                    onRefresh: () {
+                                      getAuctionDetail();
+                                    }),
+                              );
                             },
                             loaded: (auctionModel) {
                               return Expanded(
