@@ -17,7 +17,7 @@ class SurveyStartScreen extends StatelessWidget {
     final int role = Provider.of<RoleProvider>(context, listen: true).role;
     bool isCustomer = role == 1;
     final preferences = locator<SharedPreferences>();
-
+   final ScrollController scrollController = ScrollController();
     final String? userName = preferences.getString("userName");
     return Scaffold(
       body: Padding(
@@ -42,7 +42,7 @@ class SurveyStartScreen extends StatelessWidget {
               child: Text(
                 "Для того, чтобы мы могли найти для вас подходящих ${isCustomer ? "производителей" : "заказчиков"}, пожалуйста, ответьте на несколько вопросов",
                 style: AppFonts.w700s36
-                    .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                    .copyWith(height: 1, fontWeight: FontWeight.bold),
               ),
             ),
             Padding(

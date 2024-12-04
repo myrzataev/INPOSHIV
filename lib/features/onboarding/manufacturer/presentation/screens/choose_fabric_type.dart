@@ -100,7 +100,7 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
               Text(
                 "Введите наименование ткани",
                 style: AppFonts.w700s36
-                    .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                    .copyWith(height: 1, fontWeight: FontWeight.bold),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -109,13 +109,13 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
                   style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(bottom: 20.h),
-                child: Text(
-                  "Это необязательное действие, если вы не знаете ткань",
-                  style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
-                ),
-              ),
+              // Padding(
+              //   padding: EdgeInsets.only(bottom: 20.h),
+              //   child: Text(
+              //     "Это необязательное действие, если вы не знаете ткань",
+              //     style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+              //   ),
+              // ),
               GestureDetector(
                 key: _buttonKey,
                 onTap: _toggleDropdown, // Toggle the dropdown menu
@@ -146,7 +146,7 @@ class _ChooseCategoryScreenState extends State<ChooseFabricTypeScreen> {
               ),
               const Spacer(),
               Padding(
-                padding: EdgeInsets.only(bottom: 10.h),
+                padding: EdgeInsets.only(bottom: 20.h),
                 child: CustomButton(
                     text: "Дальше",
                     onPressed: () {

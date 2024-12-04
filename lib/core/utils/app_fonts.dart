@@ -23,6 +23,11 @@ abstract class AppFonts {
       fontSize: 20.sp,
       color: AppColors.regularGreyColor,
       fontFamily: "Neue");
+       static TextStyle w700s22 = TextStyle(
+      fontWeight: FontWeight.w700,
+      fontSize: 22.sp,
+      color: AppColors.regularGreyColor,
+      fontFamily: "Neue");
   static TextStyle w700s16 = TextStyle(
       fontWeight: FontWeight.w700,
       fontSize: 16.sp,

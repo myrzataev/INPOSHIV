@@ -15,7 +15,7 @@ import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/blocs/manufacturer_bloc/manufacturer_bloc.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/survey/data/models/create_manufacturers_profile_model.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';

@@ -11,8 +11,8 @@ import 'package:inposhiv/features/main/chat/data/models/create_chat_room_model.d
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_withouttextfield.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_dialog.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/get_invoice_details_bloc/get_invoice_details_bloc.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/widgets/choose_payment.dart';

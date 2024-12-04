@@ -113,8 +113,8 @@ class _ChooseImageSourceScreenState extends State<ChooseImageSourceScreen> {
                 padding: EdgeInsets.symmetric(vertical: 10.h),
                 child: Text(
                   (isCustomer ?? true)
-                      ? "Загрузите фотографии ваших работ\nВы можете загрузить не более 5 фотографий"
-                      : "Вы можете загрузить не более 5 фотографий",
+                      ? "Загрузите фотографии ваших работ\nВы можете загрузить не более 3 фотографий"
+                      : "Вы можете загрузить не более 3 фотографий",
                   style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
                 ),
               ),

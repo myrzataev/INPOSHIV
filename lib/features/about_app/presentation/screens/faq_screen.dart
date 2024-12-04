@@ -6,7 +6,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/about_app/presentation/widgets/custom_animated_container.dart';
 
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 
 class FaqScreen extends StatefulWidget {

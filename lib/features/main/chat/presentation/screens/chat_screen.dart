@@ -455,7 +455,7 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/chat/data/models/pageble_model.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 

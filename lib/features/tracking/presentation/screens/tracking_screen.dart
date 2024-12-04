@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/end_of_tracking.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage1.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/stage2.dart';

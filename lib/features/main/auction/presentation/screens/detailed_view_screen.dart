@@ -9,17 +9,16 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
-import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auction_members_bloc/get_auction_members_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_detailed_auction_info_bloc/get_detailed_auction_info_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/auction_screen.dart';
-import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -158,7 +157,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                     Padding(
                                       padding: EdgeInsets.only(bottom: 10.h),
                                       child: SizedBox(
-                                        height: 60.h,
+                                        height: 170.h,
                                         child: ListView.separated(
                                           scrollDirection: Axis.horizontal,
                                           itemCount: auctionModel.productsList
@@ -220,14 +219,14 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                     Row(
                                       children: [
                                         Text(
-                                          "${auctionModel.productsList?.first.priceUsd?.toStringAsFixed(2) ?? ""} \$",
+                                          "${formatNumber(auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0)} \$",
                                           style: AppFonts.w400s16.copyWith(
                                               color: AppColors.accentTextColor),
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 84.w),
                                           child: Text(
-                                            "${calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0).toStringAsFixed(2)} \$",
+                                            "${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} \$",
                                             style: AppFonts.w400s16.copyWith(
                                                 color:
                                                     AppColors.accentTextColor),
@@ -238,13 +237,13 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                     Row(
                                       children: [
                                         Text(
-                                          "${auctionModel.productsList?.first.priceRub?.toStringAsFixed(2) ?? ""} руб",
+                                          "${formatNumber(auctionModel.productsList?.first.priceRub ?? 0)} руб",
                                           style: AppFonts.w400s16,
                                         ),
                                         Padding(
                                           padding: EdgeInsets.only(left: 48.w),
                                           child: Text(
-                                            "${calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub?.toDouble() ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0).toStringAsFixed(2)} руб",
+                                            "${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub?.toDouble() ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0))} руб",
                                             style: AppFonts.w400s16,
                                           ),
                                         )
@@ -383,7 +382,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                     style: AppFonts.w700s18,
                                                   ),
                                                   Text(
-                                                    "${((currency ?? 0) * (currentItem.orderPrice ?? 0)).toStringAsFixed(2)} руб",
+                                                    "${formatNumber((currency ?? 0) * (currentItem.orderPrice ?? 0))} руб",
                                                     style: AppFonts.w400s16,
                                                   ),
                                                 ],
@@ -396,11 +395,11 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      "${currentItem.orderSumPrice}\$",
+                                                      "${formatNumber(currentItem.orderSumPrice?.toDouble() ?? 0)}\$",
                                                       style: AppFonts.w700s18,
                                                     ),
                                                     Text(
-                                                      "${((currency ?? 0) * (currentItem.orderSumPrice ?? 0)).toStringAsFixed(2)} руб",
+                                                      "${formatNumber((currency ?? 0) * (currentItem.orderSumPrice ?? 0))} руб",
                                                       style: AppFonts.w400s16,
                                                     ),
                                                   ],

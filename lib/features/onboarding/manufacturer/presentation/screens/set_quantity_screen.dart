@@ -130,10 +130,10 @@ class _ChooseCategoryScreenState extends State<SetQuantityScreen> {
                 Text(
                   "Укажите размерный ряд и количество товара",
                   style: AppFonts.w700s36
-                      .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                      .copyWith(height: 0.9, fontWeight: FontWeight.bold),
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20.h),
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
                   child: Text(
                     "Минимальное количество товара 100 ед",
                     style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
@@ -235,22 +235,22 @@ class _ChooseCategoryScreenState extends State<SetQuantityScreen> {
                     ],
                   ),
                 ),
+                // Padding(
+                //   padding: EdgeInsets.only(top: 20.h),
+                //   child: Center(
+                //     child: TextButton(
+                //         onPressed: () {
+                //           GoRouter.of(context)
+                //               .pushNamed("setQuantityWithoutSizeScreen");
+                //         },
+                //         child: Text(
+                //           "Пропустить",
+                //           style: AppFonts.w400s16,
+                //         )),
+                //   ),
+                // ),
                 Padding(
-                  padding: EdgeInsets.only(top: 20.h),
-                  child: Center(
-                    child: TextButton(
-                        onPressed: () {
-                          GoRouter.of(context)
-                              .pushNamed("setQuantityWithoutSizeScreen");
-                        },
-                        child: Text(
-                          "Пропустить",
-                          style: AppFonts.w400s16,
-                        )),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10.h),
+                  padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
                   child: CustomButton(
                       text: "Дальше",
                       onPressed: () {

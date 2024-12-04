@@ -66,15 +66,24 @@ import 'package:inposhiv/features/main/home/presentation/customer/screens/top_up
 import 'package:inposhiv/features/main/home/presentation/customer/screens/user_profile_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/screens/orders_screen.dart';
 import 'package:inposhiv/internal/bottom_navigation_bar.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
+String getInitialRoute() {
+  final preferences = locator<SharedPreferences>();
+  bool isAuthorized = preferences.getString("userId") != null;
+
+  // Check for notification launch logic if needed
+  return isAuthorized ? "/main" : "/";
+}
 
 final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation:
+    initialLocation:getInitialRoute(),
         // "/",
-        "/main",
+        // "/main",
     // "/registration",
     //  "/chooseImageSource",
     //  "/surveyStartScreen",
@@ -299,7 +308,7 @@ final GoRouter router = GoRouter(
           final String quantityOfGoods =
               state.uri.queryParameters["quantity"] ?? "0";
           return SetPriceScreen(
-            quantityOfGoods: quantityOfGoods,
+            // quantityOfGoods: quantityOfGoods,
           );
         },
       ),

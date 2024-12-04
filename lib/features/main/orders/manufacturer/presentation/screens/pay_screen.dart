@@ -7,7 +7,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/widgets/choose_payment.dart';
 import 'package:inposhiv/resources/resources.dart';
 

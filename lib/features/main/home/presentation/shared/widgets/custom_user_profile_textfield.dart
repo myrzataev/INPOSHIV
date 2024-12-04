@@ -16,6 +16,7 @@ class CustomProfileTextField extends StatefulWidget {
   final bool hasValidator;
   final Function(String? value) validator;
   final List<TextInputFormatter>? textInputFormatter;
+  final bool onlyRead;
   const CustomProfileTextField(
       {super.key,
       required this.controller,
@@ -27,7 +28,8 @@ class CustomProfileTextField extends StatefulWidget {
       this.hasValidator = false,
       this.textInputFormatter,
       this.textAlign = TextAlign.center,
-      required this.validator});
+      required this.validator,
+      this.onlyRead = false});
 
   @override
   State<CustomProfileTextField> createState() => _CustomProfileTextFieldState();
@@ -53,13 +55,13 @@ class _CustomProfileTextFieldState extends State<CustomProfileTextField> {
           style: AppFonts.w400s16,
         ),
         TextFormField(
-         
             controller: widget.controller,
             keyboardType: widget.textInputType,
             textAlign: widget.textAlign,
             cursorColor: AppColors.borderColorGrey,
             obscureText: widget.obscureText ? isObscured : false,
             obscuringCharacter: "*",
+            readOnly: widget.onlyRead ,
             style: AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
             inputFormatters: widget.textInputFormatter,
             decoration: InputDecoration(
@@ -83,9 +85,7 @@ class _CustomProfileTextFieldState extends State<CustomProfileTextField> {
                     AppFonts.w700s20.copyWith(color: const Color(0xffA0A0A0)),
                 border: const UnderlineInputBorder(
                     borderSide: BorderSide(width: 1))),
-            validator: (value) => widget.validator(value)
-
-            ),
+            validator: (value) => widget.validator(value)),
       ],
     );
   }

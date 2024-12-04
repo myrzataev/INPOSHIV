@@ -81,7 +81,7 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
                   ? "Что для вас важно при работе с производителями"
                   : "Что для вас важно при работе с поставщиками",
               style: AppFonts.w700s36
-                  .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                  .copyWith(height: 1, fontWeight: FontWeight.bold),
             ),
             Padding(
               padding: EdgeInsets.only(top: 20.h, bottom: 30.h),
@@ -264,11 +264,12 @@ class _ImportantThingsListScreenState extends State<ImportantThingsListScreen> {
                       }
                     : () {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          duration: const Duration(seconds: 2),
                             backgroundColor: Colors.white,
                             content: Text(
                               "Выберите вариант",
                               style: AppFonts.w400s14
-                                  .copyWith(color: AppColors.accentTextColor),
+                                  .copyWith(color: Colors.red),
                             )));
                       },
               ),

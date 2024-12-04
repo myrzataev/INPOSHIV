@@ -24,14 +24,16 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SetPriceScreen extends StatefulWidget {
-  final String quantityOfGoods;
-  const SetPriceScreen({super.key, required this.quantityOfGoods});
+  const SetPriceScreen({
+    super.key,
+  });
 
   @override
   State<SetPriceScreen> createState() => _ChooseCategoryScreenState();
 }
 
 class _ChooseCategoryScreenState extends State<SetPriceScreen> {
+  String? quantityOfGoods;
   bool _isUpdating = false; // Flag to avoid recursive calls
   double totalDollarSum = 0;
   double totalSumRuble = 0;
@@ -43,13 +45,19 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
 
   @override
   void initState() {
+   
     super.initState();
     callBloc();
 
     // Add a listener to the text field controller to modify input.
     // controller.addListener(_onTextChanged);
   }
-
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Now it's safe to access the provider
+    quantityOfGoods = Provider.of<SizeProvider>(context, listen: true).totalQuantity.toString();
+  }
   void callBloc() {
     BlocProvider.of<CurrentCurrencyBloc>(context)
         .add(const CurrentCurrencyEvent.getCurrentCurrencyEvent());
@@ -101,14 +109,14 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
   _onTextChanged(String value) {
     setState(() {
       totalDollarSum =
-          double.parse(value) * double.parse(widget.quantityOfGoods);
+          double.parse(value) * double.parse(quantityOfGoods ?? "0");
     });
   }
 
   void _calculateTotalQuantity(double unitPrice) {
     setState(() {
       totalDollarSum =
-          unitPrice * (double.tryParse(widget.quantityOfGoods) ?? 0);
+          unitPrice * (double.tryParse(quantityOfGoods ?? "0") ?? 0);
     });
   }
 
@@ -121,7 +129,7 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
   void _calculateTotalQuantityInRuble(String values) {
     setState(() {
       totalSumRuble = double.parse(values) *
-          double.parse(widget.quantityOfGoods) *
+          double.parse(quantityOfGoods ?? "0") *
           currentCurrency;
     });
   }
@@ -225,13 +233,14 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(vertical: 20.h),
-                    child: Text(
-                      "Средняя цена на блузки 600 рублей за единицу товара",
-                      style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
-                    ),
-                  ),
+                  SizedBox(height: 50.h,),
+                  // Padding(
+                  //   padding: EdgeInsets.symmetric(vertical: 20.h),
+                  //   child: Text(
+                  //     "Средняя цена на блузки 600 рублей за единицу товара",
+                  //     style: AppFonts.w400s16.copyWith(fontFamily: "SF Pro"),
+                  //   ),
+                  // ),
                   Form(
                     key: _formKey,
                     child: TextFormField(
@@ -250,7 +259,7 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                         floatingLabelBehavior: FloatingLabelBehavior.always,
                         label: const Row(
                           children: [
-                            Text("Цена за единицу"),
+                            Text("Цена за ед"),
                             Spacer(),
                             Text("Итого"),
                           ],
@@ -297,7 +306,7 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                   ),
                   const Spacer(),
                   Padding(
-                    padding: EdgeInsets.only(bottom: 10.h),
+                    padding: EdgeInsets.only(bottom: 20.h),
                     child: CustomButton(
                       text: "Дальше",
                       onPressed: () async {
@@ -329,7 +338,7 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                             "priceUsd": int.tryParse(controller.text),
                             "priceRub": retailPriceInRuble,
                             "productName": vm.productName,
-                            "quantity": totalCount,
+                            "totalQuantity": totalCount,
                             "description": vm.description,
                             if (sizesVm.length > 1)
                               "sizeQuantitiesJson": jsonEncode({

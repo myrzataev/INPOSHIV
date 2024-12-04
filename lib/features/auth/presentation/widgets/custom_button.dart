@@ -9,8 +9,10 @@ class CustomButton extends StatelessWidget {
   final int? height;
   final bool sizedTemporary;
   final bool isActive;
+  final double? textSize;
   const CustomButton(
       {super.key,
+      this.textSize,
       required this.text,
       this.height,
       required this.onPressed,
@@ -35,7 +37,8 @@ class CustomButton extends StatelessWidget {
         child: Center(
           child: Text(
             text,
-            style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
+            style: AppFonts.w400s16
+                .copyWith(color: AppColors.accentTextColor, fontSize: textSize),
           ),
         ),
       ),

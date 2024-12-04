@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 
 class ChooseSpecializationScreen extends StatefulWidget {
@@ -43,7 +43,7 @@ class _ChooseSpecializationScreenState
                 child: Text(
                   "Ваша специализация в одежде",
                   style: AppFonts.w700s36
-                      .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                      .copyWith(height: 0.9, fontWeight: FontWeight.bold),
                 ),
               ),
               Text(

@@ -10,6 +10,7 @@ class LoginEntity with _$LoginEntity {
         String? refreshToken,
         String? userUuid,
         String? customerOrManufacturerUuid,
+        String? role,
     }) = _LoginEntity;
 
 }

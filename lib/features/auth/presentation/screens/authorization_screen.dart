@@ -9,7 +9,7 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/core/utils/logger.dart';
 import 'package:inposhiv/features/auth/presentation/blocs/login/login_bloc.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_user_profile_textfield.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:inposhiv/services/showdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -108,31 +108,31 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
 
                           if (error.type == ErrorType.authorization) {
                             // setState(() {
-                              // if (error.userMessage.contains("пароль")) {
-                              //   passwordError = error.userMessage;
-                              // } else if (error.userMessage
-                              //     .contains("номер телефона")) {
-                              //   phoneError = error.userMessage;
-                              // } else {
-                                Showdialog.showErrorDialog(
-                                    context: context,
-                                    title: "Ошибка авторизации",
-                                    message: error.userMessage);
-                              
+                            // if (error.userMessage.contains("пароль")) {
+                            //   passwordError = error.userMessage;
+                            // } else if (error.userMessage
+                            //     .contains("номер телефона")) {
+                            //   phoneError = error.userMessage;
+                            // } else {
+                            Showdialog.showErrorDialog(
+                                context: context,
+                                title: "Ошибка авторизации",
+                                message: error.userMessage);
+
                             // });
                           } else if (error.type == ErrorType.validation) {
                             // setState(() {
-                              // if (error.userMessage.contains("пароль")) {
-                              //   passwordError = error.userMessage;
-                              // } else if (error.userMessage
-                              //     .contains("номер телефона")) {
-                              //   phoneError = error.userMessage;
-                              // } else {
-                                Showdialog.showErrorDialog(
-                                    context: context,
-                                    title: "Ошибка валидации",
-                                    message: error.userMessage);
-                              // }
+                            // if (error.userMessage.contains("пароль")) {
+                            //   passwordError = error.userMessage;
+                            // } else if (error.userMessage
+                            //     .contains("номер телефона")) {
+                            //   phoneError = error.userMessage;
+                            // } else {
+                            Showdialog.showErrorDialog(
+                                context: context,
+                                title: "Ошибка валидации",
+                                message: error.userMessage);
+                            // }
                             // });
                           } else {
                             Showdialog.showErrorDialog(
@@ -150,6 +150,8 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                               "userId", entity.userUuid ?? "");
                           preferences.setString("customerId",
                               entity.customerOrManufacturerUuid ?? "");
+                          preferences.setBool(
+                              "isCustomer", entity.role == "CUSTOMER");
                           GoRouter.of(context).pushNamed("surveyStartScreen");
                         },
                         orElse: () {

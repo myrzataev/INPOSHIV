@@ -4,8 +4,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({
@@ -14,6 +16,8 @@ class CustomDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final preferences = locator<SharedPreferences>();
+
     return Drawer(
       backgroundColor: Colors.white,
       child: SafeArea(
@@ -39,6 +43,11 @@ class CustomDrawer extends StatelessWidget {
                           .copyWith(color: AppColors.accentTextColor),
                     )),
               ),
+              ElevatedButton(
+                  onPressed: () {
+                    preferences.clear();
+                  },
+                  child: Text("data")),
               TextButton(
                   onPressed: () {
                     GoRouter.of(context).pushNamed("settings");

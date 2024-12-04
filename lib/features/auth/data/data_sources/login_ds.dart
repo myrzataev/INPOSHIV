@@ -20,6 +20,7 @@ class LoginDs {
         refreshToken: model.refreshToken,
         token: model.token,
         userUuid: model.userUuid,
-        customerOrManufacturerUuid: model.customerOrManufacturerUuid);
+        customerOrManufacturerUuid: model.customerOrManufacturerUuid,
+        role: model.role);
   }
 }

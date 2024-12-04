@@ -9,7 +9,7 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/survey/domain/entities/categories_entity.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/get_categories_bloc/get_categories_bloc.dart';
 import 'package:inposhiv/features/survey/presentation/providers/categories_provider.dart';
@@ -218,7 +218,8 @@ class _ChooseSpecializationScreenState
                                     GoRouter.of(context).pop();
                                   },
                                   child: SvgPicture.asset(SvgImages.goback)),
-                              const Spacer(),
+                              // const Spacer(),
+                              SizedBox(height: 100.h,),
                               Padding(
                                 padding: EdgeInsets.only(bottom: 20.h),
                                 child: Text(
@@ -226,7 +227,7 @@ class _ChooseSpecializationScreenState
                                       ? "Выберите категорию"
                                       : "Какие модели вы шьете чаще всего?",
                                   style: AppFonts.w700s36.copyWith(
-                                      height: 0.8, fontWeight: FontWeight.bold),
+                                      height: 1, fontWeight: FontWeight.bold),
                                 ),
                               ),
                               Wrap(
@@ -324,6 +325,7 @@ class _ChooseSpecializationScreenState
                                       ),
                                     ),
                                   )),
+                                  SizedBox(height: 30.h,)
                             ],
                           ),
                         ),

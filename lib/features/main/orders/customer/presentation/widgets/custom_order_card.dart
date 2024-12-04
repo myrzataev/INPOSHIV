@@ -7,6 +7,7 @@ import 'package:inposhiv/features/main/home/presentation/customer/screens/main_s
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 
 class CustomOrderCard extends StatefulWidget {
   const CustomOrderCard({
@@ -153,7 +154,7 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Text(
-              "${widget.retailPriceInRuble} руб за единицу, итого ${widget.totalPriceInRuble} руб",
+              "${formatNumber(widget.retailPriceInRuble.toDouble())} руб за единицу, итого ${formatNumber(widget.totalPriceInRuble.toDouble())} руб",
               style: AppFonts.w400s16.copyWith(),
             ),
           ),

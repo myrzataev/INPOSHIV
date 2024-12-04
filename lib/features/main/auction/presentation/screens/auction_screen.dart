@@ -20,10 +20,11 @@ import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_b
 import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_auctions_bloc/manufacturer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/home/data/mocked_data.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/main_screen.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_drawer.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/main_appbar.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:inposhiv/services/showdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -120,6 +121,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
               padding: EdgeInsets.only(bottom: 10.h),
               child: const MainAppBar(),
             ),
+            // ElevatedButton(onPressed: (){print(isCustomer);}, child: Text("data")),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(top: 10.h),
@@ -250,7 +252,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                       horizontal:
                                                                           14.w),
                                                               child: Text(
-                                                                "${currentItem.auctionProcessDtoList?.length ?? 90} откликов",
+                                                                "${currentItem.auctionProcessDtoList?.length ?? 0} откликов",
                                                                 style: AppFonts
                                                                     .w400s16
                                                                     .copyWith(
@@ -328,88 +330,85 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                     "",
                                                 style: AppFonts.w400s16,
                                               ),
-                                              Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 10.h),
-                                                  child: Column(
-                                                    children: [
-                                                      InkWell(
-                                                        onTap: () {
-                                                          setState(() {
-                                                            _isExpandedList[
-                                                                    index] =
-                                                                !_isExpandedList[
-                                                                    index];
-                                                          });
-                                                        },
-                                                        child: Row(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                              "Размерный ряд",
-                                                              style: AppFonts
-                                                                  .w400s16
-                                                                  .copyWith(
-                                                                      color: AppColors
-                                                                          .accentTextColor),
-                                                            ),
-                                                            Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      left:
-                                                                          6.w),
-                                                              child: RotatedBox(
-                                                                quarterTurns:
-                                                                    currentIndexIsExpanded
-                                                                        ? 2
-                                                                        : 0,
-                                                                child: SvgPicture
-                                                                    .asset(SvgImages
-                                                                        .bottom),
-                                                              ),
-                                                            )
-                                                          ],
+                                              Column(
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      setState(() {
+                                                        _isExpandedList[index] =
+                                                            !_isExpandedList[
+                                                                index];
+                                                      });
+                                                    },
+                                                    child: Row(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          "Размерный ряд",
+                                                          style: AppFonts
+                                                              .w400s16
+                                                              .copyWith(
+                                                                  color: AppColors
+                                                                      .accentTextColor),
                                                         ),
-                                                      ),
-                                                      AnimatedSize(
-                                                        duration:
-                                                            const Duration(
-                                                                milliseconds:
-                                                                    300),
-                                                        curve: Curves
-                                                            .fastOutSlowIn,
-                                                        child:
-                                                            currentIndexIsExpanded
-                                                                ? GridView
-                                                                    .builder(
-                                                                        shrinkWrap:
-                                                                            true,
-                                                                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                                            mainAxisSpacing:
-                                                                                0,
-                                                                            mainAxisExtent: 30
-                                                                                .h,
-                                                                            crossAxisCount:
-                                                                                2),
-                                                                        itemCount:
-                                                                            currentItem.products?.first.sizeQuantities?.length ??
-                                                                                0,
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                gridwiewIndex) {
-                                                                          return Text(
-                                                                            "${sizes[gridwiewIndex].usaSize} (${sizes[gridwiewIndex].ruSize}) – ${currentItem.products?.first.sizeQuantities?["${gridwiewIndex + 1}"]}шт",
-                                                                            style:
-                                                                                AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
-                                                                          );
-                                                                        })
-                                                                : const SizedBox
-                                                                    .shrink(),
-                                                      ),
-                                                    ],
-                                                  ))
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  left: 6.w),
+                                                          child: RotatedBox(
+                                                            quarterTurns:
+                                                                currentIndexIsExpanded
+                                                                    ? 2
+                                                                    : 0,
+                                                            child: SvgPicture
+                                                                .asset(SvgImages
+                                                                    .bottom),
+                                                          ),
+                                                        )
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  AnimatedSize(
+                                                    duration: const Duration(
+                                                        milliseconds: 300),
+                                                    curve: Curves.fastOutSlowIn,
+                                                    child:
+                                                        currentIndexIsExpanded
+                                                            ? GridView.builder(
+                                                                shrinkWrap:
+                                                                    true,
+                                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                                    mainAxisSpacing:
+                                                                        0,
+                                                                    mainAxisExtent:
+                                                                        30.h,
+                                                                    crossAxisCount:
+                                                                        2),
+                                                                itemCount: currentItem
+                                                                        .products
+                                                                        ?.first
+                                                                        .sizeQuantities
+                                                                        ?.length ??
+                                                                    0,
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        gridwiewIndex) {
+                                                                  return Text(
+                                                                    "${sizes[gridwiewIndex].usaSize} (${sizes[gridwiewIndex].ruSize}) – ${currentItem.products?.first.sizeQuantities?["${gridwiewIndex + 1}"]}шт",
+                                                                    style: AppFonts
+                                                                        .w400s16
+                                                                        .copyWith(
+                                                                            color:
+                                                                                AppColors.accentTextColor),
+                                                                  );
+                                                                })
+                                                            : const SizedBox
+                                                                .shrink(),
+                                                  ),
+                                                ],
+                                              )
                                             ],
                                           ),
                                         ),
@@ -586,7 +585,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                   ),
                                                                 ),
                                                                 Text(
-                                                                  "${item.productsList?.first.quantity ?? 580} штук",
+                                                                  "${item.productsList?.first.quantity ?? 580} шт",
                                                                   style: AppFonts
                                                                       .w400s16
                                                                       .copyWith(
@@ -596,7 +595,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                               ],
                                                             ),
                                                             Text(
-                                                              "${item.productsList?.first.priceRub?.toStringAsFixed(1)} руб за ед., итого ${calculateService.calculateTotalPriceInRuble(ruble: item.productsList?.first.priceRub ?? 0, totalCount: item.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
+                                                              "${formatNumber(item.productsList?.first.priceRub?.toDouble() ?? 0)} руб за ед., итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: item.productsList?.first.priceRub ?? 0, totalCount: item.productsList?.first.quantity ?? 0))} руб",
                                                               style: AppFonts
                                                                   .w400s16,
                                                             ),

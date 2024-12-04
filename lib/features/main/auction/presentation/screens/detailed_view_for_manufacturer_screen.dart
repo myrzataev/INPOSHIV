@@ -14,11 +14,12 @@ import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_detailed_auction_info_bloc/get_detailed_auction_info_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/auction_screen.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_dialog.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:inposhiv/services/showdialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,7 +42,7 @@ class _DetailedViewForManufacturerScreenState
   final preferences = locator<SharedPreferences>();
   String? auctionUid;
   int? auctionid;
-
+  double? minimumBid;
   @override
   void initState() {
     getAuctionDetail();
@@ -171,6 +172,9 @@ class _DetailedViewForManufacturerScreenState
                                     auctionid = auctionModel.auctionProcesses
                                             ?.first.auctionId ??
                                         0;
+                                    minimumBid = auctionModel
+                                        .auctionProcesses?.last.bidPrice
+                                        ?.toDouble();
                                   }
                                 }),
                             orElse: () {});
@@ -213,7 +217,7 @@ class _DetailedViewForManufacturerScreenState
                                                   padding: EdgeInsets.only(
                                                       bottom: 10.h),
                                                   child: SizedBox(
-                                                    height: 60.h,
+                                                    height: 130.h,
                                                     child: ListView.separated(
                                                         scrollDirection:
                                                             Axis.horizontal,
@@ -273,7 +277,7 @@ class _DetailedViewForManufacturerScreenState
                                                       ),
                                                     ),
                                                     Text(
-                                                      "${auctionModel.productsList?.first.quantity ?? 0} штук",
+                                                      "${auctionModel.productsList?.first.quantity ?? 0} шт",
                                                       style: AppFonts.w400s16
                                                           .copyWith(
                                                               color: AppColors
@@ -282,7 +286,7 @@ class _DetailedViewForManufacturerScreenState
                                                   ],
                                                 ),
                                                 Text(
-                                                  "${auctionModel.productsList?.first.priceRub?.toStringAsFixed(1)} руб за ед. , итого ${calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
+                                                  "${formatNumber(auctionModel.productsList?.first.priceRub ?? 0)} руб за ед , итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} руб",
                                                   style: AppFonts.w400s16,
                                                 ),
                                               ],
@@ -478,7 +482,7 @@ class _DetailedViewForManufacturerScreenState
                       style: AppFonts.w700s18,
                     ),
                     Text(
-                      "Помните, вы можете сделать не более 3х ставок\nМинимальная ставка – 5.50\$",
+                      "Помните, вы можете сделать не более 3х ставок\n Последняя ставка – $minimumBid\$",
                       style: AppFonts.w700s16.copyWith(
                           fontFamily: "SF Pro",
                           color: AppColors.regularGreyColor),

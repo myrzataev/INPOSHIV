@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -41,9 +40,8 @@ class CustomDialog extends StatelessWidget {
             ),
             Text(
               title,
-              
-              style:
-                  AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
+              style: AppFonts.w700s22
+                  .copyWith(color: AppColors.accentTextColor, height: 1.2),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 10.h),

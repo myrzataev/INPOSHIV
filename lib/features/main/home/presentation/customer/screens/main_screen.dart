@@ -17,15 +17,17 @@ import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/get_auctions_bloc/get_auctions_bloc.dart';
+import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/get_manufacturers_profile_bloc/get_manufacturers_profile_bloc.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/data/mocked_data.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_drawer.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/main_appbar.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_drawer.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/main_appbar.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -352,7 +354,7 @@ class _MainScreenState extends State<MainScreen> {
                                                   padding: EdgeInsets.symmetric(
                                                       vertical: 10.h),
                                                   child: Text(
-                                                    "Выполнено в Inposhiv ${40} заказов.",
+                                                    "Выполнено в Inposhiv ${calculateTotalCopletedWorks(model[index].orderHistory ?? [])} заказов.",
                                                     style: AppFonts.w400s16
                                                         .copyWith(
                                                             color: AppColors
@@ -576,7 +578,7 @@ class _MainScreenState extends State<MainScreen> {
                                                   ),
                                                 ),
                                                 Text(
-                                                  "${currentItem.productsList?.first.priceRub?.toStringAsFixed(2)} руб за ед,  ${calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0).toStringAsFixed(2)} руб",
+                                                  "${formatNumber(currentItem.productsList?.first.priceRub ?? 0)} руб за ед,  ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0))} руб",
                                                   style: AppFonts.w400s16,
                                                 ),
                                                 Padding(
@@ -661,7 +663,7 @@ class _MainScreenState extends State<MainScreen> {
                             ));
                           } else {
                             return RefreshIndicator.adaptive(
-                              onRefresh: ()async => (),
+                              onRefresh: () async => (),
                               child: SingleChildScrollView(
                                 child: const Center(
                                   child: Text("Пусто"),
@@ -702,6 +704,16 @@ class _MainScreenState extends State<MainScreen> {
         ]),
       )),
     );
+  }
+
+  int calculateTotalCopletedWorks(List<OrderHistory> orderHistory) {
+    int value;
+    try {
+      value = orderHistory.where((element) => element.status == "PAID").length;
+    } catch (e) {
+      value = 0;
+    }
+    return value;
   }
 }
 

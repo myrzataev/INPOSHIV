@@ -12,7 +12,7 @@ import 'package:inposhiv/features/auth/data/models/user_model.dart';
 import 'package:inposhiv/features/auth/presentation/blocs/auth/auth_bloc.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_user_profile_textfield.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:inposhiv/services/showdialog.dart';
 import 'package:provider/provider.dart';
@@ -368,7 +368,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               context: context,
                               title: "Ошибка",
                               message: errorMessage,
-                              onClose: () => router.pop(),
+                              onClose: () => Navigator.pop(context),
                             );
                             // setState(() {
                             //   isErrorVisible =

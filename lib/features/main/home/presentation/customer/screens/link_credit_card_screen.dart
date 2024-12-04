@@ -6,8 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/credit_card_textfield.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/credit_card_textfield.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 
 class LinkCreditCardScreen extends StatelessWidget {

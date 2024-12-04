@@ -6,7 +6,7 @@ import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 
 import 'package:inposhiv/features/about_app/presentation/widgets/custom_about_app_button.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:url_launcher/url_launcher.dart';
 

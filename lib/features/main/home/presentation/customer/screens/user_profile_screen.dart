@@ -9,12 +9,14 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/blocs/user_bloc/user_bloc.dart';
-import 'package:inposhiv/features/main/home/presentation/shared/delete_account_bloc/delete_account_bloc.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_choise_widget.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_dialog.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_profile_info_row.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_user_profile_textfield.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/blocs/change_password_bloc/change_password_bloc.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/blocs/delete_account_bloc/delete_account_bloc.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/change_password_textfield.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_choise_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_dialog.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_profile_info_row.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_user_profile_textfield.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/colors_helper.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
@@ -33,11 +35,25 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController oldPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? companyName;
   String? city;
   final preferences = locator<SharedPreferences>();
 
   int currentIndex = 0;
+  @override
+  void dispose() {
+    emailController.dispose();
+    pageController.dispose();
+    passwordController.dispose();
+    phoneNumberController.dispose();
+    oldPasswordController.dispose();
+    newPasswordController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -250,11 +266,13 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                             textInputType:
                                                 TextInputType.emailAddress,
                                             obscureText: false,
-                                            suffixIcon: SvgPicture.asset(
-                                              SvgImages.pen,
-                                              height: 20.h,
-                                              width: 20.w,
-                                            ),
+                                            onlyRead: true,
+                                            suffixIcon: const SizedBox.shrink(),
+                                            //  SvgPicture.asset(
+                                            //   SvgImages.pen,
+                                            //   height: 20.h,
+                                            //   width: 20.w,
+                                            // ),
                                           ),
                                           Padding(
                                             padding: EdgeInsets.symmetric(
@@ -271,14 +289,17 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                               controller: phoneNumberController,
                                               labelText: "Номер телефона",
                                               hintText: "+996 (777)–777–777",
+                                              onlyRead: true,
                                               textInputType:
                                                   TextInputType.phone,
                                               obscureText: false,
-                                              suffixIcon: SvgPicture.asset(
-                                                SvgImages.pen,
-                                                height: 20.h,
-                                                width: 20.w,
-                                              ),
+                                              suffixIcon:
+                                                  const SizedBox.shrink(),
+                                              // SvgPicture.asset(
+                                              //   SvgImages.pen,
+                                              //   height: 20.h,
+                                              //   width: 20.w,
+                                              // ),
                                             ),
                                           ),
                                           Padding(
@@ -294,16 +315,186 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                               },
                                               controller: passwordController,
                                               labelText: "Пароль",
-                                              hintText: "Пароль",
+                                              hintText: "***********",
                                               textAlign: TextAlign.start,
+                                              onlyRead: true,
                                               textInputType:
                                                   TextInputType.visiblePassword,
                                               obscureText: true,
-                                              suffixIcon: const Icon(
-                                                  Icons.visibility_outlined),
+                                              suffixIcon: InkWell(
+                                                onTap: () => showDialog(
+                                                  context: context,
+                                                  builder: (context) => Dialog(
+                                                    backgroundColor:
+                                                        Colors.white,
+                                                    child: Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 20.w,
+                                                              vertical: 10.h),
+                                                      child: Form(
+                                                        key: _formKey,
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
+                                                              children: [
+                                                                const SizedBox
+                                                                    .shrink(),
+                                                                IconButton(
+                                                                    onPressed:
+                                                                        () {
+                                                                      Navigator.pop(
+                                                                          context);
+                                                                    },
+                                                                    icon: SvgPicture.asset(
+                                                                        SvgImages
+                                                                            .close))
+                                                              ],
+                                                            ),
+                                                            ChangePasswordTextField(
+                                                              labelText:
+                                                                  "Старый пароль",
+                                                              controller:
+                                                                  oldPasswordController,
+                                                              validator:
+                                                                  (value) {
+                                                                if (value ==
+                                                                        null ||
+                                                                    value
+                                                                        .isEmpty) {
+                                                                  return "Не может быть пустым";
+                                                                }
+                                                                return null;
+                                                              },
+                                                            ),
+                                                            ChangePasswordTextField(
+                                                              labelText:
+                                                                  "Новый пароль",
+                                                              controller:
+                                                                  newPasswordController,
+                                                              validator:
+                                                                  (value) {
+                                                                if (value ==
+                                                                        null ||
+                                                                    value
+                                                                        .isEmpty) {
+                                                                  return "Не может быть пустым";
+                                                                }
+                                                                return null;
+                                                              },
+                                                            ),
+                                                            Padding(
+                                                              padding: EdgeInsets
+                                                                  .symmetric(
+                                                                      vertical:
+                                                                          20.h),
+                                                              child:
+                                                                  CustomButton(
+                                                                      sizedTemporary:
+                                                                          true,
+                                                                      height:
+                                                                          40,
+                                                                      text:
+                                                                          "Сохранить",
+                                                                      onPressed:
+                                                                          () {
+                                                                        if (_formKey
+                                                                            .currentState!
+                                                                            .validate()) {
+                                                                          context
+                                                                              .read<ChangePasswordBloc>()
+                                                                              .add(ChangePasswordEvent.started(body: {
+                                                                                "oldPassword": oldPasswordController.text,
+                                                                                "newPassword": newPasswordController.text,
+                                                                                "phoneNumber": phoneNumberController.text
+                                                                              }));
+                                                                          Navigator.pop(
+                                                                              context);
+                                                                        } else {}
+                                                                      }),
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                child: SvgPicture.asset(
+                                                  SvgImages.pen,
+                                                  height: 40.h,
+                                                  width: 40.w,
+                                                ),
+                                              ),
+
+                                              // suffixIcon: const Icon(
+                                              //     Icons.visibility_outlined),
                                             ),
                                           ),
-
+                                          BlocListener<ChangePasswordBloc,
+                                              ChangePasswordState>(
+                                            listener: (context, state) {
+                                              state.maybeWhen(
+                                                  loading: () => Showdialog
+                                                      .showLoaderDialog(
+                                                          context),
+                                                  error: (error) {
+                                                    Navigator.pop(context);
+                                                    oldPasswordController
+                                                        .clear();
+                                                    newPasswordController
+                                                        .clear();
+                                                    Showdialog.showErrorDialog(
+                                                        context: context,
+                                                        title: "Ошибка",
+                                                        message:
+                                                            error.substring(7,
+                                                                error.length));
+                                                  },
+                                                  loaded: (message) {
+                                                    Navigator.pop(context);
+                                                    AlertDialog.adaptive(
+                                                      title: Text(
+                                                        "Успех",
+                                                        style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 18.sp,
+                                                          color: Colors.red,
+                                                        ),
+                                                      ),
+                                                      content: Text(
+                                                        "Успешно изменен",
+                                                        style: TextStyle(
+                                                          fontSize: 16.sp,
+                                                          color: Colors.black87,
+                                                        ),
+                                                      ),
+                                                      actions: [
+                                                        TextButton(
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child:
+                                                              const Text("ОК"),
+                                                        ),
+                                                      ],
+                                                    );
+                                                    oldPasswordController
+                                                        .clear();
+                                                    newPasswordController
+                                                        .clear();
+                                                  },
+                                                  orElse: () {});
+                                            },
+                                            child: const SizedBox.shrink(),
+                                          ),
                                           Text(
                                             "Данные пользователя",
                                             style: AppFonts.w700s20.copyWith(
@@ -324,7 +515,26 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                             child: InkWell(
                                               borderRadius:
                                                   BorderRadius.circular(10.r),
-                                              onTap: () {},
+                                              onTap: () {
+                                                showDialog(
+                                                  context: context,
+                                                  builder: (context) =>
+                                                      CustomAlertDialog(
+                                                    phoneNumberController:
+                                                        phoneNumberController,
+                                                    text:
+                                                        "Все ваши данные будут удалены с приложения",
+                                                    title:
+                                                        "Вы уверены, что хотите выйти?",
+                                                    buttonText: "Выйти",
+                                                    onTap: () {
+                                                      preferences.clear();
+                                                      router.goNamed(
+                                                          "onBoarding");
+                                                    },
+                                                  ),
+                                                );
+                                              },
                                               child: Ink(
                                                 height: 50.h,
                                                 width: double.infinity,
@@ -367,52 +577,24 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                   showDialog(
                                                     context: context,
                                                     builder: (context) =>
-                                                        CustomDialog(
-                                                      button: InkWell(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10.r),
-                                                        onTap: () {
-                                                          BlocProvider.of<
-                                                                      DeleteAccountBloc>(
-                                                                  context)
-                                                              .add(DeleteAccountEvent
-                                                                  .delete(
-                                                                      phoneNumber:
-                                                                          phoneNumberController
-                                                                              .text));
-                                                        },
-                                                        child: Ink(
-                                                          height: 40.h,
-                                                          width:
-                                                              double.infinity,
-                                                          decoration: BoxDecoration(
-                                                              color: Colors
-                                                                  .transparent,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          10.r),
-                                                              border: Border.all(
-                                                                  color:
-                                                                      AppColors
-                                                                          .red)),
-                                                          child: Center(
-                                                            child: Text(
-                                                              "Удалить",
-                                                              style: AppFonts
-                                                                  .w400s16
-                                                                  .copyWith(
-                                                                      color: AppColors
-                                                                          .red),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
+                                                        CustomAlertDialog(
+                                                      phoneNumberController:
+                                                          phoneNumberController,
+                                                      text:
+                                                          "Все ваши данные будут удалены с приложения",
                                                       title:
                                                           "Вы уверены, что хотите удалить аккаунт?",
-                                                      description:
-                                                          "Все ваши данные будут удалены с приложения",
+                                                      buttonText: "Удалить",
+                                                      onTap: () {
+                                                        BlocProvider.of<
+                                                                    DeleteAccountBloc>(
+                                                                context)
+                                                            .add(DeleteAccountEvent
+                                                                .delete(
+                                                                    phoneNumber:
+                                                                        phoneNumberController
+                                                                            .text));
+                                                      },
                                                     ),
                                                   );
                                                 },
@@ -539,5 +721,50 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                         });
                   }),
                 ))));
+  }
+}
+
+class CustomAlertDialog extends StatelessWidget {
+  final String buttonText;
+  final String title;
+  final String text;
+  final VoidCallback onTap;
+  const CustomAlertDialog({
+    super.key,
+    required this.phoneNumberController,
+    required this.buttonText,
+    required this.title,
+    required this.text,
+    required this.onTap,
+  });
+
+  final TextEditingController phoneNumberController;
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomDialog(
+      button: InkWell(
+        borderRadius: BorderRadius.circular(10.r),
+        onTap: onTap,
+        child: Ink(
+          height: 40.h,
+          width: double.infinity,
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(10.r),
+              border: Border.all(color: AppColors.red)),
+          child: Center(
+            child: Text(
+              buttonText,
+              style: AppFonts.w400s16.copyWith(color: AppColors.red),
+            ),
+          ),
+        ),
+      ),
+      title: title,
+      //  "Вы уверены, что хотите удалить аккаунт?",
+      description: text,
+      //  "Все ваши данные будут удалены с приложения",
+    );
   }
 }

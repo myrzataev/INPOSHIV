@@ -14,9 +14,9 @@ import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/s
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/data/feedback_mocked_data.dart';
 import 'package:inposhiv/features/main/home/data/mocked_history_data.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_appbar.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/custom_choise_widget.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/history_card.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_appbar.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_choise_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/history_card.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';

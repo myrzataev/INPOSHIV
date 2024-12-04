@@ -8,7 +8,7 @@ import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_choice_container.dart';
-import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/providers/order_provider.dart';
 import 'package:inposhiv/features/survey/domain/entities/categories_entity.dart';
 import 'package:inposhiv/features/survey/presentation/blocs/get_categories_bloc/get_categories_bloc.dart';
@@ -107,6 +107,7 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                         onChanged: (value) {
                           setState(() {
                             _selectedGenderSlug = value;
+
                             final selectedGender = _gender.firstWhere(
                               (element) => element.slug == value,
                             );
@@ -197,14 +198,23 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
               loaded: (entity) {
                 setState(() {
                   _gender = entity.map((gender) => gender).toList();
-                  // final result = entity
-                  //     .map((element) =>
-                  //         element.subcategories) // List<List<Subcategory>?>
-                  //     .expand((subcategoryList) => (subcategoryList ?? []).cast<
-                  //         Subcategory?>()) // Flattening to List<Subcategory>
-                  //     .toList(); // Convert to List<Subcategory>
 
-                  // _category = result;
+                  // Automatically select the first category
+                  if (_gender.isNotEmpty) {
+                    _selectedGenderSlug = _gender.first.slug;
+                    _selectedGenderName = _gender.first.name ?? "";
+                    _categoryId = _gender.first.id ?? 0;
+                    
+
+                    // Notify Provider
+                    Provider.of<OrderProvider>(context, listen: false)
+                        .updateCategoryId(id: _categoryId);
+
+                    // Fetch subcategories for the first category
+                    BlocProvider.of<GetSubCategoriesBloc>(context).add(
+                        GetSubCategoriesEvent.started(
+                            slug: _selectedGenderSlug ?? ""));
+                  }
                 });
               },
               orElse: () {});
@@ -275,7 +285,7 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                               Text(
                                 "Выберите  категорию товара",
                                 style: AppFonts.w700s36.copyWith(
-                                    height: 0.8, fontWeight: FontWeight.bold),
+                                    height: 1, fontWeight: FontWeight.bold),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(vertical: 20.h),
@@ -333,7 +343,9 @@ class _ChooseCategoryScreenState extends State<ChooseCategoryScreen> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.only(bottom: 10.h, top: 10.h),
+                        padding: EdgeInsets.only(
+                          bottom: 30.h,
+                        ),
                         child: CustomButton(
                             text: "Дальше",
                             onPressed: () {
