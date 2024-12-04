@@ -43,6 +43,7 @@ class _DetailedViewForManufacturerScreenState
   String? auctionUid;
   int? auctionid;
   double? minimumBid;
+  int? totalCount;
   @override
   void initState() {
     getAuctionDetail();
@@ -165,6 +166,8 @@ class _DetailedViewForManufacturerScreenState
                       listener: (context, state) {
                         state.maybeWhen(
                             loaded: (auctionModel) => setState(() {
+                                  totalCount =
+                                      auctionModel.productsList?.first.quantity;
                                   auctionUid = auctionModel.auctionUuid;
                                   if ((auctionModel
                                           .auctionProcesses?.isNotEmpty ??
@@ -217,7 +220,7 @@ class _DetailedViewForManufacturerScreenState
                                                   padding: EdgeInsets.only(
                                                       bottom: 10.h),
                                                   child: SizedBox(
-                                                    height: 130.h,
+                                                    height: 120.h,
                                                     child: ListView.separated(
                                                         scrollDirection:
                                                             Axis.horizontal,
@@ -284,6 +287,10 @@ class _DetailedViewForManufacturerScreenState
                                                                   .accentTextColor),
                                                     )
                                                   ],
+                                                ),
+                                                Text(
+                                                  "${formatNumber(auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0)} \$ за ед , итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} \$",
+                                                  style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
                                                 ),
                                                 Text(
                                                   "${formatNumber(auctionModel.productsList?.first.priceRub ?? 0)} руб за ед , итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} руб",
@@ -407,7 +414,7 @@ class _DetailedViewForManufacturerScreenState
                                                                     .w700s18,
                                                               ),
                                                               Text(
-                                                                "${((currency ?? 0) * (currentItem?.bidPrice ?? 0)).toStringAsFixed(2)} руб",
+                                                                "${formatNumber((currency ?? 0) * (currentItem?.bidPrice ?? 0))} руб",
                                                                 style: AppFonts
                                                                     .w400s16,
                                                               ),
@@ -423,12 +430,12 @@ class _DetailedViewForManufacturerScreenState
                                                                       .start,
                                                               children: [
                                                                 Text(
-                                                                  "${currentItem?.bidPrice}\$",
+                                                                  "${((currentItem?.bidPrice ?? 0) * (totalCount?.toInt() ?? 0))}\$",
                                                                   style: AppFonts
                                                                       .w700s18,
                                                                 ),
                                                                 Text(
-                                                                  "${((currency ?? 0) * (currentItem?.bidPrice ?? 0)).toStringAsFixed(2)} руб",
+                                                                  "${formatNumber(((currency ?? 0) * (currentItem?.bidPrice ?? 0)) * (totalCount?.toInt() ?? 0))} руб",
                                                                   style: AppFonts
                                                                       .w400s16,
                                                                 ),

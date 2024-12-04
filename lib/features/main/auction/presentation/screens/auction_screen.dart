@@ -122,6 +122,12 @@ class _AuctionScreenState extends State<AuctionScreen> {
               child: const MainAppBar(),
             ),
             // ElevatedButton(onPressed: (){print(isCustomer);}, child: Text("data")),
+            Center(
+              child: Text(
+                "Мои аукционы",
+                style: AppFonts.w700s36,
+              ),
+            ),
             Expanded(
               child: Padding(
                 padding: EdgeInsets.only(top: 10.h),
@@ -131,291 +137,333 @@ class _AuctionScreenState extends State<AuctionScreen> {
                           return state.maybeWhen(loading: () {
                             return const CustomMainLoadingListview();
                           }, customerOrdersLoaded: (customerOrdersModel) {
-                            return RefreshIndicator.adaptive(
-                              onRefresh: () async => getCustomerAuctions(),
-                              child: ListView.separated(
-                                itemCount: customerOrdersModel.length,
-                                separatorBuilder: (context, index) => SizedBox(
-                                  height: 5.h,
-                                ),
-                                itemBuilder: (context, index) {
-                                  final currentItem =
-                                      customerOrdersModel[index];
-                                  final bool currentIndexIsExpanded =
-                                      _isExpandedList[index];
-                                  final List<String> fullPhotoUrls = currentItem
-                                          .products?.first.photos
-                                          ?.map((url) =>
-                                              "${UrlRoutes.baseUrl}$url")
-                                          .toList() ??
-                                      [];
-                                  return Padding(
-                                      padding:
-                                          EdgeInsets.symmetric(vertical: 10.h),
-                                      child: InkWell(
-                                        onTap: () {
-                                          GoRouter.of(context).pushNamed(
-                                              "detailedViewScreen",
-                                              extra: currentItem
-                                                  .auctonsUuid?.first);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.r)),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Stack(
-                                                  alignment: Alignment.center,
-                                                  children: [
-                                                    CarouselSlider.builder(
-                                                      carouselController:
-                                                          _carouselSliderController,
-                                                      itemCount:
-                                                          fullPhotoUrls.length,
-                                                      options: CarouselOptions(
-                                                        autoPlay: false,
-                                                        enlargeCenterPage: true,
-                                                        viewportFraction: 1,
-                                                        aspectRatio: 16 / 7,
-                                                        height: 300.h,
-                                                        onPageChanged:
-                                                            (indexCarousel,
-                                                                reason) {
-                                                          setState(() {
-                                                            _currentIndexes[
-                                                                    index] =
-                                                                indexCarousel;
-                                                          });
+                            if (customerOrdersModel.isNotEmpty) {
+                              return RefreshIndicator.adaptive(
+                                onRefresh: () async => getCustomerAuctions(),
+                                child: ListView.separated(
+                                  itemCount: customerOrdersModel.length,
+                                  separatorBuilder: (context, index) =>
+                                      SizedBox(
+                                    height: 5.h,
+                                  ),
+                                  itemBuilder: (context, index) {
+                                    final currentItem =
+                                        customerOrdersModel[index];
+                                    final bool currentIndexIsExpanded =
+                                        _isExpandedList[index];
+                                    final List<String> fullPhotoUrls =
+                                        currentItem.products?.first.photos
+                                                ?.map((url) =>
+                                                    "${UrlRoutes.baseUrl}$url")
+                                                .toList() ??
+                                            [];
+                                    return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical: 10.h),
+                                        child: InkWell(
+                                          onTap: () {
+                                            GoRouter.of(context).pushNamed(
+                                                "detailedViewScreen",
+                                                extra: currentItem
+                                                    .auctonsUuid?.first);
+                                          },
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        20.r)),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Stack(
+                                                    alignment: Alignment.center,
+                                                    children: [
+                                                      CarouselSlider.builder(
+                                                        carouselController:
+                                                            _carouselSliderController,
+                                                        itemCount: fullPhotoUrls
+                                                            .length,
+                                                        options:
+                                                            CarouselOptions(
+                                                          autoPlay: false,
+                                                          enlargeCenterPage:
+                                                              true,
+                                                          viewportFraction: 1,
+                                                          aspectRatio: 16 / 7,
+                                                          height: 300.h,
+                                                          onPageChanged:
+                                                              (indexCarousel,
+                                                                  reason) {
+                                                            setState(() {
+                                                              _currentIndexes[
+                                                                      index] =
+                                                                  indexCarousel;
+                                                            });
+                                                          },
+                                                        ),
+                                                        itemBuilder: (context,
+                                                            caruselIndex,
+                                                            realIndex) {
+                                                          return Stack(
+                                                              children: [
+                                                                ClipRRect(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(15
+                                                                            .r),
+                                                                    child: fullPhotoUrls
+                                                                            .isNotEmpty
+                                                                        ? CachedNetworkImage(
+                                                                            progressIndicatorBuilder: (context, url, progress) =>
+                                                                                Center(
+                                                                                  child: LoadingCard(height: 300.h, radius: 0),
+                                                                                ),
+                                                                            fit: BoxFit
+                                                                                .cover,
+                                                                            // height: 350.h,
+                                                                            width: double
+                                                                                .infinity,
+                                                                            imageUrl: fullPhotoUrls[
+                                                                                caruselIndex])
+                                                                        : Image.asset(
+                                                                            Images.good1)),
+                                                              ]);
                                                         },
                                                       ),
-                                                      itemBuilder: (context,
-                                                          caruselIndex,
-                                                          realIndex) {
-                                                        return Stack(children: [
-                                                          ClipRRect(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          15.r),
-                                                              child: fullPhotoUrls
-                                                                      .isNotEmpty
-                                                                  ? CachedNetworkImage(
-                                                                      progressIndicatorBuilder: (context,
-                                                                              url,
-                                                                              progress) =>
-                                                                          Center(
-                                                                            child:
-                                                                                LoadingCard(height: 300.h, radius: 0),
-                                                                          ),
-                                                                      fit: BoxFit
-                                                                          .cover,
-                                                                      // height: 350.h,
-                                                                      width: double
-                                                                          .infinity,
-                                                                      imageUrl:
-                                                                          fullPhotoUrls[
-                                                                              caruselIndex])
-                                                                  : Image.asset(
-                                                                      Images
-                                                                          .good1)),
-                                                        ]);
-                                                      },
-                                                    ),
-                                                    Positioned(
-                                                      top: 10.h,
-                                                      left: 10.w,
-                                                      right: 10.w,
-                                                      child: Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceBetween,
-                                                        children: [
-                                                          const SizedBox
-                                                              .shrink(),
-                                                          Container(
-                                                            alignment: Alignment
-                                                                .center,
-                                                            height: 36.h,
-                                                            decoration: BoxDecoration(
-                                                                color: AppColors
-                                                                    .accentTextColor,
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(
-                                                                            60.r)),
-                                                            child: Padding(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          14.w),
-                                                              child: Text(
-                                                                "${currentItem.auctionProcessDtoList?.length ?? 0} откликов",
-                                                                style: AppFonts
-                                                                    .w400s16
-                                                                    .copyWith(
-                                                                        color: Colors
-                                                                            .white),
+                                                      Positioned(
+                                                        top: 10.h,
+                                                        left: 10.w,
+                                                        right: 10.w,
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            const SizedBox
+                                                                .shrink(),
+                                                            Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              height: 36.h,
+                                                              decoration: BoxDecoration(
+                                                                  color: AppColors
+                                                                      .accentTextColor,
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              60.r)),
+                                                              child: Padding(
+                                                                padding: EdgeInsets
+                                                                    .symmetric(
+                                                                        horizontal:
+                                                                            14.w),
+                                                                child: Text(
+                                                                  "${currentItem.auctionProcessDtoList?.length ?? 0} откликов",
+                                                                  style: AppFonts
+                                                                      .w400s16
+                                                                      .copyWith(
+                                                                          color:
+                                                                              Colors.white),
+                                                                ),
                                                               ),
                                                             ),
-                                                          ),
-                                                        ],
+                                                          ],
+                                                        ),
                                                       ),
-                                                    ),
-                                                    Positioned(
-                                                      bottom: 10.h,
-                                                      child: DotsIndicator(
-                                                        dotsCount: fullPhotoUrls
-                                                                .isNotEmpty
-                                                            ? fullPhotoUrls
-                                                                .length
-                                                            : 1,
-                                                        position:
-                                                            _currentIndexes[
-                                                                index],
-                                                        decorator:
-                                                            DotsDecorator(
-                                                                activeColor:
-                                                                    Colors
-                                                                        .white,
-                                                                size: Size(10.w,
-                                                                    10.h)),
+                                                      Positioned(
+                                                        bottom: 10.h,
+                                                        child: DotsIndicator(
+                                                          dotsCount: fullPhotoUrls
+                                                                  .isNotEmpty
+                                                              ? fullPhotoUrls
+                                                                  .length
+                                                              : 1,
+                                                          position:
+                                                              _currentIndexes[
+                                                                  index],
+                                                          decorator:
+                                                              DotsDecorator(
+                                                                  activeColor:
+                                                                      Colors
+                                                                          .white,
+                                                                  size: Size(
+                                                                      10.w,
+                                                                      10.h)),
+                                                        ),
+                                                      )
+                                                    ]),
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      vertical: 10.h),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          softWrap: true,
+                                                          currentItem
+                                                                  .products
+                                                                  ?.first
+                                                                  .name ??
+                                                              "",
+                                                          style: AppFonts
+                                                              .w700s20
+                                                              .copyWith(
+                                                                  color: AppColors
+                                                                      .accentTextColor),
+                                                        ),
                                                       ),
-                                                    )
-                                                  ]),
-                                              Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical: 10.h),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        maxLines: 2,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        softWrap: true,
-                                                        currentItem.products
-                                                                ?.first.name ??
-                                                            "",
-                                                        style: AppFonts.w700s20
-                                                            .copyWith(
-                                                                color: AppColors
-                                                                    .accentTextColor),
-                                                      ),
-                                                    ),
-                                                    // const Spacer(),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 5.w),
-                                                      child: Text(
-                                                        "${currentItem.products?.first.quantity} штук",
-                                                        style: AppFonts.w400s16
-                                                            .copyWith(
-                                                                color: AppColors
-                                                                    .accentTextColor),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              Text(
-                                                currentItem.products?.first
-                                                        .description ??
-                                                    "",
-                                                style: AppFonts.w400s16,
-                                              ),
-                                              Column(
-                                                children: [
-                                                  InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        _isExpandedList[index] =
-                                                            !_isExpandedList[
-                                                                index];
-                                                      });
-                                                    },
-                                                    child: Row(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          "Размерный ряд",
+                                                      // const Spacer(),
+                                                      Padding(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    5.w),
+                                                        child: Text(
+                                                          "${currentItem.products?.first.quantity} шт",
                                                           style: AppFonts
                                                               .w400s16
                                                               .copyWith(
                                                                   color: AppColors
                                                                       .accentTextColor),
                                                         ),
-                                                        Padding(
-                                                          padding:
-                                                              EdgeInsets.only(
-                                                                  left: 6.w),
-                                                          child: RotatedBox(
-                                                            quarterTurns:
-                                                                currentIndexIsExpanded
-                                                                    ? 2
-                                                                    : 0,
-                                                            child: SvgPicture
-                                                                .asset(SvgImages
-                                                                    .bottom),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                                Text(
+                                                  currentItem.products?.first
+                                                          .description ??
+                                                      "",
+                                                  style: AppFonts.w400s16,
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    InkWell(
+                                                      onTap: () {
+                                                        setState(() {
+                                                          _isExpandedList[
+                                                                  index] =
+                                                              !_isExpandedList[
+                                                                  index];
+                                                        });
+                                                      },
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            "Размерный ряд",
+                                                            style: AppFonts
+                                                                .w400s16
+                                                                .copyWith(
+                                                                    color: AppColors
+                                                                        .accentTextColor),
                                                           ),
-                                                        )
-                                                      ],
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsets.only(
+                                                                    left: 6.w),
+                                                            child: RotatedBox(
+                                                              quarterTurns:
+                                                                  currentIndexIsExpanded
+                                                                      ? 2
+                                                                      : 0,
+                                                              child: SvgPicture
+                                                                  .asset(SvgImages
+                                                                      .bottom),
+                                                            ),
+                                                          )
+                                                        ],
+                                                      ),
                                                     ),
-                                                  ),
-                                                  AnimatedSize(
-                                                    duration: const Duration(
-                                                        milliseconds: 300),
-                                                    curve: Curves.fastOutSlowIn,
-                                                    child:
-                                                        currentIndexIsExpanded
-                                                            ? GridView.builder(
-                                                                shrinkWrap:
-                                                                    true,
-                                                                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                                                    mainAxisSpacing:
-                                                                        0,
-                                                                    mainAxisExtent:
-                                                                        30.h,
-                                                                    crossAxisCount:
-                                                                        2),
-                                                                itemCount: currentItem
-                                                                        .products
-                                                                        ?.first
-                                                                        .sizeQuantities
-                                                                        ?.length ??
-                                                                    0,
-                                                                itemBuilder:
-                                                                    (context,
-                                                                        gridwiewIndex) {
-                                                                  return Text(
-                                                                    "${sizes[gridwiewIndex].usaSize} (${sizes[gridwiewIndex].ruSize}) – ${currentItem.products?.first.sizeQuantities?["${gridwiewIndex + 1}"]}шт",
-                                                                    style: AppFonts
-                                                                        .w400s16
-                                                                        .copyWith(
-                                                                            color:
-                                                                                AppColors.accentTextColor),
-                                                                  );
-                                                                })
-                                                            : const SizedBox
-                                                                .shrink(),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
+                                                    AnimatedSize(
+                                                      duration: const Duration(
+                                                          milliseconds: 300),
+                                                      curve:
+                                                          Curves.fastOutSlowIn,
+                                                      child:
+                                                          currentIndexIsExpanded
+                                                              ? GridView
+                                                                  .builder(
+                                                                      shrinkWrap:
+                                                                          true,
+                                                                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                                          mainAxisSpacing:
+                                                                              0,
+                                                                          mainAxisExtent: 30
+                                                                              .h,
+                                                                          crossAxisCount:
+                                                                              2),
+                                                                      itemCount: currentItem
+                                                                              .products
+                                                                              ?.first
+                                                                              .sizeQuantities
+                                                                              ?.length ??
+                                                                          0,
+                                                                      itemBuilder:
+                                                                          (context,
+                                                                              gridwiewIndex) {
+                                                                        return Text(
+                                                                          "${sizes[gridwiewIndex].usaSize} (${sizes[gridwiewIndex].ruSize}) – ${currentItem.products?.first.sizeQuantities?["${gridwiewIndex + 1}"]}шт",
+                                                                          style: AppFonts
+                                                                              .w400s16
+                                                                              .copyWith(color: AppColors.accentTextColor),
+                                                                        );
+                                                                      })
+                                                              : const SizedBox
+                                                                  .shrink(),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ));
+                                  },
+                                ),
+                              );
+                            } else {
+                              return RefreshIndicator.adaptive(
+                                onRefresh: () async => (),
+                                child: SingleChildScrollView(
+                                  physics:
+                                      const AlwaysScrollableScrollPhysics(),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .center, // Align text to the center horizontally
+                                    children: [
+                                      SizedBox(
+                                        height: 100.h,
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical:
+                                                20.0.h), // Add some padding
+                                        child: Text(
+                                          "Создайте свой первый заказ и начните торговаться",
+                                          textAlign: TextAlign.center,
+                                          style: AppFonts.w700s20.copyWith(
+                                            color: AppColors.accentTextColor,
                                           ),
                                         ),
-                                      ));
-                                },
-                              ),
-                            );
+                                      ),
+                                      SizedBox(
+                                        height: 150.h,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
                           }, customerOrdersError: (error) {
                             return Expanded(
                               child: CustomErrorWidget(
@@ -429,200 +477,225 @@ class _AuctionScreenState extends State<AuctionScreen> {
                           });
                         },
                       )
-                    : Column(
-                        children: [
-                          Center(
-                            child: Text(
-                              "Мои аукционы",
-                              style: AppFonts.w700s36,
-                            ),
-                          ),
-                          BlocListener<AuctionBloc, AuctionState>(
-                            listener: (context, state) {
-                              state.maybeWhen(
-                                  loading: () {
-                                    // router.pop();
-                                    Showdialog.showLoaderDialog(context);
-                                  },
-                                  makeBidSuccess: (model) {
-                                    router.pop();
-                                    BlocProvider.of<GetAuctionsBloc>(context)
-                                        .add(const GetAuctionsEvent
-                                            .getAuctions());
-                                    bidPriceController.clear();
-                                  },
-                                  makeBidError: (errorText) {
-                                    router.pop();
-                                  },
-                                  orElse: () {});
-                            },
-                            child: BlocBuilder<ManufacturerAuctionsBloc,
-                                ManufacturerAuctionsState>(
-                              builder: (context, state) {
-                                return state.maybeWhen(
-                                    loading: () => Expanded(
-                                          child: Padding(
-                                            padding: EdgeInsets.only(top: 10.h),
-                                            child: ListView.separated(
-                                                itemBuilder: (context, index) {
-                                                  return LoadingCard(
-                                                      height: 140.h,
-                                                      radius: 10.r);
-                                                },
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return SizedBox(
-                                                    height: 8.h,
-                                                  );
-                                                },
-                                                itemCount: 7),
-                                          ),
-                                        ),
-                                    error: (errorText) => Expanded(
-                                          child: CustomErrorWidget(
-                                              description:
-                                                  errorText.userMessage,
-                                              onRefresh: () {
-                                                getManufacturerAuctions();
-                                              }),
-                                        ),
-                                    loaded: (model) {
-                                      return Expanded(
-                                        child: Padding(
-                                          padding: EdgeInsets.only(top: 10.h),
-                                          child: RefreshIndicator.adaptive(
-                                            onRefresh: () async {
-                                              getManufacturerAuctions();
-                                            },
-                                            child: ListView.separated(
-                                                itemBuilder: (context, index) {
-                                                  final item = model[index];
+                    : BlocBuilder<ManufacturerAuctionsBloc,
+                        ManufacturerAuctionsState>(
+                        builder: (context, state) {
+                          return state.maybeWhen(
+                              loading: () => Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 10.h),
+                                      child: ListView.separated(
+                                          itemBuilder: (context, index) {
+                                            return LoadingCard(
+                                                height: 140.h, radius: 10.r);
+                                          },
+                                          separatorBuilder: (context, index) {
+                                            return SizedBox(
+                                              height: 8.h,
+                                            );
+                                          },
+                                          itemCount: 7),
+                                    ),
+                                  ),
+                              error: (errorText) => Expanded(
+                                    child: CustomErrorWidget(
+                                        description: errorText.userMessage,
+                                        onRefresh: () {
+                                          getManufacturerAuctions();
+                                        }),
+                                  ),
+                              loaded: (model) {
+                                if (model.isNotEmpty) {
+                                  return Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.only(top: 10.h),
+                                      child: RefreshIndicator.adaptive(
+                                        onRefresh: () async {
+                                          getManufacturerAuctions();
+                                        },
+                                        child: ListView.separated(
+                                            itemBuilder: (context, index) {
+                                              final item = model[index];
 
-                                                  return InkWell(
-                                                    onTap: () {
-                                                      setState(() {
-                                                        selectedAuction = item;
-                                                      });
-                                                      router.pushNamed(
-                                                          "detailedViewScreenForManufacturer",
-                                                          extra:
-                                                              item.auctionUuid);
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          color: AppColors
-                                                              .cardsColor,
-                                                          borderRadius:
-                                                              BorderRadiusDirectional
-                                                                  .circular(
-                                                                      10.r)),
-                                                      child: Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    10.w,
-                                                                vertical: 10.h),
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Padding(
-                                                              padding: EdgeInsets
-                                                                  .only(
-                                                                      bottom:
-                                                                          10.h),
-                                                              child: SizedBox(
-                                                                height: 60.h,
-                                                                child: ListView
-                                                                    .separated(
-                                                                        scrollDirection:
-                                                                            Axis
-                                                                                .horizontal,
-                                                                        itemCount:
-                                                                            item.productsList?.first.photos?.length ??
-                                                                                0,
-                                                                        separatorBuilder:
-                                                                            (context,
-                                                                                index) {
-                                                                          return SizedBox(
-                                                                            width:
-                                                                                10.w,
-                                                                          );
+                                              return InkWell(
+                                                onTap: () {
+                                                  setState(() {
+                                                    selectedAuction = item;
+                                                  });
+                                                  router.pushNamed(
+                                                      "detailedViewScreenForManufacturer",
+                                                      extra: item.auctionUuid);
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      color:
+                                                          AppColors.cardsColor,
+                                                      borderRadius:
+                                                          BorderRadiusDirectional
+                                                              .circular(10.r)),
+                                                  child: Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 10.w,
+                                                            vertical: 10.h),
+                                                    child: Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsets.only(
+                                                                  bottom: 10.h),
+                                                          child: SizedBox(
+                                                            height: 140.h,
+                                                            child: ListView
+                                                                .separated(
+                                                                    scrollDirection:
+                                                                        Axis
+                                                                            .horizontal,
+                                                                    itemCount: item
+                                                                            .productsList
+                                                                            ?.first
+                                                                            .photos
+                                                                            ?.length ??
+                                                                        0,
+                                                                    separatorBuilder:
+                                                                        (context,
+                                                                            index) {
+                                                                      return SizedBox(
+                                                                        width:
+                                                                            10.w,
+                                                                      );
+                                                                    },
+                                                                    itemBuilder:
+                                                                        (context,
+                                                                            indexForPhotos) {
+                                                                      final List<
+                                                                          String> fullPhotoUrls = item
+                                                                              .productsList
+                                                                              ?.first
+                                                                              .photos
+                                                                              ?.map((url) => "${UrlRoutes.baseUrl}$url")
+                                                                              .toList() ??
+                                                                          [];
+                                                                      return InkWell(
+                                                                        onTap:
+                                                                            () {
+                                                                          GoRouter.of(context).pushNamed(
+                                                                              "seeImage",
+                                                                              extra: fullPhotoUrls);
                                                                         },
-                                                                        itemBuilder:
-                                                                            (context,
-                                                                                indexForPhotos) {
-                                                                          final List<String>
-                                                                              fullPhotoUrls =
-                                                                              item.productsList?.first.photos?.map((url) => "${UrlRoutes.baseUrl}$url").toList() ?? [];
-                                                                          return InkWell(
-                                                                            onTap:
-                                                                                () {
-                                                                              GoRouter.of(context).pushNamed("seeImage", extra: fullPhotoUrls);
-                                                                            },
-                                                                            child:
-                                                                                ClipRRect(borderRadius: BorderRadius.circular(6.r), child: Image.network("${UrlRoutes.baseUrl}${item.productsList?.first.photos?[indexForPhotos]}")),
-                                                                          );
-                                                                        }),
+                                                                        child: ClipRRect(
+                                                                            borderRadius: BorderRadius.circular(6.r),
+                                                                            child: CachedNetworkImage(
+                                                                                fit: BoxFit.cover,
+                                                                                height: 100.h,
+                                                                                width: 100.w,
+                                                                                // progressIndicatorBuilder: (context, url, progress) => ,
+                                                                                imageUrl: "${UrlRoutes.baseUrl}${item.productsList?.first.photos?[indexForPhotos]}")),
+                                                                      );
+                                                                    }),
+                                                          ),
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Expanded(
+                                                              child: Text(
+                                                                item
+                                                                        .productsList
+                                                                        ?.first
+                                                                        .name ??
+                                                                    "",
+                                                                style: AppFonts
+                                                                    .w700s20
+                                                                    .copyWith(
+                                                                        color: AppColors
+                                                                            .accentTextColor),
                                                               ),
                                                             ),
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .spaceBetween,
-                                                              children: [
-                                                                Expanded(
-                                                                  child: Text(
-                                                                    item.productsList?.first
-                                                                            .name ??
-                                                                        "",
-                                                                    style: AppFonts
-                                                                        .w700s20
-                                                                        .copyWith(
-                                                                            color:
-                                                                                AppColors.accentTextColor),
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  "${item.productsList?.first.quantity ?? 580} шт",
-                                                                  style: AppFonts
-                                                                      .w400s16
-                                                                      .copyWith(
-                                                                          color:
-                                                                              AppColors.accentTextColor),
-                                                                )
-                                                              ],
-                                                            ),
                                                             Text(
-                                                              "${formatNumber(item.productsList?.first.priceRub?.toDouble() ?? 0)} руб за ед., итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: item.productsList?.first.priceRub ?? 0, totalCount: item.productsList?.first.quantity ?? 0))} руб",
+                                                              "${item.productsList?.first.quantity ?? 580} шт",
                                                               style: AppFonts
-                                                                  .w400s16,
-                                                            ),
+                                                                  .w400s16
+                                                                  .copyWith(
+                                                                      color: AppColors
+                                                                          .accentTextColor),
+                                                            )
                                                           ],
                                                         ),
-                                                      ),
+                                                        Text(
+                                                          item
+                                                                  .productsList
+                                                                  ?.first
+                                                                  .description ??
+                                                              "",
+                                                          style:
+                                                              AppFonts.w400s16,
+                                                        ),
+                                                        Text(
+                                                          "${formatNumber(item.productsList?.first.priceRub?.toDouble() ?? 0)} руб за ед., итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: item.productsList?.first.priceRub ?? 0, totalCount: item.productsList?.first.quantity ?? 0))} руб",
+                                                          style:
+                                                              AppFonts.w400s16,
+                                                        ),
+                                                      ],
                                                     ),
-                                                  );
-                                                },
-                                                separatorBuilder:
-                                                    (context, index) {
-                                                  return SizedBox(
-                                                    height: 10.h,
-                                                  );
-                                                },
-                                                itemCount: model.length),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            separatorBuilder: (context, index) {
+                                              return SizedBox(
+                                                height: 10.h,
+                                              );
+                                            },
+                                            itemCount: model.length),
+                                      ),
+                                    ),
+                                  );
+                                } else {
+                                  return RefreshIndicator.adaptive(
+                                    onRefresh: () async => (),
+                                    child: SingleChildScrollView(
+                                      physics:
+                                          const AlwaysScrollableScrollPhysics(),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .center, // Align text to the center horizontally
+                                        children: [
+                                          SizedBox(
+                                            height: 100.h,
                                           ),
-                                        ),
-                                      );
-                                    },
-                                    orElse: () {
-                                      return const SizedBox.shrink();
-                                    });
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                vertical:
+                                                    20.0.h), // Add some padding
+                                            child: Text(
+                                              "Найдите подходящие заказы и сделайте свою первую ставку",
+                                              textAlign: TextAlign.center,
+                                              style: AppFonts.w700s20.copyWith(
+                                                color:
+                                                    AppColors.accentTextColor,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: 150.h,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
-                            ),
-                          )
-                        ],
+                              orElse: () {
+                                return const SizedBox.shrink();
+                              });
+                        },
                       ),
               ),
             ),

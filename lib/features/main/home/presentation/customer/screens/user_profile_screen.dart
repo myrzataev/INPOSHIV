@@ -611,13 +611,15 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
                                     // Second page: Reviews Section
                                     ListView.separated(
-                                        itemCount: 10,
+                                        itemCount: model.reviews?.length ?? 0,
                                         separatorBuilder: (context, index) {
                                           return SizedBox(
                                             height: 5.h,
                                           );
                                         },
                                         itemBuilder: (context, index) {
+                                          final currentItem =
+                                              model.reviews?[index];
                                           return Container(
                                             decoration: BoxDecoration(
                                                 color: AppColors.cardsColor,
@@ -643,7 +645,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                             EdgeInsets.only(
                                                                 left: 5.w),
                                                         child: Text(
-                                                          "Цех 52",
+                                                          currentItem
+                                                                  ?.customerName ??
+                                                              "",
                                                           style:
                                                               AppFonts.w700s18,
                                                         ),

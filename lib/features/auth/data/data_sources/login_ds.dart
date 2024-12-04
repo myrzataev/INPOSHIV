@@ -21,6 +21,7 @@ class LoginDs {
         token: model.token,
         userUuid: model.userUuid,
         customerOrManufacturerUuid: model.customerOrManufacturerUuid,
-        role: model.role);
+        role: model.role,
+        username: model.username);
   }
 }

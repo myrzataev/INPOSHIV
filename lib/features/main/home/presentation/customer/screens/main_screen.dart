@@ -538,8 +538,8 @@ class _MainScreenState extends State<MainScreen> {
                                                       )
                                                     ]),
                                                 Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                      vertical: 10.h),
+                                                  padding: EdgeInsets.only(
+                                                      top: 10.h, ),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -577,8 +577,25 @@ class _MainScreenState extends State<MainScreen> {
                                                     ],
                                                   ),
                                                 ),
+                                                Padding(
+                                                  padding:  EdgeInsets.only(bottom: 5.h),
+                                                  child: Text(
+                                                      currentItem
+                                                              .productsList
+                                                              ?.first
+                                                              .description ??
+                                                          "",
+                                                      style: AppFonts.w700s16
+                                                          .copyWith(
+                                                              color: AppColors
+                                                                  .accentTextColor, fontWeight: FontWeight.w100, fontFamily: "SF Pro")),
+                                                ),
                                                 Text(
-                                                  "${formatNumber(currentItem.productsList?.first.priceRub ?? 0)} руб за ед,  ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0))} руб",
+                                                  "${formatNumber(currentItem.productsList?.first.priceUsd?.toDouble() ?? 0)} \$ за ед, итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0))} \$",
+                                                  style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor, ),
+                                                ),
+                                                Text(
+                                                  "${formatNumber(currentItem.productsList?.first.priceRub ?? 0)} руб за ед, итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0))} руб",
                                                   style: AppFonts.w400s16,
                                                 ),
                                                 Padding(

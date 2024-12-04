@@ -23,17 +23,18 @@ mixin _$ProfileModel {
   String? get userUuid => throw _privateConstructorUsedError;
   String? get username => throw _privateConstructorUsedError;
   String? get email => throw _privateConstructorUsedError;
-  dynamic get password => throw _privateConstructorUsedError;
+  String? get password => throw _privateConstructorUsedError;
   String? get phoneNumber => throw _privateConstructorUsedError;
   String? get companyName => throw _privateConstructorUsedError;
-  dynamic get companyDescription => throw _privateConstructorUsedError;
+  String? get companyDescription => throw _privateConstructorUsedError;
   String? get city => throw _privateConstructorUsedError;
   String? get trustLevel => throw _privateConstructorUsedError;
   String? get role => throw _privateConstructorUsedError;
   int? get status => throw _privateConstructorUsedError;
-  dynamic get lastLogin => throw _privateConstructorUsedError;
-  dynamic get token => throw _privateConstructorUsedError;
-  dynamic get refreshToken => throw _privateConstructorUsedError;
+  String? get lastLogin => throw _privateConstructorUsedError;
+  String? get token => throw _privateConstructorUsedError;
+  String? get refreshToken => throw _privateConstructorUsedError;
+  List<Review>? get reviews => throw _privateConstructorUsedError;
 
   /// Serializes this ProfileModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,17 +56,18 @@ abstract class $ProfileModelCopyWith<$Res> {
       {String? userUuid,
       String? username,
       String? email,
-      dynamic password,
+      String? password,
       String? phoneNumber,
       String? companyName,
-      dynamic companyDescription,
+      String? companyDescription,
       String? city,
       String? trustLevel,
       String? role,
       int? status,
-      dynamic lastLogin,
-      dynamic token,
-      dynamic refreshToken});
+      String? lastLogin,
+      String? token,
+      String? refreshToken,
+      List<Review>? reviews});
 }
 
 /// @nodoc
@@ -97,6 +99,7 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
     Object? lastLogin = freezed,
     Object? token = freezed,
     Object? refreshToken = freezed,
+    Object? reviews = freezed,
   }) {
     return _then(_value.copyWith(
       userUuid: freezed == userUuid
@@ -114,7 +117,7 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
       password: freezed == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -126,7 +129,7 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
       companyDescription: freezed == companyDescription
           ? _value.companyDescription
           : companyDescription // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
@@ -146,15 +149,19 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
       lastLogin: freezed == lastLogin
           ? _value.lastLogin
           : lastLogin // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       refreshToken: freezed == refreshToken
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
+      reviews: freezed == reviews
+          ? _value.reviews
+          : reviews // ignore: cast_nullable_to_non_nullable
+              as List<Review>?,
     ) as $Val);
   }
 }
@@ -171,17 +178,18 @@ abstract class _$$ProfileModelImplCopyWith<$Res>
       {String? userUuid,
       String? username,
       String? email,
-      dynamic password,
+      String? password,
       String? phoneNumber,
       String? companyName,
-      dynamic companyDescription,
+      String? companyDescription,
       String? city,
       String? trustLevel,
       String? role,
       int? status,
-      dynamic lastLogin,
-      dynamic token,
-      dynamic refreshToken});
+      String? lastLogin,
+      String? token,
+      String? refreshToken,
+      List<Review>? reviews});
 }
 
 /// @nodoc
@@ -211,6 +219,7 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
     Object? lastLogin = freezed,
     Object? token = freezed,
     Object? refreshToken = freezed,
+    Object? reviews = freezed,
   }) {
     return _then(_$ProfileModelImpl(
       userUuid: freezed == userUuid
@@ -228,7 +237,7 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
       password: freezed == password
           ? _value.password
           : password // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       phoneNumber: freezed == phoneNumber
           ? _value.phoneNumber
           : phoneNumber // ignore: cast_nullable_to_non_nullable
@@ -240,7 +249,7 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
       companyDescription: freezed == companyDescription
           ? _value.companyDescription
           : companyDescription // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       city: freezed == city
           ? _value.city
           : city // ignore: cast_nullable_to_non_nullable
@@ -260,15 +269,19 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
       lastLogin: freezed == lastLogin
           ? _value.lastLogin
           : lastLogin // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
       refreshToken: freezed == refreshToken
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as String?,
+      reviews: freezed == reviews
+          ? _value._reviews
+          : reviews // ignore: cast_nullable_to_non_nullable
+              as List<Review>?,
     ));
   }
 }
@@ -290,7 +303,9 @@ class _$ProfileModelImpl implements _ProfileModel {
       this.status,
       this.lastLogin,
       this.token,
-      this.refreshToken});
+      this.refreshToken,
+      final List<Review>? reviews})
+      : _reviews = reviews;
 
   factory _$ProfileModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileModelImplFromJson(json);
@@ -302,13 +317,13 @@ class _$ProfileModelImpl implements _ProfileModel {
   @override
   final String? email;
   @override
-  final dynamic password;
+  final String? password;
   @override
   final String? phoneNumber;
   @override
   final String? companyName;
   @override
-  final dynamic companyDescription;
+  final String? companyDescription;
   @override
   final String? city;
   @override
@@ -318,15 +333,24 @@ class _$ProfileModelImpl implements _ProfileModel {
   @override
   final int? status;
   @override
-  final dynamic lastLogin;
+  final String? lastLogin;
   @override
-  final dynamic token;
+  final String? token;
   @override
-  final dynamic refreshToken;
+  final String? refreshToken;
+  final List<Review>? _reviews;
+  @override
+  List<Review>? get reviews {
+    final value = _reviews;
+    if (value == null) return null;
+    if (_reviews is EqualUnmodifiableListView) return _reviews;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString() {
-    return 'ProfileModel(userUuid: $userUuid, username: $username, email: $email, password: $password, phoneNumber: $phoneNumber, companyName: $companyName, companyDescription: $companyDescription, city: $city, trustLevel: $trustLevel, role: $role, status: $status, lastLogin: $lastLogin, token: $token, refreshToken: $refreshToken)';
+    return 'ProfileModel(userUuid: $userUuid, username: $username, email: $email, password: $password, phoneNumber: $phoneNumber, companyName: $companyName, companyDescription: $companyDescription, city: $city, trustLevel: $trustLevel, role: $role, status: $status, lastLogin: $lastLogin, token: $token, refreshToken: $refreshToken, reviews: $reviews)';
   }
 
   @override
@@ -339,22 +363,25 @@ class _$ProfileModelImpl implements _ProfileModel {
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.email, email) || other.email == email) &&
-            const DeepCollectionEquality().equals(other.password, password) &&
+            (identical(other.password, password) ||
+                other.password == password) &&
             (identical(other.phoneNumber, phoneNumber) ||
                 other.phoneNumber == phoneNumber) &&
             (identical(other.companyName, companyName) ||
                 other.companyName == companyName) &&
-            const DeepCollectionEquality()
-                .equals(other.companyDescription, companyDescription) &&
+            (identical(other.companyDescription, companyDescription) ||
+                other.companyDescription == companyDescription) &&
             (identical(other.city, city) || other.city == city) &&
             (identical(other.trustLevel, trustLevel) ||
                 other.trustLevel == trustLevel) &&
             (identical(other.role, role) || other.role == role) &&
             (identical(other.status, status) || other.status == status) &&
-            const DeepCollectionEquality().equals(other.lastLogin, lastLogin) &&
-            const DeepCollectionEquality().equals(other.token, token) &&
-            const DeepCollectionEquality()
-                .equals(other.refreshToken, refreshToken));
+            (identical(other.lastLogin, lastLogin) ||
+                other.lastLogin == lastLogin) &&
+            (identical(other.token, token) || other.token == token) &&
+            (identical(other.refreshToken, refreshToken) ||
+                other.refreshToken == refreshToken) &&
+            const DeepCollectionEquality().equals(other._reviews, _reviews));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -364,17 +391,18 @@ class _$ProfileModelImpl implements _ProfileModel {
       userUuid,
       username,
       email,
-      const DeepCollectionEquality().hash(password),
+      password,
       phoneNumber,
       companyName,
-      const DeepCollectionEquality().hash(companyDescription),
+      companyDescription,
       city,
       trustLevel,
       role,
       status,
-      const DeepCollectionEquality().hash(lastLogin),
-      const DeepCollectionEquality().hash(token),
-      const DeepCollectionEquality().hash(refreshToken));
+      lastLogin,
+      token,
+      refreshToken,
+      const DeepCollectionEquality().hash(_reviews));
 
   /// Create a copy of ProfileModel
   /// with the given fields replaced by the non-null parameter values.
@@ -397,17 +425,18 @@ abstract class _ProfileModel implements ProfileModel {
       {final String? userUuid,
       final String? username,
       final String? email,
-      final dynamic password,
+      final String? password,
       final String? phoneNumber,
       final String? companyName,
-      final dynamic companyDescription,
+      final String? companyDescription,
       final String? city,
       final String? trustLevel,
       final String? role,
       final int? status,
-      final dynamic lastLogin,
-      final dynamic token,
-      final dynamic refreshToken}) = _$ProfileModelImpl;
+      final String? lastLogin,
+      final String? token,
+      final String? refreshToken,
+      final List<Review>? reviews}) = _$ProfileModelImpl;
 
   factory _ProfileModel.fromJson(Map<String, dynamic> json) =
       _$ProfileModelImpl.fromJson;
@@ -419,13 +448,13 @@ abstract class _ProfileModel implements ProfileModel {
   @override
   String? get email;
   @override
-  dynamic get password;
+  String? get password;
   @override
   String? get phoneNumber;
   @override
   String? get companyName;
   @override
-  dynamic get companyDescription;
+  String? get companyDescription;
   @override
   String? get city;
   @override
@@ -435,16 +464,273 @@ abstract class _ProfileModel implements ProfileModel {
   @override
   int? get status;
   @override
-  dynamic get lastLogin;
+  String? get lastLogin;
   @override
-  dynamic get token;
+  String? get token;
   @override
-  dynamic get refreshToken;
+  String? get refreshToken;
+  @override
+  List<Review>? get reviews;
 
   /// Create a copy of ProfileModel
   /// with the given fields replaced by the non-null parameter values.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ProfileModelImplCopyWith<_$ProfileModelImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+Review _$ReviewFromJson(Map<String, dynamic> json) {
+  return _Review.fromJson(json);
+}
+
+/// @nodoc
+mixin _$Review {
+  String? get customerUuid => throw _privateConstructorUsedError;
+  String? get manufacturerUuid => throw _privateConstructorUsedError;
+  String? get reviewText => throw _privateConstructorUsedError;
+  String? get createdAt => throw _privateConstructorUsedError;
+  int? get rating => throw _privateConstructorUsedError;
+  String? get customerName => throw _privateConstructorUsedError;
+
+  /// Serializes this Review to a JSON map.
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+
+  /// Create a copy of Review
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  $ReviewCopyWith<Review> get copyWith => throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ReviewCopyWith<$Res> {
+  factory $ReviewCopyWith(Review value, $Res Function(Review) then) =
+      _$ReviewCopyWithImpl<$Res, Review>;
+  @useResult
+  $Res call(
+      {String? customerUuid,
+      String? manufacturerUuid,
+      String? reviewText,
+      String? createdAt,
+      int? rating,
+      String? customerName});
+}
+
+/// @nodoc
+class _$ReviewCopyWithImpl<$Res, $Val extends Review>
+    implements $ReviewCopyWith<$Res> {
+  _$ReviewCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  /// Create a copy of Review
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? customerUuid = freezed,
+    Object? manufacturerUuid = freezed,
+    Object? reviewText = freezed,
+    Object? createdAt = freezed,
+    Object? rating = freezed,
+    Object? customerName = freezed,
+  }) {
+    return _then(_value.copyWith(
+      customerUuid: freezed == customerUuid
+          ? _value.customerUuid
+          : customerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      reviewText: freezed == reviewText
+          ? _value.reviewText
+          : reviewText // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rating: freezed == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as int?,
+      customerName: freezed == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ReviewImplCopyWith<$Res> implements $ReviewCopyWith<$Res> {
+  factory _$$ReviewImplCopyWith(
+          _$ReviewImpl value, $Res Function(_$ReviewImpl) then) =
+      __$$ReviewImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String? customerUuid,
+      String? manufacturerUuid,
+      String? reviewText,
+      String? createdAt,
+      int? rating,
+      String? customerName});
+}
+
+/// @nodoc
+class __$$ReviewImplCopyWithImpl<$Res>
+    extends _$ReviewCopyWithImpl<$Res, _$ReviewImpl>
+    implements _$$ReviewImplCopyWith<$Res> {
+  __$$ReviewImplCopyWithImpl(
+      _$ReviewImpl _value, $Res Function(_$ReviewImpl) _then)
+      : super(_value, _then);
+
+  /// Create a copy of Review
+  /// with the given fields replaced by the non-null parameter values.
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? customerUuid = freezed,
+    Object? manufacturerUuid = freezed,
+    Object? reviewText = freezed,
+    Object? createdAt = freezed,
+    Object? rating = freezed,
+    Object? customerName = freezed,
+  }) {
+    return _then(_$ReviewImpl(
+      customerUuid: freezed == customerUuid
+          ? _value.customerUuid
+          : customerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      manufacturerUuid: freezed == manufacturerUuid
+          ? _value.manufacturerUuid
+          : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      reviewText: freezed == reviewText
+          ? _value.reviewText
+          : reviewText // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as String?,
+      rating: freezed == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as int?,
+      customerName: freezed == customerName
+          ? _value.customerName
+          : customerName // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ReviewImpl implements _Review {
+  const _$ReviewImpl(
+      {this.customerUuid,
+      this.manufacturerUuid,
+      this.reviewText,
+      this.createdAt,
+      this.rating,
+      this.customerName});
+
+  factory _$ReviewImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ReviewImplFromJson(json);
+
+  @override
+  final String? customerUuid;
+  @override
+  final String? manufacturerUuid;
+  @override
+  final String? reviewText;
+  @override
+  final String? createdAt;
+  @override
+  final int? rating;
+  @override
+  final String? customerName;
+
+  @override
+  String toString() {
+    return 'Review(customerUuid: $customerUuid, manufacturerUuid: $manufacturerUuid, reviewText: $reviewText, createdAt: $createdAt, rating: $rating, customerName: $customerName)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ReviewImpl &&
+            (identical(other.customerUuid, customerUuid) ||
+                other.customerUuid == customerUuid) &&
+            (identical(other.manufacturerUuid, manufacturerUuid) ||
+                other.manufacturerUuid == manufacturerUuid) &&
+            (identical(other.reviewText, reviewText) ||
+                other.reviewText == reviewText) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.rating, rating) || other.rating == rating) &&
+            (identical(other.customerName, customerName) ||
+                other.customerName == customerName));
+  }
+
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  int get hashCode => Object.hash(runtimeType, customerUuid, manufacturerUuid,
+      reviewText, createdAt, rating, customerName);
+
+  /// Create a copy of Review
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ReviewImplCopyWith<_$ReviewImpl> get copyWith =>
+      __$$ReviewImplCopyWithImpl<_$ReviewImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ReviewImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _Review implements Review {
+  const factory _Review(
+      {final String? customerUuid,
+      final String? manufacturerUuid,
+      final String? reviewText,
+      final String? createdAt,
+      final int? rating,
+      final String? customerName}) = _$ReviewImpl;
+
+  factory _Review.fromJson(Map<String, dynamic> json) = _$ReviewImpl.fromJson;
+
+  @override
+  String? get customerUuid;
+  @override
+  String? get manufacturerUuid;
+  @override
+  String? get reviewText;
+  @override
+  String? get createdAt;
+  @override
+  int? get rating;
+  @override
+  String? get customerName;
+
+  /// Create a copy of Review
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  _$$ReviewImplCopyWith<_$ReviewImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

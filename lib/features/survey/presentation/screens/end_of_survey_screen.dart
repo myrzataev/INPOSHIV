@@ -43,24 +43,25 @@ class EndOfSurveyScreen extends StatelessWidget {
               style: AppFonts.w700s36
                   .copyWith(height: 1, fontWeight: FontWeight.bold),
             ),
-            Center(
-              child: Padding(
-                padding: EdgeInsets.only(top: 113.h),
-                child: isCustomer
-                    ? TextButton(
-                        onPressed: () {
-                          router.goNamed("main");
-                        },
-                        child: Text(
-                          "Пропустить",
-                          style: AppFonts.w400s16
-                              .copyWith(color: AppColors.accentTextColor),
-                        ))
-                    : const SizedBox(),
-              ),
-            ),
+            // Center(
+            //   child: Padding(
+            //     padding: EdgeInsets.only(top: 113.h),
+            //     child: isCustomer
+            //         ? TextButton(
+            //             onPressed: () {
+            //               router.goNamed("main");
+            //             },
+            //             child: Text(
+            //               "Пропустить",
+            //               style: AppFonts.w400s16
+            //                   .copyWith(color: AppColors.accentTextColor),
+            //             ))
+            //         : const SizedBox(),
+            //   ),
+            // ),
             Padding(
               padding: EdgeInsets.only(
+                top: 113.h,
                 bottom: 20.h,
               ),
               child: CustomButton(

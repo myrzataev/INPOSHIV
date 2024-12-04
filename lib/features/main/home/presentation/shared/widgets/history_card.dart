@@ -48,7 +48,7 @@ class CustomHistoryCard extends StatelessWidget {
                   AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),
             ),
             Text(
-              "$quantity штук",
+              "$quantity шт",
               style: AppFonts.w400s16.copyWith(
                   color: AppColors.accentTextColor, fontFamily: "SF Pro"),
             )

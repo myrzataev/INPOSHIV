@@ -145,7 +145,7 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
                 ),
               ),
               Text(
-                "${widget.quantity} штук",
+                "${widget.quantity} шт",
                 style:
                     AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
               ),
@@ -154,7 +154,7 @@ class _CustomOrderCardState extends State<CustomOrderCard> {
           Padding(
             padding: EdgeInsets.symmetric(vertical: 8.h),
             child: Text(
-              "${formatNumber(widget.retailPriceInRuble.toDouble())} руб за единицу, итого ${formatNumber(widget.totalPriceInRuble.toDouble())} руб",
+              "${formatNumber(widget.retailPriceInRuble.toDouble())} руб за ед, итого ${formatNumber(widget.totalPriceInRuble.toDouble())} руб",
               style: AppFonts.w400s16.copyWith(),
             ),
           ),

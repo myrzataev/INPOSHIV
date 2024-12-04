@@ -11,6 +11,7 @@ class LoginEntity with _$LoginEntity {
         String? userUuid,
         String? customerOrManufacturerUuid,
         String? role,
+        String? username,
     }) = _LoginEntity;
 
 }

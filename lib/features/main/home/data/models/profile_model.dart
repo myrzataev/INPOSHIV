@@ -1,16 +1,8 @@
-// To parse this JSON data, do
-//
-//     final profileModel = profileModelFromJson(jsonString);
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'dart:convert';
 
 part 'profile_model.freezed.dart';
 part 'profile_model.g.dart';
-
-ProfileModel profileModelFromJson(String str) => ProfileModel.fromJson(json.decode(str));
-
-String profileModelToJson(ProfileModel data) => json.encode(data.toJson());
 
 @freezed
 class ProfileModel with _$ProfileModel {
@@ -18,18 +10,33 @@ class ProfileModel with _$ProfileModel {
         String? userUuid,
         String? username,
         String? email,
-        dynamic password,
+        String? password,
         String? phoneNumber,
         String? companyName,
-        dynamic companyDescription,
+        String? companyDescription,
         String? city,
         String? trustLevel,
         String? role,
         int? status,
-        dynamic lastLogin,
-        dynamic token,
-        dynamic refreshToken,
+        String? lastLogin,
+        String? token,
+        String? refreshToken,
+        List<Review>? reviews,
     }) = _ProfileModel;
 
     factory ProfileModel.fromJson(Map<String, dynamic> json) => _$ProfileModelFromJson(json);
+}
+
+@freezed
+class Review with _$Review {
+    const factory Review({
+        String? customerUuid,
+        String? manufacturerUuid,
+        String? reviewText,
+        String? createdAt,
+        int? rating,
+        String? customerName,
+    }) = _Review;
+
+    factory Review.fromJson(Map<String, dynamic> json) => _$ReviewFromJson(json);
 }

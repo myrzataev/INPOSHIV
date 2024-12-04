@@ -180,22 +180,31 @@ class _ChatTabState extends State<ChatTab> {
                     chatRoomsLoaded: (model) {
                       if (model.isEmpty) {
                         return RefreshIndicator.adaptive(
-                          color: AppColors.accentTextColor,
-                          onRefresh: () async {
-                            callBloc();
-                          },
+                          onRefresh: () async => ( callBloc()),
                           child: SingleChildScrollView(
                             physics: const AlwaysScrollableScrollPhysics(),
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              crossAxisAlignment: CrossAxisAlignment
+                                  .center, // Align text to the center horizontally
                               children: [
-                                Icon(Icons.chat_bubble_outline,
-                                    size: 64, color: Colors.grey),
-                                SizedBox(height: 16),
-                                Text(
-                                  "Начните переписываться",
-                                  style: AppFonts.w700s16,
-                                )
+                                SizedBox(
+                                  height: 100.h,
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 20.0.h), // Add some padding
+                                  child: Text(
+                                    (isCustomer ?? true) ? "Выберите производителя во время аукциона и свяжитесь с ним" : "Заказчик свяжется с вами, если выберет вас в ходе аукциона",
+                                    textAlign: TextAlign.center,
+                                    style: AppFonts.w700s20.copyWith(
+                                      color: AppColors.accentTextColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 150.h,
+                                ),
                               ],
                             ),
                           ),

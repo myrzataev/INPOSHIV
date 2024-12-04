@@ -25,6 +25,7 @@ mixin _$LoginResponseModel {
   String? get userUuid => throw _privateConstructorUsedError;
   String? get customerOrManufacturerUuid => throw _privateConstructorUsedError;
   String? get role => throw _privateConstructorUsedError;
+  String? get username => throw _privateConstructorUsedError;
 
   /// Serializes this LoginResponseModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +48,8 @@ abstract class $LoginResponseModelCopyWith<$Res> {
       String? refreshToken,
       String? userUuid,
       String? customerOrManufacturerUuid,
-      String? role});
+      String? role,
+      String? username});
 }
 
 /// @nodoc
@@ -70,6 +72,7 @@ class _$LoginResponseModelCopyWithImpl<$Res, $Val extends LoginResponseModel>
     Object? userUuid = freezed,
     Object? customerOrManufacturerUuid = freezed,
     Object? role = freezed,
+    Object? username = freezed,
   }) {
     return _then(_value.copyWith(
       token: freezed == token
@@ -92,6 +95,10 @@ class _$LoginResponseModelCopyWithImpl<$Res, $Val extends LoginResponseModel>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String?,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -109,7 +116,8 @@ abstract class _$$LoginResponseModelImplCopyWith<$Res>
       String? refreshToken,
       String? userUuid,
       String? customerOrManufacturerUuid,
-      String? role});
+      String? role,
+      String? username});
 }
 
 /// @nodoc
@@ -130,6 +138,7 @@ class __$$LoginResponseModelImplCopyWithImpl<$Res>
     Object? userUuid = freezed,
     Object? customerOrManufacturerUuid = freezed,
     Object? role = freezed,
+    Object? username = freezed,
   }) {
     return _then(_$LoginResponseModelImpl(
       token: freezed == token
@@ -152,6 +161,10 @@ class __$$LoginResponseModelImplCopyWithImpl<$Res>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String?,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -164,7 +177,8 @@ class _$LoginResponseModelImpl implements _LoginResponseModel {
       this.refreshToken,
       this.userUuid,
       this.customerOrManufacturerUuid,
-      this.role});
+      this.role,
+      this.username});
 
   factory _$LoginResponseModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginResponseModelImplFromJson(json);
@@ -179,10 +193,12 @@ class _$LoginResponseModelImpl implements _LoginResponseModel {
   final String? customerOrManufacturerUuid;
   @override
   final String? role;
+  @override
+  final String? username;
 
   @override
   String toString() {
-    return 'LoginResponseModel(token: $token, refreshToken: $refreshToken, userUuid: $userUuid, customerOrManufacturerUuid: $customerOrManufacturerUuid, role: $role)';
+    return 'LoginResponseModel(token: $token, refreshToken: $refreshToken, userUuid: $userUuid, customerOrManufacturerUuid: $customerOrManufacturerUuid, role: $role, username: $username)';
   }
 
   @override
@@ -199,13 +215,15 @@ class _$LoginResponseModelImpl implements _LoginResponseModel {
                     customerOrManufacturerUuid) ||
                 other.customerOrManufacturerUuid ==
                     customerOrManufacturerUuid) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.username, username) ||
+                other.username == username));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, token, refreshToken, userUuid,
-      customerOrManufacturerUuid, role);
+      customerOrManufacturerUuid, role, username);
 
   /// Create a copy of LoginResponseModel
   /// with the given fields replaced by the non-null parameter values.
@@ -230,7 +248,8 @@ abstract class _LoginResponseModel implements LoginResponseModel {
       final String? refreshToken,
       final String? userUuid,
       final String? customerOrManufacturerUuid,
-      final String? role}) = _$LoginResponseModelImpl;
+      final String? role,
+      final String? username}) = _$LoginResponseModelImpl;
 
   factory _LoginResponseModel.fromJson(Map<String, dynamic> json) =
       _$LoginResponseModelImpl.fromJson;
@@ -245,6 +264,8 @@ abstract class _LoginResponseModel implements LoginResponseModel {
   String? get customerOrManufacturerUuid;
   @override
   String? get role;
+  @override
+  String? get username;
 
   /// Create a copy of LoginResponseModel
   /// with the given fields replaced by the non-null parameter values.

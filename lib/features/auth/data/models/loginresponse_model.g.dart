@@ -14,6 +14,7 @@ _$LoginResponseModelImpl _$$LoginResponseModelImplFromJson(
       userUuid: json['userUuid'] as String?,
       customerOrManufacturerUuid: json['customerOrManufacturerUuid'] as String?,
       role: json['role'] as String?,
+      username: json['username'] as String?,
     );
 
 Map<String, dynamic> _$$LoginResponseModelImplToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$$LoginResponseModelImplToJson(
       'userUuid': instance.userUuid,
       'customerOrManufacturerUuid': instance.customerOrManufacturerUuid,
       'role': instance.role,
+      'username': instance.username,
     };

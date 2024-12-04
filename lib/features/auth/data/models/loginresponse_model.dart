@@ -20,6 +20,7 @@ class LoginResponseModel with _$LoginResponseModel {
         String? userUuid,
         String? customerOrManufacturerUuid,
         String? role,
+        String? username,
     }) = _LoginResponseModel;
 
     factory LoginResponseModel.fromJson(Map<String, dynamic> json) => _$LoginResponseModelFromJson(json);

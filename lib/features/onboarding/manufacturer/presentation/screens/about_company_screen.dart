@@ -149,7 +149,7 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
                 child: CustomButton(
                     text: "Дальше",
                     onPressed: () {
-                      // if (_formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate()) {
                       sendData(
                           companyDescription: controller.text,
                           manufacturersPriorities:
@@ -168,7 +168,7 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
                               .toList());
                       // GoRouter.of(context).pushNamed("profileReady",
                       //     queryParameters: {"description": controller.text});
-                      // }
+                      }
                     }),
               )
             ],

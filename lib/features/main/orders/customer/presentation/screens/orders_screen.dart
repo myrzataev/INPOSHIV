@@ -216,83 +216,122 @@ class _OrdersScreenState extends State<OrdersScreen>
                                   return state.maybeWhen(
                                       customerOrdersLoaded:
                                           (customerOrdersModel) {
-                                        return RefreshIndicator.adaptive(
-                                          onRefresh: () async =>
-                                              callBlocForCustomer(),
-                                          child: ListView.builder(
-                                              itemCount:
-                                                  customerOrdersModel.length,
-                                              scrollDirection: Axis.vertical,
-                                              itemBuilder: (context, index) {
-                                                final currentItem =
-                                                    customerOrdersModel[index];
-                                                final List<String>
-                                                    fullPhotoUrls =
-                                                    customerOrdersModel[index]
-                                                            .products
-                                                            ?.first
-                                                            .photos
-                                                            ?.map((url) =>
-                                                                "${UrlRoutes.baseUrl}$url")
-                                                            .toList() ??
-                                                        [];
-                                                return Padding(
-                                                  padding: EdgeInsets.only(
-                                                      bottom: 10.h),
-                                                  child: CustomOrderCard(
-                                                    images: fullPhotoUrls,
-                                                    onPageChanged:
-                                                        (carouselIndex,
-                                                            reason) {},
-                                                    reliableStatus: "",
-                                                    name: currentItem.products
-                                                            ?.first.name ??
-                                                        "",
-                                                    quantity: currentItem
-                                                            .products
-                                                            ?.first
-                                                            .quantity ??
-                                                        0,
-                                                    retailPriceInRuble:
-                                                        currentItem.products
-                                                                ?.first.priceRub
-                                                                ?.toInt() ??
-                                                            0,
-                                                    totalPriceInRuble: calculateService
-                                                        .calculateTotalPriceInRuble(
-                                                            ruble: currentItem
-                                                                    .products
-                                                                    ?.first
-                                                                    .priceRub
-                                                                    ?.toDouble() ??
-                                                                0,
-                                                            totalCount: currentItem
-                                                                    .products
-                                                                    ?.first
-                                                                    .quantity ??
-                                                                0)
-                                                        .toInt(),
-                                                    currentIndex: _currentIndex,
-                                                    sizeQuantities: currentItem
-                                                            .products
-                                                            ?.first
-                                                            .sizeQuantities ??
-                                                        {},
-                                                    gridwiewLength: currentItem
-                                                            .products
-                                                            ?.first
-                                                            .sizeQuantities
-                                                            ?.length ??
-                                                        0,
+                                        if (customerOrdersModel.isNotEmpty) {
+                                          return RefreshIndicator.adaptive(
+                                            onRefresh: () async =>
+                                                callBlocForCustomer(),
+                                            child: ListView.builder(
+                                                itemCount:
+                                                    customerOrdersModel.length,
+                                                scrollDirection: Axis.vertical,
+                                                itemBuilder: (context, index) {
+                                                  final currentItem =
+                                                      customerOrdersModel[
+                                                          index];
+                                                  final List<String>
+                                                      fullPhotoUrls =
+                                                      customerOrdersModel[index]
+                                                              .products
+                                                              ?.first
+                                                              .photos
+                                                              ?.map((url) =>
+                                                                  "${UrlRoutes.baseUrl}$url")
+                                                              .toList() ??
+                                                          [];
+                                                  return Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 10.h),
+                                                    child: CustomOrderCard(
+                                                      images: fullPhotoUrls,
+                                                      onPageChanged:
+                                                          (carouselIndex,
+                                                              reason) {},
+                                                      reliableStatus: "",
+                                                      name: currentItem.products
+                                                              ?.first.name ??
+                                                          "",
+                                                      quantity: currentItem
+                                                              .products
+                                                              ?.first
+                                                              .quantity ??
+                                                          0,
+                                                      retailPriceInRuble:
+                                                          currentItem
+                                                                  .products
+                                                                  ?.first
+                                                                  .priceRub
+                                                                  ?.toInt() ??
+                                                              0,
+                                                      totalPriceInRuble: calculateService
+                                                          .calculateTotalPriceInRuble(
+                                                              ruble: currentItem
+                                                                      .products
+                                                                      ?.first
+                                                                      .priceRub
+                                                                      ?.toDouble() ??
+                                                                  0,
+                                                              totalCount: currentItem
+                                                                      .products
+                                                                      ?.first
+                                                                      .quantity ??
+                                                                  0)
+                                                          .toInt(),
+                                                      currentIndex:
+                                                          _currentIndex,
+                                                      sizeQuantities: currentItem
+                                                              .products
+                                                              ?.first
+                                                              .sizeQuantities ??
+                                                          {},
+                                                      gridwiewLength: currentItem
+                                                              .products
+                                                              ?.first
+                                                              .sizeQuantities
+                                                              ?.length ??
+                                                          0,
+                                                    ),
+                                                  );
+                                                }),
+                                          );
+                                        } else {
+                                          return RefreshIndicator.adaptive(
+                                            onRefresh: () async => (),
+                                            child: SingleChildScrollView(
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .center, // Align text to the center horizontally
+                                                children: [
+                                                  SizedBox(
+                                                    height: 100.h,
                                                   ),
-                                                );
-                                              }),
-                                        );
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 20.0
+                                                            .h), // Add some padding
+                                                    child: Text(
+                                                      "Здесь будут отображаться ваши активные заказы",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: AppFonts.w700s20
+                                                          .copyWith(
+                                                        color: AppColors
+                                                            .accentTextColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }
                                       },
                                       loading: () => Expanded(
                                             child: ListView.separated(
                                                 itemBuilder: (context, index) {
-                                                  return MyOrdersLoadingCard();
+                                                  return const MyOrdersLoadingCard();
                                                 },
                                                 separatorBuilder:
                                                     (context, index) {
@@ -460,7 +499,36 @@ class _OrdersScreenState extends State<OrdersScreen>
                                           );
                                         });
                                   } else {
-                                    return Text("Пусто");
+                                    return RefreshIndicator.adaptive(
+                                      onRefresh: () async => (),
+                                      child: SingleChildScrollView(
+                                        physics:
+                                            const AlwaysScrollableScrollPhysics(),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .center, // Align text to the center horizontally
+                                          children: [
+                                            SizedBox(
+                                              height: 100.h,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 20.0
+                                                      .h), // Add some padding
+                                              child: Text(
+                                                "Здесь будут отображаться ваши завершенные заказы",
+                                                textAlign: TextAlign.center,
+                                                style:
+                                                    AppFonts.w700s20.copyWith(
+                                                  color:
+                                                      AppColors.accentTextColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
                                   }
                                 },
                                 error: (error) => CustomErrorWidget(
@@ -598,19 +666,35 @@ class _OrdersScreenState extends State<OrdersScreen>
                                           }),
                                     );
                                   } else {
-                                    return Column(
-                                      children: [
-                                        const Center(
-                                          child: Text("Пусто"),
+                                    return RefreshIndicator.adaptive(
+                                      onRefresh: () async => (),
+                                      child: SingleChildScrollView(
+                                        physics:
+                                            const AlwaysScrollableScrollPhysics(),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment
+                                              .center, // Align text to the center horizontally
+                                          children: [
+                                            SizedBox(
+                                              height: 100.h,
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 20.0
+                                                      .h), // Add some padding
+                                              child: Text(
+                                                "Здесь будет отображаться трекинг ваших заказов",
+                                                textAlign: TextAlign.center,
+                                                style:
+                                                    AppFonts.w700s20.copyWith(
+                                                  color:
+                                                      AppColors.accentTextColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                        TextButton(
-                                            onPressed: () {
-                                              (isCustomer ?? true)
-                                                  ? getCustomerInvoices()
-                                                  : getManufacturerInvoices();
-                                            },
-                                            child: Text("Обновить"))
-                                      ],
+                                      ),
                                     );
                                   }
                                 },

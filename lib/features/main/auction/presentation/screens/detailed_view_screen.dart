@@ -209,7 +209,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                           ),
                                         ),
                                         Text(
-                                          "${auctionModel.productsList?.first.quantity ?? 0} штук",
+                                          "${auctionModel.productsList?.first.quantity ?? 0} шт",
                                           style: AppFonts.w400s16.copyWith(
                                             color: AppColors.accentTextColor,
                                           ),
@@ -223,6 +223,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                           style: AppFonts.w400s16.copyWith(
                                               color: AppColors.accentTextColor),
                                         ),
+                                        
                                         Padding(
                                           padding: EdgeInsets.only(left: 84.w),
                                           child: Text(

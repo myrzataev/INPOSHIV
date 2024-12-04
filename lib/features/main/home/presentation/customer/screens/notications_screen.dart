@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/core/utils/app_colors.dart';
+import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/features/main/home/data/models/notification_model.dart';
 import 'package:inposhiv/features/main/home/presentation/shared/blocs/notification_history_bloc/notification_history_bloc.dart';
@@ -65,32 +67,67 @@ class _NoticationsScreen extends State<NoticationsScreen> {
                   NotificationHistoryState>(
                 builder: (context, state) {
                   return state.maybeWhen(
-                    loading: () => const Center(child: CircularProgressIndicator.adaptive(),),
+                      loading: () => const Center(
+                            child: CircularProgressIndicator.adaptive(),
+                          ),
                       loaded: (model) {
-                        return RefreshIndicator.adaptive(
-                          onRefresh: () async {},
-                          child: ListView.separated(
-                              itemBuilder: (context, index) {
-                                final currentItem = model.history?[index];
-                                return NotificationCard(
-                                  title: currentItem?.title ?? "",
-                                  onTap: () {
-                                    clicAction(
-                                        clicAction:
-                                            currentItem?.clickAction ?? "",
-                                        historyModel:
-                                            currentItem ?? const History());
-                                  },
-                                  description: currentItem?.body ?? "",
-                                );
-                              },
-                              separatorBuilder: (index, context) {
-                                return SizedBox(
-                                  height: 7.h,
-                                );
-                              },
-                              itemCount: model.history?.length ?? 0),
-                        );
+                        if (model.history?.isNotEmpty ?? false) {
+                          return RefreshIndicator.adaptive(
+                            onRefresh: () async {},
+                            child: ListView.separated(
+                                itemBuilder: (context, index) {
+                                  final currentItem = model.history?[index];
+                                  return NotificationCard(
+                                    title: currentItem?.title ?? "",
+                                    onTap: () {
+                                      clicAction(
+                                          clicAction:
+                                              currentItem?.clickAction ?? "",
+                                          historyModel:
+                                              currentItem ?? const History());
+                                    },
+                                    description: currentItem?.body ?? "",
+                                  );
+                                },
+                                separatorBuilder: (index, context) {
+                                  return SizedBox(
+                                    height: 7.h,
+                                  );
+                                },
+                                itemCount: model.history?.length ?? 0),
+                          );
+                        } else {
+                          return RefreshIndicator.adaptive(
+                            onRefresh: () async => (getNotifications()),
+                            child: SingleChildScrollView(
+                              physics: const AlwaysScrollableScrollPhysics(),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment
+                                    .center, // Align text to the center horizontally
+                                children: [
+                                  SizedBox(
+                                    height: 100.h,
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 20.0.h), // Add some padding
+                                    child: Text(
+                                   "У вас пока нет никаких уведомлений",
+                                      textAlign: TextAlign.center,
+                                      style: AppFonts.w700s20.copyWith(
+                                        color: AppColors.accentTextColor,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 150.h,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        }
                       },
                       error: (error) => Expanded(
                               child: Expanded(
@@ -146,7 +183,8 @@ class _NoticationsScreen extends State<NoticationsScreen> {
             extra: historyModel.orderUuid);
         break;
       case 'SEND_PAY_DETAILS':
-        router.pushNamed("orderDetailsForManufacturer", extra: historyModel.orderUuid);
+        router.pushNamed("orderDetailsForManufacturer",
+            extra: historyModel.orderUuid);
         print("SEND_PAY_DETAILS is catching");
         break;
 

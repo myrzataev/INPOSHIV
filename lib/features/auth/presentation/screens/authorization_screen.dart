@@ -152,6 +152,8 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
                               entity.customerOrManufacturerUuid ?? "");
                           preferences.setBool(
                               "isCustomer", entity.role == "CUSTOMER");
+                                preferences.setString(
+                                "userName", entity.username ?? "");
                           GoRouter.of(context).pushNamed("surveyStartScreen");
                         },
                         orElse: () {

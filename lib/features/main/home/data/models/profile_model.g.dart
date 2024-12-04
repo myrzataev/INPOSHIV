@@ -11,17 +11,20 @@ _$ProfileModelImpl _$$ProfileModelImplFromJson(Map<String, dynamic> json) =>
       userUuid: json['userUuid'] as String?,
       username: json['username'] as String?,
       email: json['email'] as String?,
-      password: json['password'],
+      password: json['password'] as String?,
       phoneNumber: json['phoneNumber'] as String?,
       companyName: json['companyName'] as String?,
-      companyDescription: json['companyDescription'],
+      companyDescription: json['companyDescription'] as String?,
       city: json['city'] as String?,
       trustLevel: json['trustLevel'] as String?,
       role: json['role'] as String?,
       status: (json['status'] as num?)?.toInt(),
-      lastLogin: json['lastLogin'],
-      token: json['token'],
-      refreshToken: json['refreshToken'],
+      lastLogin: json['lastLogin'] as String?,
+      token: json['token'] as String?,
+      refreshToken: json['refreshToken'] as String?,
+      reviews: (json['reviews'] as List<dynamic>?)
+          ?.map((e) => Review.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$ProfileModelImplToJson(_$ProfileModelImpl instance) =>
@@ -40,4 +43,24 @@ Map<String, dynamic> _$$ProfileModelImplToJson(_$ProfileModelImpl instance) =>
       'lastLogin': instance.lastLogin,
       'token': instance.token,
       'refreshToken': instance.refreshToken,
+      'reviews': instance.reviews,
+    };
+
+_$ReviewImpl _$$ReviewImplFromJson(Map<String, dynamic> json) => _$ReviewImpl(
+      customerUuid: json['customerUuid'] as String?,
+      manufacturerUuid: json['manufacturerUuid'] as String?,
+      reviewText: json['reviewText'] as String?,
+      createdAt: json['createdAt'] as String?,
+      rating: (json['rating'] as num?)?.toInt(),
+      customerName: json['customerName'] as String?,
+    );
+
+Map<String, dynamic> _$$ReviewImplToJson(_$ReviewImpl instance) =>
+    <String, dynamic>{
+      'customerUuid': instance.customerUuid,
+      'manufacturerUuid': instance.manufacturerUuid,
+      'reviewText': instance.reviewText,
+      'createdAt': instance.createdAt,
+      'rating': instance.rating,
+      'customerName': instance.customerName,
     };

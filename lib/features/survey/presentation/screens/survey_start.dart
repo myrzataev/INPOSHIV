@@ -45,18 +45,18 @@ class SurveyStartScreen extends StatelessWidget {
                     .copyWith(height: 1, fontWeight: FontWeight.bold),
               ),
             ),
+            // Padding(
+            //   padding: EdgeInsets.only(top: 113.h),
+            //   child: TextButton(
+            //       onPressed: () {},
+            //       child: Text(
+            //         "Пропустить",
+            //         style: AppFonts.w400s16
+            //             .copyWith(color: AppColors.accentTextColor),
+            //       )),
+            // ),
             Padding(
-              padding: EdgeInsets.only(top: 113.h),
-              child: TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "Пропустить",
-                    style: AppFonts.w400s16
-                        .copyWith(color: AppColors.accentTextColor),
-                  )),
-            ),
-            Padding(
-              padding: EdgeInsets.only(bottom: 20.h),
+              padding: EdgeInsets.only(bottom: 20.h, top: 113.h),
               child: CustomButton(
                 text: "Начать",
                 onPressed: () {

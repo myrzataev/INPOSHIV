@@ -21,6 +21,7 @@ mixin _$LoginEntity {
   String? get userUuid => throw _privateConstructorUsedError;
   String? get customerOrManufacturerUuid => throw _privateConstructorUsedError;
   String? get role => throw _privateConstructorUsedError;
+  String? get username => throw _privateConstructorUsedError;
 
   /// Create a copy of LoginEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -40,7 +41,8 @@ abstract class $LoginEntityCopyWith<$Res> {
       String? refreshToken,
       String? userUuid,
       String? customerOrManufacturerUuid,
-      String? role});
+      String? role,
+      String? username});
 }
 
 /// @nodoc
@@ -63,6 +65,7 @@ class _$LoginEntityCopyWithImpl<$Res, $Val extends LoginEntity>
     Object? userUuid = freezed,
     Object? customerOrManufacturerUuid = freezed,
     Object? role = freezed,
+    Object? username = freezed,
   }) {
     return _then(_value.copyWith(
       token: freezed == token
@@ -85,6 +88,10 @@ class _$LoginEntityCopyWithImpl<$Res, $Val extends LoginEntity>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String?,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -102,7 +109,8 @@ abstract class _$$LoginEntityImplCopyWith<$Res>
       String? refreshToken,
       String? userUuid,
       String? customerOrManufacturerUuid,
-      String? role});
+      String? role,
+      String? username});
 }
 
 /// @nodoc
@@ -123,6 +131,7 @@ class __$$LoginEntityImplCopyWithImpl<$Res>
     Object? userUuid = freezed,
     Object? customerOrManufacturerUuid = freezed,
     Object? role = freezed,
+    Object? username = freezed,
   }) {
     return _then(_$LoginEntityImpl(
       token: freezed == token
@@ -145,6 +154,10 @@ class __$$LoginEntityImplCopyWithImpl<$Res>
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
               as String?,
+      username: freezed == username
+          ? _value.username
+          : username // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -157,7 +170,8 @@ class _$LoginEntityImpl implements _LoginEntity {
       this.refreshToken,
       this.userUuid,
       this.customerOrManufacturerUuid,
-      this.role});
+      this.role,
+      this.username});
 
   @override
   final String? token;
@@ -169,10 +183,12 @@ class _$LoginEntityImpl implements _LoginEntity {
   final String? customerOrManufacturerUuid;
   @override
   final String? role;
+  @override
+  final String? username;
 
   @override
   String toString() {
-    return 'LoginEntity(token: $token, refreshToken: $refreshToken, userUuid: $userUuid, customerOrManufacturerUuid: $customerOrManufacturerUuid, role: $role)';
+    return 'LoginEntity(token: $token, refreshToken: $refreshToken, userUuid: $userUuid, customerOrManufacturerUuid: $customerOrManufacturerUuid, role: $role, username: $username)';
   }
 
   @override
@@ -189,12 +205,14 @@ class _$LoginEntityImpl implements _LoginEntity {
                     customerOrManufacturerUuid) ||
                 other.customerOrManufacturerUuid ==
                     customerOrManufacturerUuid) &&
-            (identical(other.role, role) || other.role == role));
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.username, username) ||
+                other.username == username));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, token, refreshToken, userUuid,
-      customerOrManufacturerUuid, role);
+      customerOrManufacturerUuid, role, username);
 
   /// Create a copy of LoginEntity
   /// with the given fields replaced by the non-null parameter values.
@@ -211,7 +229,8 @@ abstract class _LoginEntity implements LoginEntity {
       final String? refreshToken,
       final String? userUuid,
       final String? customerOrManufacturerUuid,
-      final String? role}) = _$LoginEntityImpl;
+      final String? role,
+      final String? username}) = _$LoginEntityImpl;
 
   @override
   String? get token;
@@ -223,6 +242,8 @@ abstract class _LoginEntity implements LoginEntity {
   String? get customerOrManufacturerUuid;
   @override
   String? get role;
+  @override
+  String? get username;
 
   /// Create a copy of LoginEntity
   /// with the given fields replaced by the non-null parameter values.

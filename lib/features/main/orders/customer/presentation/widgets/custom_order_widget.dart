@@ -81,7 +81,7 @@ class CustomCompletedOrdersCard extends StatelessWidget {
                   //   ),
                   // ),
                   Text(
-                    "580 штук",
+                    "580 шт",
                     style: AppFonts.w400s16
                         .copyWith(color: AppColors.accentTextColor),
                   )
