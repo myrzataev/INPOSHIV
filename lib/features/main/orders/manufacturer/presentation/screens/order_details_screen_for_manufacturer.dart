@@ -82,7 +82,9 @@ class _OrderDetailsScreenForManufacturer
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: BlocBuilder<GetOrderDetailsBloc, GetOrderDetailsState>(
             builder: (context, state) {
+              print(state);
               return state.maybeWhen(
+              
                   loading: () => const Center(
                         child: CircularProgressIndicator.adaptive(),
                       ),

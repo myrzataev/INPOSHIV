@@ -33,9 +33,10 @@ mixin _$OrderDetailsResponseModel {
   String? get deadlineEnd => throw _privateConstructorUsedError;
   dynamic get discount => throw _privateConstructorUsedError;
   String? get deliveryPoint => throw _privateConstructorUsedError;
-  List<String>? get technicalDocumentUrls => throw _privateConstructorUsedError;
-  List<String>? get lekalaDocumentUrls => throw _privateConstructorUsedError;
-  List<dynamic>? get agreementUrls => throw _privateConstructorUsedError;
+  List<String?>? get technicalDocumentUrls =>
+      throw _privateConstructorUsedError;
+  List<String?>? get lekalaDocumentUrls => throw _privateConstructorUsedError;
+  List<dynamic?>? get agreementUrls => throw _privateConstructorUsedError;
   dynamic get manufacturerUuid => throw _privateConstructorUsedError;
   List<int>? get deadlineStartAsLocalDate => throw _privateConstructorUsedError;
   List<int>? get deadlineEndAsLocalDate => throw _privateConstructorUsedError;
@@ -69,9 +70,9 @@ abstract class $OrderDetailsResponseModelCopyWith<$Res> {
       String? deadlineEnd,
       dynamic discount,
       String? deliveryPoint,
-      List<String>? technicalDocumentUrls,
-      List<String>? lekalaDocumentUrls,
-      List<dynamic>? agreementUrls,
+      List<String?>? technicalDocumentUrls,
+      List<String?>? lekalaDocumentUrls,
+      List<dynamic?>? agreementUrls,
       dynamic manufacturerUuid,
       List<int>? deadlineStartAsLocalDate,
       List<int>? deadlineEndAsLocalDate});
@@ -164,15 +165,15 @@ class _$OrderDetailsResponseModelCopyWithImpl<$Res,
       technicalDocumentUrls: freezed == technicalDocumentUrls
           ? _value.technicalDocumentUrls
           : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       lekalaDocumentUrls: freezed == lekalaDocumentUrls
           ? _value.lekalaDocumentUrls
           : lekalaDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       agreementUrls: freezed == agreementUrls
           ? _value.agreementUrls
           : agreementUrls // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<dynamic?>?,
       manufacturerUuid: freezed == manufacturerUuid
           ? _value.manufacturerUuid
           : manufacturerUuid // ignore: cast_nullable_to_non_nullable
@@ -211,9 +212,9 @@ abstract class _$$OrderDetailsResponseModelImplCopyWith<$Res>
       String? deadlineEnd,
       dynamic discount,
       String? deliveryPoint,
-      List<String>? technicalDocumentUrls,
-      List<String>? lekalaDocumentUrls,
-      List<dynamic>? agreementUrls,
+      List<String?>? technicalDocumentUrls,
+      List<String?>? lekalaDocumentUrls,
+      List<dynamic?>? agreementUrls,
       dynamic manufacturerUuid,
       List<int>? deadlineStartAsLocalDate,
       List<int>? deadlineEndAsLocalDate});
@@ -305,15 +306,15 @@ class __$$OrderDetailsResponseModelImplCopyWithImpl<$Res>
       technicalDocumentUrls: freezed == technicalDocumentUrls
           ? _value._technicalDocumentUrls
           : technicalDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       lekalaDocumentUrls: freezed == lekalaDocumentUrls
           ? _value._lekalaDocumentUrls
           : lekalaDocumentUrls // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
       agreementUrls: freezed == agreementUrls
           ? _value._agreementUrls
           : agreementUrls // ignore: cast_nullable_to_non_nullable
-              as List<dynamic>?,
+              as List<dynamic?>?,
       manufacturerUuid: freezed == manufacturerUuid
           ? _value.manufacturerUuid
           : manufacturerUuid // ignore: cast_nullable_to_non_nullable
@@ -346,9 +347,9 @@ class _$OrderDetailsResponseModelImpl implements _OrderDetailsResponseModel {
       this.deadlineEnd,
       this.discount,
       this.deliveryPoint,
-      final List<String>? technicalDocumentUrls,
-      final List<String>? lekalaDocumentUrls,
-      final List<dynamic>? agreementUrls,
+      final List<String?>? technicalDocumentUrls,
+      final List<String?>? lekalaDocumentUrls,
+      final List<dynamic?>? agreementUrls,
       this.manufacturerUuid,
       final List<int>? deadlineStartAsLocalDate,
       final List<int>? deadlineEndAsLocalDate})
@@ -385,9 +386,9 @@ class _$OrderDetailsResponseModelImpl implements _OrderDetailsResponseModel {
   final dynamic discount;
   @override
   final String? deliveryPoint;
-  final List<String>? _technicalDocumentUrls;
+  final List<String?>? _technicalDocumentUrls;
   @override
-  List<String>? get technicalDocumentUrls {
+  List<String?>? get technicalDocumentUrls {
     final value = _technicalDocumentUrls;
     if (value == null) return null;
     if (_technicalDocumentUrls is EqualUnmodifiableListView)
@@ -396,9 +397,9 @@ class _$OrderDetailsResponseModelImpl implements _OrderDetailsResponseModel {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<String>? _lekalaDocumentUrls;
+  final List<String?>? _lekalaDocumentUrls;
   @override
-  List<String>? get lekalaDocumentUrls {
+  List<String?>? get lekalaDocumentUrls {
     final value = _lekalaDocumentUrls;
     if (value == null) return null;
     if (_lekalaDocumentUrls is EqualUnmodifiableListView)
@@ -407,9 +408,9 @@ class _$OrderDetailsResponseModelImpl implements _OrderDetailsResponseModel {
     return EqualUnmodifiableListView(value);
   }
 
-  final List<dynamic>? _agreementUrls;
+  final List<dynamic?>? _agreementUrls;
   @override
-  List<dynamic>? get agreementUrls {
+  List<dynamic?>? get agreementUrls {
     final value = _agreementUrls;
     if (value == null) return null;
     if (_agreementUrls is EqualUnmodifiableListView) return _agreementUrls;
@@ -540,9 +541,9 @@ abstract class _OrderDetailsResponseModel implements OrderDetailsResponseModel {
           final String? deadlineEnd,
           final dynamic discount,
           final String? deliveryPoint,
-          final List<String>? technicalDocumentUrls,
-          final List<String>? lekalaDocumentUrls,
-          final List<dynamic>? agreementUrls,
+          final List<String?>? technicalDocumentUrls,
+          final List<String?>? lekalaDocumentUrls,
+          final List<dynamic?>? agreementUrls,
           final dynamic manufacturerUuid,
           final List<int>? deadlineStartAsLocalDate,
           final List<int>? deadlineEndAsLocalDate}) =
@@ -576,11 +577,11 @@ abstract class _OrderDetailsResponseModel implements OrderDetailsResponseModel {
   @override
   String? get deliveryPoint;
   @override
-  List<String>? get technicalDocumentUrls;
+  List<String?>? get technicalDocumentUrls;
   @override
-  List<String>? get lekalaDocumentUrls;
+  List<String?>? get lekalaDocumentUrls;
   @override
-  List<dynamic>? get agreementUrls;
+  List<dynamic?>? get agreementUrls;
   @override
   dynamic get manufacturerUuid;
   @override

@@ -22,10 +22,10 @@ _$OrderDetailsResponseModelImpl _$$OrderDetailsResponseModelImplFromJson(
       discount: json['discount'],
       deliveryPoint: json['deliveryPoint'] as String?,
       technicalDocumentUrls: (json['technicalDocumentUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => e as String?)
           .toList(),
       lekalaDocumentUrls: (json['lekalaDocumentUrls'] as List<dynamic>?)
-          ?.map((e) => e as String)
+          ?.map((e) => e as String?)
           .toList(),
       agreementUrls: json['agreementUrls'] as List<dynamic>?,
       manufacturerUuid: json['manufacturerUuid'],

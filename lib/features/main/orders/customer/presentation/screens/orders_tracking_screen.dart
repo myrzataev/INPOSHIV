@@ -73,6 +73,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
 
   @override
   void initState() {
+    print("invoice id from widget is ${widget.invoiceUuid}");
     isCustomer = preferences.getBool("isCustomer");
     // trackingModel = widget.model;
     // activeStage = widget.model.activeStageId ?? 0;

@@ -90,11 +90,14 @@ import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/search_order_bloc/search_order_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/send_feed_back_bloc/send_feed_back_bloc_bloc.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_manufacturer_invoices_ds.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_manufacturers_completed_orders_ds.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/data_sources/get_order_detail_ds.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_manufacturer_completed_orders_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_manufacturer_invoices_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/data/repositories/get_order_details_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_order_details_bloc/get_order_details_bloc.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/manufacturer_completed_orders_bloc/manufacturer_completed_orders_bloc.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/create_order_ds.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/get_currency_ds.dart';
 import 'package:inposhiv/features/onboarding/customer/data/data_source/get_fabric_types_ds.dart';
@@ -211,18 +214,35 @@ class _MyAppState extends State<MyApp> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         try {
-          if (data["click_action"] == "registration") {
-            router.goNamed("registration", queryParameters: data);
-          } else if (data["click_action"] == "main") {
-            router.goNamed("main", queryParameters: {"isFromSearch": "false"});
-          } else {
-            router.go("/");
-          }
+          _handleBackgroundMessage(message);
         } catch (e) {
           debugPrint(e.toString());
         }
       }
     });
+  }
+
+  void _handleBackgroundMessage(RemoteMessage message) {
+    print("_handleBackgroundMessage method is calling and message is $message");
+
+    if (message.data["click_action"] == "CLICK_AUCTION") {
+      router.go("/auction/detailedViewScreen",
+          extra: message.data["auctionUuid"]);
+    } else if (message.data["click_action"] == "STAGE_CHANGED") {
+      router.goNamed("orderTracking",
+          queryParameters: {"invoiceUid": message.data["invoiceUuid"]});
+    } else if (message.data["click_action"] == "TRACKING_STAGE_ACCEPTED") {
+      router.go("/auction/detailedViewScreen",
+          extra: message.data["auctionUuid"]);
+    } else if (message.data["click_action"] == "ORDER_DETAILS_FULLED") {
+      router.go("orderDetailsForManufacturer",
+          extra: message.data["orderUuid"]);
+    } else if (message.data["click_action"] == "INVOICE_SENT") {
+      router.goNamed("invoiceScreenForCustomer",
+          queryParameters: {"orderId": message.data["orderId"]});
+    } else {
+      router.goNamed("notifications");
+    }
   }
 
   @override
@@ -479,7 +499,15 @@ class _MyAppState extends State<MyApp> {
                         context))),
         RepositoryProvider(
             create: (context) => ChangePasswordRepoimmpl(
-                userAccountDs: RepositoryProvider.of<UserAccountDs>(context)))
+                userAccountDs: RepositoryProvider.of<UserAccountDs>(context))),
+        RepositoryProvider(
+            create: (context) => GetManufacturersCompletedOrdersDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => GetManufacturerCompletedOrdersRepoimpl(
+                getManufacturersCompletedOrdersDs:
+                    RepositoryProvider.of<GetManufacturersCompletedOrdersDs>(
+                        context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -644,7 +672,11 @@ class _MyAppState extends State<MyApp> {
                       GetCustomersCompletedOrdersRepoimpl>(context))),
           BlocProvider(
               create: (context) => ChangePasswordBloc(
-                  RepositoryProvider.of<ChangePasswordRepoimmpl>(context)))
+                  RepositoryProvider.of<ChangePasswordRepoimmpl>(context))),
+          BlocProvider(
+              create: (context) => ManufacturerCompletedOrdersBloc(
+                  RepositoryProvider.of<GetManufacturerCompletedOrdersRepoimpl>(
+                      context)))
         ],
         child: MultiProvider(
           providers: [

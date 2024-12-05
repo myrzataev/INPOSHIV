@@ -12,6 +12,7 @@ import 'package:inposhiv/core/widgets/custom_error_widget.dart';
 import 'package:inposhiv/core/widgets/loading_state.dart';
 import 'package:inposhiv/core/widgets/my_orders_loading_card.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
+import 'package:inposhiv/features/auth/presentation/widgets/custom_tabbar.dart';
 import 'package:inposhiv/features/main/auction/data/mocked_aution_data.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_auctions_bloc/manufacturer_auctions_bloc.dart';
@@ -22,6 +23,7 @@ import 'package:inposhiv/features/main/orders/customer/presentation/blocs/custom
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_card.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_widget.dart';
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/get_manufacturer_invoices_bloc/get_manufacturer_invoices_bloc.dart';
+import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/manufacturer_completed_orders_bloc/manufacturer_completed_orders_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/calculate_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
@@ -59,7 +61,7 @@ class _OrdersScreenState extends State<OrdersScreen>
   bool openedDetailedView = false;
   CalculateService calculateService = CalculateService();
   final ValueNotifier<int> selectedIndexNotifier = ValueNotifier<int>(0);
-
+  late TabController _tabController;
   @override
   void initState() {
     super.initState();
@@ -68,7 +70,7 @@ class _OrdersScreenState extends State<OrdersScreen>
       vsync: this,
       duration: const Duration(seconds: 5),
     );
-
+    _tabController = TabController(length: 4, vsync: this);
     // Instead of calling setState in every frame, use it only when animation updates are required for UI
     controller.repeat(reverse: false);
 
@@ -81,6 +83,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     } else {
       callBlocForManufacturer();
       getManufacturerInvoices();
+      getManufacturerCompletedOrders();
     }
   }
 
@@ -114,6 +117,12 @@ class _OrdersScreenState extends State<OrdersScreen>
             manufactureId: preferences.getString("customerId") ?? ""));
   }
 
+  getManufacturerCompletedOrders() {
+    BlocProvider.of<ManufacturerCompletedOrdersBloc>(context).add(
+        ManufacturerCompletedOrdersEvent.started(
+            manufacturerUuid: preferences.getString("customerId") ?? ""));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -145,69 +154,14 @@ class _OrdersScreenState extends State<OrdersScreen>
                   ),
                   Padding(
                     padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
-                    child: SizedBox(
-                      height: 55.h,
-                      child: ValueListenableBuilder(
-                        valueListenable: selectedIndexNotifier,
-                        builder: (context, selectedIndex, child) =>
-                            ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return CustomChoiceWidget(
-                              key: ValueKey(index),
-                              isSelelected: selectedIndex == index,
-                              text: tabs[index],
-                              onTap: () {
-                                if (selectedIndexNotifier.value != index) {
-                                  selectedIndexNotifier.value = index;
-                                  _pageController.animateToPage(
-                                    index,
-                                    duration: const Duration(milliseconds: 200),
-                                    curve: Curves.easeInOut,
-                                  );
-                                }
-                                // if (selectedIndex != index) {
-                                //   // Prevent redundant state updates
-                                //   setState(() {
-                                //     selectedIndex = index;
-                                //     _currentIndex = 0;
-                                //   });
-
-                                //   // Animate to the corresponding page in the PageView.
-                                //   _pageController.animateToPage(
-                                //     index,
-                                //     duration: const Duration(milliseconds: 200),
-                                //     curve: Curves.easeInOut,
-                                //   );
-                                // }
-                              },
-                            );
-                          },
-                          separatorBuilder: (context, index) {
-                            return SizedBox(
-                              width: 7.w,
-                            );
-                          },
-                          itemCount: tabs.length,
-                        ),
-                      ),
-                    ),
+                    child:
+                        CustomTabBar(tabController: _tabController, tabs: tabs),
                   ),
                   Expanded(
                       child: Padding(
                     padding: EdgeInsets.only(bottom: 70.h),
-                    child: PageView(
-                      controller: _pageController,
-                      onPageChanged: (value) {
-                        if (selectedIndexNotifier.value != value) {
-                          selectedIndexNotifier.value = value;
-                          _pageController.animateToPage(
-                            value,
-                            duration: const Duration(milliseconds: 200),
-                            curve: Curves.easeInOut,
-                          );
-                        }
-                      },
+                    child: TabBarView(
+                      controller: _tabController,
                       children: [
                         (isCustomer ?? true)
                             ? BlocBuilder<CustomerAuctionsBloc,
@@ -469,77 +423,161 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       });
                                 },
                               ),
-                        BlocBuilder<CustomersCompletedOrdersBloc,
-                            CustomersCompletedOrdersState>(
-                          builder: (context, state) {
-                            return state.maybeWhen(
-                                loading: () => const Center(
-                                      child:
-                                          CircularProgressIndicator.adaptive(),
-                                    ),
-                                loaded: (model) {
-                                  if (model.isNotEmpty) {
-                                    return ListView.separated(
-                                        separatorBuilder: (context, index) {
-                                          return SizedBox(
-                                            height: 10.h,
-                                          );
-                                        },
-                                        itemCount: model.length,
-                                        itemBuilder: (context, index) {
-                                          final currentItem = model[index];
-                                          return CustomCompletedOrdersCard(
-                                            location:
-                                                currentItem.customerName ?? "",
-                                            trustRating: 5,
-                                            rating: 4.96,
-                                            retailPrice: 4,
-                                            retailPriceInRuble: 580,
-                                            quantityInApp: 30,
-                                          );
-                                        });
-                                  } else {
-                                    return RefreshIndicator.adaptive(
-                                      onRefresh: () async => (),
-                                      child: SingleChildScrollView(
-                                        physics:
-                                            const AlwaysScrollableScrollPhysics(),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .center, // Align text to the center horizontally
-                                          children: [
-                                            SizedBox(
-                                              height: 100.h,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 20.0
-                                                      .h), // Add some padding
-                                              child: Text(
-                                                "Здесь будут отображаться ваши завершенные заказы",
-                                                textAlign: TextAlign.center,
-                                                style:
-                                                    AppFonts.w700s20.copyWith(
-                                                  color:
-                                                      AppColors.accentTextColor,
-                                                ),
+                        (isCustomer ?? false)
+                            ? BlocBuilder<CustomersCompletedOrdersBloc,
+                                CustomersCompletedOrdersState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(
+                                      loading: () => const Center(
+                                            child: CircularProgressIndicator
+                                                .adaptive(),
+                                          ),
+                                      loaded: (model) {
+                                        if (model.isNotEmpty) {
+                                          return ListView.separated(
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return SizedBox(
+                                                  height: 10.h,
+                                                );
+                                              },
+                                              itemCount: model.length,
+                                              itemBuilder: (context, index) {
+                                                final currentItem =
+                                                    model[index];
+                                                return CustomCompletedOrdersCard(
+                                                  location: currentItem
+                                                          .customerName ??
+                                                      "",
+                                                  trustRating: 5,
+                                                  rating: 4.96,
+                                                  retailPrice: 4,
+                                                  retailPriceInRuble: 580,
+                                                  quantityInApp: 30,
+                                                );
+                                              });
+                                        } else {
+                                          return RefreshIndicator.adaptive(
+                                            onRefresh: () async =>
+                                                getCustomersCompletedOrders(),
+                                            child: SingleChildScrollView(
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .center, // Align text to the center horizontally
+                                                children: [
+                                                  SizedBox(
+                                                    height: 100.h,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 20.0
+                                                            .h), // Add some padding
+                                                    child: Text(
+                                                      "Здесь будут отображаться ваши завершенные заказы",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: AppFonts.w700s20
+                                                          .copyWith(
+                                                        color: AppColors
+                                                            .accentTextColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  }
+                                          );
+                                        }
+                                      },
+                                      error: (error) => CustomErrorWidget(
+                                          description: error.userMessage,
+                                          onRefresh: () =>
+                                              getCustomersCompletedOrders()),
+                                      orElse: () {
+                                        return const SizedBox.shrink();
+                                      });
                                 },
-                                error: (error) => CustomErrorWidget(
-                                    description: error.userMessage,
-                                    onRefresh: () =>
-                                        getCustomersCompletedOrders()),
-                                orElse: () {
-                                  return const SizedBox.shrink();
-                                });
-                          },
-                        ),
+                              )
+                            : BlocBuilder<ManufacturerCompletedOrdersBloc,
+                                ManufacturerCompletedOrdersState>(
+                                builder: (context, state) {
+                                  return state.maybeWhen(
+                                      loading: () => const Center(
+                                            child: CircularProgressIndicator
+                                                .adaptive(),
+                                          ),
+                                      loaded: (model) {
+                                        if (model.isNotEmpty) {
+                                          return ListView.separated(
+                                              separatorBuilder:
+                                                  (context, index) {
+                                                return SizedBox(
+                                                  height: 10.h,
+                                                );
+                                              },
+                                              itemCount: model.length,
+                                              itemBuilder: (context, index) {
+                                                final currentItem =
+                                                    model[index];
+                                                return CustomCompletedOrdersCard(
+                                                  location: currentItem
+                                                          .customerName ??
+                                                      "",
+                                                  trustRating: 5,
+                                                  rating: 4.96,
+                                                  retailPrice: 4,
+                                                  retailPriceInRuble: 580,
+                                                  quantityInApp: 30,
+                                                );
+                                              });
+                                        } else {
+                                          return RefreshIndicator.adaptive(
+                                            onRefresh: () async =>
+                                                getManufacturerCompletedOrders(),
+                                            child: SingleChildScrollView(
+                                              physics:
+                                                  const AlwaysScrollableScrollPhysics(),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment
+                                                        .center, // Align text to the center horizontally
+                                                children: [
+                                                  SizedBox(
+                                                    height: 100.h,
+                                                  ),
+                                                  Padding(
+                                                    padding: EdgeInsets.symmetric(
+                                                        vertical: 20.0
+                                                            .h), // Add some padding
+                                                    child: Text(
+                                                      "Здесь будут отображаться ваши завершенные заказы",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: AppFonts.w700s20
+                                                          .copyWith(
+                                                        color: AppColors
+                                                            .accentTextColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
+                                      error: (error) => CustomErrorWidget(
+                                          description: error.userMessage,
+                                          onRefresh: () =>
+                                              getManufacturerCompletedOrders()),
+                                      orElse: () {
+                                        return const SizedBox.shrink();
+                                      });
+                                },
+                              ),
                         ListView.separated(
                             separatorBuilder: (context, index) {
                               return SizedBox(
@@ -623,13 +661,11 @@ class _OrdersScreenState extends State<OrdersScreen>
                                       child:
                                           CircularProgressIndicator.adaptive(),
                                     ),
-                                error: (error) => Expanded(
-                                      child: CustomErrorWidget(
-                                          description: error.userMessage,
-                                          onRefresh: () {
-                                            getCustomerInvoices();
-                                          }),
-                                    ),
+                                error: (error) => CustomErrorWidget(
+                                    description: error.userMessage,
+                                    onRefresh: () {
+                                      getCustomerInvoices();
+                                    }),
                                 loaded: (model) {
                                   if (model.isNotEmpty) {
                                     return RefreshIndicator.adaptive(

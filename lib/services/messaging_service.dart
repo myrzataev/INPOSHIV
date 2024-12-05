@@ -17,7 +17,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {}
   print("_firebaseMessagingBackgroundHandler is calling $message");
   await MessagingService.instance.setUpFlutterNotification();
-  await MessagingService.instance.showNotification(message);
+  // await MessagingService.instance.showNotification(message);
   await MessagingService.instance._setupMessageHandlers();
 }
 
@@ -145,8 +145,8 @@ class MessagingService {
                   // Handle SEND_AGREEMENT
                   break;
                 case "STAGE_CHANGED":
-                  router.goNamed("detailedTrackingScreen", queryParameters: {
-                    "invoiceId": payloadData["invoiceUuid"]
+                  router.goNamed("orderTracking", queryParameters: {
+                    "invoiceUid": payloadData["invoiceUuid"]
                   });
                   break;
                 // case "STAGE_CHANGED":
@@ -179,6 +179,7 @@ class MessagingService {
 
                 default:
                   print("Unknown click_action");
+                    router.pushNamed("notifications");
                   break;
               }
             } catch (e) {
@@ -219,15 +220,20 @@ class MessagingService {
   }
 
   Future<void> _setupMessageHandlers() async {
-    //foreground messages
+    // Only setup these handlers once
     FirebaseMessaging.onMessage.listen((message) {
-      showNotification(message);
+      print("Foreground message received: ${message.data}");
+      showNotification(message); // Trigger notification
     });
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleBackgroundMessage);
-    //when app is opened
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print("App opened from notification: ${message.data}");
+      _handleBackgroundMessage(message);
+    });
+
     final initialMessage = await messaging.getInitialMessage();
     if (initialMessage != null) {
-      print("initial message is $initialMessage");
+      print("Initial message received: ${initialMessage.data}");
       _handleBackgroundMessage(initialMessage);
     }
   }
@@ -236,22 +242,47 @@ class MessagingService {
     print("_handleBackgroundMessage method is calling and message is $message");
 
     if (message.data["click_action"] == "CLICK_AUCTION") {
-      router.go("/auction/detailedViewScreen",
+      router.pushNamed("/auction/detailedViewScreen",
           extra: message.data["auctionUuid"]);
     } else if (message.data["click_action"] == "STAGE_CHANGED") {
-      router.goNamed("detailedTrackingScreen",
+      router.pushNamed("detailedTrackingScreen",
           queryParameters: {"invoiceId": message.data["invoiceUuid"]});
     } else if (message.data["click_action"] == "TRACKING_STAGE_ACCEPTED") {
-      router.go("/auction/detailedViewScreen",
+      router.pushNamed("/auction/detailedViewScreen",
           extra: message.data["auctionUuid"]);
     } else if (message.data["click_action"] == "ORDER_DETAILS_FULLED") {
-      router.go("orderDetailsForManufacturer",
+      router.pushNamed("orderDetailsForManufacturer",
           extra: message.data["orderUuid"]);
     } else if (message.data["click_action"] == "INVOICE_SENT") {
-      router.goNamed("invoiceScreenForCustomer",
+      router.pushNamed("invoiceScreenForCustomer",
           queryParameters: {"orderId": message.data["orderId"]});
+    } else {
+      router.pushNamed("notifications");
     }
   }
+
+  // void _handleBackgroundMessage(RemoteMessage message) {
+  //   print("_handleBackgroundMessage method is calling and message is $message");
+
+  //   if (message.data["click_action"] == "CLICK_AUCTION") {
+  //     router.go("/auction/detailedViewScreen",
+  //         extra: message.data["auctionUuid"]);
+  //   } else if (message.data["click_action"] == "STAGE_CHANGED") {
+  //     router.goNamed("detailedTrackingScreen",
+  //         queryParameters: {"invoiceId": message.data["invoiceUuid"]});
+  //   } else if (message.data["click_action"] == "TRACKING_STAGE_ACCEPTED") {
+  //     router.go("/auction/detailedViewScreen",
+  //         extra: message.data["auctionUuid"]);
+  //   } else if (message.data["click_action"] == "ORDER_DETAILS_FULLED") {
+  //     router.go("orderDetailsForManufacturer",
+  //         extra: message.data["orderUuid"]);
+  //   } else if (message.data["click_action"] == "INVOICE_SENT") {
+  //     router.goNamed("invoiceScreenForCustomer",
+  //         queryParameters: {"orderId": message.data["orderId"]});
+  //   } else {
+  //     router.goNamed("notifications");
+  //   }
+  // }
 }
 
 // import 'dart:convert';

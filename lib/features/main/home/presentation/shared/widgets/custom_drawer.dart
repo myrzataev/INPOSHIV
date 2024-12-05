@@ -43,11 +43,11 @@ class CustomDrawer extends StatelessWidget {
                           .copyWith(color: AppColors.accentTextColor),
                     )),
               ),
-              ElevatedButton(
-                  onPressed: () {
-                    preferences.clear();
-                  },
-                  child: Text("data")),
+              // ElevatedButton(
+              //     onPressed: () {
+              //       preferences.clear();
+              //     },
+              //     child: Text("data")),
               TextButton(
                   onPressed: () {
                     GoRouter.of(context).pushNamed("settings");

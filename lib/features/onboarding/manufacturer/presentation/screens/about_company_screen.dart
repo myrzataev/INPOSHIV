@@ -133,8 +133,10 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
                                       borderSide: BorderSide(
                                           color: AppColors.borderColor))),
                               validator: (value) {
-                                if ((value?.length ?? 0) < 110) {
+                                if ((value?.length ?? 0) > 110) {
                                   return "В описании должно быть не более 110 символов";
+                                } else if (value == null || value.isEmpty) {
+                                  return "Не может быть пустым";
                                 }
                                 return null;
                               },
@@ -150,24 +152,25 @@ class _AboutCompanyScreenState extends State<AboutCompanyScreen> {
                     text: "Дальше",
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
-                      sendData(
-                          companyDescription: controller.text,
-                          manufacturersPriorities:
-                              manufacturersPriorities ?? {},
-                          images: images,
-                          monthProductsVolume: monthProductsVolume ?? "",
-                          clothingCategories: categories!
-                              .where((e) => e != null) // Filter out null values
-                              .map((e) => e!) // Unwrap non-null values
-                              .toList(),
-                          vm: vm,
-                          manufacturerPrioritiesList: manufacturersPriorities!
-                              // ignore: unnecessary_null_comparison
-                              .where((e) => e != null)
-                              .map((e) => e)
-                              .toList());
-                      // GoRouter.of(context).pushNamed("profileReady",
-                      //     queryParameters: {"description": controller.text});
+                        sendData(
+                            companyDescription: controller.text,
+                            manufacturersPriorities:
+                                manufacturersPriorities ?? {},
+                            images: images,
+                            monthProductsVolume: monthProductsVolume ?? "",
+                            clothingCategories: categories!
+                                .where(
+                                    (e) => e != null) // Filter out null values
+                                .map((e) => e!) // Unwrap non-null values
+                                .toList(),
+                            vm: vm,
+                            manufacturerPrioritiesList: manufacturersPriorities!
+                                // ignore: unnecessary_null_comparison
+                                .where((e) => e != null)
+                                .map((e) => e)
+                                .toList());
+                        // GoRouter.of(context).pushNamed("profileReady",
+                        //     queryParameters: {"description": controller.text});
                       }
                     }),
               )

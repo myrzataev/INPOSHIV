@@ -9,6 +9,7 @@ import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
+import 'package:inposhiv/features/auth/presentation/widgets/custom_tabbar.dart';
 import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
@@ -30,21 +31,24 @@ class DetailedScreen extends StatefulWidget {
   State<DetailedScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<DetailedScreen> {
+class _MainScreenState extends State<DetailedScreen>
+    with SingleTickerProviderStateMixin {
   final CarouselSliderController _carouselSliderController =
       CarouselSliderController();
   int _currentIndex = 0;
   int selectedIndex = 0;
   int _carouselIndex = 0;
   bool isExpanded = false;
-  final ValueNotifier<int> selectedIndexNotifier = ValueNotifier<int>(0);
+
   late PageController _pageController;
   bool? isCustomer;
   final preferences = locator<SharedPreferences>();
   List<String> tabs = ["Профиль", "История заказов", "Отзывы"];
+  late TabController _tabController;
   @override
   void initState() {
     isCustomer = preferences.getBool("isCustomer");
+    _tabController = TabController(length: 3, vsync: this);
 
     _pageController =
         PageController(initialPage: _currentIndex, keepPage: true);
@@ -78,48 +82,15 @@ class _MainScreenState extends State<DetailedScreen> {
               (isCustomer ?? true)
                   ? Padding(
                       padding: EdgeInsets.only(bottom: 20.h, top: 10.h),
-                      child: SizedBox(
-                        height: 55.h,
-                        child: ValueListenableBuilder(
-                          valueListenable: selectedIndexNotifier,
-                          builder: (context, selectedIndex, child) =>
-                              ListView.builder(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: tabs.length,
-                                  itemBuilder: (context, index) {
-                                    return CustomChoiceWidget(
-                                      isSelelected: selectedIndex == index,
-                                      text: tabs[index],
-                                      onTap: () {
-                                        if (selectedIndexNotifier.value !=
-                                            index) {
-                                          selectedIndexNotifier.value = index;
-                                          _pageController.animateToPage(
-                                            index,
-                                            duration: const Duration(
-                                                milliseconds: 200),
-                                            curve: Curves.easeInOut,
-                                          );
-                                        }
-                                      },
-                                    );
-                                  }),
-                        ),
-                      ),
-                    )
+                      child: CustomTabBar(
+                          tabController: _tabController, tabs: tabs))
                   : const SizedBox.shrink(),
 
               // Use PageView for smooth horizontal scrolling between tabs.
               // (isCustomer ?? true)
               Expanded(
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (index) {
-                    setState(() {
-                      selectedIndex = index;
-                      _currentIndex = 0;
-                    });
-                  },
+                child: TabBarView(
+                  controller: _tabController,
                   children: [
                     // Tab 1: Profile content
                     SingleChildScrollView(

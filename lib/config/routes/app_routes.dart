@@ -81,7 +81,8 @@ String getInitialRoute() {
 
 final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation:getInitialRoute(),
+    initialLocation:
+    getInitialRoute(),
         // "/",
         // "/main",
     // "/registration",

@@ -30,6 +30,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
   final preferences = locator<SharedPreferences>();
   String? phoneError;
   String? passwordError;
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void dispose() {
@@ -52,6 +53,7 @@ class _AuthorizationScreenState extends State<AuthorizationScreen> {
           child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: SingleChildScrollView(
+          controller: _scrollController,
           child: Form(
             key: _formKey,
             child: Column(

@@ -34,4 +34,6 @@ abstract class UrlRoutes {
   static const String notificationsHistory = "api/notification/history";
   static const String customersCompletedOrders = "api/orders/completed";
   static const String changePassword = "api/profile/password";
+   static const String manufacturersCompletedOrders =
+      "api/orders/completed-by-manufacturer";
 }
