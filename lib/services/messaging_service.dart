@@ -96,100 +96,105 @@ class MessagingService {
           iOS: initializationSettingsDarwin);
       await _localNotification.initialize(
         initializationSettings,
-        onDidReceiveNotificationResponse: (NotificationResponse details) {
-          print("onDidReceiveNotificationResponse method is calling");
-          print("notification response ${details.payload}");
-          print("notification response ${details.notificationResponseType}");
-          print("notification response ${details.id}");
+       onDidReceiveNotificationResponse: (NotificationResponse details) {
+  print("onDidReceiveNotificationResponse method is calling");
+  print("notification response ${details.payload}");
+  print("notification response ${details.notificationResponseType}");
+  print("notification response ${details.id}");
 
-          if (details.payload != null) {
-            String payload = details.payload!;
+  if (details.payload != null) {
+    String payload = details.payload!;
 
-            // Quote keys
-            payload = payload.replaceAllMapped(
-                RegExp(r'(\w+):'), (match) => '"${match.group(1)}":');
+    // Quote keys
+    payload = payload.replaceAllMapped(
+        RegExp(r'(\w+):'), (match) => '"${match.group(1)}":');
 
-            // Quote values that are not already quoted (handles cases like INVOICE_SENT)
-            payload = payload.replaceAllMapped(
-                RegExp(r':\s*([a-zA-Z0-9_]+)(,|\s*})'),
-                (match) => ': "${match.group(1)}"${match.group(2)}');
+    // Handle double quotes around UUIDs (e.g., ""<UUID>"")
+    payload = payload.replaceAllMapped(
+        RegExp(r'(:\s*")"([0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12})"'),
+        (match) => '${match.group(1)}"${match.group(2)}"');
 
-            // Quote UUIDs separated by hyphens
-            payload = payload.replaceAllMapped(
-                RegExp(
-                    r'([0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12})-([0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12})'),
-                (match) => '"${match.group(1)}-${match.group(2)}"');
+    // Handle any unquoted strings (like names) and add double quotes around them
+    payload = payload.replaceAllMapped(
+        RegExp(r':\s*([^",]+)(,|\s*})'),
+        (match) => ': "${match.group(1)?.replaceAll('"', '\\"')}"${match.group(2)}');
 
-            // Quote single UUIDs
-            payload = payload.replaceAllMapped(
-                RegExp(
-                    r'(?<!")([0-9a-fA-F-]{8}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{4}-[0-9a-fA-F-]{12})(?!")'),
-                (match) => '"${match.group(1)}"');
+    // Fix malformed URLs (e.g., http":// -> "http://")
+    payload = payload.replaceAllMapped(
+        RegExp(r'(":?)http://'),
+        (match) => '"http://');  // Make sure the URL is correctly quoted
 
-            try {
-              // Parse the modified JSON string
-              Map<String, dynamic> payloadData = jsonDecode(payload);
-              print("click action is ${payloadData['click_action']}");
+    // Ensure that URLs are correctly quoted and prevent any malformed character from breaking JSON
+    payload = payload.replaceAllMapped(
+        RegExp(r'(:\s*)("http://[^\"]+")(,|\s*})'),
+        (match) => '${match.group(1)}${match.group(2)}${match.group(3)}');
 
-              // Navigate based on click_action
-              switch (payloadData['click_action']) {
-                case 'CLICK_AUCTION':
-                  router.go("/auction/detailedViewScreen",
-                      extra: payloadData["auctionUuid"]);
-                  break;
-                case 'INVOICE_SENT':
-                  router.goNamed("invoiceScreenForCustomer",
-                      queryParameters: {"orderId": payloadData["orderId"]});
-                  break;
-                case 'SEND_AGREEMENT':
-                  // Handle SEND_AGREEMENT
-                  break;
-                case "STAGE_CHANGED":
-                  router.goNamed("orderTracking", queryParameters: {
-                    "invoiceUid": payloadData["invoiceUuid"]
-                  });
-                  break;
-                // case "STAGE_CHANGED":
-                //   print("///////${payloadData["invoiceUuid"]}");
-                //   router.goNamed("orderTracking", queryParameters: {
-                //     "invoiceUid": payloadData["invoiceUuid"]
-                //   });
-                //   break;
+    try {
+      // Parse the modified JSON string
+      Map<String, dynamic> payloadData = jsonDecode(payload);
+      print("click action is ${payloadData['click_action']}");
 
-                case "TRACKING_STAGE_ACCEPTED":
-                  // router.goNamed("detailedTrackingScreen", queryParameters: {
-                  //   "invoiceId": payloadData["invoiceUuid"]
-                  // });
-                  router.goNamed(
-                    "orderTracking",
-                    pathParameters: {
-                      "activeStage": payloadData["invoiceUuid"] ?? "",
-                    },
-                  );
-                  break;
-                case 'ORDER_DETAILS_FULLED':
-                  router.go("/orders/orderDetailsForManufacturer",
-                      extra: payloadData["orderUuid"]);
-                  break;
-                case 'SEND_PAY_DETAILS':
-                  router.go("orderDetailsForManufacturer",
-                      extra: payloadData["orderUuid"]);
-                  print("SEND_PAY_DETAILS is catching");
-                  break;
+      // Navigate based on click_action
+      switch (payloadData['click_action']) {
+        case 'CLICK_AUCTION':
+          router.go("/auction/detailedViewScreen",
+              extra: payloadData["auctionUuid"]);
+          break;
+        case 'INVOICE_SENT':
+          router.goNamed("invoiceScreenForCustomer",
+              queryParameters: {"orderId": payloadData["orderId"]});
+          break;
+        case 'SEND_AGREEMENT':
+          // Handle SEND_AGREEMENT
+          break;
+        case "STAGE_CHANGED":
+          print(
+              "stage changed invoice id ${payloadData["invoiceUuid"]}");
+          router.goNamed("orderTracking", queryParameters: {
+            "invoiceUid": payloadData["invoiceUuid"]
+          });
+          break;
+        case "MESSAGE_RECEIVED":
+          router.goNamed("chatScreen", queryParameters: {
+            "receipentUuid": payloadData["senderUuid"],
+            "chatUuid": payloadData["chatUuid"],
+            "orderId": payloadData["orderId"],
+            "recipientName": payloadData["recipientName"]
+          });
+          break;
+        case "TRACKING_STAGE_ACCEPTED":
+          router.goNamed(
+            "orderTracking",
+            pathParameters: {
+              "activeStage": payloadData["invoiceUuid"] ?? "",
+            },
+          );
+          break;
+        case 'ORDER_DETAILS_FULLED':
+          router.go("/orders/orderDetailsForManufacturer",
+              extra: payloadData["orderUuid"]);
+          break;
+        case 'SEND_PAY_DETAILS':
+          router.go("orderDetailsForManufacturer",
+              extra: payloadData["orderUuid"]);
+          print("SEND_PAY_DETAILS is catching");
+          break;
 
-                default:
-                  print("Unknown click_action");
-                    router.pushNamed("notifications");
-                  break;
-              }
-            } catch (e) {
-              // Handle JSON decoding errors
-              print("Error parsing payload: $e");
-            }
-          } else {
-            print("Payload is null");
-          }
-        },
+        default:
+          print("Unknown click_action");
+          router.pushNamed("notifications");
+          break;
+      }
+    } catch (e) {
+      // Handle JSON decoding errors
+      print("Error parsing payload: $e");
+    }
+  } else {
+    print("Payload is null");
+  }
+},
+
+
       );
       _isFlutterLocalNotificationInitialized = true;
     }

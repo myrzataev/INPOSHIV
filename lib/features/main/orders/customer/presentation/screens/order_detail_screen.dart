@@ -221,8 +221,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                         showDialog(
                             context: context,
                             builder: (context) => CustomDialog(
-                                title: "title",
-                                description: "description",
+                                title: "Внимание",
+                                description: "Прикрепите пожалуйста документы",
                                 button: CustomButton(
                                     text: "Понятно",
                                     onPressed: () {

@@ -483,7 +483,7 @@ mixin _$ChatsState {
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -496,8 +496,7 @@ mixin _$ChatsState {
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -509,8 +508,7 @@ mixin _$ChatsState {
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -632,7 +630,7 @@ class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -648,8 +646,7 @@ class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -664,8 +661,7 @@ class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -786,7 +782,7 @@ class _$LoadingImpl with DiagnosticableTreeMixin implements _Loading {
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -802,8 +798,7 @@ class _$LoadingImpl with DiagnosticableTreeMixin implements _Loading {
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -818,8 +813,7 @@ class _$LoadingImpl with DiagnosticableTreeMixin implements _Loading {
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -940,7 +934,7 @@ class _$SendedImpl with DiagnosticableTreeMixin implements _Sended {
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -956,8 +950,7 @@ class _$SendedImpl with DiagnosticableTreeMixin implements _Sended {
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -972,8 +965,7 @@ class _$SendedImpl with DiagnosticableTreeMixin implements _Sended {
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -1124,7 +1116,7 @@ class _$ErrorImpl with DiagnosticableTreeMixin implements _Error {
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -1140,8 +1132,7 @@ class _$ErrorImpl with DiagnosticableTreeMixin implements _Error {
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -1156,8 +1147,7 @@ class _$ErrorImpl with DiagnosticableTreeMixin implements _Error {
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -1242,7 +1232,9 @@ abstract class _$$GetChatroomHistoryLoadedImplCopyWith<$Res> {
           $Res Function(_$GetChatroomHistoryLoadedImpl) then) =
       __$$GetChatroomHistoryLoadedImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<ChatRoomHistoryModel> model});
+  $Res call({ChatRoomHistoryModel model});
+
+  $ChatRoomHistoryModelCopyWith<$Res> get model;
 }
 
 /// @nodoc
@@ -1263,10 +1255,20 @@ class __$$GetChatroomHistoryLoadedImplCopyWithImpl<$Res>
   }) {
     return _then(_$GetChatroomHistoryLoadedImpl(
       model: null == model
-          ? _value._model
+          ? _value.model
           : model // ignore: cast_nullable_to_non_nullable
-              as List<ChatRoomHistoryModel>,
+              as ChatRoomHistoryModel,
     ));
+  }
+
+  /// Create a copy of ChatsState
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @pragma('vm:prefer-inline')
+  $ChatRoomHistoryModelCopyWith<$Res> get model {
+    return $ChatRoomHistoryModelCopyWith<$Res>(_value.model, (value) {
+      return _then(_value.copyWith(model: value));
+    });
   }
 }
 
@@ -1275,17 +1277,10 @@ class __$$GetChatroomHistoryLoadedImplCopyWithImpl<$Res>
 class _$GetChatroomHistoryLoadedImpl
     with DiagnosticableTreeMixin
     implements _GetChatroomHistoryLoaded {
-  const _$GetChatroomHistoryLoadedImpl(
-      {required final List<ChatRoomHistoryModel> model})
-      : _model = model;
+  const _$GetChatroomHistoryLoadedImpl({required this.model});
 
-  final List<ChatRoomHistoryModel> _model;
   @override
-  List<ChatRoomHistoryModel> get model {
-    if (_model is EqualUnmodifiableListView) return _model;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_model);
-  }
+  final ChatRoomHistoryModel model;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -1305,12 +1300,11 @@ class _$GetChatroomHistoryLoadedImpl
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$GetChatroomHistoryLoadedImpl &&
-            const DeepCollectionEquality().equals(other._model, _model));
+            (identical(other.model, model) || other.model == model));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(_model));
+  int get hashCode => Object.hash(runtimeType, model);
 
   /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
@@ -1328,7 +1322,7 @@ class _$GetChatroomHistoryLoadedImpl
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -1344,8 +1338,7 @@ class _$GetChatroomHistoryLoadedImpl
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -1360,8 +1353,7 @@ class _$GetChatroomHistoryLoadedImpl
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -1429,10 +1421,10 @@ class _$GetChatroomHistoryLoadedImpl
 
 abstract class _GetChatroomHistoryLoaded implements ChatsState {
   const factory _GetChatroomHistoryLoaded(
-          {required final List<ChatRoomHistoryModel> model}) =
+          {required final ChatRoomHistoryModel model}) =
       _$GetChatroomHistoryLoadedImpl;
 
-  List<ChatRoomHistoryModel> get model;
+  ChatRoomHistoryModel get model;
 
   /// Create a copy of ChatsState
   /// with the given fields replaced by the non-null parameter values.
@@ -1527,7 +1519,7 @@ class _$GetChatroomHistoryErrorImpl
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -1543,8 +1535,7 @@ class _$GetChatroomHistoryErrorImpl
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -1559,8 +1550,7 @@ class _$GetChatroomHistoryErrorImpl
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -1735,7 +1725,7 @@ class _$CreateChatRoomSuccessImpl
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -1751,8 +1741,7 @@ class _$CreateChatRoomSuccessImpl
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -1767,8 +1756,7 @@ class _$CreateChatRoomSuccessImpl
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,
@@ -1931,7 +1919,7 @@ class _$CreateChatRoomErrorImpl
     required TResult Function() loading,
     required TResult Function() sended,
     required TResult Function(String errorext) sendError,
-    required TResult Function(List<ChatRoomHistoryModel> model)
+    required TResult Function(ChatRoomHistoryModel model)
         getChatroomHistoryLoaded,
     required TResult Function(String errorext) getChatroomHistoryError,
     required TResult Function(CreateChatRoomModel model) createChatRoomSuccess,
@@ -1947,8 +1935,7 @@ class _$CreateChatRoomErrorImpl
     TResult? Function()? loading,
     TResult? Function()? sended,
     TResult? Function(String errorext)? sendError,
-    TResult? Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult? Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult? Function(String errorext)? getChatroomHistoryError,
     TResult? Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult? Function(String errorText)? createChatRoomError,
@@ -1963,8 +1950,7 @@ class _$CreateChatRoomErrorImpl
     TResult Function()? loading,
     TResult Function()? sended,
     TResult Function(String errorext)? sendError,
-    TResult Function(List<ChatRoomHistoryModel> model)?
-        getChatroomHistoryLoaded,
+    TResult Function(ChatRoomHistoryModel model)? getChatroomHistoryLoaded,
     TResult Function(String errorext)? getChatroomHistoryError,
     TResult Function(CreateChatRoomModel model)? createChatRoomSuccess,
     TResult Function(String errorText)? createChatRoomError,

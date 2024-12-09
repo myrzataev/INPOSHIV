@@ -6,15 +6,13 @@ import 'package:inposhiv/features/main/chat/data/models/pageble_model.dart';
 class GetChatroomHistoryDs {
   final Dio dio;
   GetChatroomHistoryDs({required this.dio});
-  Future<List<ChatRoomHistoryModel>> getChatRoomHistory(
+  Future<ChatRoomHistoryModel> getChatRoomHistory(
       {required String chatRoomUuid, required PagebleModel model}) async {
-        print("////////////////// ${model.toJson()}");
+    print("////////////////// ${model.toJson()}");
     final Response response = await dio.get(
         "${UrlRoutes.getChatRoomHistory}/$chatRoomUuid",
         queryParameters: model.toJson());
-    final List responseList = response.data;
-    return responseList
-        .map((element) => ChatRoomHistoryModel.fromJson(element))
-        .toList();
+
+    return ChatRoomHistoryModel.fromJson(response.data);
   }
 }

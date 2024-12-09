@@ -38,6 +38,7 @@ _$AuctionProcessImpl _$$AuctionProcessImplFromJson(Map<String, dynamic> json) =>
     _$AuctionProcessImpl(
       auctionId: (json['auctionId'] as num?)?.toInt(),
       manufacturerUuid: json['manufacturerUuid'] as String?,
+      manufacturerUsername: json['manufacturerUsername'] as String?,
       bidPrice: (json['bidPrice'] as num?)?.toInt(),
       bidTime: json['bidTime'] == null
           ? null
@@ -50,6 +51,7 @@ Map<String, dynamic> _$$AuctionProcessImplToJson(
     <String, dynamic>{
       'auctionId': instance.auctionId,
       'manufacturerUuid': instance.manufacturerUuid,
+      'manufacturerUsername': instance.manufacturerUsername,
       'bidPrice': instance.bidPrice,
       'bidTime': instance.bidTime?.toIso8601String(),
       'bidCount': instance.bidCount,
@@ -68,7 +70,13 @@ _$ProductsListImpl _$$ProductsListImplFromJson(Map<String, dynamic> json) =>
       priceUsd: (json['priceUsd'] as num?)?.toInt(),
       priceRub: (json['priceRub'] as num?)?.toDouble(),
       photos:
-          (json['photos'] as List<dynamic>?)?.map((e) => e as String).toList(),
+          (json['photos'] as List<dynamic>?)?.map((e) => e as String?).toList(),
+      lekalaDocuments: (json['lekalaDocuments'] as List<dynamic>?)
+          ?.map((e) => e as String?)
+          .toList(),
+      technicalDocuments: (json['technicalDocuments'] as List<dynamic>?)
+          ?.map((e) => e as String?)
+          .toList(),
     );
 
 Map<String, dynamic> _$$ProductsListImplToJson(_$ProductsListImpl instance) =>
@@ -82,4 +90,6 @@ Map<String, dynamic> _$$ProductsListImplToJson(_$ProductsListImpl instance) =>
       'priceUsd': instance.priceUsd,
       'priceRub': instance.priceRub,
       'photos': instance.photos,
+      'lekalaDocuments': instance.lekalaDocuments,
+      'technicalDocuments': instance.technicalDocuments,
     };

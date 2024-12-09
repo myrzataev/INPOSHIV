@@ -5,9 +5,11 @@ import 'package:inposhiv/features/about_app/presentation/screens/faq_screen.dart
 import 'package:inposhiv/features/about_app/presentation/screens/secured_deal_screen.dart';
 import 'package:inposhiv/features/about_app/presentation/screens/settings_screen.dart';
 import 'package:inposhiv/features/auth/presentation/screens/authorization_screen.dart';
+import 'package:inposhiv/features/main/auction/data/models/auction_model.dart';
 import 'package:inposhiv/features/main/auction/data/models/customer_orders_model.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/detailed_view_for_manufacturer_screen.dart';
 import 'package:inposhiv/features/main/auction/presentation/screens/detailed_view_screen.dart';
+import 'package:inposhiv/features/main/auction/presentation/screens/order_detailed_view_screen.dart';
 import 'package:inposhiv/features/main/home/data/models/manufacturers_profile_model.dart';
 import 'package:inposhiv/features/main/home/presentation/customer/screens/notications_screen.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/invoice_model.dart';
@@ -81,10 +83,9 @@ String getInitialRoute() {
 
 final GoRouter router = GoRouter(
     navigatorKey: _rootNavigatorKey,
-    initialLocation:
-    getInitialRoute(),
-        // "/",
-        // "/main",
+    initialLocation: getInitialRoute(),
+    // "/",
+    // "/main",
     // "/registration",
     //  "/chooseImageSource",
     //  "/surveyStartScreen",
@@ -309,8 +310,8 @@ final GoRouter router = GoRouter(
           final String quantityOfGoods =
               state.uri.queryParameters["quantity"] ?? "0";
           return SetPriceScreen(
-            // quantityOfGoods: quantityOfGoods,
-          );
+              // quantityOfGoods: quantityOfGoods,
+              );
         },
       ),
       GoRoute(
@@ -508,6 +509,14 @@ final GoRouter router = GoRouter(
                     },
                   ),
                   GoRoute(
+                      path: "orderDetailedViewScreen",
+                      name: "orderDetailedViewScreen",
+                      parentNavigatorKey: _rootNavigatorKey, builder: (context, state) {
+                        return OrderDetailedViewScreen(
+                          productsList: state.extra as ProductsList,
+                        );
+                      },),
+                  GoRoute(
                     path: "detailedViewScreen",
                     name: "detailedViewScreen",
                     parentNavigatorKey: _rootNavigatorKey,
@@ -550,6 +559,8 @@ final GoRouter router = GoRouter(
                     parentNavigatorKey: _rootNavigatorKey,
                     builder: (context, state) {
                       return ChatScreen(
+                        recipientName:
+                            state.uri.queryParameters["recipientName"] ?? "",
                         autoMessage:
                             state.uri.queryParameters["autoMessage"] ?? "",
                         orderId: state.uri.queryParameters["orderId"] ?? "",
@@ -655,7 +666,8 @@ final GoRouter router = GoRouter(
                       final TrackingModel? model =
                           state.extra as TrackingModel?;
                       return OrdersTrackingScreen(
-                          invoiceUuid: state.pathParameters["invoiceUid"] ?? "",
+                          invoiceUuid:
+                              state.uri.queryParameters["invoiceUid"] ?? "",
                           model: model,
                           activeStage:
                               state.uri.queryParameters["activeStage"] ?? "");

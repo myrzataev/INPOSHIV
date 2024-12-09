@@ -149,8 +149,7 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
                                     ),
                                   ),
                                   CustomOrderRowWithoutTextfield(
-                                    title:
-                                        "Примерное количество товара\nТочное кол-во будет указано после раскроя ткани",
+                                    title: "Примерное количество товара",
                                     value:
                                         "${invoiceModel.preliminaryQuantity} шт",
                                   ),
@@ -224,23 +223,26 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
                       )),
                   alreadySended
                       ? const SizedBox.shrink()
-                      : CustomButton(
-                          text: "Подтвердить и перейти к оплате",
-                          onPressed: () {
-                            _showAuctionDetail();
-                            // BlocProvider.of<OrdersBloc>(context)
-                            //     .add(OrdersEvent.sendInvoice(invoice: {
-                            //   "orderId": widget.orderId,
-                            //   "preliminaryQuantity": 1000,
-                            //   "pricePerUnit": retailPriceController.text,
-                            //   "preliminaryAmount": totalPriceWithoutAdditionalInRuble,
-                            //   "lekalaCost": exampleController.text,
-                            //   "sampleCost": priceForLecalaController.text,
-                            //   "deliveryCost": deliveryPriceController.text,
-                            //   "discount": discountController.text,
-                            //   "totalAmount": totalPriceWithAdditionalInRuble
-                            // }, orderId: widget.orderId));
-                          })
+                      : Padding(
+                          padding: EdgeInsets.only(bottom: 20.h),
+                          child: CustomButton(
+                              text: "Подтвердить и перейти к оплате",
+                              onPressed: () {
+                                _showAuctionDetail();
+                                // BlocProvider.of<OrdersBloc>(context)
+                                //     .add(OrdersEvent.sendInvoice(invoice: {
+                                //   "orderId": widget.orderId,
+                                //   "preliminaryQuantity": 1000,
+                                //   "pricePerUnit": retailPriceController.text,
+                                //   "preliminaryAmount": totalPriceWithoutAdditionalInRuble,
+                                //   "lekalaCost": exampleController.text,
+                                //   "sampleCost": priceForLecalaController.text,
+                                //   "deliveryCost": deliveryPriceController.text,
+                                //   "discount": discountController.text,
+                                //   "totalAmount": totalPriceWithAdditionalInRuble
+                                // }, orderId: widget.orderId));
+                              }),
+                        )
                 ],
               )
             ],
@@ -309,7 +311,7 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
                   children: [
                     Text(
                       "Выберите способ оплаты",
-                      style: AppFonts.w700s36,
+                      style: AppFonts.w700s36.copyWith(height: 0.5),
                     ),
                     CustomChoosePaymentWidget(
                         text:

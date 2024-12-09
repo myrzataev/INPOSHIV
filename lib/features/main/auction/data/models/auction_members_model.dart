@@ -23,6 +23,7 @@ class AuctionMembersModel with _$AuctionMembersModel {
         String? manufacturerUuid,
         String? manufacturerUserUuid,
         String? manufacturerUsername,
+        double? bidPrice,
     }) = _AuctionMembersModel;
 
     factory AuctionMembersModel.fromJson(Map<String, dynamic> json) => _$AuctionMembersModelFromJson(json);

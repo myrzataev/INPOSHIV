@@ -634,12 +634,12 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                                 children: [
                                                   Row(
                                                     children: [
-                                                      CircleAvatar(
-                                                        radius: 20.r,
-                                                        backgroundImage:
-                                                            const AssetImage(
-                                                                Images.ava),
-                                                      ),
+                                                      // CircleAvatar(
+                                                      //   radius: 20.r,
+                                                      //   backgroundImage:
+                                                      //       const AssetImage(
+                                                      //           Images.ava),
+                                                      // ),
                                                       Padding(
                                                         padding:
                                                             EdgeInsets.only(

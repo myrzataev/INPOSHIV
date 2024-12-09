@@ -3,7 +3,7 @@ import 'package:inposhiv/features/main/orders/customer/data/data_source/review_f
 import 'package:inposhiv/features/main/orders/customer/domain/repositories/review_for_manufacturer_repo.dart';
 
 class ReviewForManufacturerRepoimpl implements ReviewForManufacturerRepo {
-  ReviewForManufacturerDs reviewForManufacturerDs;
+  ReviewDs reviewForManufacturerDs;
   ReviewForManufacturerRepoimpl({
     required this.reviewForManufacturerDs,
   });
@@ -12,7 +12,18 @@ class ReviewForManufacturerRepoimpl implements ReviewForManufacturerRepo {
       {required String manufacturerUuid,
       required String customerUuid,
       required Map<String, dynamic> body}) async {
-    await reviewForManufacturerDs.review(
+    await reviewForManufacturerDs.reviewToManufacturer(
+        manufacturerUuid: manufacturerUuid,
+        customerUuid: customerUuid,
+        body: body);
+  }
+
+  @override
+  Future<void> reviewToCustomer(
+      {required String manufacturerUuid,
+      required String customerUuid,
+      required Map<String, dynamic> body}) async {
+    await reviewForManufacturerDs.reviewToCustomer(
         manufacturerUuid: manufacturerUuid,
         customerUuid: customerUuid,
         body: body);

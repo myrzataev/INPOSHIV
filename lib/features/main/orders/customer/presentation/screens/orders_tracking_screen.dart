@@ -116,6 +116,10 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             loaded: (model) {
               setState(() {
                 trackingModelLocal = widget.model ?? model;
+                currentIndex = (trackingModelLocal?.activeStageId ?? 0) - 1;
+                print("current index is $currentIndex");
+                print("acive stage is $currentIndex");
+                _pageController.jumpToPage(currentIndex);
               });
             },
             orElse: () {});
@@ -127,11 +131,9 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // ElevatedButton(
-              //     onPressed: () {
-              //       print(trackingModelLocal);
-              //     },
-              //     child: Text("data")),
+              // ElevatedButton(onPressed: (){
+              // print(reliableRating);
+              // }, child: Text("data")),
               Padding(
                 padding: EdgeInsets.only(bottom: 20.h),
                 child: CustomSearchWidget(
@@ -145,7 +147,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                   state.maybeWhen(
                       loading: () => Showdialog.showLoaderDialog(context),
                       loaded: () {
-                        router.pop();
+                        Navigator.pop(context);
                         showDialog(
                             context: context,
                             builder: (context) => CustomDialog(
@@ -153,12 +155,12 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                                 description: "успех",
                                 button: CustomButton(
                                     onPressed: () {
-                                      router.pop();
+                                      Navigator.pop(context);
                                     },
                                     text: "Закрыть")));
                       },
                       error: () {
-                        router.pop();
+                        Navigator.pop(context);
                       },
                       orElse: () {});
                 },
@@ -180,7 +182,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                               context: context,
                               builder: (context) => CustomDialog(
                                   title: "Не удалось",
-                                  description: "Ну удалось",
+                                  description: "Нe удалось",
                                   button: CustomButton(
                                       text: "Понятно",
                                       onPressed: () {
@@ -190,6 +192,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                         orElse: () {});
                   },
                   child: Expanded(
+
                     child: PageView.builder(
                       controller: _pageController,
                       onPageChanged: (index) {
@@ -197,11 +200,11 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                           currentIndex = index;
                         });
                       },
-                      physics: currentIndex >
+                      physics: currentIndex <=
                               (trackingModelLocal?.activeStageId ?? 0)
-                          ? const NeverScrollableScrollPhysics() // Disable scrolling after the active stage
-                          : const AlwaysScrollableScrollPhysics(), // Allow scrolling before the active stage
-                      itemCount: widgets.length,
+                          ? const ClampingScrollPhysics() // Disable scrolling after the active stage
+                          : const NeverScrollableScrollPhysics(), // Allow scrolling before the active stage
+                      itemCount: trackingModelLocal?.activeStageId ?? 0,
                       itemBuilder: (context, index) {
                         return widgets[index];
                       },
@@ -748,7 +751,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                     name: paymentCheckFileName ?? "")
               ],
               stageAccepted: false,
-              comment: controllers[4].text,
+              comment: controllers[3].text,
             );
           } else {
             dialogShow();
@@ -781,13 +784,13 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
         allComments: filterComments(
             allComents: trackingModelLocal?.allComments,
             stage: "READY_FOR_SHIPMENT"),
-        controller: controllers[5],
+        controller: controllers[4],
         currentIndexOfData: 40,
         onTap: () async {
           if (paymentCheck != null) {
             confirmTrackingStage(
               invoiceUuid: trackingModelLocal?.invoiceUuid ?? "",
-              orderId: trackingModelLocal?.toString() ?? "",
+              orderId: trackingModelLocal?.orderId.toString() ?? "",
               activeStage: "READY_FOR_SHIPMENT",
               allCheckFiles: [
                 NamedFile(
@@ -795,7 +798,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                     name: paymentCheckFileName ?? "")
               ],
               stageAccepted: false,
-              comment: controllers[5].text,
+              comment: controllers[4].text,
             );
           } else {
             dialogShow();
@@ -827,13 +830,13 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             paymentCheckFileName = fileName;
           });
         },
-        controller: controllers[6],
+        controller: controllers[5],
         currentIndexOfData: 50,
         onTap: () {
           if (paymentCheck != null) {
             confirmTrackingStage(
               invoiceUuid: trackingModelLocal?.invoiceUuid ?? "",
-              orderId: trackingModelLocal?.toString() ?? "",
+              orderId: trackingModelLocal?.orderId.toString() ?? "",
               activeStage: "SHIPPED",
               allCheckFiles: [
                 NamedFile(
@@ -841,7 +844,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                     name: paymentCheckFileName ?? "")
               ],
               stageAccepted: false,
-              comment: controllers[6].text,
+              comment: controllers[5].text,
             );
           } else {
             dialogShow();

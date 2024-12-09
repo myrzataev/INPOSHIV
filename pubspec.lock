@@ -644,10 +644,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_markdown
-      sha256: "999a4e3cb3e1532a971c86d6c73a480264f6a687959d4887cb4e2990821827e4"
+      sha256: "255b00afa1a7bad19727da6a7780cf3db6c3c12e68d302d85e0ff1fdf173db9e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.4+2"
+    version: "0.7.4+3"
   flutter_multi_formatter:
     dependency: "direct main"
     description:
@@ -1643,10 +1643,10 @@ packages:
     dependency: transitive
     description:
       name: video_player_avfoundation
-      sha256: "0b146e5d82e886ff43e5a46c6bcbe390761b802864a6e2503eb612d69a405dfa"
+      sha256: f498e44a547a3572a928fa30ac8760e127d5e5fc86b81b10b0d56300866322f3
       url: "https://pub.dev"
     source: hosted
-    version: "2.6.3"
+    version: "2.6.4"
   video_player_platform_interface:
     dependency: transitive
     description:

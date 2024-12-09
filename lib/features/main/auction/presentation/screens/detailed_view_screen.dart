@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/consts/url_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
@@ -37,6 +38,7 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
   CalculateService calculateService = CalculateService();
   double? totalPriceInDollar;
   AuctionModel? auctionModel;
+  int? totalQuantity;
   @override
   void initState() {
     getAuctionDetails();
@@ -137,125 +139,136 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                       ?.first
                                                       .quantity ??
                                                   0);
+                                      totalQuantity = auctionModel
+                                              .productsList?.first.quantity ??
+                                          0;
                                     }),
                                 orElse: () {});
                           },
                           child: Padding(
                             padding: EdgeInsets.symmetric(vertical: 10.h),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.cardsColor,
-                                borderRadius:
-                                    BorderRadiusDirectional.circular(10.r),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w, vertical: 10.h),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(bottom: 10.h),
-                                      child: SizedBox(
-                                        height: 170.h,
-                                        child: ListView.separated(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: auctionModel.productsList
-                                                  ?.first.photos?.length ??
-                                              0,
-                                          separatorBuilder:
-                                              (context, indexForPhotos) {
-                                            return SizedBox(width: 10.w);
-                                          },
-                                          itemBuilder:
-                                              (context, indexForPhotos) {
-                                            final List<String> fullPhotoUrls =
-                                                auctionModel.productsList?.first
-                                                        .photos
-                                                        ?.map((url) =>
-                                                            "${UrlRoutes.baseUrl}$url")
-                                                        .toList() ??
-                                                    [];
+                            child: InkWell(
+                              onTap: () =>
+                                  router.pushNamed("orderDetailedViewScreen", extra: auctionModel.productsList?.first),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.cardsColor,
+                                  borderRadius:
+                                      BorderRadiusDirectional.circular(10.r),
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 10.w, vertical: 10.h),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(bottom: 10.h),
+                                        child: SizedBox(
+                                          height: 170.h,
+                                          child: ListView.separated(
+                                            scrollDirection: Axis.horizontal,
+                                            itemCount: auctionModel.productsList
+                                                    ?.first.photos?.length ??
+                                                0,
+                                            separatorBuilder:
+                                                (context, indexForPhotos) {
+                                              return SizedBox(width: 10.w);
+                                            },
+                                            itemBuilder:
+                                                (context, indexForPhotos) {
+                                              final List<String> fullPhotoUrls =
+                                                  auctionModel.productsList
+                                                          ?.first.photos
+                                                          ?.map((url) =>
+                                                              "${UrlRoutes.baseUrl}$url")
+                                                          .toList() ??
+                                                      [];
 
-                                            return InkWell(
-                                              onTap: () {
-                                                GoRouter.of(context).pushNamed(
-                                                    "seeImage",
-                                                    extra: fullPhotoUrls);
-                                              },
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(6.r),
-                                                child: CachedNetworkImage(
-                                                  imageUrl:
-                                                      "${UrlRoutes.baseUrl}${auctionModel.productsList?.first.photos?[indexForPhotos]}",
+                                              return InkWell(
+                                                onTap: () {
+                                                  GoRouter.of(context)
+                                                      .pushNamed("seeImage",
+                                                          extra: fullPhotoUrls);
+                                                },
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          6.r),
+                                                  child: CachedNetworkImage(
+                                                    imageUrl:
+                                                        "${UrlRoutes.baseUrl}${auctionModel.productsList?.first.photos?[indexForPhotos]}",
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          },
+                                              );
+                                            },
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Text(
-                                            auctionModel
-                                                    .productsList?.first.name ??
-                                                "",
-                                            style: AppFonts.w700s16,
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              auctionModel.productsList?.first
+                                                      .name ??
+                                                  "",
+                                              style: AppFonts.w700s16,
+                                            ),
                                           ),
-                                        ),
-                                        Text(
-                                          "${auctionModel.productsList?.first.quantity ?? 0} шт",
-                                          style: AppFonts.w400s16.copyWith(
-                                            color: AppColors.accentTextColor,
+                                          Text(
+                                            "${auctionModel.productsList?.first.quantity ?? 0} шт",
+                                            style: AppFonts.w400s16.copyWith(
+                                              color: AppColors.accentTextColor,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "${formatNumber(auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0)} \$",
-                                          style: AppFonts.w400s16.copyWith(
-                                              color: AppColors.accentTextColor),
-                                        ),
-                                        
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 84.w),
-                                          child: Text(
-                                            "${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} \$",
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "${formatNumber(auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0)} \$",
                                             style: AppFonts.w400s16.copyWith(
                                                 color:
                                                     AppColors.accentTextColor),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          "${formatNumber(auctionModel.productsList?.first.priceRub ?? 0)} руб",
-                                          style: AppFonts.w400s16,
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 48.w),
-                                          child: Text(
-                                            "${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub?.toDouble() ?? 0, totalCount: totalPriceInDollar?.toInt() ?? 0))} руб",
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 84.w),
+                                            child: Text(
+                                              "${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} \$",
+                                              style: AppFonts.w400s16.copyWith(
+                                                  color: AppColors
+                                                      .accentTextColor),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            "${formatNumber(auctionModel.productsList?.first.priceRub ?? 0)} руб",
                                             style: AppFonts.w400s16,
                                           ),
-                                        )
-                                      ],
-                                    ),
-                                    Text(
-                                      "${auctionModel.productsList?.first.description.toString()}",
-                                      style: AppFonts.w400s16.copyWith(
-                                          color: AppColors.accentTextColor),
-                                    )
-                                  ],
+                                          Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 48.w),
+                                            child: Text(
+                                              "${formatNumber((totalPriceInDollar ?? 0) * (currency ?? 0))} руб",
+                                              style: AppFonts.w400s16,
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                      Text(
+                                        "${auctionModel.productsList?.first.description.toString()}",
+                                        style: AppFonts.w400s16.copyWith(
+                                            color: AppColors.accentTextColor),
+                                      )
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -307,11 +320,23 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
                                             children: [
                                               const CircleAvatar(
                                                 backgroundImage: AssetImage(
                                                     Images.sewingMachine),
                                               ),
+                                              Text(
+                                                currentItem
+                                                        .manufacturerUsername ??
+                                                    "",
+                                                style: AppFonts.w400s16
+                                                    .copyWith(
+                                                        color: AppColors
+                                                            .accentTextColor),
+                                              ),
+                                              const Spacer(),
                                               Padding(
                                                 padding:
                                                     EdgeInsets.only(left: 5.w),
@@ -379,11 +404,11 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                   Text(
-                                                    "${currentItem.orderPrice}\$",
+                                                    "${currentItem.bidPrice}\$",
                                                     style: AppFonts.w700s18,
                                                   ),
                                                   Text(
-                                                    "${formatNumber((currency ?? 0) * (currentItem.orderPrice ?? 0))} руб",
+                                                    "${formatNumber((currency ?? 0) * (currentItem.bidPrice ?? 0))} руб",
                                                     style: AppFonts.w400s16,
                                                   ),
                                                 ],
@@ -396,11 +421,11 @@ class _DetailedViewScreenState extends State<DetailedViewScreen> {
                                                       CrossAxisAlignment.start,
                                                   children: [
                                                     Text(
-                                                      "${formatNumber(currentItem.orderSumPrice?.toDouble() ?? 0)}\$",
+                                                      "${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: currentItem.bidPrice ?? 0, totalCount: totalQuantity ?? 0))}\$",
                                                       style: AppFonts.w700s18,
                                                     ),
                                                     Text(
-                                                      "${formatNumber((currency ?? 0) * (currentItem.orderSumPrice ?? 0))} руб",
+                                                      "${formatNumber(((totalQuantity ?? 0) * (currentItem.bidPrice ?? 0)) * (currency ?? 0))} руб",
                                                       style: AppFonts.w400s16,
                                                     ),
                                                   ],

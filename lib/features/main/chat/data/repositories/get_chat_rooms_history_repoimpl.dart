@@ -7,7 +7,7 @@ class GetChatRoomsHistoryRepoimpl implements GetChatRoomHistoryRepo {
   GetChatroomHistoryDs dataSource;
   GetChatRoomsHistoryRepoimpl({required this.dataSource});
   @override
-  Future<List<ChatRoomHistoryModel>> getChatRoomHistory(
+  Future<ChatRoomHistoryModel> getChatRoomHistory(
       {required String chatRoomUuid, required PagebleModel model}) async {
     return await dataSource.getChatRoomHistory(
         chatRoomUuid: chatRoomUuid, model: model);

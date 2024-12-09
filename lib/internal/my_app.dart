@@ -43,14 +43,17 @@ import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_a
 import 'package:inposhiv/features/main/chat/data/data_source/create_chatroom_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/get_chatroom_history_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/get_chats_ds.dart';
+import 'package:inposhiv/features/main/chat/data/data_source/send_files_to_chat_ds.dart';
 import 'package:inposhiv/features/main/chat/data/data_source/send_message_ds.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/create_chat_repoimpl.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/get_chat_rooms_history_repoimpl.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/get_chats_repoimpl.dart';
+import 'package:inposhiv/features/main/chat/data/repositories/send_files_to_chat_repoimpl.dart';
 import 'package:inposhiv/features/main/chat/data/repositories/send_message_repoimpl.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_rooms_bloc/chat_rooms_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/create_chat_room_bloc/create_chat_room_bloc.dart';
+import 'package:inposhiv/features/main/chat/presentation/blocs/send_files_to_chat_bloc/send_files_to_chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/providers/chat_provider.dart';
 import 'package:inposhiv/features/main/home/data/data_source/user_account_ds.dart';
 import 'package:inposhiv/features/main/home/data/data_source/get_manufacturers_ds.dart';
@@ -463,15 +466,15 @@ class _MyAppState extends State<MyApp> {
                 deleteAccountDs:
                     RepositoryProvider.of<UserAccountDs>(context))),
         RepositoryProvider(
-            create: (context) => ReviewForManufacturerDs(
-                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+            create: (context) =>
+                ReviewDs(dio: RepositoryProvider.of<DioSettings>(context).dio)),
         RepositoryProvider(
             create: (context) => GetCustomerInvoicesDs(
                 dio: RepositoryProvider.of<DioSettings>(context).dio)),
         RepositoryProvider(
             create: (context) => ReviewForManufacturerRepoimpl(
                 reviewForManufacturerDs:
-                    RepositoryProvider.of<ReviewForManufacturerDs>(context))),
+                    RepositoryProvider.of<ReviewDs>(context))),
         RepositoryProvider(
             create: (context) => GetCustomerInvoicesRepoimpl(
                 getCustomerInvoicesDs:
@@ -507,7 +510,14 @@ class _MyAppState extends State<MyApp> {
             create: (context) => GetManufacturerCompletedOrdersRepoimpl(
                 getManufacturersCompletedOrdersDs:
                     RepositoryProvider.of<GetManufacturersCompletedOrdersDs>(
-                        context)))
+                        context))),
+        RepositoryProvider(
+            create: (context) => SendFilesToChatDs(
+                dio: RepositoryProvider.of<DioSettings>(context).dio)),
+        RepositoryProvider(
+            create: (context) => SendFilesToChatRepoimpl(
+                sendFilesToChatDs:
+                    RepositoryProvider.of<SendFilesToChatDs>(context)))
       ],
       child: MultiBlocProvider(
         providers: [
@@ -676,7 +686,10 @@ class _MyAppState extends State<MyApp> {
           BlocProvider(
               create: (context) => ManufacturerCompletedOrdersBloc(
                   RepositoryProvider.of<GetManufacturerCompletedOrdersRepoimpl>(
-                      context)))
+                      context))),
+          BlocProvider(
+              create: (context) => SendFilesToChatBloc(
+                  RepositoryProvider.of<SendFilesToChatRepoimpl>(context)))
         ],
         child: MultiProvider(
           providers: [

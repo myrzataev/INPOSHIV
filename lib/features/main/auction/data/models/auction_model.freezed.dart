@@ -326,6 +326,7 @@ AuctionProcess _$AuctionProcessFromJson(Map<String, dynamic> json) {
 mixin _$AuctionProcess {
   int? get auctionId => throw _privateConstructorUsedError;
   String? get manufacturerUuid => throw _privateConstructorUsedError;
+  String? get manufacturerUsername => throw _privateConstructorUsedError;
   int? get bidPrice => throw _privateConstructorUsedError;
   DateTime? get bidTime => throw _privateConstructorUsedError;
   int? get bidCount => throw _privateConstructorUsedError;
@@ -349,6 +350,7 @@ abstract class $AuctionProcessCopyWith<$Res> {
   $Res call(
       {int? auctionId,
       String? manufacturerUuid,
+      String? manufacturerUsername,
       int? bidPrice,
       DateTime? bidTime,
       int? bidCount});
@@ -371,6 +373,7 @@ class _$AuctionProcessCopyWithImpl<$Res, $Val extends AuctionProcess>
   $Res call({
     Object? auctionId = freezed,
     Object? manufacturerUuid = freezed,
+    Object? manufacturerUsername = freezed,
     Object? bidPrice = freezed,
     Object? bidTime = freezed,
     Object? bidCount = freezed,
@@ -383,6 +386,10 @@ class _$AuctionProcessCopyWithImpl<$Res, $Val extends AuctionProcess>
       manufacturerUuid: freezed == manufacturerUuid
           ? _value.manufacturerUuid
           : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      manufacturerUsername: freezed == manufacturerUsername
+          ? _value.manufacturerUsername
+          : manufacturerUsername // ignore: cast_nullable_to_non_nullable
               as String?,
       bidPrice: freezed == bidPrice
           ? _value.bidPrice
@@ -411,6 +418,7 @@ abstract class _$$AuctionProcessImplCopyWith<$Res>
   $Res call(
       {int? auctionId,
       String? manufacturerUuid,
+      String? manufacturerUsername,
       int? bidPrice,
       DateTime? bidTime,
       int? bidCount});
@@ -431,6 +439,7 @@ class __$$AuctionProcessImplCopyWithImpl<$Res>
   $Res call({
     Object? auctionId = freezed,
     Object? manufacturerUuid = freezed,
+    Object? manufacturerUsername = freezed,
     Object? bidPrice = freezed,
     Object? bidTime = freezed,
     Object? bidCount = freezed,
@@ -443,6 +452,10 @@ class __$$AuctionProcessImplCopyWithImpl<$Res>
       manufacturerUuid: freezed == manufacturerUuid
           ? _value.manufacturerUuid
           : manufacturerUuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      manufacturerUsername: freezed == manufacturerUsername
+          ? _value.manufacturerUsername
+          : manufacturerUsername // ignore: cast_nullable_to_non_nullable
               as String?,
       bidPrice: freezed == bidPrice
           ? _value.bidPrice
@@ -466,6 +479,7 @@ class _$AuctionProcessImpl implements _AuctionProcess {
   const _$AuctionProcessImpl(
       {this.auctionId,
       this.manufacturerUuid,
+      this.manufacturerUsername,
       this.bidPrice,
       this.bidTime,
       this.bidCount});
@@ -478,6 +492,8 @@ class _$AuctionProcessImpl implements _AuctionProcess {
   @override
   final String? manufacturerUuid;
   @override
+  final String? manufacturerUsername;
+  @override
   final int? bidPrice;
   @override
   final DateTime? bidTime;
@@ -486,7 +502,7 @@ class _$AuctionProcessImpl implements _AuctionProcess {
 
   @override
   String toString() {
-    return 'AuctionProcess(auctionId: $auctionId, manufacturerUuid: $manufacturerUuid, bidPrice: $bidPrice, bidTime: $bidTime, bidCount: $bidCount)';
+    return 'AuctionProcess(auctionId: $auctionId, manufacturerUuid: $manufacturerUuid, manufacturerUsername: $manufacturerUsername, bidPrice: $bidPrice, bidTime: $bidTime, bidCount: $bidCount)';
   }
 
   @override
@@ -498,6 +514,8 @@ class _$AuctionProcessImpl implements _AuctionProcess {
                 other.auctionId == auctionId) &&
             (identical(other.manufacturerUuid, manufacturerUuid) ||
                 other.manufacturerUuid == manufacturerUuid) &&
+            (identical(other.manufacturerUsername, manufacturerUsername) ||
+                other.manufacturerUsername == manufacturerUsername) &&
             (identical(other.bidPrice, bidPrice) ||
                 other.bidPrice == bidPrice) &&
             (identical(other.bidTime, bidTime) || other.bidTime == bidTime) &&
@@ -507,8 +525,8 @@ class _$AuctionProcessImpl implements _AuctionProcess {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, auctionId, manufacturerUuid, bidPrice, bidTime, bidCount);
+  int get hashCode => Object.hash(runtimeType, auctionId, manufacturerUuid,
+      manufacturerUsername, bidPrice, bidTime, bidCount);
 
   /// Create a copy of AuctionProcess
   /// with the given fields replaced by the non-null parameter values.
@@ -531,6 +549,7 @@ abstract class _AuctionProcess implements AuctionProcess {
   const factory _AuctionProcess(
       {final int? auctionId,
       final String? manufacturerUuid,
+      final String? manufacturerUsername,
       final int? bidPrice,
       final DateTime? bidTime,
       final int? bidCount}) = _$AuctionProcessImpl;
@@ -542,6 +561,8 @@ abstract class _AuctionProcess implements AuctionProcess {
   int? get auctionId;
   @override
   String? get manufacturerUuid;
+  @override
+  String? get manufacturerUsername;
   @override
   int? get bidPrice;
   @override
@@ -571,7 +592,9 @@ mixin _$ProductsList {
   String? get description => throw _privateConstructorUsedError;
   int? get priceUsd => throw _privateConstructorUsedError;
   double? get priceRub => throw _privateConstructorUsedError;
-  List<String>? get photos => throw _privateConstructorUsedError;
+  List<String?>? get photos => throw _privateConstructorUsedError;
+  List<String?>? get lekalaDocuments => throw _privateConstructorUsedError;
+  List<String?>? get technicalDocuments => throw _privateConstructorUsedError;
 
   /// Serializes this ProductsList to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -598,7 +621,9 @@ abstract class $ProductsListCopyWith<$Res> {
       String? description,
       int? priceUsd,
       double? priceRub,
-      List<String>? photos});
+      List<String?>? photos,
+      List<String?>? lekalaDocuments,
+      List<String?>? technicalDocuments});
 }
 
 /// @nodoc
@@ -625,6 +650,8 @@ class _$ProductsListCopyWithImpl<$Res, $Val extends ProductsList>
     Object? priceUsd = freezed,
     Object? priceRub = freezed,
     Object? photos = freezed,
+    Object? lekalaDocuments = freezed,
+    Object? technicalDocuments = freezed,
   }) {
     return _then(_value.copyWith(
       name: freezed == name
@@ -662,7 +689,15 @@ class _$ProductsListCopyWithImpl<$Res, $Val extends ProductsList>
       photos: freezed == photos
           ? _value.photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
+      lekalaDocuments: freezed == lekalaDocuments
+          ? _value.lekalaDocuments
+          : lekalaDocuments // ignore: cast_nullable_to_non_nullable
+              as List<String?>?,
+      technicalDocuments: freezed == technicalDocuments
+          ? _value.technicalDocuments
+          : technicalDocuments // ignore: cast_nullable_to_non_nullable
+              as List<String?>?,
     ) as $Val);
   }
 }
@@ -684,7 +719,9 @@ abstract class _$$ProductsListImplCopyWith<$Res>
       String? description,
       int? priceUsd,
       double? priceRub,
-      List<String>? photos});
+      List<String?>? photos,
+      List<String?>? lekalaDocuments,
+      List<String?>? technicalDocuments});
 }
 
 /// @nodoc
@@ -709,6 +746,8 @@ class __$$ProductsListImplCopyWithImpl<$Res>
     Object? priceUsd = freezed,
     Object? priceRub = freezed,
     Object? photos = freezed,
+    Object? lekalaDocuments = freezed,
+    Object? technicalDocuments = freezed,
   }) {
     return _then(_$ProductsListImpl(
       name: freezed == name
@@ -746,7 +785,15 @@ class __$$ProductsListImplCopyWithImpl<$Res>
       photos: freezed == photos
           ? _value._photos
           : photos // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as List<String?>?,
+      lekalaDocuments: freezed == lekalaDocuments
+          ? _value._lekalaDocuments
+          : lekalaDocuments // ignore: cast_nullable_to_non_nullable
+              as List<String?>?,
+      technicalDocuments: freezed == technicalDocuments
+          ? _value._technicalDocuments
+          : technicalDocuments // ignore: cast_nullable_to_non_nullable
+              as List<String?>?,
     ));
   }
 }
@@ -763,9 +810,13 @@ class _$ProductsListImpl implements _ProductsList {
       this.description,
       this.priceUsd,
       this.priceRub,
-      final List<String>? photos})
+      final List<String?>? photos,
+      final List<String?>? lekalaDocuments,
+      final List<String?>? technicalDocuments})
       : _sizeQuantities = sizeQuantities,
-        _photos = photos;
+        _photos = photos,
+        _lekalaDocuments = lekalaDocuments,
+        _technicalDocuments = technicalDocuments;
 
   factory _$ProductsListImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProductsListImplFromJson(json);
@@ -794,9 +845,9 @@ class _$ProductsListImpl implements _ProductsList {
   final int? priceUsd;
   @override
   final double? priceRub;
-  final List<String>? _photos;
+  final List<String?>? _photos;
   @override
-  List<String>? get photos {
+  List<String?>? get photos {
     final value = _photos;
     if (value == null) return null;
     if (_photos is EqualUnmodifiableListView) return _photos;
@@ -804,9 +855,30 @@ class _$ProductsListImpl implements _ProductsList {
     return EqualUnmodifiableListView(value);
   }
 
+  final List<String?>? _lekalaDocuments;
+  @override
+  List<String?>? get lekalaDocuments {
+    final value = _lekalaDocuments;
+    if (value == null) return null;
+    if (_lekalaDocuments is EqualUnmodifiableListView) return _lekalaDocuments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+  final List<String?>? _technicalDocuments;
+  @override
+  List<String?>? get technicalDocuments {
+    final value = _technicalDocuments;
+    if (value == null) return null;
+    if (_technicalDocuments is EqualUnmodifiableListView)
+      return _technicalDocuments;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
   @override
   String toString() {
-    return 'ProductsList(name: $name, clothingCategoryId: $clothingCategoryId, fabricId: $fabricId, quantity: $quantity, sizeQuantities: $sizeQuantities, description: $description, priceUsd: $priceUsd, priceRub: $priceRub, photos: $photos)';
+    return 'ProductsList(name: $name, clothingCategoryId: $clothingCategoryId, fabricId: $fabricId, quantity: $quantity, sizeQuantities: $sizeQuantities, description: $description, priceUsd: $priceUsd, priceRub: $priceRub, photos: $photos, lekalaDocuments: $lekalaDocuments, technicalDocuments: $technicalDocuments)';
   }
 
   @override
@@ -829,7 +901,11 @@ class _$ProductsListImpl implements _ProductsList {
                 other.priceUsd == priceUsd) &&
             (identical(other.priceRub, priceRub) ||
                 other.priceRub == priceRub) &&
-            const DeepCollectionEquality().equals(other._photos, _photos));
+            const DeepCollectionEquality().equals(other._photos, _photos) &&
+            const DeepCollectionEquality()
+                .equals(other._lekalaDocuments, _lekalaDocuments) &&
+            const DeepCollectionEquality()
+                .equals(other._technicalDocuments, _technicalDocuments));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -844,7 +920,9 @@ class _$ProductsListImpl implements _ProductsList {
       description,
       priceUsd,
       priceRub,
-      const DeepCollectionEquality().hash(_photos));
+      const DeepCollectionEquality().hash(_photos),
+      const DeepCollectionEquality().hash(_lekalaDocuments),
+      const DeepCollectionEquality().hash(_technicalDocuments));
 
   /// Create a copy of ProductsList
   /// with the given fields replaced by the non-null parameter values.
@@ -872,7 +950,9 @@ abstract class _ProductsList implements ProductsList {
       final String? description,
       final int? priceUsd,
       final double? priceRub,
-      final List<String>? photos}) = _$ProductsListImpl;
+      final List<String?>? photos,
+      final List<String?>? lekalaDocuments,
+      final List<String?>? technicalDocuments}) = _$ProductsListImpl;
 
   factory _ProductsList.fromJson(Map<String, dynamic> json) =
       _$ProductsListImpl.fromJson;
@@ -894,7 +974,11 @@ abstract class _ProductsList implements ProductsList {
   @override
   double? get priceRub;
   @override
-  List<String>? get photos;
+  List<String?>? get photos;
+  @override
+  List<String?>? get lekalaDocuments;
+  @override
+  List<String?>? get technicalDocuments;
 
   /// Create a copy of ProductsList
   /// with the given fields replaced by the non-null parameter values.

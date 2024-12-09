@@ -31,8 +31,8 @@ class SpecifyMonthlySalesScreen extends StatelessWidget {
             const Spacer(),
             Text(
               isCustomer
-                  ? "Укажите примерный ежемесячный обьем продаж"
-                  : "Укажите средний ежемесячный обьем продукции",
+                  ? "Укажите примерный ежемесячный обьем продаж в USD"
+                  : "Укажите средний ежемесячный обьем продукции ",
               style: AppFonts.w700s36
                   .copyWith(height: 0.8, fontWeight: FontWeight.bold),
             ),

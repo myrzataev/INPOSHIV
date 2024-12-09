@@ -43,20 +43,20 @@ class CustomDrawer extends StatelessWidget {
                           .copyWith(color: AppColors.accentTextColor),
                     )),
               ),
-              // ElevatedButton(
-              //     onPressed: () {
-              //       preferences.clear();
-              //     },
-              //     child: Text("data")),
-              TextButton(
+              ElevatedButton(
                   onPressed: () {
-                    GoRouter.of(context).pushNamed("settings");
+                    preferences.clear();
                   },
-                  child: Text(
-                    "Настройки",
-                    style: AppFonts.w400s16
-                        .copyWith(color: AppColors.accentTextColor),
-                  )),
+                  child: Text("data")),
+              // TextButton(
+              //     onPressed: () {
+              //       GoRouter.of(context).pushNamed("settings");
+              //     },
+              //     child: Text(
+              //       "Настройки",
+              //       style: AppFonts.w400s16
+              //           .copyWith(color: AppColors.accentTextColor),
+              //     )),
               TextButton(
                   onPressed: () {
                     GoRouter.of(context).pushNamed("faqScreen");

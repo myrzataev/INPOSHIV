@@ -664,7 +664,7 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 error: (error) => CustomErrorWidget(
                                     description: error.userMessage,
                                     onRefresh: () {
-                                      getCustomerInvoices();
+                                      getManufacturerInvoices();
                                     }),
                                 loaded: (model) {
                                   if (model.isNotEmpty) {

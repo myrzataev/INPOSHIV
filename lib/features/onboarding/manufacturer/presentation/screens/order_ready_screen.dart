@@ -162,12 +162,13 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                                 ),
                               ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(vertical: 8.h),
-                              child: Text(
-                                "${(formatNumber(vm.priceRub?.toDouble() ?? 0))} руб за ед, итого ${formatNumber(double.parse(widget.totalPriceInRuble))} руб",
-                                style: AppFonts.w400s16,
-                              ),
+                            Text(
+                              "${vm.description}",
+                              style: AppFonts.w400s16,
+                            ),
+                            Text(
+                              "${(formatNumber(vm.priceRub?.toDouble() ?? 0))} руб за ед, итого ${formatNumber(double.parse(widget.totalPriceInRuble))} руб",
+                              style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,

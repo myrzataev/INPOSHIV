@@ -28,6 +28,7 @@ mixin _$AuctionMembersModel {
   String? get manufacturerUuid => throw _privateConstructorUsedError;
   String? get manufacturerUserUuid => throw _privateConstructorUsedError;
   String? get manufacturerUsername => throw _privateConstructorUsedError;
+  double? get bidPrice => throw _privateConstructorUsedError;
 
   /// Serializes this AuctionMembersModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -53,7 +54,8 @@ abstract class $AuctionMembersModelCopyWith<$Res> {
       int? rating,
       String? manufacturerUuid,
       String? manufacturerUserUuid,
-      String? manufacturerUsername});
+      String? manufacturerUsername,
+      double? bidPrice});
 }
 
 /// @nodoc
@@ -79,6 +81,7 @@ class _$AuctionMembersModelCopyWithImpl<$Res, $Val extends AuctionMembersModel>
     Object? manufacturerUuid = freezed,
     Object? manufacturerUserUuid = freezed,
     Object? manufacturerUsername = freezed,
+    Object? bidPrice = freezed,
   }) {
     return _then(_value.copyWith(
       ordersQuantity: freezed == ordersQuantity
@@ -113,6 +116,10 @@ class _$AuctionMembersModelCopyWithImpl<$Res, $Val extends AuctionMembersModel>
           ? _value.manufacturerUsername
           : manufacturerUsername // ignore: cast_nullable_to_non_nullable
               as String?,
+      bidPrice: freezed == bidPrice
+          ? _value.bidPrice
+          : bidPrice // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -133,7 +140,8 @@ abstract class _$$AuctionMembersModelImplCopyWith<$Res>
       int? rating,
       String? manufacturerUuid,
       String? manufacturerUserUuid,
-      String? manufacturerUsername});
+      String? manufacturerUsername,
+      double? bidPrice});
 }
 
 /// @nodoc
@@ -157,6 +165,7 @@ class __$$AuctionMembersModelImplCopyWithImpl<$Res>
     Object? manufacturerUuid = freezed,
     Object? manufacturerUserUuid = freezed,
     Object? manufacturerUsername = freezed,
+    Object? bidPrice = freezed,
   }) {
     return _then(_$AuctionMembersModelImpl(
       ordersQuantity: freezed == ordersQuantity
@@ -191,6 +200,10 @@ class __$$AuctionMembersModelImplCopyWithImpl<$Res>
           ? _value.manufacturerUsername
           : manufacturerUsername // ignore: cast_nullable_to_non_nullable
               as String?,
+      bidPrice: freezed == bidPrice
+          ? _value.bidPrice
+          : bidPrice // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -206,7 +219,8 @@ class _$AuctionMembersModelImpl implements _AuctionMembersModel {
       this.rating,
       this.manufacturerUuid,
       this.manufacturerUserUuid,
-      this.manufacturerUsername});
+      this.manufacturerUsername,
+      this.bidPrice});
 
   factory _$AuctionMembersModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuctionMembersModelImplFromJson(json);
@@ -227,10 +241,12 @@ class _$AuctionMembersModelImpl implements _AuctionMembersModel {
   final String? manufacturerUserUuid;
   @override
   final String? manufacturerUsername;
+  @override
+  final double? bidPrice;
 
   @override
   String toString() {
-    return 'AuctionMembersModel(ordersQuantity: $ordersQuantity, orderPrice: $orderPrice, orderSumPrice: $orderSumPrice, trustLevel: $trustLevel, rating: $rating, manufacturerUuid: $manufacturerUuid, manufacturerUserUuid: $manufacturerUserUuid, manufacturerUsername: $manufacturerUsername)';
+    return 'AuctionMembersModel(ordersQuantity: $ordersQuantity, orderPrice: $orderPrice, orderSumPrice: $orderSumPrice, trustLevel: $trustLevel, rating: $rating, manufacturerUuid: $manufacturerUuid, manufacturerUserUuid: $manufacturerUserUuid, manufacturerUsername: $manufacturerUsername, bidPrice: $bidPrice)';
   }
 
   @override
@@ -252,7 +268,9 @@ class _$AuctionMembersModelImpl implements _AuctionMembersModel {
             (identical(other.manufacturerUserUuid, manufacturerUserUuid) ||
                 other.manufacturerUserUuid == manufacturerUserUuid) &&
             (identical(other.manufacturerUsername, manufacturerUsername) ||
-                other.manufacturerUsername == manufacturerUsername));
+                other.manufacturerUsername == manufacturerUsername) &&
+            (identical(other.bidPrice, bidPrice) ||
+                other.bidPrice == bidPrice));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -266,7 +284,8 @@ class _$AuctionMembersModelImpl implements _AuctionMembersModel {
       rating,
       manufacturerUuid,
       manufacturerUserUuid,
-      manufacturerUsername);
+      manufacturerUsername,
+      bidPrice);
 
   /// Create a copy of AuctionMembersModel
   /// with the given fields replaced by the non-null parameter values.
@@ -294,7 +313,8 @@ abstract class _AuctionMembersModel implements AuctionMembersModel {
       final int? rating,
       final String? manufacturerUuid,
       final String? manufacturerUserUuid,
-      final String? manufacturerUsername}) = _$AuctionMembersModelImpl;
+      final String? manufacturerUsername,
+      final double? bidPrice}) = _$AuctionMembersModelImpl;
 
   factory _AuctionMembersModel.fromJson(Map<String, dynamic> json) =
       _$AuctionMembersModelImpl.fromJson;
@@ -315,6 +335,8 @@ abstract class _AuctionMembersModel implements AuctionMembersModel {
   String? get manufacturerUserUuid;
   @override
   String? get manufacturerUsername;
+  @override
+  double? get bidPrice;
 
   /// Create a copy of AuctionMembersModel
   /// with the given fields replaced by the non-null parameter values.

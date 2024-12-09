@@ -7,7 +7,7 @@ class ChatsState with _$ChatsState {
   const factory ChatsState.sended() = _Sended;
   const factory ChatsState.sendError({required String errorext}) = _Error;
   const factory ChatsState.getChatroomHistoryLoaded(
-      {required List<ChatRoomHistoryModel> model}) = _GetChatroomHistoryLoaded;
+      {required ChatRoomHistoryModel model}) = _GetChatroomHistoryLoaded;
   const factory ChatsState.getChatroomHistoryError({required String errorext}) =
       _GetChatroomHistoryError;
   const factory ChatsState.createChatRoomSuccess(

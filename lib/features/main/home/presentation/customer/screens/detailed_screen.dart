@@ -156,17 +156,18 @@ class _MainScreenState extends State<DetailedScreen>
                                         alignment: Alignment.center,
                                         height: 36.h,
                                         decoration: BoxDecoration(
-                                            color: Colors.white,
+                                            color: AppColors.accentTextColor,
                                             borderRadius:
                                                 BorderRadius.circular(60.r)),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 14.w),
                                           child: Text(
-                                            widget.model.trustLevel ?? "",
+                                            "Надежный",
+                                            // widget.model.trustLevel ?? "",
                                             style: AppFonts.w400s16.copyWith(
                                                 color:
-                                                    AppColors.accentTextColor),
+                                                    Colors.white),
                                           ),
                                         ),
                                       ),
@@ -236,13 +237,16 @@ class _MainScreenState extends State<DetailedScreen>
                     // Tab 2: Order history content
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          "Выполнено в Inposhiv ${widget.model.orderHistory?.length ?? 0} заказов.",
-                          style: AppFonts.w400s16.copyWith(
-                              color: AppColors.accentTextColor,
-                              fontFamily: "SF Pro"),
-                        ),
+                        widget.model.orderHistory?.isNotEmpty ?? false
+                            ? Text(
+                                "Выполнено в Inposhiv ${widget.model.orderHistory?.length ?? 0} заказов.",
+                                style: AppFonts.w400s16.copyWith(
+                                    color: AppColors.accentTextColor,
+                                    fontFamily: "SF Pro"),
+                              )
+                            : const SizedBox.shrink(),
                         Expanded(
                           child: (widget.model.orderHistory?.isNotEmpty ??
                                   false)
@@ -273,7 +277,7 @@ class _MainScreenState extends State<DetailedScreen>
                                   })
                               : Center(
                                   child: Text(
-                                    "Пусто",
+                                    "Производитель еще не выполнил ни один заказ через INPOSHIV",
                                     style: AppFonts.w700s18,
                                   ),
                                 ),
@@ -285,61 +289,62 @@ class _MainScreenState extends State<DetailedScreen>
                       slivers: [
                         SliverToBoxAdapter(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Stack(alignment: Alignment.center, children: [
-                                CarouselSlider.builder(
-                                  carouselController: _carouselSliderController,
-                                  itemCount: fullPhotoUrls?.length ?? 1,
-                                  options: CarouselOptions(
-                                    autoPlay: false,
-                                    enlargeCenterPage: true,
-                                    viewportFraction: 1,
-                                    aspectRatio: 16 / 7,
-                                    height: 300.h,
-                                    onPageChanged: (indexCarousel, reason) {
-                                      setState(() {
-                                        _currentIndex = indexCarousel;
-                                      });
-                                    },
-                                  ),
-                                  itemBuilder:
-                                      (context, caruselIndex, realIndex) {
-                                    return Stack(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(15.r),
-                                          child: fullPhotoUrls.isNotEmpty
-                                              ? CachedNetworkImage(
-                                                  fit: BoxFit.fill,
-                                                  width: double.infinity,
-                                                  imageUrl: fullPhotoUrls[
-                                                      caruselIndex],
-                                                )
-                                              : Image.asset(Images.good1),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                ),
-                                Positioned(
-                                  bottom: 10.h,
-                                  child: DotsIndicator(
-                                    dotsCount: (fullPhotoUrls.isNotEmpty &&
-                                            widget.model.photosUrls != null &&
-                                            (widget.model.photosUrls
-                                                    ?.isNotEmpty ??
-                                                false))
-                                        ? fullPhotoUrls.length
-                                        : 1,
-                                    position: _currentIndex,
-                                    decorator: DotsDecorator(
-                                      activeColor: Colors.white,
-                                      size: Size(10.w, 10.h),
-                                    ),
-                                  ),
-                                )
-                              ]),
+                              // Stack(alignment: Alignment.center, children: [
+                              //   CarouselSlider.builder(
+                              //     carouselController: _carouselSliderController,
+                              //     itemCount: fullPhotoUrls?.length ?? 1,
+                              //     options: CarouselOptions(
+                              //       autoPlay: false,
+                              //       enlargeCenterPage: true,
+                              //       viewportFraction: 1,
+                              //       aspectRatio: 16 / 7,
+                              //       height: 300.h,
+                              //       onPageChanged: (indexCarousel, reason) {
+                              //         setState(() {
+                              //           _currentIndex = indexCarousel;
+                              //         });
+                              //       },
+                              //     ),
+                              //     itemBuilder:
+                              //         (context, caruselIndex, realIndex) {
+                              //       return Stack(
+                              //         children: [
+                              //           ClipRRect(
+                              //             borderRadius:
+                              //                 BorderRadius.circular(15.r),
+                              //             child: fullPhotoUrls.isNotEmpty
+                              //                 ? CachedNetworkImage(
+                              //                     fit: BoxFit.contain,
+                              //                     width: double.infinity,
+                              //                     imageUrl: fullPhotoUrls[
+                              //                         caruselIndex],
+                              //                   )
+                              //                 : Image.asset(Images.good1),
+                              //           ),
+                              //         ],
+                              //       );
+                              //     },
+                              //   ),
+                              //   Positioned(
+                              //     bottom: 10.h,
+                              //     child: DotsIndicator(
+                              //       dotsCount: (fullPhotoUrls.isNotEmpty &&
+                              //               widget.model.photosUrls != null &&
+                              //               (widget.model.photosUrls
+                              //                       ?.isNotEmpty ??
+                              //                   false))
+                              //           ? fullPhotoUrls.length
+                              //           : 1,
+                              //       position: _currentIndex,
+                              //       decorator: DotsDecorator(
+                              //         activeColor: Colors.white,
+                              //         size: Size(10.w, 10.h),
+                              //       ),
+                              //     ),
+                              //   )
+                              // ]),
                               // Remove Expanded and replace with Flexible
                               Padding(
                                 padding: EdgeInsets.only(top: 10.h),
@@ -410,10 +415,20 @@ class _MainScreenState extends State<DetailedScreen>
                                           );
                                         },
                                       )
-                                    : Center(
-                                        child: Text(
-                                          "Пусто",
-                                          style: AppFonts.w700s18,
+                                    : SizedBox(
+                                      height: 600.h,
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment
+                                              .center, // Center vertically
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              "У производителя еще нет ни одного отзыва",
+                                              style: AppFonts.w700s18,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
                                         ),
                                       ),
                               ),

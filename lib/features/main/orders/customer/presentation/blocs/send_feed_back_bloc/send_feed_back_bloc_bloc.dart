@@ -40,7 +40,7 @@ class SendFeedBackBlocBloc
       required Emitter<SendFeedBackBlocState> emit}) async {
     try {
       emit(const SendFeedBackBlocState.loading());
-      await reviewForManufacturerRepoimpl.reviewForManufacturer(
+      await reviewForManufacturerRepoimpl.reviewToCustomer(
           manufacturerUuid: event.manufacturerUuid,
           customerUuid: event.customerUuid,
           body: event.body);

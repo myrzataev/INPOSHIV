@@ -180,7 +180,7 @@ class _ChatTabState extends State<ChatTab> {
                     chatRoomsLoaded: (model) {
                       if (model.isEmpty) {
                         return RefreshIndicator.adaptive(
-                          onRefresh: () async => ( callBloc()),
+                          onRefresh: () async => (callBloc()),
                           child: SingleChildScrollView(
                             physics: const AlwaysScrollableScrollPhysics(),
                             child: Column(
@@ -195,7 +195,9 @@ class _ChatTabState extends State<ChatTab> {
                                   padding: EdgeInsets.symmetric(
                                       vertical: 20.0.h), // Add some padding
                                   child: Text(
-                                    (isCustomer ?? true) ? "Выберите производителя во время аукциона и свяжитесь с ним" : "Заказчик свяжется с вами, если выберет вас в ходе аукциона",
+                                    (isCustomer ?? true)
+                                        ? "Выберите производителя во время аукциона и свяжитесь с ним"
+                                        : "Заказчик свяжется с вами, если выберет вас в ходе аукциона",
                                     textAlign: TextAlign.center,
                                     style: AppFonts.w700s20.copyWith(
                                       color: AppColors.accentTextColor,
@@ -255,6 +257,9 @@ class _ChatTabState extends State<ChatTab> {
                         : currentItem.senderUuid,
                     "chatUuid": currentItem.chatUuid,
                     "orderId": currentItem.orderId.toString(),
+                    "recipientName": (isCustomer ?? true)
+                        ? currentItem.senderName
+                        : currentItem.recipientName,
                   },
                 );
               },

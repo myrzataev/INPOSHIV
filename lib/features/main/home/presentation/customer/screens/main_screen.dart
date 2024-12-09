@@ -237,7 +237,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                                   child: LoadingCard(height: 300.h, radius: 0),
                                                                                 ),
                                                                             fit: BoxFit
-                                                                                .cover,
+                                                                                .contain,
                                                                             // height: 350.h,
                                                                             width: double
                                                                                 .infinity,
@@ -462,7 +462,7 @@ class _MainScreenState extends State<MainScreen> {
                                                                                 LoadingCard(height: 300.h, radius: 0),
                                                                           );
                                                                         },
-                                                                        fit: BoxFit.cover,
+                                                                        fit: BoxFit.contain,
                                                                         // height: 350.h,
                                                                         width: double.infinity,
                                                                         imageUrl: fullPhotoUrls[caruselIndex])),
@@ -539,7 +539,8 @@ class _MainScreenState extends State<MainScreen> {
                                                     ]),
                                                 Padding(
                                                   padding: EdgeInsets.only(
-                                                      top: 10.h, ),
+                                                    top: 10.h,
+                                                  ),
                                                   child: Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -578,7 +579,8 @@ class _MainScreenState extends State<MainScreen> {
                                                   ),
                                                 ),
                                                 Padding(
-                                                  padding:  EdgeInsets.only(bottom: 5.h),
+                                                  padding: EdgeInsets.only(
+                                                      bottom: 5.h),
                                                   child: Text(
                                                       currentItem
                                                               .productsList
@@ -588,11 +590,20 @@ class _MainScreenState extends State<MainScreen> {
                                                       style: AppFonts.w700s16
                                                           .copyWith(
                                                               color: AppColors
-                                                                  .accentTextColor, fontWeight: FontWeight.w100, fontFamily: "SF Pro")),
+                                                                  .accentTextColor,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w100,
+                                                              fontFamily:
+                                                                  "SF Pro")),
                                                 ),
                                                 Text(
                                                   "${formatNumber(currentItem.productsList?.first.priceUsd?.toDouble() ?? 0)} \$ за ед, итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0))} \$",
-                                                  style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor, ),
+                                                  style:
+                                                      AppFonts.w400s16.copyWith(
+                                                    color: AppColors
+                                                        .accentTextColor,
+                                                  ),
                                                 ),
                                                 Text(
                                                   "${formatNumber(currentItem.productsList?.first.priceRub ?? 0)} руб за ед, итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: currentItem.productsList?.first.priceRub ?? 0, totalCount: currentItem.productsList?.first.quantity ?? 0))} руб",
@@ -682,8 +693,30 @@ class _MainScreenState extends State<MainScreen> {
                             return RefreshIndicator.adaptive(
                               onRefresh: () async => (),
                               child: SingleChildScrollView(
-                                child: const Center(
-                                  child: Text("Пусто"),
+                                physics: const AlwaysScrollableScrollPhysics(),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center, // Align text to the center horizontally
+                                  children: [
+                                    SizedBox(
+                                      height: 100.h,
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 20.0.h), // Add some padding
+                                      child: Text(
+                                        "Здесь появятся заявки на аукцион, в которых вы cможете принять участие",
+                                        textAlign: TextAlign.center,
+                                        style: AppFonts.w700s20.copyWith(
+                                          color: AppColors.accentTextColor,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 150.h,
+                                    ),
+                                  ],
                                 ),
                               ),
                             );

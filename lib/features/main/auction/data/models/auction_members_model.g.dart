@@ -17,6 +17,7 @@ _$AuctionMembersModelImpl _$$AuctionMembersModelImplFromJson(
       manufacturerUuid: json['manufacturerUuid'] as String?,
       manufacturerUserUuid: json['manufacturerUserUuid'] as String?,
       manufacturerUsername: json['manufacturerUsername'] as String?,
+      bidPrice: (json['bidPrice'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$AuctionMembersModelImplToJson(
@@ -30,4 +31,5 @@ Map<String, dynamic> _$$AuctionMembersModelImplToJson(
       'manufacturerUuid': instance.manufacturerUuid,
       'manufacturerUserUuid': instance.manufacturerUserUuid,
       'manufacturerUsername': instance.manufacturerUsername,
+      'bidPrice': instance.bidPrice,
     };

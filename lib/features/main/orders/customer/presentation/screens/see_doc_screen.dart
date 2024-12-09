@@ -44,7 +44,7 @@ class _SeeDocScreenState extends State<SeeDocScreen> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
-        child: _buildContent(),
+        child: Center(child: _buildContent()),
       ),
     );
   }

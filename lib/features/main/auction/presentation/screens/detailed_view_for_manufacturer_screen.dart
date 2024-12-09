@@ -40,6 +40,7 @@ class _DetailedViewForManufacturerScreenState
   CalculateService calculateService = CalculateService();
   final TextEditingController bidPriceController = TextEditingController();
   final preferences = locator<SharedPreferences>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? auctionUid;
   int? auctionid;
   double? minimumBid;
@@ -107,8 +108,9 @@ class _DetailedViewForManufacturerScreenState
                         state.maybeWhen(
                             loading: () => Showdialog.showLoaderDialog(context),
                             makeBidSuccess: (model) {
-                              router.pop();
+                              Navigator.pop(context);
                               bidPriceController.clear();
+                              getAuctionDetail();
                               List<AuctionProcess>? auctionProcess =
                                   (model.auctionProcesses?.isNotEmpty ?? false)
                                       ? filterAuctionProccess(
@@ -155,7 +157,7 @@ class _DetailedViewForManufacturerScreenState
                               }
                             },
                             makeBidError: (errorText) {
-                              router.pop();
+                              Navigator.pop(context);
                             },
                             orElse: () {});
                       },
@@ -202,101 +204,116 @@ class _DetailedViewForManufacturerScreenState
                                   children: [
                                     Padding(
                                       padding: EdgeInsets.only(bottom: 10.h),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: AppColors.cardsColor,
-                                            borderRadius:
-                                                BorderRadiusDirectional
-                                                    .circular(10.r)),
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 10.w, vertical: 10.h),
-                                          child: SingleChildScrollView(
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Padding(
-                                                  padding: EdgeInsets.only(
-                                                      bottom: 10.h),
-                                                  child: SizedBox(
-                                                    height: 120.h,
-                                                    child: ListView.separated(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        itemCount: 1,
-                                                        separatorBuilder:
-                                                            (context, index) {
-                                                          return SizedBox(
-                                                            width: 10.w,
-                                                          );
-                                                        },
-                                                        itemBuilder: (context,
-                                                            indexForPhotos) {
-                                                          final List<String>
-                                                              fullPhotoUrls =
-                                                              auctionModel
-                                                                      .productsList
-                                                                      ?.first
-                                                                      .photos
-                                                                      ?.map((url) =>
-                                                                          "${UrlRoutes.baseUrl}$url")
-                                                                      .toList() ??
-                                                                  [];
-                                                          return InkWell(
-                                                            onTap: () {
-                                                              GoRouter.of(
-                                                                      context)
-                                                                  .pushNamed(
-                                                                      "seeImage",
-                                                                      extra:
-                                                                          fullPhotoUrls);
-                                                            },
-                                                            child: ClipRRect(
-                                                                borderRadius:
-                                                                    BorderRadius
-                                                                        .circular(6
-                                                                            .r),
-                                                                child: Image
-                                                                    .network(""
-                                                                        "${UrlRoutes.baseUrl}${auctionModel.productsList?.first.photos?[indexForPhotos]}")),
-                                                          );
-                                                        }),
-                                                  ),
-                                                ),
-                                                Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Text(
-                                                        auctionModel
-                                                                .productsList
-                                                                ?.first
-                                                                .name ??
-                                                            "",
-                                                        style: AppFonts.w700s16,
-                                                      ),
+                                      child: InkWell(
+                                        onTap: () => router.pushNamed("orderDetailedViewScreen", extra: auctionModel.productsList?.first),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              color: AppColors.cardsColor,
+                                              borderRadius:
+                                                  BorderRadiusDirectional
+                                                      .circular(10.r)),
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 10.w, vertical: 10.h),
+                                            child: SingleChildScrollView(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Padding(
+                                                    padding: EdgeInsets.only(
+                                                        bottom: 10.h),
+                                                    child: SizedBox(
+                                                      height: 120.h,
+                                                      child: ListView.separated(
+                                                          scrollDirection:
+                                                              Axis.horizontal,
+                                                          itemCount: auctionModel
+                                                                  .productsList
+                                                                  ?.first
+                                                                  .photos
+                                                                  ?.length ??
+                                                              0,
+                                                          separatorBuilder:
+                                                              (context, index) {
+                                                            return SizedBox(
+                                                              width: 0.w,
+                                                            );
+                                                          },
+                                                          itemBuilder: (context,
+                                                              indexForPhotos) {
+                                                            final List<String>
+                                                                fullPhotoUrls =
+                                                                auctionModel
+                                                                        .productsList
+                                                                        ?.first
+                                                                        .photos
+                                                                        ?.map((url) =>
+                                                                            "${UrlRoutes.baseUrl}$url")
+                                                                        .toList() ??
+                                                                    [];
+                                                            return InkWell(
+                                                              onTap: () {
+                                                                GoRouter.of(
+                                                                        context)
+                                                                    .pushNamed(
+                                                                        "seeImage",
+                                                                        extra:
+                                                                            fullPhotoUrls);
+                                                              },
+                                                              child: ClipRRect(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(6
+                                                                              .r),
+                                                                  child: Image
+                                                                      .network(
+                                                                    ""
+                                                                    "${UrlRoutes.baseUrl}${auctionModel.productsList?.first.photos?[indexForPhotos]}",
+                                                                    width: 116.w,
+                                                                    height: 150.h,
+                                                                  )),
+                                                            );
+                                                          }),
                                                     ),
-                                                    Text(
-                                                      "${auctionModel.productsList?.first.quantity ?? 0} шт",
-                                                      style: AppFonts.w400s16
-                                                          .copyWith(
-                                                              color: AppColors
-                                                                  .accentTextColor),
-                                                    )
-                                                  ],
-                                                ),
-                                                Text(
-                                                  "${formatNumber(auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0)} \$ за ед , итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} \$",
-                                                  style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
-                                                ),
-                                                Text(
-                                                  "${formatNumber(auctionModel.productsList?.first.priceRub ?? 0)} руб за ед , итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} руб",
-                                                  style: AppFonts.w400s16,
-                                                ),
-                                              ],
+                                                  ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          auctionModel
+                                                                  .productsList
+                                                                  ?.first
+                                                                  .name ??
+                                                              "",
+                                                          style: AppFonts.w700s16,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        "${auctionModel.productsList?.first.quantity ?? 0} шт",
+                                                        style: AppFonts.w400s16
+                                                            .copyWith(
+                                                                color: AppColors
+                                                                    .accentTextColor),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    "${formatNumber(auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0)} \$ за ед , итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceUsd?.toDouble() ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} \$",
+                                                    style: AppFonts.w400s16
+                                                        .copyWith(
+                                                            color: AppColors
+                                                                .accentTextColor),
+                                                  ),
+                                                  Text(
+                                                    "${formatNumber(auctionModel.productsList?.first.priceRub ?? 0)} руб за ед , итого ${formatNumber(calculateService.calculateTotalPriceInRuble(ruble: auctionModel.productsList?.first.priceRub ?? 0, totalCount: auctionModel.productsList?.first.quantity ?? 0))} руб",
+                                                    style: AppFonts.w400s16,
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -324,12 +341,26 @@ class _DetailedViewForManufacturerScreenState
                                                             .start,
                                                     children: [
                                                       Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .start,
                                                         children: [
                                                           const CircleAvatar(
                                                             backgroundImage:
                                                                 AssetImage(Images
                                                                     .sewingMachine),
                                                           ),
+                                                          Text(
+                                                            currentItem
+                                                                    ?.manufacturerUsername ??
+                                                                "",
+                                                            style: AppFonts
+                                                                .w400s16
+                                                                .copyWith(
+                                                                    color: AppColors
+                                                                        .accentTextColor),
+                                                          ),
+                                                          const Spacer(),
                                                           Padding(
                                                             padding:
                                                                 EdgeInsets.only(
@@ -368,31 +399,39 @@ class _DetailedViewForManufacturerScreenState
                                                           ),
                                                         ],
                                                       ),
-                                                      Padding(
-                                                        padding: EdgeInsets
-                                                            .symmetric(
-                                                                vertical: 10.h),
-                                                        child: Row(
-                                                          children: [
-                                                            Padding(
-                                                              padding: EdgeInsets
-                                                                  .symmetric(
-                                                                      horizontal:
-                                                                          5.w),
-                                                              child: SvgPicture
-                                                                  .asset(
-                                                                SvgImages.star,
-                                                                height: 16.h,
-                                                                width: 16.w,
-                                                              ),
+                                                      Row(
+                                                        children: [
+                                                          Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        10.h),
+                                                            child: Row(
+                                                              children: [
+                                                                Padding(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              5.w),
+                                                                  child:
+                                                                      SvgPicture
+                                                                          .asset(
+                                                                    SvgImages
+                                                                        .star,
+                                                                    height:
+                                                                        16.h,
+                                                                    width: 16.w,
+                                                                  ),
+                                                                ),
+                                                                Text(
+                                                                  "${0}",
+                                                                  style: AppFonts
+                                                                      .w700s16,
+                                                                )
+                                                              ],
                                                             ),
-                                                            Text(
-                                                              "${40 ?? 0}",
-                                                              style: AppFonts
-                                                                  .w700s16,
-                                                            )
-                                                          ],
-                                                        ),
+                                                          ),
+                                                        ],
                                                       ),
                                                       Text(
                                                         "Выполнено в Inposhiv ${40} заказов.",
@@ -489,34 +528,53 @@ class _DetailedViewForManufacturerScreenState
                       style: AppFonts.w700s18,
                     ),
                     Text(
-                      "Помните, вы можете сделать не более 3х ставок\n Последняя ставка – $minimumBid\$",
+                      "Помните, вы можете сделать не более 3х ставок",
                       style: AppFonts.w700s16.copyWith(
                           fontFamily: "SF Pro",
                           color: AppColors.regularGreyColor),
                     ),
-                    TextField(
-                      keyboardType: TextInputType.number,
-                      onChanged: (value) {},
-                      controller: bidPriceController,
-                      textAlign: TextAlign.center,
-                      style: AppFonts.w700s20
-                          .copyWith(color: AppColors.accentTextColor),
+                    minimumBid != null
+                        ? Text(
+                            "Последняя ставка – $minimumBid\$",
+                            style: AppFonts.w700s16.copyWith(
+                                fontFamily: "SF Pro",
+                                color: AppColors.regularGreyColor),
+                          )
+                        : const SizedBox.shrink(),
+                    Form(
+                      key: _formKey,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {},
+                        controller: bidPriceController,
+                        textAlign: TextAlign.center,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Укажите цену";
+                          }
+                          return null;
+                        },
+                        style: AppFonts.w700s20
+                            .copyWith(color: AppColors.accentTextColor),
+                      ),
                     ),
                     Padding(
                       padding: EdgeInsets.only(top: 5.h),
                       child: CustomButton(
                           text: "Отправить",
                           onPressed: () {
-                            BlocProvider.of<AuctionBloc>(context).add(
-                                AuctionEvent.makeBid(
-                                    auctionId: auctionUid ?? "",
-                                    manufacturerId:
-                                        preferences.getString("customerId") ??
-                                            "",
-                                    bidPrice: double.tryParse(
-                                            bidPriceController.text) ??
-                                        0,
-                                    currencyCode: "USD"));
+                            if (_formKey.currentState!.validate()) {
+                              BlocProvider.of<AuctionBloc>(context).add(
+                                  AuctionEvent.makeBid(
+                                      auctionId: auctionUid ?? "",
+                                      manufacturerId:
+                                          preferences.getString("customerId") ??
+                                              "",
+                                      bidPrice: double.tryParse(
+                                              bidPriceController.text) ??
+                                          0,
+                                      currencyCode: "USD"));
+                            }
                           }),
                     )
                   ],

@@ -1,462 +1,24 @@
-// import 'dart:convert';
-// import 'dart:io';
-
-// import 'package:flutter/material.dart';
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-// import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:flutter_svg/svg.dart';
-// import 'package:go_router/go_router.dart';
-// import 'package:inposhiv/core/consts/url_routes.dart';
-// import 'package:inposhiv/core/utils/app_colors.dart';
-// import 'package:inposhiv/core/utils/app_fonts.dart';
-// import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
-// import 'package:inposhiv/features/main/chat/data/models/pageble_model.dart';
-// import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
-// import 'package:inposhiv/features/main/home/presentation/widgets/search_widget.dart';
-// import 'package:inposhiv/resources/resources.dart';
-// import 'package:inposhiv/services/shared_preferences.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:stomp_dart_client/stomp_dart_client.dart';
-// import 'package:uuid/uuid.dart';
-
-// class ChatScreen extends StatefulWidget {
-//   final String chatUuid;
-//   final String receipentUuid;
-//   final String orderId;
-//   final String autoMessage;
-//   const ChatScreen(
-//       {super.key,
-//       required this.chatUuid,
-//       required this.receipentUuid,
-//       required this.orderId,
-//       required this.autoMessage, });
-
-//   @override
-//   State<ChatScreen> createState() => _ChatScreenState();
-// }
-
-// class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
-//   final ScrollController scrollController = ScrollController();
-
-//   StompClient? stompClient;
-//   final preferences = locator<SharedPreferences>();
-//   bool? isCustomer;
-//   String? chatUuid; // Static UUID, modify this as needed
-//   List<types.Message> _messages = []; // List of chat messages
-//   // String? chatUuidMock =
-//   //     "9e205782-e9ea-40e0-9465-19efbe7709ea_f9b4d387-871a-4123-9a73-70830c220e88"; // Static UUID, modify this as needed
-//   // String? senderIdMock =
-//   //     "9e205782-e9ea-40e0-9465-19efbe7709ea"; // Static UUID, modify this as needed
-//   // String? receipentIdMock =
-//   //     "f9b4d387-871a-4123-9a73-70830c220e88"; // Static UUID, modify this as needed
-
-//   late final _currentUser;
-//   late final _secondUser;
-//   bool isConnected = false;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     WidgetsBinding.instance.addObserver(this);
-
-//     isCustomer = preferences.getBool("isCustomer");
-//     chatUuid = widget.chatUuid;
-//     _currentUser = types.User(id: preferences.getString("userId") ?? "");
-//     _secondUser = types.User(id: widget.receipentUuid);
-
-//     // Fetch chat room history when screen loads
-//     BlocProvider.of<ChatsBloc>(context).add(ChatsEvent.getChatRoomHistory(
-//       chatRoomUuid: chatUuid ?? "",
-//       model: const PagebleModel(page: 0, size: 1, sort: []),
-//     ));
-//     print("||||||||||||||||| bloc Calling");
-//     connect(); // Establish WebSocket connection when the screen loads
-
-//     // Check if autoMessage is not null and not empty, then send it automatically
-//     sendAutoMessageWithDelay();
-//   }
-
-//   void sendAutoMessageWithDelay() {
-//     // Wait for 2 seconds and check if WebSocket is connected
-//     Future.delayed(Duration(seconds: 1), () {
-//       if (isConnected && widget.autoMessage.isNotEmpty) {
-//         _handleSendPressed(
-//           types.PartialText(text: widget.autoMessage),
-//           widget.receipentUuid,
-//           widget.chatUuid,
-//         );
-//         print("Auto message sent: ${widget.autoMessage}");
-//       } else {
-//         print("WebSocket not connected or no auto message to send.");
-//       }
-//     });
-//   }
-
-//   @override
-//   void dispose() {
-//     // disconnect(); // Close WebSocket connection when the screen is disposed
-//     WidgetsBinding.instance.removeObserver(this);
-
-//     super.dispose();
-//   }
-
-//   @override
-//   void didChangeAppLifecycleState(AppLifecycleState state) {
-//     if (state == AppLifecycleState.resumed) {
-//       connect(); // Reconnect or refresh data
-//     }
-//   }
-
-//   // Establish a WebSocket connection using StompClient
-//   void connect() {
-//     stompClient = StompClient(
-//       config: StompConfig.sockJS(
-//         url: '${UrlRoutes.baseUrl}/ws', // Replace with your WebSocket URL
-//         onConnect: (StompFrame frame) {
-//           debugPrint('Connected to WebSocket');
-//           debugPrint('Frame Headers: ${frame.headers}');
-//           debugPrint('Frame Body: ${frame.body}');
-//           debugPrint("Subscribing to /queue/messages/$chatUuid");
-//           isConnected = true;
-//           stompClient!.subscribe(
-//             destination: "/queue/messages/$chatUuid", // Chat destination
-//             callback: (StompFrame frame) {
-//               print(frame.body);
-//               if (frame.body != null) {
-//                 print('Received frame body: ${frame.body}');
-
-//                 var receivedMessage = jsonDecode(frame.body!);
-//                 print('Received frame message: ${receivedMessage}');
-
-//                 if (receivedMessage['senderUuid'] !=
-//                     // senderIdMock
-//                     _currentUser.id) {
-//                   print("sender is not current user");
-//                   _handleIncomingMessage(
-//                       receivedMessage); // Handle incoming message
-//                 } else {}
-//               }
-//             },
-//           );
-//         },
-//         onWebSocketError: (dynamic error) {
-//           print('WebSocket error occurred: $error');
-//           if (error is WebSocketException) {
-//             print('WebSocketException details: ${error.message}');
-//           }
-//         },
-//       ),
-//     );
-//     stompClient!.activate(); // Activate the WebSocket connection
-//   }
-
-//   void sendMessage(types.PartialText message) {
-//     final textMessage = types.TextMessage(
-//       author: _currentUser,
-//       id: const Uuid().v4(),
-//       createdAt: DateTime.now().millisecondsSinceEpoch,
-//       text: message.text,
-//     );
-
-//     setState(() {
-//       _messages.insert(0, textMessage);
-//     });
-//     BlocProvider.of<ChatsBloc>(context).add(ChatsEvent.sendMessage(
-//         chatUuid:
-//             "9e205782-e9ea-40e0-9465-19efbe7709ea_f9b4d387-871a-4123-9a73-70830c220e88",
-//         senderUuid: "9e205782-e9ea-40e0-9465-19efbe7709ea",
-//         recipientUuid: "f9b4d387-871a-4123-9a73-70830c220e88",
-//         content: message.text));
-//   }
-
-//   void sendAutoMessage() {
-//     print("this method is triggering");
-//     print("receipent id is ${widget.receipentUuid}");
-//     print("chat id is ${widget.chatUuid}");
-//     // print("receipent id is ${widget.receipentUuid}");
-//     stompClient?.send(
-//       destination:
-//           "/app/sendMessage/$chatUuid", // The destination where messages are sent
-//       body: jsonEncode({
-//         "recipientUuid":
-//             // "f9b4d387-871a-4123-9a73-70830c220e88",
-//             widget
-//                 .receipentUuid, // Replace this with logic to get recipient's UUID
-//         'senderUuid':
-//             // "9e205782-e9ea-40e0-9465-19efbe7709ea",
-//             _currentUser.id,
-//         "content": "test message", // The actual message content
-//         'chatUuid': widget.chatUuid,
-//       }),
-//     );
-//   }
-
-//   void _handleSendPressed(
-//     types.PartialText message,
-//     String receipentId,
-//     String chatUuid,
-//   ) {
-//     if (stompClient != null && stompClient!.connected) {
-//       print("///////sending");
-//       final textMessage = types.TextMessage(
-//         author: _currentUser,
-//         id: const Uuid().v4(),
-//         createdAt: DateTime.now().millisecondsSinceEpoch,
-//         text: message.text,
-//       );
-
-//       setState(() {
-//         _messages.insert(0, textMessage);
-//       });
-
-//       stompClient?.send(
-//         destination:
-//             "/app/sendMessage/$chatUuid", // The destination where messages are sent
-//         body: jsonEncode({
-//           "recipientUuid": receipentId,
-//           // "f9b4d387-871a-4123-9a73-70830c220e88",
-//           // _secondUser.id, // Replace this with logic to get recipient's UUID
-//           'senderUuid':
-//               // "9e205782-e9ea-40e0-9465-19efbe7709ea",
-//               _currentUser.id,
-//           "content": message.text, // The actual message content
-//           'chatUuid': chatUuid
-//           //  widget.chatUuid,
-//         }),
-//       );
-//       print("///////sended");
-//     }
-//   }
-// final receivedMessageIds = <String>{};
-
-// void _handleIncomingMessage(Map<String, dynamic> message) {
-//   if (receivedMessageIds.contains(message['messageUuid'])) return;
-//   receivedMessageIds.add(message['messageUuid']);
-
-//   final textMessage = types.TextMessage(
-//     author:
-//     //  message["senderUuid"] == _currentUser.id ? _currentUser :
-//       _secondUser,
-//     id: message["messageUuid"],
-//     createdAt: DateTime.now().millisecondsSinceEpoch,
-//     text: message["content"],
-//   );
-
-//   setState(() {
-//     _messages.insert(0, textMessage);
-//   });
-// }
-
-//   void disconnect() {
-//     // stompClient?.deactivate(); // Deactivate the WebSocket connection
-//     print('Disconnected');
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Colors.white,
-//         surfaceTintColor: Colors.transparent,
-//         // title: Padding(
-//         //   padding:  EdgeInsets.symmetric(vertical: 3.h),
-//         //   child: CustomButton(text: "Сформировать заказ", onPressed: () {}),
-//         // ),
-//         flexibleSpace: SafeArea(
-//           child: Center(
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(horizontal: 65.w),
-//               child: CustomButton(
-//                   text: (isCustomer ?? true)
-//                       ? "Сформировать заказ"
-//                       : "Счет на оплату",
-//                   onPressed: () {
-//                     print(widget.orderId);
-//                     // String? userIdFromPrefs = preferences.getString("userId");
-
-//                     // if (userIdFromPrefs != null &&
-//                     //     _secondUser.id == userIdFromPrefs) {
-//                     //   print(
-//                     //       "User ID from SharedPreferences matches _secondUser ID");
-//                     // } else {
-//                     //   print("User ID does not match _secondUser ID");
-//                     // }
-
-//                     (isCustomer ?? true)
-//                         ? GoRouter.of(context).pushNamed("orderDetails",
-
-//                             //  "invoiceScreen",
-//                             queryParameters: {"orderId": widget.orderId})
-//                         : GoRouter.of(context).pushNamed(
-//                             "orderDetailsForManufacturer",
-//                             extra: widget.orderId
-//                             //  "invoiceScreen",
-//                             );
-//                   }),
-//             ),
-//           ),
-//         ),
-//         actions: [
-//           Padding(
-//             padding: EdgeInsets.only(right: 10.w),
-//             child: CustomSearchWidget(
-//                 onTap: () {}, child: SvgPicture.asset(SvgImages.search)),
-//           )
-//         ],
-//       ),
-//       body: BlocListener<ChatsBloc, ChatsState>(
-//         listener: (context, state) {
-//           state.maybeWhen(
-//               // loading: () => showDialog(
-//               //     context: context,
-//               //     barrierDismissible: true,
-//               //     builder: (context) => Dialog(
-//               //           backgroundColor: Colors.transparent,
-//               //           child: SizedBox(
-//               //             height: 20.h,
-//               //             width: 20.w,
-//               //             child: const Center(
-//               //               child: CircularProgressIndicator.adaptive(),
-//               //             ),
-//               //           ),
-//               //         )),
-//               getChatroomHistoryError: (errorext) {
-//             // GoRouter.of(context).pop();
-//           }, getChatroomHistoryLoaded: (model) {
-//             // GoRouter.of(context).pop();
-//             List<types.TextMessage> historyMessages =
-//                 model.map<types.TextMessage>((element) {
-//               return types.TextMessage(
-//                 author: element.senderUuid == _currentUser.id
-//                     ? _currentUser
-//                     : _secondUser,
-//                 id: element.messageUuid.toString(), // Use messageUuid as ID
-//                 createdAt: DateTime.now()
-//                     .millisecondsSinceEpoch, // Replace with actual timestamp from the response if available
-//                 text: element.content ?? "", // The message content
-//               );
-//             }).toList();
-
-//             setState(() {
-//               _messages.insertAll(0, historyMessages.reversed);
-//             });
-//           }, orElse: () {
-//             // GoRouter.of(context).pop();
-//           });
-//         },
-//         child: Chat(
-//             emptyState: Padding(
-//               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-//               child: Container(
-//                 decoration: BoxDecoration(
-//                     color: AppColors.containersGrey,
-//                     borderRadius: BorderRadius.circular(20.r)),
-//                 child: Padding(
-//                   padding: EdgeInsets.all(10.h),
-//                   child: SingleChildScrollView(
-//                     child: Column(
-//                       children: [
-//                         Row(
-//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                           children: [
-//                             SvgPicture.asset(SvgImages.info),
-//                             SvgPicture.asset(SvgImages.close)
-//                           ],
-//                         ),
-//                         Padding(
-//                           padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
-//                           child: Text(
-//                             "Пожалуйста, ознакомьтесь с правилами чата перед началом сотрудничества с производителем",
-//                             style: AppFonts.w700s20
-//                                 .copyWith(color: AppColors.accentTextColor),
-//                           ),
-//                         ),
-//                         textWithDots(
-//                             text:
-//                                 "Нельзя связываться и заключать сделки с производителями вне этого приложения"),
-//                         textWithDots(
-//                             text:
-//                                 "Нельзя передавать свои личные данные производителю"),
-//                         textWithDots(
-//                             text:
-//                                 "Все ваши переписки просматриваются операторами колл-центра! "),
-//                         textWithDots(
-//                             text:
-//                                 "При выявлении нарушений вы сначала получите предупреждение. При повторном нарушении правил следует штраф. При систематическом нарушении Вас заблокируют."),
-//                         textWithDots(
-//                             text:
-//                                 "Если цех предложит выйти с ним на связь напрямую, пожалуйста, не делайте этого! Вы можете потерять контроль над заказом, и, следовательно, Ваши деньги! "),
-//                         textWithDots(
-//                             text:
-//                                 "Наше приложение не несет ответственности за договоренности вне данного приложения."),
-//                       ],
-//                     ),
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             messages: _messages, // Display the list of messages
-//             onSendPressed: (message) {
-//               _handleSendPressed(
-//                   message, widget.receipentUuid, widget.chatUuid);
-//             }
-//             //  sendMessage,
-//             , // What happens when the user sends a message
-//             user: _currentUser),
-//       ),
-//     );
-//   }
-
-//   Widget textWithDots({required String text}) {
-//     return Padding(
-//       padding: const EdgeInsets.only(bottom: 8),
-//       child: Row(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           Text(
-//             "• ",
-//             style: TextStyle(
-//               fontSize: 20.sp,
-//               color: Colors.black,
-//             ),
-//           ),
-//           Expanded(
-//             child: Text(
-//               text,
-//               style:
-//                   AppFonts.w400s14.copyWith(color: AppColors.accentTextColor),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-
-// }
-
 import 'dart:convert';
 
+import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/features/main/chat/presentation/blocs/send_files_to_chat_bloc/send_files_to_chat_bloc.dart';
+import 'package:inposhiv/features/main/chat/presentation/widgets/custom_chat_message.dart';
+import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stomp_dart_client/stomp_dart_client.dart';
-import 'package:uuid/uuid.dart';
-import 'package:dash_chat_2/dash_chat_2.dart'; // Using dash_chat_2
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 
 import 'package:inposhiv/core/consts/url_routes.dart';
-import 'package:inposhiv/core/utils/app_colors.dart';
-import 'package:inposhiv/core/utils/app_fonts.dart';
+
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/chat/data/models/pageble_model.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/chat_bloc/chat_bloc.dart';
-import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
-import 'package:inposhiv/resources/resources.dart';
+
 import 'package:inposhiv/services/shared_preferences.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -464,6 +26,7 @@ class ChatScreen extends StatefulWidget {
   final String receipentUuid;
   final String orderId;
   final String autoMessage;
+  final String recipientName;
 
   const ChatScreen({
     super.key,
@@ -471,6 +34,7 @@ class ChatScreen extends StatefulWidget {
     required this.receipentUuid,
     required this.orderId,
     required this.autoMessage,
+    required this.recipientName,
   });
 
   @override
@@ -488,10 +52,24 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool isConnected = false;
   List<ChatMessage> messages = [];
   final receivedMessageIds = <String>{};
+  final TextEditingController _controller = TextEditingController();
+  late ScrollController _scrollController;
+  int currentPage = 0;
+  bool isLoading = false;
+  bool hasMoreMessages = true;
+  bool shouldScrollToBottom = true;
 
   @override
   void initState() {
+    _scrollController = ScrollController(initialScrollOffset: 0);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottom(
+          shouldScrollToBottomForMethod:
+              shouldScrollToBottom); // Прокрутка в самый низ после построения
+    });
+    _scrollController.addListener(_onScroll);
+
     WidgetsBinding.instance.addObserver(this);
 
     isCustomer = preferences.getBool("isCustomer");
@@ -499,16 +77,38 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     currentUser = ChatUser(
       id: preferences.getString("userId") ?? "",
     );
-    secondUser = ChatUser(
-      id: widget.receipentUuid,
-    );
+    secondUser =
+        ChatUser(id: widget.receipentUuid, firstName: widget.recipientName);
 
     BlocProvider.of<ChatsBloc>(context).add(ChatsEvent.getChatRoomHistory(
       chatRoomUuid: chatUuid ?? "",
-      model: const PagebleModel(page: 0, size: 1, sort: []),
+      model: const PagebleModel(page: 0, size: 20, sort: []),
     ));
     connect();
     sendAutoMessageWithDelay();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels <=
+            _scrollController.position.minScrollExtent + 100 &&
+        !isLoading &&
+        hasMoreMessages) {
+      _loadMoreMessages();
+    }
+  }
+
+  void _loadMoreMessages() {
+    if (isLoading || !hasMoreMessages) return;
+
+    setState(() {
+      isLoading = true;
+      shouldScrollToBottom = false; // Отключаем автопрокрутку при пагинации
+    });
+
+    BlocProvider.of<ChatsBloc>(context).add(ChatsEvent.getChatRoomHistory(
+      chatRoomUuid: chatUuid ?? "",
+      model: PagebleModel(page: currentPage + 1, size: 20, sort: []),
+    ));
   }
 
   void sendAutoMessageWithDelay() {
@@ -533,7 +133,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       config: StompConfig.sockJS(
         url: '${UrlRoutes.baseUrl}/ws',
         onConnect: (StompFrame frame) {
-          print('Connected to WebSocket');
+          // print('Connected to WebSocket');
           isConnected = true;
           stompClient?.subscribe(
             destination: "/queue/messages/$chatUuid",
@@ -558,8 +158,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void sendMessage(ChatMessage message) {
+    print("recipientName is ${widget.recipientName}");
     setState(() {
-      messages.insert(0, message);
+      messages.insert(messages.length, message);
     });
 
     stompClient?.send(
@@ -569,41 +170,70 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         "senderUuid": currentUser.id,
         "content": message.text,
         "chatUuid": widget.chatUuid,
+        "recipientName": widget.recipientName,
+        "orderId": widget.orderId
       }),
     );
   }
 
   void _handleIncomingMessage(Map<String, dynamic> message) {
-    // Проверка на уникальность сообщения
+    // Check if the message has already been processed
     if (receivedMessageIds.contains(message['messageUuid'])) {
-      debugPrint("Сообщение уже обработано: ${message['messageUuid']}");
+      debugPrint("Message already processed: ${message['messageUuid']}");
       return;
     }
 
-    // Проверка, что отправитель не является текущим пользователем
+    // Ignore messages from the current user
     if (message['senderUuid'] == currentUser.id) {
-      debugPrint("Игнорируется сообщение, отправленное текущим пользователем");
+      debugPrint("Message from the current user, ignoring.");
       return;
     }
 
     receivedMessageIds.add(message['messageUuid']);
 
+    String content = message['content'] ?? "";
+
+    // Check if the content is an image URL (e.g., jpg, png, jpeg)
+    if (content.endsWith(".jpg") ||
+        content.endsWith(".png") ||
+        content.endsWith(".jpeg")) {
+      // Handle image content
+      print("Image content: $content");
+    } else if (content.endsWith(".pdf")) {
+      // Handle PDF content (optional: provide a link to open/download)
+      print("PDF content: $content");
+    } else {
+      // Default text content
+      print("Text content: $content");
+    }
+
     final newMessage = ChatMessage(
       user: secondUser,
-      text: message['content'],
+      text: content,
       createdAt: DateTime.now(),
+      customProperties: {
+        'fileUrl': content.endsWith(".jpg") ||
+                content.endsWith(".png") ||
+                content.endsWith(".jpeg")
+            ? content
+            : null,
+      },
     );
-    debugPrint(
-        "Новое сообщение от ${message['senderUuid']}: ${message['content']}");
+
+    debugPrint("New message from ${message['senderUuid']}: $content");
 
     setState(() {
-      messages.insert(0, newMessage);
+      messages.insert(messages.length, newMessage);
+      _scrollToBottom(shouldScrollToBottomForMethod: true);
     });
   }
 
   @override
   void dispose() {
+    _scrollController.dispose();
     stompClient?.deactivate();
+    _scrollController.removeListener(_onScroll);
+
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -611,73 +241,230 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        flexibleSpace: SafeArea(
-          child: Center(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 65.w),
-              child: CustomButton(
-                text: (isCustomer ?? true)
-                    ? "Сформировать заказ"
-                    : "Счет на оплату",
-                onPressed: () {
-                  final route = (isCustomer ?? true)
-                      ? "orderDetails"
-                      : "orderDetailsForManufacturer";
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          surfaceTintColor: Colors.transparent,
+          flexibleSpace: SafeArea(
+            child: Center(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 65.w,
+                ),
+                child: CustomButton(
+                  sizedTemporary: true,
+                  height: 50,
+                  text: (isCustomer ?? true)
+                      ? "Сформировать заказ"
+                      : "Счет на оплату",
+                  onPressed: () {
+                    final route = (isCustomer ?? true)
+                        ? "orderDetails"
+                        : "orderDetailsForManufacturer";
 
-                  router.pushNamed(
-                    route,
-                    extra: widget.orderId,
-                  );
-                },
+                    router.pushNamed(
+                      route,
+                      extra: widget.orderId,
+                    );
+                  },
+                ),
               ),
             ),
           ),
         ),
-        // actions: [
-        //   Padding(
-        //     padding: EdgeInsets.only(right: 10.w),
-        //     child: CustomSearchWidget(
-        //       onTap: () {
-        //         print(widget.orderId);
-        //       },
-        //       child: SvgPicture.asset(SvgImages.search),
-        //     ),
-        //   ),
-        // ],
-      ),
-      body: BlocListener<ChatsBloc, ChatsState>(
-        listener: (context, state) {
-          state.maybeWhen(
-            getChatroomHistoryLoaded: (model) {
-              final historyMessages = model.map<ChatMessage>((element) {
-                return ChatMessage(
-                  user: element.senderUuid == currentUser.id
-                      ? currentUser
-                      : secondUser,
-                  text: element.content ?? "",
-                  createdAt: DateTime.now(),
-                );
-              }).toList();
+        body: BlocListener<ChatsBloc, ChatsState>(
+          listener: (context, state) {
+            state.maybeWhen(
+              getChatroomHistoryLoaded: (model) {
+                final historyMessages =
+                    model.content?.map<ChatMessage>((element) {
+                  return ChatMessage(
+                    user: element.senderUuid == currentUser.id
+                        ? currentUser
+                        : secondUser,
+                    text: element.content ?? "",
+                    createdAt: DateTime.now(),
+                  );
+                }).toList();
 
-              setState(() {
-                messages.insertAll(0, historyMessages.reversed);
-              });
-            },
-            orElse: () {},
-          );
-        },
-        child: DashChat(
-          currentUser: currentUser,
-          messages: messages,
-          onSend: (ChatMessage message) {
-            sendMessage(message);
+                // setState(() {
+                //   messages.addAll(historyMessages?.reversed.toList() ?? []);
+                // });
+
+                setState(() {
+                  if (historyMessages == null || historyMessages.isEmpty) {
+                    hasMoreMessages = false; // Если сообщений больше нет
+                  } else {
+                    messages.insertAll(0, historyMessages.reversed.toList());
+                    currentPage++; // Увеличиваем номер текущей страницы
+                  }
+                  isLoading = false;
+                });
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  _scrollToBottom(
+                      shouldScrollToBottomForMethod:
+                          shouldScrollToBottom); // Прокрутка вниз после загрузки истории
+                });
+              },
+              orElse: () {
+                setState(() {
+                  isLoading = false;
+                });
+              },
+            );
           },
-          inputOptions: InputOptions(),
-          messageOptions: MessageOptions(containerColor: AppColors.cardsColor),
-        ),
+          child: BlocListener<SendFilesToChatBloc, SendFilesToChatState>(
+            listener: (context, state) {
+              state.maybeWhen(
+                  loaded: (fileUrl) {
+                    sendMessage(ChatMessage(
+                      text: fileUrl,
+                      user: currentUser,
+                      createdAt: DateTime.now(),
+                      customProperties: {'content': fileUrl},
+                    ));
+                  },
+                  orElse: () {});
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 7.h),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 7.w),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: ListView.builder(
+                        physics: const ClampingScrollPhysics(),
+                        controller: _scrollController,
+                        itemCount: messages.length + (isLoading ? 1 : 0),
+                        itemBuilder: (context, index) {
+                          if (isLoading && index == 0) {
+                            return const Center(
+                                child: CircularProgressIndicator.adaptive());
+                          }
+                          final message = messages[
+                              index - (isLoading ? 1 : 0)]; // Смещение индекса
+
+                          // Определяем, является ли это изображением или файлом
+                          bool isImage = message.text.endsWith('.jpg') ||
+                              message.text.endsWith('.png') ||
+                              message.text.endsWith('.jpeg');
+                          bool isFile = message.text.endsWith('.pdf') ||
+                              message.text.contains('http');
+
+                          return CustomChatMessage(
+                            content: message.text,
+                            isImage: isImage,
+                            isFile: isFile,
+                            fileUrl: message.text,
+                            isSender: message.user.id == currentUser.id,
+                          );
+                        },
+                      ),
+                    ),
+                    _buildMessageInput(),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ));
+  }
+
+  void _pickImage({required String filePath, required String fileName}) async {
+    // Create the message with the image's local path
+    final imageMessage = ChatMessage(
+      user: currentUser,
+      text: "", // Leave empty to indicate it's an image
+      createdAt: DateTime.now(),
+    );
+
+    setState(() {
+      messages.add(imageMessage); // Add the message immediately
+    });
+
+    // Optionally, upload the image to the server
+    _uploadFile(filePath: filePath, fileName: fileName);
+  }
+
+  void _pickFile({required String filePath, required String fileName}) async {
+    final result = await FilePicker.platform.pickFiles();
+
+    if (result != null && result.files.single != null) {
+      final file = result.files.single;
+
+      final fileMessage = ChatMessage(
+        user: currentUser,
+        text: "Sent a file", // Or "" if you don't want text
+        createdAt: DateTime.now(),
+        customProperties: {
+          // 'fileName': file.name,
+          'fileUrl': file.path,
+        },
+      );
+
+      setState(() {
+        messages.add(fileMessage);
+      });
+
+      _uploadFile(fileName: fileName, filePath: filePath);
+    }
+  }
+
+  void _uploadFile({required String filePath, required String fileName}) async {
+    try {
+      final multipartFile = await MultipartFile.fromFile(
+        filePath,
+        filename: fileName,
+      );
+
+      final body = {
+        "file": multipartFile,
+      };
+
+      BlocProvider.of<SendFilesToChatBloc>(context).add(
+        SendFilesToChatEvent.started(body: body),
+      );
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void _scrollToBottom({required bool shouldScrollToBottomForMethod}) {
+    if (shouldScrollToBottomForMethod && _scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  Widget _buildMessageInput() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: CustomTrackingComment(
+        onTap: () {
+          if (_controller.text.isNotEmpty) {
+            sendMessage(ChatMessage(
+              user: currentUser,
+              text: _controller.text,
+              createdAt: DateTime.now(),
+            ));
+            _controller.clear();
+            _scrollToBottom(
+                shouldScrollToBottomForMethod: shouldScrollToBottom);
+          }
+        },
+        onFilePicked: (filePath, fileName) {
+          _pickImage(filePath: filePath, fileName: fileName);
+        },
+        onImagePickedFromGallery: (imagePath, fileName) {
+          _pickImage(filePath: imagePath, fileName: fileName);
+        },
+        onImagePickedFromCamera: (imagePath, fileName) {
+          _pickImage(filePath: imagePath, fileName: fileName);
+        },
+        controller: _controller,
       ),
     );
   }
