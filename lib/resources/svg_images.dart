@@ -30,6 +30,7 @@ class SvgImages {
   static const String rating = 'assets/svgs/rating.svg';
   static const String search = 'assets/svgs/search.svg';
   static const String send = 'assets/svgs/send.svg';
+  static const String sendmessage = 'assets/svgs/sendmessage.svg';
   static const String sign = 'assets/svgs/sign.svg';
   static const String star = 'assets/svgs/star.svg';
   static const String switchjusticon = 'assets/svgs/switchjusticon.svg';

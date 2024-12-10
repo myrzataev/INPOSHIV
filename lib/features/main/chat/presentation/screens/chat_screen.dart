@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
+import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/send_files_to_chat_bloc/send_files_to_chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_chat_message.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
@@ -57,7 +58,11 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool isLoading = false;
   bool hasMoreMessages = true;
   bool shouldScrollToBottom = true;
-
+  bool recommendedMessageSended = false;
+  final List<String> recommendedMessages = [
+    "Здравствуйте",
+    "Пришлите договор о сотрудничестве"
+  ];
   @override
   void initState() {
     _scrollController = ScrollController(initialScrollOffset: 0);
@@ -173,9 +178,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         "orderId": widget.orderId
       }),
     );
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-    _scrollToBottom(shouldScrollToBottomForMethod: true);
-  });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottom(shouldScrollToBottomForMethod: true);
+    });
   }
 
   void _handleIncomingMessage(Map<String, dynamic> message) {
@@ -359,6 +364,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         },
                       ),
                     ),
+
+                    _buildRecommendedMessages(), // Рекомендованные сообщения
+
                     _buildMessageInput(),
                   ],
                 ),
@@ -372,7 +380,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     // Create the message with the image's local path
     final imageMessage = ChatMessage(
       user: currentUser,
-      text: "", // Leave empty to indicate it's an image
       createdAt: DateTime.now(),
     );
 
@@ -413,9 +420,41 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     }
   }
 
+  Widget _buildRecommendedMessages() {
+    return SizedBox(
+      height: 40.h,
+      child: ListView.separated(
+          scrollDirection: Axis.horizontal,
+          itemBuilder: (context, index) {
+            return Container(
+              decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.circular(20.r)),
+              child: TextButton(
+                  onPressed: () {
+                    sendMessage(ChatMessage(
+                        user: currentUser,
+                        createdAt: DateTime.now(),
+                        text: recommendedMessages[index]));
+                    setState(() {
+                      recommendedMessageSended = true;
+                    });
+                  },
+                  child: Text(recommendedMessages[index], style: AppFonts.w400s16.copyWith(color: Colors.white),)),
+            );
+          },
+          separatorBuilder: (context, index) {
+            return SizedBox(
+              width: 5.w,
+            );
+          },
+          itemCount: recommendedMessages.length),
+    );
+  }
+
   Widget _buildMessageInput() {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.only(bottom: 10.h),
       child: CustomTrackingComment(
         onTap: () {
           if (_controller.text.isNotEmpty) {

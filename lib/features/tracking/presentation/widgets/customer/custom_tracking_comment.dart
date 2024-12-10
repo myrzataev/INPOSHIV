@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/pick_file_service.dart';
@@ -40,12 +42,20 @@ class CustomTrackingComment extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
-            child: TextField(
-              controller: controller,
-              decoration: InputDecoration(
-                hintText: "Сообщение",
-                hintStyle: AppFonts.w400s16,
-                border: const OutlineInputBorder(),
+            child: SizedBox(
+              height: 45.h,
+              child: TextField(
+                controller: controller,
+                cursorColor: AppColors.borderColor,
+                decoration: InputDecoration(
+                    hintText: "Сообщение",
+                    hintStyle: AppFonts.w400s16,
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(15.r))),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            const BorderSide(color: AppColors.borderColorGrey),
+                        borderRadius: BorderRadius.all(Radius.circular(15.r)))),
               ),
             ),
           ),
@@ -54,8 +64,8 @@ class CustomTrackingComment extends StatelessWidget {
           onTap: () {
             onTap();
           },
-          child: Image.asset(
-            Images.send,
+          child: SvgPicture.asset(
+            SvgImages.sendmessage,
             height: 40.h,
             width: 40.w,
           ),

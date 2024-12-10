@@ -35,56 +35,63 @@ class CustomChatMessage extends StatelessWidget {
                 child: InkWell(
                   onTap: () => router.pushNamed("seeDoc",
                       extra: true, queryParameters: {"docUrl": content}),
-                  child: CachedNetworkImage(
-                    height: 250.h,
-                    width: 200.w,
-                    imageUrl: content,
-                    fit: BoxFit.cover,
-                    progressIndicatorBuilder: (context, url, progress) {
-                      return LoadingCard(height: 250.h, radius: 0);
-                    },
-                    errorWidget: (context, url, error) {
-                      return const Center(
-                        child: Icon(Icons.error, color: Colors.red),
-                      );
-                    },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.r),
+                    child: CachedNetworkImage(
+                      height: 250.h,
+                      width: 200.w,
+                      imageUrl: content,
+                      fit: BoxFit.cover,
+                      
+                      progressIndicatorBuilder: (context, url, progress) {
+                        return LoadingCard(height: 250.h, radius: 0);
+                      },
+                      errorWidget: (context, url, error) {
+                        return const Center(
+                          child: Icon(Icons.error, color: Colors.red),
+                        );
+                      },
+                    ),
                   ),
                 ),
               )
             : isFile
-                ? InkWell(
-                    onTap: () {
-                      debugPrint("Open file: $fileUrl");
-                      if (fileUrl.startsWith('http')) {
-                        router.pushNamed("seeDoc",
-                            extra: true, queryParameters: {"docUrl": fileUrl});
-                      }
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[300],
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      padding: EdgeInsets.all(8.h),
-                      width: 150.w,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.insert_drive_file,
-                                color: Colors.blue),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                fileUrl.split('/').last,
-                                overflow: TextOverflow.ellipsis,
+                ? Padding(
+                  padding:  EdgeInsets.symmetric(vertical: 5.h),
+                  child: InkWell(
+                      onTap: () {
+                        debugPrint("Open file: $fileUrl");
+                        if (fileUrl.startsWith('http')) {
+                          router.pushNamed("seeDoc",
+                              extra: true, queryParameters: {"docUrl": fileUrl});
+                        }
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: EdgeInsets.all(8.h),
+                        width: 150.w,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.insert_drive_file,
+                                  color: Colors.blue),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  fileUrl.split('/').last,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  )
+                )
                 : Padding(
                     padding: EdgeInsets.symmetric(vertical: 5.h),
                     child: Container(

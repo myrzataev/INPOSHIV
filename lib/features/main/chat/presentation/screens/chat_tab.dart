@@ -294,7 +294,21 @@ class _ChatTabState extends State<ChatTab> {
                                 .copyWith(color: AppColors.accentTextColor),
                           ),
                           Text(
-                            currentItem.lastMessageContent ?? "",
+                            ((currentItem.lastMessageContent
+                                            ?.endsWith(".jpg") ??
+                                        false) ||
+                                    (currentItem.lastMessageContent
+                                            ?.endsWith(".jpeg") ??
+                                        false) ||
+                                    (currentItem.lastMessageContent
+                                            ?.endsWith(".png") ??
+                                        false))
+                                ? "Фото"
+                                : (currentItem.lastMessageContent
+                                            ?.endsWith(".pdf") ??
+                                        false)
+                                    ? "Файл"
+                                    : currentItem.lastMessageContent ?? "",
                             style: AppFonts.w400s16,
                             maxLines: 1,
                             softWrap: true,
