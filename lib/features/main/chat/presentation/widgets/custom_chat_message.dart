@@ -1,11 +1,10 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/core/widgets/loading_card.dart';
 
 class CustomChatMessage extends StatelessWidget {
   final String content;
@@ -42,8 +41,7 @@ class CustomChatMessage extends StatelessWidget {
                     imageUrl: content,
                     fit: BoxFit.cover,
                     progressIndicatorBuilder: (context, url, progress) {
-                      return const Center(
-                          child: CircularProgressIndicator.adaptive());
+                      return LoadingCard(height: 250.h, radius: 0);
                     },
                     errorWidget: (context, url, error) {
                       return const Center(

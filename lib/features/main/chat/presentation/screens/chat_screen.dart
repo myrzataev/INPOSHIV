@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:dio/dio.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
@@ -85,6 +84,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
       model: const PagebleModel(page: 0, size: 20, sort: []),
     ));
     connect();
+    _scrollToBottom(shouldScrollToBottomForMethod: true);
     sendAutoMessageWithDelay();
   }
 
@@ -158,7 +158,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void sendMessage(ChatMessage message) {
-    print("recipientName is ${widget.recipientName}");
     setState(() {
       messages.insert(messages.length, message);
     });
@@ -174,16 +173,17 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
         "orderId": widget.orderId
       }),
     );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+    _scrollToBottom(shouldScrollToBottomForMethod: true);
+  });
   }
 
   void _handleIncomingMessage(Map<String, dynamic> message) {
-    // Check if the message has already been processed
     if (receivedMessageIds.contains(message['messageUuid'])) {
       debugPrint("Message already processed: ${message['messageUuid']}");
       return;
     }
 
-    // Ignore messages from the current user
     if (message['senderUuid'] == currentUser.id) {
       debugPrint("Message from the current user, ignoring.");
       return;
@@ -193,17 +193,12 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
     String content = message['content'] ?? "";
 
-    // Check if the content is an image URL (e.g., jpg, png, jpeg)
     if (content.endsWith(".jpg") ||
         content.endsWith(".png") ||
         content.endsWith(".jpeg")) {
-      // Handle image content
-      print("Image content: $content");
     } else if (content.endsWith(".pdf")) {
-      // Handle PDF content (optional: provide a link to open/download)
       print("PDF content: $content");
     } else {
-      // Default text content
       print("Text content: $content");
     }
 
@@ -224,6 +219,8 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
     setState(() {
       messages.insert(messages.length, newMessage);
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom(shouldScrollToBottomForMethod: true);
     });
   }
@@ -336,6 +333,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                         physics: const ClampingScrollPhysics(),
                         controller: _scrollController,
                         itemCount: messages.length + (isLoading ? 1 : 0),
+                        cacheExtent: MediaQuery.sizeOf(context).height * 2,
                         itemBuilder: (context, index) {
                           if (isLoading && index == 0) {
                             return const Center(
@@ -386,30 +384,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
     _uploadFile(filePath: filePath, fileName: fileName);
   }
 
-  void _pickFile({required String filePath, required String fileName}) async {
-    final result = await FilePicker.platform.pickFiles();
-
-    if (result != null && result.files.single != null) {
-      final file = result.files.single;
-
-      final fileMessage = ChatMessage(
-        user: currentUser,
-        text: "Sent a file", // Or "" if you don't want text
-        createdAt: DateTime.now(),
-        customProperties: {
-          // 'fileName': file.name,
-          'fileUrl': file.path,
-        },
-      );
-
-      setState(() {
-        messages.add(fileMessage);
-      });
-
-      _uploadFile(fileName: fileName, filePath: filePath);
-    }
-  }
-
   void _uploadFile({required String filePath, required String fileName}) async {
     try {
       final multipartFile = await MultipartFile.fromFile(
@@ -451,8 +425,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
               createdAt: DateTime.now(),
             ));
             _controller.clear();
-            _scrollToBottom(
-                shouldScrollToBottomForMethod: shouldScrollToBottom);
+            _scrollToBottom(shouldScrollToBottomForMethod: true);
           }
         },
         onFilePicked: (filePath, fileName) {

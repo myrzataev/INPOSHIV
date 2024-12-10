@@ -64,7 +64,7 @@ class FourthOnboardingScreenForCustomer extends StatelessWidget {
                       MaterialPageRoute(
                           builder: (context) =>
                               FourthOnboardingScreen()));
-                  GoRouter.of(context).pushNamed("fourthOnBoarding");
+                  GoRouter.of(context).pushNamed("fourthOnboarding");
                 },
               ),
             ),

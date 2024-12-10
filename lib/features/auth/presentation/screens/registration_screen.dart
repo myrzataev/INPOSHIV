@@ -362,7 +362,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             });
                           },
                           error: (error) {
-                            router.pop();
+                          Navigator.pop(context);
                             final String errorMessage = error.userMessage;
                             Showdialog.showErrorDialog(
                               context: context,

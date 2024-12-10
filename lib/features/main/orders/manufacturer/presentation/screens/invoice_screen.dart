@@ -172,7 +172,7 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                           value: "шт",
                           textInputType:
                               const TextInputType.numberWithOptions(),
-                          hintText: "500",
+                          hintText: "0",
                           controller: amountController,
                         ),
                         CustomOrderRowWithTextfield(
@@ -191,7 +191,7 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                           value: "\$",
                           textInputType:
                               const TextInputType.numberWithOptions(),
-                          hintText: "5",
+                          hintText: "0",
                           controller: retailPriceController,
                         ),
                         CustomOrderRowWithoutTextfield(
@@ -214,12 +214,38 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                           title: "Цена за разработку лекал",
                           controller: priceForLecalaController,
                           value: "\$",
-                          hintText: "100+",
+                          hintText: "0+",
                           textInputType: TextInputType.number,
                         ),
                         CustomOrderRowWithTextfield(
                             title: "Скидка",
-                            onChanged: (value) {},
+                            onChanged: (value) {
+                              setState(() {
+                                totalPriceWithAdditional =
+                                    calculateAmountWithAdditional(
+                                            totalAmount:
+                                                totalPriceWithoutAdditional,
+                                            additional:
+                                                double.tryParse(value) ?? 0) -
+                                        (calculateAmountWithAdditional(
+                                                totalAmount:
+                                                    totalPriceWithoutAdditional,
+                                                additional:
+                                                    double.tryParse(value) ??
+                                                        0) *
+                                            ((int.tryParse(value) ?? 0) / 100));
+                                totalPriceWithAdditionalInRuble =
+                                    (calculateretailInRuble(
+                                            currency: currentCurrency,
+                                            totalSumInDollar:
+                                                totalPriceWithAdditional)) -
+                                        (calculateretailInRuble(
+                                                currency: currentCurrency,
+                                                totalSumInDollar:
+                                                    totalPriceWithAdditional) *
+                                            ((int.tryParse(value) ?? 0) / 100));
+                              });
+                            },
                             value: "%",
                             textInputType:
                                 const TextInputType.numberWithOptions(),
@@ -238,7 +264,7 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                           }),
                           title: "Образец",
                           value: "\$",
-                          hintText: "50+",
+                          hintText: "0+",
                           textInputType: TextInputType.number,
                           controller: exampleController,
                         ),
@@ -255,15 +281,16 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                           }),
                           controller: deliveryPriceController,
                           textInputType: TextInputType.number,
-                          hintText: "50+",
+                          hintText: "0+",
                           title: "Доставка",
                           value: "\$",
                         ),
                         CustomOrderRowWithoutTextfield(
                           title: "Итоговая примерная сумма + доп. расходы",
-                          value: "$totalPriceWithAdditional\$",
+                          value:
+                              "${totalPriceWithAdditional.toStringAsFixed(2)}\$",
                           additionalValue:
-                              "$totalPriceWithAdditionalInRuble руб",
+                              "${totalPriceWithAdditionalInRuble.toStringAsFixed(2)} руб",
                         ),
                       ],
                     ),
@@ -386,97 +413,5 @@ class _InvoiceScreen extends State<InvoiceScreen> {
   double calculateretailInRuble(
       {required double totalSumInDollar, required double currency}) {
     return totalSumInDollar * currency;
-  }
-
-  void _showAuctionDetail() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(10.r)),
-      ),
-      builder: (BuildContext context) {
-        return DraggableScrollableSheet(
-          expand: false,
-          initialChildSize: 0.3, // adjust the height as needed
-          minChildSize: 0.3,
-          maxChildSize: 0.5,
-          builder: (context, scrollController) {
-            return SingleChildScrollView(
-              controller: scrollController,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Выберите способ оплаты",
-                      style: AppFonts.w700s36,
-                    ),
-                    CustomChoosePaymentWidget(
-                        text:
-                            "Через платформу Наиболее безопасный способ\nЕще в разработке",
-                        icon: SvgImages.lock,
-                        isActive: false,
-                        onTap: () {
-                          // GoRouter.of(context).pushNamed("payScreen");
-                        }),
-                    CustomChoosePaymentWidget(
-                        isActive: true,
-                        text: "Запросить реквизиты",
-                        icon: SvgImages.lock,
-                        onTap: () {
-                          showDialog(
-                              context: context,
-                              builder: (context) => CustomDialog(
-                                  title:
-                                      "При выборе этого способа оплаты платформа не несет ответственности за оплату",
-                                  description:
-                                      "Все риски, связанные с оплатой вы берете на себя",
-                                  button: CustomButton(
-                                      text: "Запросить реквизиты",
-                                      onPressed: () {
-                                        preferences.setBool(
-                                            Provider.of<ChatProvider>(context,
-                                                        listen: false)
-                                                    .chatRoomId ??
-                                                "",
-                                            true);
-                                        context.goNamed("chatScreen",
-                                            queryParameters: {
-                                              "receipentUuid":
-                                                  // "8ba821e4-249e-4847-b86a-2af23097bb41",
-                                                  Provider.of<ChatProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .receipentId,
-                                              "chatUuid":
-                                                  // "8ba821e4-249e-4847-b86a-2af23097bb41_b52bbbc4-cdfc-4c61-bfa3-36b5ea37029c",
-                                                  Provider.of<ChatProvider>(
-                                                          context,
-                                                          listen: false)
-                                                      .chatRoomId,
-                                              "autoMessage":
-                                                  "Пришлите, пожалуйста, свои реквизиты"
-                                            });
-                                      })));
-
-                          // GoRouter.of(context).pushNamed("payScreen");
-                        }),
-                    // CustomChoosePaymentWidget(
-                    //   isActive: true,
-                    //     text: "Оплата физ. лицу",
-                    //     icon: SvgImages.lock,
-                    //     onTap: () {
-                    //       GoRouter.of(context).pushNamed("payScreen");
-                    //     }),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 }

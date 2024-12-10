@@ -691,7 +691,9 @@ class _MainScreenState extends State<MainScreen> {
                             ));
                           } else {
                             return RefreshIndicator.adaptive(
-                              onRefresh: () async => (),
+                              onRefresh: () async => (
+                                getAuctionsList()
+                              ),
                               child: SingleChildScrollView(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                 child: Column(
