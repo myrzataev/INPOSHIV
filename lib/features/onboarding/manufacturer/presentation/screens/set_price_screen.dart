@@ -18,6 +18,7 @@ import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current
 import 'package:inposhiv/features/onboarding/customer/presentation/providers/order_provider.dart';
 import 'package:inposhiv/features/onboarding/manufacturer/presentation/screens/set_quantity_screen.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:inposhiv/services/showdialog.dart';
 import 'package:provider/provider.dart';
@@ -264,7 +265,7 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                             Text("Итого"),
                           ],
                         ),
-                        suffixText: "$totalDollarSum \$",
+                        suffixText: "${formatNumber(totalDollarSum)} \$",
                         labelStyle: AppFonts.w400s16,
                         focusedBorder: const UnderlineInputBorder(
                           borderSide: BorderSide(
@@ -294,11 +295,11 @@ class _ChooseCategoryScreenState extends State<SetPriceScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "${retailPriceInRuble.toStringAsFixed(2)}₽",
+                          "${formatNumber(retailPriceInRuble)}₽",
                           style: AppFonts.w400s16,
                         ),
                         Text(
-                          "${totalSumRuble.toStringAsFixed(2)}₽",
+                          "${formatNumber(totalSumRuble)}₽",
                           style: AppFonts.w400s16,
                         ),
                       ],

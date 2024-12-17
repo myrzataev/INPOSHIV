@@ -219,7 +219,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                                   child: LoadingCard(height: 300.h, radius: 0),
                                                                                 ),
                                                                             fit: BoxFit
-                                                                                .cover,
+                                                                                .contain,
                                                                             // height: 350.h,
                                                                             width: double
                                                                                 .infinity,
@@ -589,7 +589,7 @@ class _AuctionScreenState extends State<AuctionScreen> {
                                                                         child: ClipRRect(
                                                                             borderRadius: BorderRadius.circular(6.r),
                                                                             child: CachedNetworkImage(
-                                                                                fit: BoxFit.cover,
+                                                                                fit: BoxFit.contain,
                                                                                 height: 100.h,
                                                                                 width: 100.w,
                                                                                 // progressIndicatorBuilder: (context, url, progress) => ,

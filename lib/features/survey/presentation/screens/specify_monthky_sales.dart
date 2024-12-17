@@ -34,7 +34,7 @@ class SpecifyMonthlySalesScreen extends StatelessWidget {
                   ? "Укажите примерный ежемесячный обьем продаж в USD"
                   : "Укажите средний ежемесячный обьем продукции ",
               style: AppFonts.w700s36
-                  .copyWith(height: 0.8, fontWeight: FontWeight.bold),
+                  .copyWith(height: 1, fontWeight: FontWeight.bold),
             ),
             Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),

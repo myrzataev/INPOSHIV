@@ -59,7 +59,6 @@ class CustomChoosePaymentWidget extends StatelessWidget {
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           softWrap: true,
-                          
                           style: AppFonts.w400s16.copyWith(
                               color: isActive
                                   ? const Color(0xff101010)

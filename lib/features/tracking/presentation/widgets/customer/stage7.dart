@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
@@ -15,6 +16,8 @@ class Stage7ForCustomer extends StatelessWidget {
       onImagePickedFromCamera;
   final List<Map<String, String?>> allComments;
   final List<String?>? allDocumentsOfStage;
+  final PlatformFile? documents;
+  final VoidCallback? onTapForCheck;
 
   const Stage7ForCustomer({
     super.key,
@@ -25,6 +28,8 @@ class Stage7ForCustomer extends StatelessWidget {
     this.onImagePickedFromCamera,
     required this.allComments,
     this.allDocumentsOfStage,
+    this.documents,
+    this.onTapForCheck,
   });
 
   @override
@@ -69,6 +74,40 @@ class Stage7ForCustomer extends StatelessWidget {
                             color: AppColors.accentTextColor,
                           ),
                         ),
+                        documents != null
+                            ? // Only show this when a file is selected
+                            SizedBox(
+                                height: 40.h,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 1, // Adjust as needed
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        if (documents != null) onTapForCheck;
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.file_present,
+                                              color: AppColors.accentTextColor),
+                                          SizedBox(width: 8.w),
+                                          Text(
+                                            documents!
+                                                .name, // Display the file name
+                                            style: AppFonts.w400s16.copyWith(
+                                              color: AppColors.accentTextColor,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            : const SizedBox.shrink(),
                         Text(
                           "Комментарии от заказчика",
                           style: AppFonts.w400s14,

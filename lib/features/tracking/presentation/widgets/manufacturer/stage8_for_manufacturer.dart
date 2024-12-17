@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
@@ -12,6 +13,8 @@ class Stage8ForManufacturer extends StatelessWidget {
   final Function onTapForAct;
   final List<Map<String, String?>> allComments;
   final List<String?>? allDocumentsOfStage;
+  final PlatformFile? documents;
+  final VoidCallback? onTapForCheck;
   const Stage8ForManufacturer({
     super.key,
     required this.currentIndexOfData,
@@ -19,6 +22,8 @@ class Stage8ForManufacturer extends StatelessWidget {
     required this.allComments,
     required this.onTapForAct,
     this.allDocumentsOfStage,
+    this.documents,
+    this.onTapForCheck,
   });
 
   final int currentIndexOfData;
@@ -66,6 +71,38 @@ class Stage8ForManufacturer extends StatelessWidget {
                     color: AppColors.accentTextColor),
               ),
             ),
+            documents != null
+                ? // Only show this when a file is selected
+                SizedBox(
+                    height: 40.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 1, // Adjust as needed
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            if (documents != null) onTapForAct;
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.file_present,
+                                  color: AppColors.accentTextColor),
+                              SizedBox(width: 8.w),
+                              Text(
+                                documents!.name, // Display the file name
+                                style: AppFonts.w400s16.copyWith(
+                                  color: AppColors.accentTextColor,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : const SizedBox.shrink(),
             allDocumentsOfStage != null
                 ? SizedBox(
                     height: 70.h,

@@ -48,7 +48,7 @@ class CustomOrderRowWithTextfield extends StatelessWidget {
                   decoration: InputDecoration(
                       enabledBorder: const UnderlineInputBorder(
                           borderSide:
-                              BorderSide(color: AppColors.containersGrey)),
+                              BorderSide(color: AppColors.accentTextColor)),
                       focusedBorder: const UnderlineInputBorder(
                           borderSide:
                               BorderSide(color: AppColors.containersGrey)),

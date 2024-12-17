@@ -41,7 +41,7 @@ class OrderDetailsModel with _$OrderDetailsModel {
   const factory OrderDetailsModel({
     int? orderId,
     String? productName,
-    int? material,
+    String? material,
     String? color,
     int? quantity,
     @JsonKey(includeIfNull: false, toJson: _nullableListToJson)

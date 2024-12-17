@@ -19,6 +19,7 @@ import 'package:inposhiv/features/auth/presentation/blocs/login/login_bloc.dart'
 import 'package:inposhiv/features/auth/presentation/providers/photo_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
 import 'package:inposhiv/features/auth/presentation/providers/size_provider.dart';
+import 'package:inposhiv/features/auth/presentation/providers/user_provider.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/create_auction_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_auction_members_ds.dart';
 import 'package:inposhiv/features/main/auction/data/data_source/get_auctions_list_ds.dart';
@@ -33,6 +34,7 @@ import 'package:inposhiv/features/main/auction/data/repositories/get_customer_or
 import 'package:inposhiv/features/main/auction/data/repositories/get_detailed_auction_info_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/get_manufacturer_auctions_repoimpl.dart';
 import 'package:inposhiv/features/main/auction/data/repositories/make_bid_repoimpl.dart';
+import 'package:inposhiv/features/main/auction/presentation/blocs/active_auctions_bloc/active_auctions_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/auction_bloc/auction_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/create_auction_bloc/create_auction_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
@@ -86,6 +88,7 @@ import 'package:inposhiv/features/main/orders/customer/data/repositories/search_
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_invoice_repoimpl.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/send_order_details_repo_impl.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/confirm_tracking_stage_bloc/confirm_tracking_stage_bloc.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/customer_orders_bloc/customer_orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/customers_completed_orders_bloc/customers_completed_orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/get_invoice_details_bloc/get_invoice_details_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/order_tracking_bloc/order_tracking_bloc.dart';
@@ -689,7 +692,15 @@ class _MyAppState extends State<MyApp> {
                       context))),
           BlocProvider(
               create: (context) => SendFilesToChatBloc(
-                  RepositoryProvider.of<SendFilesToChatRepoimpl>(context)))
+                  RepositoryProvider.of<SendFilesToChatRepoimpl>(context))),
+          BlocProvider(
+              create: (context) => CustomerOrdersBloc(
+                  getCustomerOrdersRepoimpl:
+                      RepositoryProvider.of<GetCustomerOrdersRepoimpl>(
+                          context))),
+          BlocProvider(
+              create: (context) => ActiveAuctionsBloc(
+                  RepositoryProvider.of<GetAuctionsListRepoimmpl>(context)))
         ],
         child: MultiProvider(
           providers: [
@@ -702,7 +713,8 @@ class _MyAppState extends State<MyApp> {
                     PlatformProvider(platformIsAndroid: isAndroid)),
             ChangeNotifierProvider(create: (context) => CategoriesProvider()),
             ChangeNotifierProvider(create: (context) => PrioritiesProvider()),
-            ChangeNotifierProvider(create: (context) => ChatProvider())
+            ChangeNotifierProvider(create: (context) => ChatProvider()),
+            ChangeNotifierProvider(create: (context) => UserProvider())
           ],
           child: TextFieldUnfocus(
             child: ScreenUtilInit(

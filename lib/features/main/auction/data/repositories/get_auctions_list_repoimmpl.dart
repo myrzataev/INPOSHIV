@@ -9,4 +9,11 @@ class GetAuctionsListRepoimmpl implements GetAuctionsList {
   Future<List<AuctionModel>> getAuctionsList() async {
     return await dataSource.getAuctionsList();
   }
+
+  @override
+  Future<List<AuctionModel>> getActiveAuctionsList(
+      {required String manufacturerUuid}) async {
+    return await dataSource.getActiveAuctionsList(
+        manufacturerUuid: manufacturerUuid);
+  }
 }

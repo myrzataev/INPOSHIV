@@ -23,7 +23,7 @@ OrderDetailsResponseModel _$OrderDetailsResponseModelFromJson(
 mixin _$OrderDetailsResponseModel {
   int? get orderId => throw _privateConstructorUsedError;
   String? get productName => throw _privateConstructorUsedError;
-  int? get material => throw _privateConstructorUsedError;
+  String? get material => throw _privateConstructorUsedError;
   String? get color => throw _privateConstructorUsedError;
   int? get quantity => throw _privateConstructorUsedError;
   dynamic get technicalDocuments => throw _privateConstructorUsedError;
@@ -60,7 +60,7 @@ abstract class $OrderDetailsResponseModelCopyWith<$Res> {
   $Res call(
       {int? orderId,
       String? productName,
-      int? material,
+      String? material,
       String? color,
       int? quantity,
       dynamic technicalDocuments,
@@ -125,7 +125,7 @@ class _$OrderDetailsResponseModelCopyWithImpl<$Res,
       material: freezed == material
           ? _value.material
           : material // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       color: freezed == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -202,7 +202,7 @@ abstract class _$$OrderDetailsResponseModelImplCopyWith<$Res>
   $Res call(
       {int? orderId,
       String? productName,
-      int? material,
+      String? material,
       String? color,
       int? quantity,
       dynamic technicalDocuments,
@@ -266,7 +266,7 @@ class __$$OrderDetailsResponseModelImplCopyWithImpl<$Res>
       material: freezed == material
           ? _value.material
           : material // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       color: freezed == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -367,7 +367,7 @@ class _$OrderDetailsResponseModelImpl implements _OrderDetailsResponseModel {
   @override
   final String? productName;
   @override
-  final int? material;
+  final String? material;
   @override
   final String? color;
   @override
@@ -531,7 +531,7 @@ abstract class _OrderDetailsResponseModel implements OrderDetailsResponseModel {
   const factory _OrderDetailsResponseModel(
           {final int? orderId,
           final String? productName,
-          final int? material,
+          final String? material,
           final String? color,
           final int? quantity,
           final dynamic technicalDocuments,
@@ -557,7 +557,7 @@ abstract class _OrderDetailsResponseModel implements OrderDetailsResponseModel {
   @override
   String? get productName;
   @override
-  int? get material;
+  String? get material;
   @override
   String? get color;
   @override

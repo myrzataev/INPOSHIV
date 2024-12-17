@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_multi_formatter/flutter_multi_formatter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
-import 'package:inposhiv/core/error/app_error.dart';
-import 'package:inposhiv/core/error/error_types.dart';
 import 'package:inposhiv/core/utils/app_colors.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
 import 'package:inposhiv/features/auth/data/models/user_model.dart';
 import 'package:inposhiv/features/auth/presentation/blocs/auth/auth_bloc.dart';
 import 'package:inposhiv/features/auth/presentation/providers/role_provider.dart';
+import 'package:inposhiv/features/auth/presentation/providers/user_provider.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_user_profile_textfield.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
@@ -74,7 +72,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
       for (String countryCode in countryCodes) {
         if (countryCode.startsWith(countryCode)) {
-          print(countryCode);
           phoneNumber = phoneNumber?.substring(countryCode.length);
           setState(() {
             _initialCountryData = PhoneCodes.getCountryDataByPhone(countryCode);
@@ -362,7 +359,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                             });
                           },
                           error: (error) {
-                          Navigator.pop(context);
+                            Navigator.pop(context);
                             final String errorMessage = error.userMessage;
                             Showdialog.showErrorDialog(
                               context: context,
@@ -392,7 +389,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 Center(
                   child: TextButton(
                       onPressed: () {
-                        GoRouter.of(context).pushNamed("authorization");
+                        Provider.of<UserProvider>(context, listen: false)
+                            .updateUserProvider(userHasAccountNew: true);
+                        router.pushNamed("authorization");
                       },
                       child: Text(
                         "Войти",

@@ -9,7 +9,7 @@ class OrderDetailsResponseModel with _$OrderDetailsResponseModel {
     const factory OrderDetailsResponseModel({
         int? orderId,
         String? productName,
-        int? material,
+        String? material,
         String? color,
         int? quantity,
         dynamic technicalDocuments,

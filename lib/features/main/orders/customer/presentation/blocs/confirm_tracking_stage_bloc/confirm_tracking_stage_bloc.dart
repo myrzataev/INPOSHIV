@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:inposhiv/core/error/app_error.dart';
+import 'package:inposhiv/core/error/error_handler.dart';
 import 'package:inposhiv/features/main/orders/customer/data/models/tracking_model.dart';
 import 'package:inposhiv/features/main/orders/customer/data/repositories/confirm_tracking_stage_repoimpl.dart';
 
@@ -21,7 +23,7 @@ class ConfirmTrackingStageBloc
             body: event.body, queryParameters: event.queryParameters);
         emit(ConfirmTrackingStageState.loaded(model: result));
       } catch (e) {
-        emit(ConfirmTrackingStageState.error(errorText: e.toString()));
+        emit(ConfirmTrackingStageState.error(errorText: handleException(e)));
       }
     });
   }

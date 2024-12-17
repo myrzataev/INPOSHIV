@@ -11,7 +11,7 @@ _$OrderDetailsModelImpl _$$OrderDetailsModelImplFromJson(
     _$OrderDetailsModelImpl(
       orderId: (json['orderId'] as num?)?.toInt(),
       productName: json['productName'] as String?,
-      material: (json['material'] as num?)?.toInt(),
+      material: json['material'] as String?,
       color: json['color'] as String?,
       quantity: (json['quantity'] as num?)?.toInt(),
       technicalDocuments: (json['technicalDocuments'] as List<dynamic>?)

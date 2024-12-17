@@ -8,6 +8,6 @@ enum ErrorType {
   notFound,
   validation,
   unknown,
-  authorization, // Группа для всех ошибок авторизации
-  other, // Группа для других ошибок
+  authorization,
+  other,
 }

@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
@@ -16,7 +17,8 @@ class Stage5ForManufacturer extends StatelessWidget {
   final void Function(String imagePath, String fileName)?
       onImagePickedFromCamera;
   final List<String?>? allDocumentsOfStage;
-
+  final PlatformFile? documents;
+  final VoidCallback? onTapForCheck;
   const Stage5ForManufacturer({
     super.key,
     required this.currentIndexOfData,
@@ -27,6 +29,8 @@ class Stage5ForManufacturer extends StatelessWidget {
     this.onFilePicked,
     this.onImagePickedFromGallery,
     this.onImagePickedFromCamera,
+    this.documents,
+    this.onTapForCheck,
   });
 
   final int currentIndexOfData;
@@ -65,6 +69,38 @@ class Stage5ForManufacturer extends StatelessWidget {
                 ),
               ),
             ),
+            documents != null
+                ? // Only show this when a file is selected
+                SizedBox(
+                    height: 40.h,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 1, // Adjust as needed
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () {
+                            if (documents != null) onTapForCheck;
+                          },
+                          child: Row(
+                            children: [
+                              const Icon(Icons.file_present,
+                                  color: AppColors.accentTextColor),
+                              SizedBox(width: 8.w),
+                              Text(
+                                documents!.name, // Display the file name
+                                style: AppFonts.w400s16.copyWith(
+                                  color: AppColors.accentTextColor,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : const SizedBox.shrink(),
             Text(
               "Комментарии от производителя",
               style: AppFonts.w400s14.copyWith(),

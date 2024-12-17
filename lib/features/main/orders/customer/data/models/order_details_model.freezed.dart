@@ -22,7 +22,7 @@ OrderDetailsModel _$OrderDetailsModelFromJson(Map<String, dynamic> json) {
 mixin _$OrderDetailsModel {
   int? get orderId => throw _privateConstructorUsedError;
   String? get productName => throw _privateConstructorUsedError;
-  int? get material => throw _privateConstructorUsedError;
+  String? get material => throw _privateConstructorUsedError;
   String? get color => throw _privateConstructorUsedError;
   int? get quantity => throw _privateConstructorUsedError;
   @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
@@ -58,7 +58,7 @@ abstract class $OrderDetailsModelCopyWith<$Res> {
   $Res call(
       {int? orderId,
       String? productName,
-      int? material,
+      String? material,
       String? color,
       int? quantity,
       @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
@@ -118,7 +118,7 @@ class _$OrderDetailsModelCopyWithImpl<$Res, $Val extends OrderDetailsModel>
       material: freezed == material
           ? _value.material
           : material // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       color: freezed == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -182,7 +182,7 @@ abstract class _$$OrderDetailsModelImplCopyWith<$Res>
   $Res call(
       {int? orderId,
       String? productName,
-      int? material,
+      String? material,
       String? color,
       int? quantity,
       @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
@@ -240,7 +240,7 @@ class __$$OrderDetailsModelImplCopyWithImpl<$Res>
       material: freezed == material
           ? _value.material
           : material // ignore: cast_nullable_to_non_nullable
-              as int?,
+              as String?,
       color: freezed == color
           ? _value.color
           : color // ignore: cast_nullable_to_non_nullable
@@ -328,7 +328,7 @@ class _$OrderDetailsModelImpl implements _OrderDetailsModel {
   @override
   final String? productName;
   @override
-  final int? material;
+  final String? material;
   @override
   final String? color;
   @override
@@ -479,7 +479,7 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
   const factory _OrderDetailsModel(
       {final int? orderId,
       final String? productName,
-      final int? material,
+      final String? material,
       final String? color,
       final int? quantity,
       @JsonKey(includeIfNull: false, toJson: _nullableListToJson)
@@ -503,7 +503,7 @@ abstract class _OrderDetailsModel implements OrderDetailsModel {
   @override
   String? get productName;
   @override
-  int? get material;
+  String? get material;
   @override
   String? get color;
   @override

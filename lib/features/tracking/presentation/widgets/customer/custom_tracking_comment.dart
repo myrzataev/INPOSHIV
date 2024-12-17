@@ -42,21 +42,20 @@ class CustomTrackingComment extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 5.w),
-            child: SizedBox(
-              height: 45.h,
-              child: TextField(
-                controller: controller,
-                cursorColor: AppColors.borderColor,
-                decoration: InputDecoration(
-                    hintText: "Сообщение",
-                    hintStyle: AppFonts.w400s16,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.r))),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: AppColors.borderColorGrey),
-                        borderRadius: BorderRadius.all(Radius.circular(15.r)))),
-              ),
+            child: TextField(
+              controller: controller,
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              cursorColor: AppColors.borderColor,
+              decoration: InputDecoration(
+                  hintText: "Сообщение",
+                  hintStyle: AppFonts.w400s16,
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(15.r))),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide:
+                          const BorderSide(color: AppColors.borderColorGrey),
+                      borderRadius: BorderRadius.all(Radius.circular(15.r)))),
             ),
           ),
         ),

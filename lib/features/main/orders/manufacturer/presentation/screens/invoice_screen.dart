@@ -14,9 +14,9 @@ import 'package:inposhiv/features/main/chat/presentation/widgets/custom_order_wi
 import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_dialog.dart';
 import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/orders_bloc/orders_bloc.dart';
-import 'package:inposhiv/features/main/orders/manufacturer/presentation/widgets/choose_payment.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +47,8 @@ class _InvoiceScreen extends State<InvoiceScreen> {
   double totalPriceWithoutAdditional = 0;
   double totalPriceWithAdditional = 0;
   double totalPriceWithoutAdditionalInRuble = 0;
+  double totalPriceWithAdditionalDiscount = 0;
+  double totalPriceWithoutAdditionalInRubleDiscount = 0;
   double totalPriceWithAdditionalInRuble = 0;
   double amount = 0;
   double amountWithAdditional = 0;
@@ -69,6 +71,55 @@ class _InvoiceScreen extends State<InvoiceScreen> {
     BlocProvider.of<CurrentCurrencyBloc>(context)
         .add(const CurrentCurrencyEvent.getCurrentCurrencyEvent());
     super.initState();
+    _addListeners();
+  }
+
+  void _addListeners() {
+    amountController.addListener(_recalculate);
+    retailPriceController.addListener(_recalculate);
+    priceForLecalaController.addListener(_recalculate);
+    exampleController.addListener(_recalculate);
+    deliveryPriceController.addListener(_recalculate);
+    discountController.addListener(_recalculate);
+  }
+
+  void _recalculate() {
+    setState(() {
+      // Parsing values from controllers
+      amount = double.tryParse(amountController.text) ?? 0;
+      double retailPrice = double.tryParse(retailPriceController.text) ?? 0;
+      double lekalaCost = double.tryParse(priceForLecalaController.text) ?? 0;
+      double exampleCost = double.tryParse(exampleController.text) ?? 0;
+      double deliveryCost = double.tryParse(deliveryPriceController.text) ?? 0;
+      double discountPercentage = double.tryParse(discountController.text) ?? 0;
+
+      // Calculating totals
+      totalPriceWithoutAdditional = calculateAmount(
+        amount: amount,
+        price: retailPrice,
+      );
+
+      totalPriceWithoutAdditionalInRuble = calculateretailInRuble(
+        currency: currentCurrency,
+        totalSumInDollar: totalPriceWithoutAdditional,
+      );
+
+      totalPriceWithAdditional =
+          totalPriceWithoutAdditional + lekalaCost + exampleCost + deliveryCost;
+
+      totalPriceWithAdditionalInRuble = calculateretailInRuble(
+        currency: currentCurrency,
+        totalSumInDollar: totalPriceWithAdditional,
+      );
+
+      totalPriceWithAdditionalDiscount = totalPriceWithAdditional -
+          (totalPriceWithAdditional * (discountPercentage / 100));
+
+      totalPriceWithoutAdditionalInRubleDiscount = calculateretailInRuble(
+        currency: currentCurrency,
+        totalSumInDollar: totalPriceWithAdditionalDiscount,
+      );
+    });
   }
 
   @override
@@ -96,7 +147,7 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                 invoiceSended: (model) {
                   router.pop();
                   preferences.setBool(
-                      "ivoice${model.orderId.toString()}", true);
+                      "invoice${model.orderId.toString()}", true);
                   showDialog(
                       context: context,
                       builder: (context) => CustomDialog(
@@ -115,12 +166,13 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                 },
                 changeInvoiceSuccess: (model) {
                   router.pop();
+
                   showDialog(
                       context: context,
                       builder: (context) => CustomDialog(
-                            title: "Мы отправили на подтверждение",
+                            title: "Мы отправили Заказчику на подтверждение",
                             description:
-                                "Мы уведомим вас, когда заказчик подтвердит счет на оплату",
+                                "Мы уведомим вас, когда он подтвердит счет на оплату",
                             button: CustomButton(
                                 text: "Закрыть",
                                 onPressed: () {
@@ -156,141 +208,69 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                           ),
                         ),
                         CustomOrderRowWithTextfield(
-                          onChanged: (value) => setState(() {
-                            amount = double.tryParse(value) ?? 0;
-                            totalPriceWithoutAdditional = calculateAmount(
-                                amount: double.tryParse(value) ?? 0,
-                                price: double.tryParse(
-                                        retailPriceController.text) ??
-                                    0);
-                            calculateretailInRuble(
-                                currency: currentCurrency,
-                                totalSumInDollar: totalPriceWithoutAdditional);
-                          }),
+                          onChanged: (value) => (),
                           title:
                               "Примерное количество товара\nТочное кол-во будет указано после раскроя ткани",
                           value: "шт",
                           textInputType:
                               const TextInputType.numberWithOptions(),
-                          hintText: "0",
+                          hintText: " 0 ",
                           controller: amountController,
                         ),
                         CustomOrderRowWithTextfield(
-                          onChanged: (value) => setState(() {
-                            totalPriceWithoutAdditional = calculateAmount(
-                                amount: amount,
-                                price: double.tryParse(value) ?? 0);
-                            totalPriceWithoutAdditionalInRuble =
-                                calculateretailInRuble(
-                                    currency: currentCurrency,
-                                    totalSumInDollar:
-                                        totalPriceWithoutAdditional);
-                          }),
-                          title:
-                              "Примерное количество товара\nТочное кол-во будет указано после раскроя ткани",
+                          onChanged: (value) => (),
+                          title: "Примерная цена за ед",
                           value: "\$",
                           textInputType:
                               const TextInputType.numberWithOptions(),
-                          hintText: "0",
+                          hintText: " 0 ",
                           controller: retailPriceController,
                         ),
                         CustomOrderRowWithoutTextfield(
                           title: "Итоговая примерная сумма",
-                          value: "$totalPriceWithoutAdditional\$",
+                          value:
+                              " ${formatNumber(totalPriceWithoutAdditional)} \$ ",
                           additionalValue:
-                              "$totalPriceWithoutAdditionalInRuble руб",
+                              "${formatNumber(totalPriceWithoutAdditionalInRuble)} руб",
                         ),
                         CustomOrderRowWithTextfield(
-                          onChanged: (value) => setState(() {
-                            totalPriceWithAdditional =
-                                calculateAmountWithAdditional(
-                                    totalAmount: totalPriceWithoutAdditional,
-                                    additional: double.tryParse(value) ?? 0);
-                            totalPriceWithAdditionalInRuble =
-                                calculateretailInRuble(
-                                    currency: currentCurrency,
-                                    totalSumInDollar: totalPriceWithAdditional);
-                          }),
+                          onChanged: (value) => (),
                           title: "Цена за разработку лекал",
                           controller: priceForLecalaController,
                           value: "\$",
-                          hintText: "0+",
+                          hintText: " 0+",
                           textInputType: TextInputType.number,
                         ),
                         CustomOrderRowWithTextfield(
+                          onChanged: (value) => (),
+                          title: "Образец",
+                          value: "\$",
+                          hintText: " 0+",
+                          textInputType: TextInputType.number,
+                          controller: exampleController,
+                        ),
+                        CustomOrderRowWithTextfield(
+                          onChanged: (value) => (),
+                          controller: deliveryPriceController,
+                          textInputType: TextInputType.number,
+                          hintText: " 0+",
+                          title: "Доставка",
+                          value: "\$",
+                        ),
+                        CustomOrderRowWithTextfield(
                             title: "Скидка",
-                            onChanged: (value) {
-                              setState(() {
-                                totalPriceWithAdditional =
-                                    calculateAmountWithAdditional(
-                                            totalAmount:
-                                                totalPriceWithoutAdditional,
-                                            additional:
-                                                double.tryParse(value) ?? 0) -
-                                        (calculateAmountWithAdditional(
-                                                totalAmount:
-                                                    totalPriceWithoutAdditional,
-                                                additional:
-                                                    double.tryParse(value) ??
-                                                        0) *
-                                            ((int.tryParse(value) ?? 0) / 100));
-                                totalPriceWithAdditionalInRuble =
-                                    (calculateretailInRuble(
-                                            currency: currentCurrency,
-                                            totalSumInDollar:
-                                                totalPriceWithAdditional)) -
-                                        (calculateretailInRuble(
-                                                currency: currentCurrency,
-                                                totalSumInDollar:
-                                                    totalPriceWithAdditional) *
-                                            ((int.tryParse(value) ?? 0) / 100));
-                              });
-                            },
+                            onChanged: (value) {},
                             value: "%",
                             textInputType:
                                 const TextInputType.numberWithOptions(),
                             hintText: "",
                             controller: discountController),
-                        CustomOrderRowWithTextfield(
-                          onChanged: (value) => setState(() {
-                            totalPriceWithAdditional =
-                                calculateAmountWithAdditional(
-                                    totalAmount: totalPriceWithoutAdditional,
-                                    additional: double.tryParse(value) ?? 0);
-                            totalPriceWithAdditionalInRuble =
-                                calculateretailInRuble(
-                                    currency: currentCurrency,
-                                    totalSumInDollar: totalPriceWithAdditional);
-                          }),
-                          title: "Образец",
-                          value: "\$",
-                          hintText: "0+",
-                          textInputType: TextInputType.number,
-                          controller: exampleController,
-                        ),
-                        CustomOrderRowWithTextfield(
-                          onChanged: (value) => setState(() {
-                            totalPriceWithAdditional =
-                                calculateAmountWithAdditional(
-                                    totalAmount: totalPriceWithoutAdditional,
-                                    additional: double.tryParse(value) ?? 0);
-                            totalPriceWithAdditionalInRuble =
-                                calculateretailInRuble(
-                                    currency: currentCurrency,
-                                    totalSumInDollar: totalPriceWithAdditional);
-                          }),
-                          controller: deliveryPriceController,
-                          textInputType: TextInputType.number,
-                          hintText: "0+",
-                          title: "Доставка",
-                          value: "\$",
-                        ),
                         CustomOrderRowWithoutTextfield(
                           title: "Итоговая примерная сумма + доп. расходы",
                           value:
-                              "${totalPriceWithAdditional.toStringAsFixed(2)}\$",
+                              "${formatNumber(totalPriceWithAdditionalDiscount)}\$",
                           additionalValue:
-                              "${totalPriceWithAdditionalInRuble.toStringAsFixed(2)} руб",
+                              "${formatNumber(totalPriceWithoutAdditionalInRubleDiscount)} руб",
                         ),
                       ],
                     ),
@@ -335,7 +315,8 @@ class _InvoiceScreen extends State<InvoiceScreen> {
                               "sampleCost": priceForLecalaController.text,
                               "deliveryCost": deliveryPriceController.text,
                               "discount": discountController.text,
-                              "totalAmount": totalPriceWithAdditionalInRuble,
+                              "totalAmount":
+                                  totalPriceWithoutAdditionalInRubleDiscount,
                               "chatUuid": widget.chatUuid
                             }, orderId: widget.orderId));
                     })

@@ -117,8 +117,7 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
               setState(() {
                 trackingModelLocal = widget.model ?? model;
                 currentIndex = (trackingModelLocal?.activeStageId ?? 0) - 1;
-                print("current index is $currentIndex");
-                print("acive stage is $currentIndex");
+
                 _pageController.jumpToPage(currentIndex);
               });
             },
@@ -148,19 +147,29 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                       loading: () => Showdialog.showLoaderDialog(context),
                       loaded: () {
                         Navigator.pop(context);
-                        showDialog(
-                            context: context,
-                            builder: (context) => CustomDialog(
-                                title: "отправка",
-                                description: "успех",
-                                button: CustomButton(
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                    text: "Закрыть")));
+                        Future.delayed(const Duration(milliseconds: 300), () {
+                          showDialog(
+                              // ignore: use_build_context_synchronously
+                              context: context,
+                              builder: (context) => CustomDialog(
+                                  title: "Отчет отправлен",
+                                  description:
+                                      "Мы уведомим вас при его подтверждении",
+                                  button: CustomButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      text: "Закрыть")));
+                        });
                       },
                       error: () {
                         Navigator.pop(context);
+                        Future.delayed(const Duration(milliseconds: 300), () {
+                          Showdialog.showErrorDialog(
+                              context: context,
+                              title: "Ошибка",
+                              message: "Не удалось отправить");
+                        });
                       },
                       orElse: () {});
                 },
@@ -171,28 +180,26 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
                         loading: () => Showdialog.showLoaderDialog(context),
                         loaded: (model) {
                           router.pop();
+
                           router.goNamed("detailedTrackingScreen",
                               queryParameters: {
                                 "invoiceId": model.invoiceUuid
                               });
+                          Future.delayed(const Duration(milliseconds: 300), () {
+                            if (!mounted) return;
+                            _showSuccessDialog();
+                          });
                         },
                         error: (errorText) {
                           router.pop();
-                          showDialog(
+                          Showdialog.showErrorDialog(
                               context: context,
-                              builder: (context) => CustomDialog(
-                                  title: "Не удалось",
-                                  description: "Нe удалось",
-                                  button: CustomButton(
-                                      text: "Понятно",
-                                      onPressed: () {
-                                        router.pop();
-                                      })));
+                              title: "Подтверждение отправлено",
+                              message: "Вы уже подтвердили отчет");
                         },
                         orElse: () {});
                   },
                   child: Expanded(
-
                     child: PageView.builder(
                       controller: _pageController,
                       onPageChanged: (index) {
@@ -215,6 +222,22 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             ],
           ),
         )),
+      ),
+    );
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => CustomDialog(
+        title: "Отчет отправлен",
+        description: "Мы уведомим вас, когда вторая сторона подтвердит его",
+        button: CustomButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          text: "Закрыть",
+        ),
       ),
     );
   }
@@ -429,51 +452,60 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
         },
       ),
       Stage7ForCustomer(
-        onFilePicked: (filePath, fileName) {
-          setState(() {
-            paymentCheck = filePath;
-            paymentCheckFileName = fileName;
-          });
-        },
-        onImagePickedFromCamera: (imagePath, fileName) {
-          setState(() {
-            paymentCheck = imagePath;
-            paymentCheckFileName = fileName;
-          });
-        },
-        onImagePickedFromGallery: (imagePath, fileName) {
-          setState(() {
-            paymentCheck = imagePath;
-            paymentCheckFileName = fileName;
-          });
-        },
-        controller: controllers[1],
-        allComments: filterComments(
-            allComents: trackingModelLocal?.allComments,
-            stage: "FINAL_PAYMENT"),
-        allDocumentsOfStage: filterFileUrls(
-            allFiles: trackingModelLocal?.allChecks,
-            stage: "FINAL_PAYMENT",
-            trackingModelLocal: trackingModelLocal),
-        onTap: () {
-          if (paymentCheck != null) {
-            confirmTrackingStage(
-              invoiceUuid: trackingModelLocal?.invoiceUuid ?? "",
-              orderId: trackingModelLocal?.orderId?.toString() ?? "",
-              activeStage: "FINAL_PAYMENT",
-              allCheckFiles: [
-                NamedFile(
-                    file: File(paymentCheck ?? ""),
-                    name: paymentCheckFileName ?? "")
-              ],
-              stageAccepted: false,
-              comment: controllers[1].text,
-            );
-          } else {
-            dialogShow();
-          }
-        },
-      ),
+          onFilePicked: (filePath, fileName) {
+            setState(() {
+              paymentCheck = filePath;
+              paymentCheckFileName = fileName;
+            });
+          },
+          onImagePickedFromCamera: (imagePath, fileName) {
+            setState(() {
+              paymentCheck = imagePath;
+              paymentCheckFileName = fileName;
+            });
+          },
+          onImagePickedFromGallery: (imagePath, fileName) {
+            setState(() {
+              paymentCheck = imagePath;
+              paymentCheckFileName = fileName;
+            });
+          },
+          controller: controllers[1],
+          allComments: filterComments(
+              allComents: trackingModelLocal?.allComments,
+              stage: "FINAL_PAYMENT"),
+          allDocumentsOfStage: filterFileUrls(
+              allFiles: trackingModelLocal?.allChecks,
+              stage: "FINAL_PAYMENT",
+              trackingModelLocal: trackingModelLocal),
+          onTap: () {
+            if (paymentCheck != null) {
+              confirmTrackingStage(
+                invoiceUuid: trackingModelLocal?.invoiceUuid ?? "",
+                orderId: trackingModelLocal?.orderId?.toString() ?? "",
+                activeStage: "FINAL_PAYMENT",
+                allCheckFiles: [
+                  NamedFile(
+                      file: File(paymentCheck ?? ""),
+                      name: paymentCheckFileName ?? "")
+                ],
+                stageAccepted: false,
+                comment: controllers[1].text,
+              );
+            } else {
+              dialogShow();
+            }
+          },
+          onTapForCheck: () {
+            paymentCheck != null
+                ? router.pushNamed("seeDoc",
+                    queryParameters: {"path": paymentCheck}, extra: false)
+                : null;
+          },
+          documents: paymentCheck != null
+              ? PlatformFile(
+                  path: paymentCheck, name: paymentCheckFileName ?? "", size: 0)
+              : null),
       Stage8ForCustomer(
         onFilePicked: (filePath, fileName) {
           setState(() {
@@ -593,12 +625,6 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             trackingModelLocal: trackingModelLocal,
           );
 
-          // GoRouter.of(context).pushNamed("seeDoc",
-          //     queryParameters: {
-          //       "path": paymentCheck,
-          //       "docUrl": fullDocUrls.first
-          //     },
-          //     extra: true);
           router.pushNamed("seeDoc",
               extra: false, queryParameters: {"docUrl": urls});
         },
@@ -632,6 +658,16 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             paymentCheckFileName = fileName;
           });
         },
+        onTapForCheck: () {
+          paymentCheck != null
+              ? router.pushNamed("seeDoc",
+                  queryParameters: {"path": paymentCheck}, extra: false)
+              : null;
+        },
+        documents: paymentCheck != null
+            ? PlatformFile(
+                path: paymentCheck, name: paymentCheckFileName ?? "", size: 0)
+            : null,
         allDocumentsOfStage: filterFileUrls(
             allFiles: trackingModelLocal?.allChecks,
             stage: "FABRIC_PURCHASE_AND_CUTTING",
@@ -692,6 +728,16 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             allComents: trackingModelLocal?.allComments, stage: "SEWING"),
         controller: controllers[2],
         currentIndexOfData: 20,
+        onTapForCheck: () {
+          paymentCheck != null
+              ? router.pushNamed("seeDoc",
+                  queryParameters: {"path": paymentCheck}, extra: false)
+              : null;
+        },
+        documents: paymentCheck != null
+            ? PlatformFile(
+                path: paymentCheck, name: paymentCheckFileName ?? "", size: 0)
+            : null,
         onTap: () {
           if (paymentCheck != null) {
             confirmTrackingStage(
@@ -730,6 +776,16 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             paymentCheckFileName = fileName;
           });
         },
+        onTapForCheck: () {
+          paymentCheck != null
+              ? router.pushNamed("seeDoc",
+                  queryParameters: {"path": paymentCheck}, extra: false)
+              : null;
+        },
+        documents: paymentCheck != null
+            ? PlatformFile(
+                path: paymentCheck, name: paymentCheckFileName ?? "", size: 0)
+            : null,
         allDocumentsOfStage: filterFileUrls(
             allFiles: trackingModelLocal?.allChecks,
             stage: "QUALITY_CONTROL",
@@ -786,6 +842,16 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             stage: "READY_FOR_SHIPMENT"),
         controller: controllers[4],
         currentIndexOfData: 40,
+        onTapForCheck: () {
+          paymentCheck != null
+              ? router.pushNamed("seeDoc",
+                  queryParameters: {"path": paymentCheck}, extra: false)
+              : null;
+        },
+        documents: paymentCheck != null
+            ? PlatformFile(
+                path: paymentCheck, name: paymentCheckFileName ?? "", size: 0)
+            : null,
         onTap: () async {
           if (paymentCheck != null) {
             confirmTrackingStage(
@@ -832,6 +898,16 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
         },
         controller: controllers[5],
         currentIndexOfData: 50,
+        onTapForCheck: () {
+          paymentCheck != null
+              ? router.pushNamed("seeDoc",
+                  queryParameters: {"path": paymentCheck}, extra: false)
+              : null;
+        },
+        documents: paymentCheck != null
+            ? PlatformFile(
+                path: paymentCheck, name: paymentCheckFileName ?? "", size: 0)
+            : null,
         onTap: () {
           if (paymentCheck != null) {
             confirmTrackingStage(
@@ -902,7 +978,16 @@ class _OrdersTrackingScreenState extends State<OrdersTrackingScreen> {
             dialogShow();
           }
         },
-        onTapForAct: () {},
+        onTapForAct: () {
+          paymentCheck != null
+              ? router.pushNamed("seeDoc",
+                  queryParameters: {"path": paymentCheck}, extra: false)
+              : null;
+        },
+        documents: paymentCheck != null
+            ? PlatformFile(
+                path: paymentCheck, name: paymentCheckFileName ?? "", size: 0)
+            : null,
         allComments: filterComments(
             allComents: trackingModelLocal?.allComments,
             stage: "ORDER_RECEIVED"),

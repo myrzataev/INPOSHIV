@@ -139,7 +139,7 @@ class Stage1 extends StatelessWidget {
                           )
                         : const SizedBox.shrink(),
                     SizedBox(
-                        height: 200.h,
+                        height: 400.h,
                         child: ListView.separated(
                             itemBuilder: (context, index) {
                               final currentItem = allComments[index];

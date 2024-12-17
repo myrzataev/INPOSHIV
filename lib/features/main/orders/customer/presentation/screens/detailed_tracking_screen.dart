@@ -102,9 +102,17 @@ class _DetailedTrackingScreenState extends State<DetailedTrackingScreen> {
                           // return Text("test");
                           return Expanded(
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
                               children: [
-                                Text("Отслеживайте ваш заказ",
-                                    style: AppFonts.w700s36),
+                                Padding(
+                                  padding:  EdgeInsets.only(
+                                    top: 20.h,
+                                    bottom: 40.h),
+                                  child: Text("Отслеживайте ваш заказ",
+                                      style:
+                                          AppFonts.w700s36.copyWith(height: 0.9)),
+                                ),
                                 Expanded(
                                   child: RefreshIndicator.adaptive(
                                     onRefresh: () async => orderTracking(),
@@ -118,13 +126,13 @@ class _DetailedTrackingScreenState extends State<DetailedTrackingScreen> {
                                         return InkWell(
                                           onTap: () {
                                             currentItem.isDone
-                                                ?router
-                                                    .pushNamed("orderTracking",
-                                                        queryParameters: {
-                                                          'activeStage':
-                                                              index.toString()
-                                                        },
-                                                        extra: model)
+                                                ? router.pushNamed(
+                                                    "orderTracking",
+                                                    queryParameters: {
+                                                      'activeStage':
+                                                          index.toString()
+                                                    },
+                                                    extra: model)
                                                 : null;
                                           },
                                           child: Padding(

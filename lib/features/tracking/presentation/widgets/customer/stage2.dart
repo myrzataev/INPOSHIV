@@ -28,7 +28,7 @@ class Stage2ForCustomer extends StatelessWidget {
       children: [
         SizedBox(height: 40.h, width: 40.w, child: Image.asset(Images.tick)),
         Text(
-          "Оплата прошла успешно!",
+          "Ваш отчет подтвержден",
           style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
         ),
         Text(
@@ -44,6 +44,7 @@ class Stage2ForCustomer extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(10.h),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize
                   .max, // Ensure the Column takes all available space
               children: [

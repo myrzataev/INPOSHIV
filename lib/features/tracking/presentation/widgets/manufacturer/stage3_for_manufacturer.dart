@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -18,6 +19,8 @@ class Stage3ForManufacturer extends StatelessWidget {
   final void Function(String imagePath, String fileName)?
       onImagePickedFromCamera;
   final List<String>? allFiles;
+    final PlatformFile? documents;
+  final VoidCallback? onTapForCheck;
   const Stage3ForManufacturer({
     super.key,
     required this.currentIndexOfData,
@@ -27,7 +30,7 @@ class Stage3ForManufacturer extends StatelessWidget {
     this.onFilePicked,
     this.onImagePickedFromGallery,
     this.onImagePickedFromCamera,
-    required this.allFiles,
+    required this.allFiles, this.documents, this.onTapForCheck,
   });
 
   final double currentIndexOfData;
@@ -67,6 +70,40 @@ class Stage3ForManufacturer extends StatelessWidget {
                 ),
               ),
             ),
+              documents != null
+                            ? // Only show this when a file is selected
+                            SizedBox(
+                                height: 40.h,
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: 1, // Adjust as needed
+                                  itemBuilder: (context, index) {
+                                    return InkWell(
+                                      onTap: () {
+                                        if (documents != null) onTapForCheck;
+                                      },
+                                      child: Row(
+                                        children: [
+                                          const Icon(Icons.file_present,
+                                              color: AppColors.accentTextColor),
+                                          SizedBox(width: 8.w),
+                                          Text(
+                                            documents!
+                                                .name, // Display the file name
+                                            style: AppFonts.w400s16.copyWith(
+                                              color: AppColors.accentTextColor,
+                                              decoration:
+                                                  TextDecoration.underline,
+                                            ),
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            : const SizedBox.shrink(),
             allFiles != null
                 ? SizedBox(
                     height: 70.h,

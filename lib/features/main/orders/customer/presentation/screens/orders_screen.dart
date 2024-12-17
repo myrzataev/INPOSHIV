@@ -14,11 +14,10 @@ import 'package:inposhiv/core/widgets/my_orders_loading_card.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_button.dart';
 import 'package:inposhiv/features/auth/presentation/widgets/custom_tabbar.dart';
 import 'package:inposhiv/features/main/auction/data/mocked_aution_data.dart';
-import 'package:inposhiv/features/main/auction/presentation/blocs/customer_auctions_bloc/customer_auctions_bloc.dart';
 import 'package:inposhiv/features/main/auction/presentation/blocs/manufacturer_auctions_bloc/manufacturer_auctions_bloc.dart';
-import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_choise_widget.dart';
 import 'package:inposhiv/features/main/home/presentation/shared/widgets/custom_drawer.dart';
 import 'package:inposhiv/features/main/home/presentation/shared/widgets/search_widget.dart';
+import 'package:inposhiv/features/main/orders/customer/presentation/blocs/customer_orders_bloc/customer_orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/blocs/customers_completed_orders_bloc/customers_completed_orders_bloc.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_card.dart';
 import 'package:inposhiv/features/main/orders/customer/presentation/widgets/custom_order_widget.dart';
@@ -77,7 +76,7 @@ class _OrdersScreenState extends State<OrdersScreen>
     isCustomer = preferences.getBool("isCustomer") ?? true;
 
     if (isCustomer ?? true) {
-      callBlocForCustomer();
+      getCustomerOrdersHistory();
       getCustomerInvoices();
       getCustomersCompletedOrders();
     } else {
@@ -93,10 +92,13 @@ class _OrdersScreenState extends State<OrdersScreen>
             manufacturerId: preferences.getString("customerId") ?? ""));
   }
 
-  void callBlocForCustomer() {
-    BlocProvider.of<CustomerAuctionsBloc>(context).add(
-        CustomerAuctionsEvent.getCustomerAuctions(
-            customerId: preferences.getString("customerId") ?? ""));
+  void getCustomerOrdersHistory() {
+    // BlocProvider.of<CustomerAuctionsBloc>(context).add(
+    //     CustomerAuctionsEvent.getCustomerAuctions(
+    // customerId: preferences.getString("customerId") ?? ""));
+    BlocProvider.of<CustomerOrdersBloc>(context).add(
+        CustomerOrdersEvent.started(
+            customerUid: preferences.getString("customerId") ?? ""));
   }
 
   getCustomersCompletedOrders() {
@@ -164,16 +166,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                       controller: _tabController,
                       children: [
                         (isCustomer ?? true)
-                            ? BlocBuilder<CustomerAuctionsBloc,
-                                CustomerAuctionsState>(
+                            ? BlocBuilder<CustomerOrdersBloc,
+                                CustomerOrdersState>(
                                 builder: (context, state) {
                                   return state.maybeWhen(
-                                      customerOrdersLoaded:
-                                          (customerOrdersModel) {
+                                      loaded: (customerOrdersModel) {
                                         if (customerOrdersModel.isNotEmpty) {
                                           return RefreshIndicator.adaptive(
                                             onRefresh: () async =>
-                                                callBlocForCustomer(),
+                                                getCustomerOrdersHistory(),
                                             child: ListView.builder(
                                                 itemCount:
                                                     customerOrdersModel.length,
@@ -184,10 +185,8 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                           index];
                                                   final List<String>
                                                       fullPhotoUrls =
-                                                      customerOrdersModel[index]
-                                                              .products
-                                                              ?.first
-                                                              .photos
+                                                      currentItem.products
+                                                              ?.first.photos
                                                               ?.map((url) =>
                                                                   "${UrlRoutes.baseUrl}$url")
                                                               .toList() ??
@@ -664,13 +663,18 @@ class _OrdersScreenState extends State<OrdersScreen>
                                 error: (error) => CustomErrorWidget(
                                     description: error.userMessage,
                                     onRefresh: () {
-                                      getManufacturerInvoices();
+                                      (isCustomer ?? false)
+                                          ? getCustomerInvoices()
+                                          : getManufacturerInvoices();
                                     }),
                                 loaded: (model) {
                                   if (model.isNotEmpty) {
                                     return RefreshIndicator.adaptive(
-                                      onRefresh: () async =>
-                                          getCustomerInvoices(),
+                                      onRefresh: () async {
+                                        (isCustomer ?? false)
+                                            ? getCustomerInvoices()
+                                            : getManufacturerInvoices();
+                                      },
                                       child: ListView.separated(
                                           itemCount: model.length,
                                           separatorBuilder: (context, index) =>
@@ -688,14 +692,15 @@ class _OrdersScreenState extends State<OrdersScreen>
                                                     // model[index].invoiceUuid
                                                   }),
                                               child: Container(
-                                                height: 40.h,
+                                                height: 50.h,
                                                 decoration: BoxDecoration(
-                                                    color: AppColors.cardsColor,
+                                                    color: Colors.grey[200],
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             15.r)),
                                                 child: Center(
-                                                  child: Text("Заказ № $index"),
+                                                  child: Text(
+                                                      "Заказ № ${index + 1}", style: AppFonts.w700s20.copyWith(color: AppColors.accentTextColor),),
                                                 ),
                                               ),
                                             );
@@ -703,7 +708,10 @@ class _OrdersScreenState extends State<OrdersScreen>
                                     );
                                   } else {
                                     return RefreshIndicator.adaptive(
-                                      onRefresh: () async => (),
+                                      onRefresh: () async =>
+                                          ((isCustomer ?? false)
+                                              ? getCustomerInvoices()
+                                              : getManufacturerInvoices()),
                                       child: SingleChildScrollView(
                                         physics:
                                             const AlwaysScrollableScrollPhysics(),

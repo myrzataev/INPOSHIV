@@ -72,8 +72,8 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                       context: context,
                       builder: (context) => CustomDialog(
                           title:
-                              "Мы отправили эти данные производителю для подтверждения",
-                          description: "Мы уведомим вас, когда он это сделает",
+                              "Мы отправили эти данные производителю",
+                          description: "Мы уведомим вас, когда он подтвердит их",
                           button: CustomButton(
                               text: "Понятно",
                               onPressed: () {

@@ -18,6 +18,7 @@ import 'package:inposhiv/features/main/orders/customer/presentation/blocs/get_in
 import 'package:inposhiv/features/main/orders/manufacturer/presentation/widgets/choose_payment.dart';
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
+import 'package:inposhiv/services/number_format_service.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -159,28 +160,28 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
                                   ),
                                   CustomOrderRowWithoutTextfield(
                                     title: "Итоговая примерная сумма",
-                                    value: "${invoiceModel.preliminaryAmount}",
+                                    value: "${invoiceModel.preliminaryAmount}\$",
                                     additionalValue:
-                                        "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: invoiceModel.totalAmount?.toDouble() ?? 0).toStringAsFixed(2)} руб",
+                                        "${formatNumber(calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: invoiceModel.totalAmount?.toDouble() ?? 0))} руб",
                                   ),
                                   CustomOrderRowWithoutTextfield(
                                     title: "Цена за разработку лекал",
-                                    value: "+${invoiceModel.lekalaCost}",
+                                    value: "${invoiceModel.lekalaCost}\$",
                                   ),
                                   CustomOrderRowWithoutTextfield(
                                     title: "Образец",
-                                    value: "+${invoiceModel.sampleCost}",
+                                    value: "${invoiceModel.sampleCost}\$",
                                   ),
                                   CustomOrderRowWithoutTextfield(
                                     title: "Доставка",
-                                    value: "+${invoiceModel.deliveryCost}",
+                                    value: "${invoiceModel.deliveryCost}\$",
                                   ),
                                   CustomOrderRowWithoutTextfield(
                                     title:
                                         "Итоговая примерная сумма + доп. расходы",
                                     value: "${invoiceModel.totalAmount}\$",
                                     additionalValue:
-                                        "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: invoiceModel.totalAmount?.toDouble() ?? 0).toStringAsFixed(2)} руб",
+                                        "${formatNumber(calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: invoiceModel.totalAmount?.toDouble() ?? 0))} руб",
                                   ),
                                   BlocListener<ChatRoomsBloc, ChatRoomsState>(
                                     listener: (context, state) {
@@ -311,11 +312,11 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
                   children: [
                     Text(
                       "Выберите способ оплаты",
-                      style: AppFonts.w700s36.copyWith(height: 0.5),
+                      style: AppFonts.w700s36.copyWith(height: 1),
                     ),
                     CustomChoosePaymentWidget(
                         text:
-                            "Через платформу Наиболее безопасный способ\nЕще в разработке",
+                            "Через платформу - наиболее безопасный способ\nЕще в разработке",
                         icon: SvgImages.lock,
                         isActive: false,
                         onTap: () {
@@ -330,7 +331,7 @@ class _InvoiceScreenForCustomer extends State<InvoiceScreenForCustomer> {
                               context: context,
                               builder: (context) => CustomDialog(
                                   title:
-                                      "При выборе этого способа оплаты платформа не несет ответственности за оплату",
+                                      "При выборе этого способа оплаты платформа ответственности не несет",
                                   description:
                                       "Все риски, связанные с оплатой вы берете на себя",
                                   button: CustomButton(

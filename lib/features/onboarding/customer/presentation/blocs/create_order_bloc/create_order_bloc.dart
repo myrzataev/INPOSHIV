@@ -3,11 +3,9 @@ import 'package:dio/dio.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:inposhiv/core/error/app_error.dart';
 import 'package:inposhiv/core/error/error_handler.dart';
-import 'package:inposhiv/features/onboarding/customer/data/models/currency_convert_model.dart';
 import 'package:inposhiv/features/onboarding/customer/data/models/order_model.dart';
 import 'package:inposhiv/features/onboarding/customer/data/models/size_model.dart';
 import 'package:inposhiv/features/onboarding/customer/data/repositories/create_order_repo_impl.dart';
-import 'package:inposhiv/features/onboarding/customer/data/repositories/get_current_currency_impl.dart';
 import 'package:inposhiv/features/onboarding/customer/data/repositories/get_sizes_repoimpl.dart';
 
 part 'create_order_event.dart';

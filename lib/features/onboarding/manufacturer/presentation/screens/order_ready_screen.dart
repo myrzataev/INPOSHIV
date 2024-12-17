@@ -167,8 +167,14 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                               style: AppFonts.w400s16,
                             ),
                             Text(
-                              "${(formatNumber(vm.priceRub?.toDouble() ?? 0))} руб за ед, итого ${formatNumber(double.parse(widget.totalPriceInRuble))} руб",
-                              style: AppFonts.w400s16.copyWith(color: AppColors.accentTextColor),
+                              "${(formatNumber(vm.priceUsd?.toDouble() ?? 0))} \$ за ед, итого ${formatNumber((vm.priceUsd?.toDouble()??0)*160)} \$",
+                              style: AppFonts.w400s16
+                                  .copyWith(color: AppColors.accentTextColor),
+                            ),
+                            Text(
+                              "${(formatNumber(vm.priceRub?.toDouble() ?? 0))} руб за ед, итого ${formatNumber(double.parse(widget.totalPriceInRuble))} руб\n",
+                              style: AppFonts.w400s16
+                                  .copyWith(),
                             ),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -210,6 +216,7 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                                     ),
                                   )
                                 : const SizedBox(),
+                            
                           ],
                         ),
                       ),
@@ -226,7 +233,7 @@ class _OrderReadyScreenState extends State<OrderReadyScreen> {
                 padding: EdgeInsets.only(bottom: isAndroid! ? 20.h : 10),
                 child: CustomButton(
                   text: "Начать аукцион",
-                  textSize: 20.sp,
+                  textSize: 18.sp,
                   onPressed: () {
                     BlocProvider.of<CreateAuctionBloc>(context).add(
                       CreateAuctionEvent.createAuction(orderId: widget.orderId),

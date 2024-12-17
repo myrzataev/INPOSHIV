@@ -12,4 +12,16 @@ class GetAuctionsListDs {
         .map((element) => AuctionModel.fromJson(element))
         .toList();
   }
+
+  Future<List<AuctionModel>> getActiveAuctionsList(
+      {required String manufacturerUuid}) async {
+    final Response response =
+        await dio.get(UrlRoutes.activeAuctions, queryParameters: {
+      "manufacturerUuid": manufacturerUuid,
+    });
+    final List responseList = response.data;
+    return responseList
+        .map((element) => AuctionModel.fromJson(element))
+        .toList();
+  }
 }

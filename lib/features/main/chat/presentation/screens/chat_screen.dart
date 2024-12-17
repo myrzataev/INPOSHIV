@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inposhiv/config/routes/app_routes.dart';
 import 'package:inposhiv/core/utils/app_fonts.dart';
+import 'package:inposhiv/features/main/chat/data/models/chat_room_history_model.dart';
 import 'package:inposhiv/features/main/chat/presentation/blocs/send_files_to_chat_bloc/send_files_to_chat_bloc.dart';
 import 'package:inposhiv/features/main/chat/presentation/widgets/custom_chat_message.dart';
 import 'package:inposhiv/features/tracking/presentation/widgets/customer/custom_tracking_comment.dart';
@@ -59,13 +60,14 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   bool hasMoreMessages = true;
   bool shouldScrollToBottom = true;
   bool recommendedMessageSended = false;
+  List<Content?>? chatMessagesList;
   final List<String> recommendedMessages = [
-    "Здравствуйте",
+    "Здравствуйте, я заинтересован",
     "Пришлите договор о сотрудничестве"
   ];
   @override
   void initState() {
-    _scrollController = ScrollController(initialScrollOffset: 0);
+    _scrollController = ScrollController();
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom(
@@ -86,7 +88,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
     BlocProvider.of<ChatsBloc>(context).add(ChatsEvent.getChatRoomHistory(
       chatRoomUuid: chatUuid ?? "",
-      model: const PagebleModel(page: 0, size: 20, sort: []),
+      model: PagebleModel(page: currentPage, size: 20, sort: []),
     ));
     connect();
     _scrollToBottom(shouldScrollToBottomForMethod: true);
@@ -94,8 +96,9 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   }
 
   void _onScroll() {
+   
     if (_scrollController.position.pixels <=
-            _scrollController.position.minScrollExtent + 100 &&
+            _scrollController.position.minScrollExtent &&
         !isLoading &&
         hasMoreMessages) {
       _loadMoreMessages();
@@ -277,37 +280,42 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
           listener: (context, state) {
             state.maybeWhen(
               getChatroomHistoryLoaded: (model) {
-                final historyMessages =
-                    model.content?.map<ChatMessage>((element) {
-                  return ChatMessage(
-                    user: element.senderUuid == currentUser.id
-                        ? currentUser
-                        : secondUser,
-                    text: element.content ?? "",
-                    createdAt: DateTime.now(),
-                  );
-                }).toList();
-
-                // setState(() {
-                //   messages.addAll(historyMessages?.reversed.toList() ?? []);
-                // });
-
                 setState(() {
+                  chatMessagesList = model.content;
+
+                  // Map Content to ChatMessage
+                  final historyMessages =
+                      chatMessagesList?.map<ChatMessage>((element) {
+                    return ChatMessage(
+                      user: element?.senderUuid == currentUser.id
+                          ? currentUser
+                          : secondUser,
+                      text: element?.content ?? "",
+                      createdAt: DateTime.now(),
+                    );
+                  }).toList();
+
                   if (historyMessages == null || historyMessages.isEmpty) {
-                    hasMoreMessages = false; // Если сообщений больше нет
+                    hasMoreMessages = false; // No more messages
                   } else {
                     messages.insertAll(0, historyMessages.reversed.toList());
-                    currentPage++; // Увеличиваем номер текущей страницы
+                    if (isLoading) {
+                      // Increment currentPage only during pagination
+                      currentPage++;
+                    }
                   }
-                  isLoading = false;
+
+                  isLoading = false; // Reset loading state
                 });
+
+                // Scroll to bottom if required
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   _scrollToBottom(
-                      shouldScrollToBottomForMethod:
-                          shouldScrollToBottom); // Прокрутка вниз после загрузки истории
+                      shouldScrollToBottomForMethod: shouldScrollToBottom);
                 });
               },
               orElse: () {
+                // Reset loading state in case of error
                 setState(() {
                   isLoading = false;
                 });
@@ -335,7 +343,6 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                   children: [
                     Expanded(
                       child: ListView.builder(
-                        physics: const ClampingScrollPhysics(),
                         controller: _scrollController,
                         itemCount: messages.length + (isLoading ? 1 : 0),
                         cacheExtent: MediaQuery.sizeOf(context).height * 2,
@@ -440,7 +447,10 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                       recommendedMessageSended = true;
                     });
                   },
-                  child: Text(recommendedMessages[index], style: AppFonts.w400s16.copyWith(color: Colors.white),)),
+                  child: Text(
+                    recommendedMessages[index],
+                    style: AppFonts.w400s16.copyWith(color: Colors.white),
+                  )),
             );
           },
           separatorBuilder: (context, index) {
@@ -454,7 +464,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
 
   Widget _buildMessageInput() {
     return Padding(
-      padding: EdgeInsets.only(bottom: 10.h),
+      padding: EdgeInsets.only(bottom: 10.h, top: 5.h),
       child: CustomTrackingComment(
         onTap: () {
           if (_controller.text.isNotEmpty) {

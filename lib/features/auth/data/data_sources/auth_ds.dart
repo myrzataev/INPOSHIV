@@ -5,7 +5,7 @@ import 'package:inposhiv/features/auth/data/models/user_response_model.dart';
 import 'package:inposhiv/features/auth/domain/entities/user_entity.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthDataSource {
+class AuthDataSource  {
   final Dio dio;
   // final SharedPreferences sharedPreferences;
   AuthDataSource({required this.dio, });

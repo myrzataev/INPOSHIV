@@ -18,6 +18,7 @@ import 'package:inposhiv/features/main/orders/manufacturer/presentation/blocs/ge
 import 'package:inposhiv/features/onboarding/customer/presentation/blocs/current_currency_bloc/current_currency_bloc.dart';
 import 'package:inposhiv/resources/resources.dart';
 import 'package:inposhiv/services/shared_preferences.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -84,7 +85,6 @@ class _OrderDetailsScreenForManufacturer
             builder: (context, state) {
               print(state);
               return state.maybeWhen(
-              
                   loading: () => const Center(
                         child: CircularProgressIndicator.adaptive(),
                       ),
@@ -92,7 +92,7 @@ class _OrderDetailsScreenForManufacturer
                         child: CustomErrorWidget(
                             description: error.userMessage,
                             onRefresh: () {
-                             getOrderDetails();
+                              getOrderDetails();
                             }),
                       ),
                   loaded: (model) {
@@ -140,15 +140,24 @@ class _OrderDetailsScreenForManufacturer
                                   ),
                                   CustomOrderRowWithoutTextfield(
                                       title: "Начало",
-                                      value:
-                                          "${model.deadlineStart?.substring(0, 10)}",
+                                      value: formatDateTime(
+                                          dateTimeString:
+                                              model.deadlineStart ?? ""),
+                                      // "${model.deadlineStart?.substring(0, 10)}",
                                       additionalValue: ""
                                       // "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
                                       ),
+                                  // ElevatedButton(
+                                  //     onPressed: () {
+                                  //       print(model.deadlineEnd);
+                                  //     },
+                                  //     child: Text("data")),
                                   CustomOrderRowWithoutTextfield(
                                       title: "Конец",
-                                      value:
-                                          "${model.deadlineEnd?.substring(0, 10)}",
+                                      value:formatDateTime(
+                                          dateTimeString:
+                                              model.deadlineEnd ?? ""),
+                                          // "${model.deadlineEnd?.substring(0, 10)}",
                                       additionalValue: ""
                                       // "${calculateretailInRuble(currency: currency ?? 0, totalSumInDollar: widget.model.totalAmount?.toDouble() ?? 0)} руб",
                                       ),
@@ -262,6 +271,17 @@ class _OrderDetailsScreenForManufacturer
 
   double calculateAmount({required double amount, required double price}) {
     return amount * price;
+  }
+
+  String formatDateTime({required String dateTimeString}) {
+    // Исходная строка
+
+    // Парсим строку в объект DateTime
+    DateTime date = DateTime.parse(dateTimeString);
+
+    // Преобразуем в нужный формат
+    String formattedDate = DateFormat('dd-MM-yyyy').format(date);
+    return formattedDate;
   }
 
   showLoaderDialog(BuildContext context) {
